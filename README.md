@@ -7,8 +7,9 @@ This zarf package serves as a universal dev (local & remote) and test environmen
 
 ## Prerequisites
 
-- [UDS cli](https://github.com/defenseunicorns/uds-cli/blob/main/README.md#install) & [K3d](https://k3d.io/#installation) using the versions specified in the [uds-common repo](https://github.com/defenseunicorns/uds-common/blob/main/README.md#supported-tool-versions)
+- [UDS cli](https://github.com/defenseunicorns/uds-cli/blob/main/README.md#install) using the versions specified in the [uds-common repo](https://github.com/defenseunicorns/uds-common/blob/main/README.md#supported-tool-versions)
 - [Docker](https://docs.docker.com/get-docker/) or [Podman](https://podman.io/getting-started/installation) for running building and pulling images
+- See the RKE2 documentation for host system [pre-requisites](https://docs.rke2.io/install/requirements)
 
 ## Deploy
 

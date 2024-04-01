@@ -1,7 +1,7 @@
 # UDS RKE2 Environment
 
 > [!IMPORTANT]
-> This is an unofficial sandbox repository for developing and testing a UDS RKE2 capability. Please go to the defenseunicorns organization for official UDS capabilities.
+> This is an unofficial sandbox repository for developing and testing a UDS RKE2 capability. Please go to the [defenseunicorns](https://github.com/defenseunicorns) organization for official UDS capabilities.
 
 This zarf package serves as a universal dev (local & remote) and test environment for testing [UDS Core](https://github.com/defenseunicorns/uds-core), individual UDS Capabilities, and UDS capabilities aggregated via the [UDS CLI](https://github.com/defenseunicorns/uds-cli).
 

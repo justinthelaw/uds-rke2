@@ -1,4 +1,4 @@
-# UDS K3d Environment
+# UDS RKE2 Environment
 
 > [!IMPORTANT]
 > This is an unofficial sandbox repository for developing and testing a UDS RKE2 capability. Please go to the defenseunicorns organization for official UDS capabilities.

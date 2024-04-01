@@ -1,0 +1,43 @@
+variables:
+  - name: VERSION
+    default: "0.1.0"
+
+tasks:
+  - name: default
+    description: "Build and deploy uds-rke2"
+    actions:
+      - description: "Build UDS RKE2 Sandbox Package"
+        cmd: "uds zarf package create --confirm"
+
+      - description: "Deploy UDS RKE2 Sandbox Package"
+        cmd: "uds zarf package deploy zarf-package-uds-rke2-*.tar.zst"
+
+  - name: validate
+    actions:
+      - description: Validate CoreDNS is up
+        wait:
+          cluster:
+            kind: Pod
+            name: "k8s-app=kube-dns"
+            namespace: kube-system
+            condition: Ready
+
+      - description: Validate CoreDNS
+        cmd: |
+          set -e
+          FOO_IP=$(uds zarf tools kubectl run dig-test --image=arunvelsriram/utils -q --restart=Never --rm -i -- dig +short foo.uds.prod)
+          if [ "${FOO_IP}" != "127.0.0.1" ]; then
+            echo "CoreDNS is resolving foo.uds.prod to host.rke2.internal"
+          else
+            echo "CoreDNS patch failed, foo.uds.prod is resolving to 127.0.0.1"
+            exit 1
+          fi
+
+      - description: Validate `zarf init``
+        cmd: |
+          set -e
+          # uds zarf tools download-init does not work in 0.9.4 - https://github.com/defenseunicorns/uds-cli/issues/517
+          uds zarf package pull oci://ghcr.io/defenseunicorns/packages/init:v$(uds zarf version)
+          mv zarf-init-amd64-v$(uds zarf version).tar.zst zarf-init-amd64-$(uds zarf version).tar.zst
+          # Test zarf init due to containerd issue - https://github.com/defenseunicorns/zarf/issues/592
+          uds zarf init --confirm

@@ -1,0 +1,32 @@
+name: Helm Lint
+
+on:
+  push:
+    branches:
+      - '!main'
+    paths:
+      - 'charts/*'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'charts/*'
+
+concurrency:
+  group: helmlint-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  helm-lint:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+
+      - name: Lint Helm
+        uses: WyriHaximus/github-action-helm3@6c2b7200d597e38a3f2cd901b50046c800fc144b # v4.0.0
+        with:
+          exec: helm lint ./chart

@@ -1,0 +1,77 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/defenseunicorns/zarf/main/zarf.schema.json
+
+kind: ZarfPackageConfig
+metadata:
+  name: uds-rke2-sandbox
+  description: "UDS RKE2 Cluster Setup. WARNING: This will requires root access to modify host security and network configurations."
+  url: https://github.com/justinthelaw/uds-rke2-sandbox
+  # x-release-please-start-version
+  version: "0.1.0"
+  # x-release-please-end
+
+variables:
+  - name: CLUSTER_NAME
+    description: "Name of the cluster"
+    default: "uds"
+
+components:
+  - name: destroy-cluster
+    required: true
+    description: "Optionally destroy the cluster before creating it"
+    actions:
+      onDeploy:
+        before:
+          # TODO: Write an automated cluster removal script
+          - cmd: echo "NotImplementedError"
+            description: "Destroy the cluster"
+
+  - name: create-cluster
+    required: true
+    description: "Create the RKE2 cluster"
+    actions:
+      onDeploy:
+        before:
+          # TODO: Write an automated cluster bootstrapping script
+          - cmd: echo "NotImplementedError"
+            description: "Create the RKE2 cluster"
+        onSuccess:
+          - cmd: |
+              echo "You can access this cluster over SSH (note http redirect will redirect to port 80 instead of 8080):"
+              echo "ssh -N -L 8080:localhost:80 -L 8443:localhost:443 -L 6550:localhost:6550"
+              echo
+              echo "To get the kubeconfig:"
+              echo "k3d kubeconfig get ${ZARF_VAR_CLUSTER_NAME}"
+              echo
+              echo "This cluster can be destroyed with:"
+              # TODO: Write an automated cluster removal script
+              echo "NotImplementedError"
+            description: "Print out information about how to access the cluster remotely"
+
+  - name: uds-rke2-stack
+    required: true
+    description: "Install MetalLB, Minio, local-path-rwx and Ensure MachineID to meet UDS developer needs without later config changes"
+    actions:
+      onDeploy:
+        before:
+          - cmd: ./zarf tools kubectl get nodes -o=jsonpath='{.items[0].status.addresses[?(@.type=="InternalIP")].address}' | cut -d'.' -f1-3
+            description: "Load network ip base for MetalLB"
+            setVariables:
+              - name: BASE_IP
+        after:
+          - cmd: ./zarf tools kubectl rollout restart deployment coredns -n kube-system
+            description: "Restart CoreDNS to pick up internal DNS override for uds.prod"
+    charts:
+      - name: metallb
+        namespace: uds-rke2-stack
+        url: https://metallb.github.io/metallb
+        version: 0.13.11
+      - name: uds-rke2-stack
+        namespace: uds-rke2-stack
+        localPath: chart
+        version: 0.2.0
+      - name: minio
+        namespace: uds-rke2-stack
+        version: 5.0.14
+        url: https://charts.min.io/
+        valuesFiles:
+          - "values/minio-values.yaml"

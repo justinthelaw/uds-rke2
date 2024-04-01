@@ -1,0 +1,47 @@
+name: UDS Lint
+
+on:
+  push:
+    branches:
+      - '!main'
+    paths:
+      - '**/uds.yaml'
+  pull_request:
+    branches: [main]
+    paths:
+      - '**/uds.yaml'
+
+concurrency:
+  group: udslint-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  uds-lint:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+
+      - name: Set up Python
+        uses: actions/setup-python@0a5c61591373683505ea898e09a3ea4f39ef2b9c # v5.0.0
+        with:
+          python-version: 3.11.6
+
+      - name: Download UDS Schema
+        run: curl -o uds.schema.json https://raw.githubusercontent.com/defenseunicorns/uds-cli/main/uds.schema.json
+
+      - name: Install jsonschema
+        run: pip install check-jsonschema==0.28.0
+
+      - name: Validate uds-bundle.yaml
+        run: |
+          if [ -f "uds-bundle.yaml" ]; then
+            echo "uds-bundle.yaml exists."
+            check-jsonschema uds-bundle.yaml --schemafile uds.schema.json
+          else
+            echo "uds-bundle.yaml does not exist."
+          fi

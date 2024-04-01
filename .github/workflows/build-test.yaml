@@ -1,0 +1,37 @@
+name: Test UDS Capability
+
+on:
+  pull_request:
+    paths-ignore:
+      - "**.md"
+      - "docs/**"
+      - "CODEOWNERS"
+      - "./*.json"
+      - "./*.json"
+      - ".github/**"
+      - "LICENSE"
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  test-clean-install:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup UDS
+        if: always()
+        uses: defenseunicorns/uds-common/.github/actions/setup@v0.3.6
+        with:
+          username: ${{secrets.IRON_BANK_ROBOT_USERNAME}}
+          password: ${{secrets.IRON_BANK_ROBOT_PASSWORD}}
+
+      - name: Create and Dpeloy UDS RKE2
+        run: uds run
+      
+      - name: Validate UDS RKE2 Cluster
+        run: uds run validate 
+

@@ -1,0 +1,50 @@
+name: Cleanup Workflows
+
+on:
+  # cronjob trigger At 00:00 on day-of-month 1. https://crontab.guru/every-month
+  schedule:
+    - cron: "0 0 1 * *"
+  pull_request:
+    types:
+      - closed
+    branches:
+      - main
+
+  workflow_dispatch:
+    inputs:
+      delete_workflow_pattern:
+        description: 'Pattern to match workflow names'
+        required: false
+      delete_workflow_by_state_pattern:
+        description: 'Pattern to match workflow state'
+        required: false
+      delete_run_by_conclusion_pattern:
+        description: 'Pattern to match run conclusion'
+        required: false
+      dry_run:
+        description: 'Dry run mode'
+        required: false
+
+concurrency:
+  group: cleanup-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  workflows:
+    runs-on: ubuntu-latest
+
+    permissions:
+      actions: write
+      
+    steps:
+      - name: Delete Stale Workflows
+        uses: Mattraks/delete-workflow-runs@39f0bbed25d76b34de5594dceab824811479e5de # v2.0.6
+        with:
+          token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          retain_days: 15
+          keep_minimum_runs: 0
+          delete_workflow_pattern: ${{ github.event.inputs.delete_workflow_pattern }}
+          delete_workflow_by_state_pattern: ${{ github.event.inputs.delete_workflow_by_state_pattern }}
+          delete_run_by_conclusion_pattern: ${{ github.event.inputs.delete_run_by_conclusion_pattern }}
+          dry_run: ${{ github.event.inputs.dry_run }}

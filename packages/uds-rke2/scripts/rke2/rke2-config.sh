@@ -8,16 +8,15 @@ LOCAL_DIR=/root/uds-rke2-artifacts
 mkdir -p $CONFIG_DIR
 
 # Stage startup helper script
-cp -f $LOCAL_DIR/rke2-startup.sh /root/rke2-startup.sh
-chmod +x /root/rke2-startup.sh
-chown root:root /root/rke2-startup.sh
+chmod +x $LOCAL_DIR/rke2-startup.sh
+chown root:root $LOCAL_DIR/rke2-startup.sh
 
 # Stage STIG config files
-cp -f $LOCAL_DIR/configs/rke2-config.yaml $CONFIG_FILE
+cp -f $LOCAL_DIR/rke2-config.yaml $CONFIG_FILE
 chown -R root:root $CONFIG_FILE
-cp -f $LOCAL_DIR/configs/audit-policy.yaml $CONFIG_DIR/audit-policy.yaml
+cp -f $LOCAL_DIR/audit-policy.yaml $CONFIG_DIR/audit-policy.yaml
 chown -R root:root $CONFIG_DIR/audit-policy.yaml
-cp -f $LOCAL_DIR/configs/default-pss.yaml $CONFIG_DIR/default-pss.yaml
+cp -f $LOCAL_DIR/default-pss.yaml $CONFIG_DIR/default-pss.yaml
 chown -R root:root $CONFIG_DIR/default-pss.yaml
 
 # Configure settings needed by CIS profile and add etcd user

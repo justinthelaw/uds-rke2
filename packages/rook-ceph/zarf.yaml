@@ -42,13 +42,13 @@ components:
     description: "Install missing pre-requisites on the host system"
     files:
       - source: scripts/install-deps.sh
-        target: /root/uds-rke2-artifacts/rook-ceph/deps/install-deps.sh
+        target: /root/uds-rke2-artifacts/rook-ceph/install-deps.sh
         executable: true
     actions:
       onDeploy:
         after:
           - cmd: |
-              /root/uds-rke2-artifacts/rook-ceph/deps/install-deps.sh
+              /root/uds-rke2-artifacts/rook-ceph/install-deps.sh
             description: "Install all Rook-Ceph related dependencies"
 
   - name: prepare-host
@@ -56,12 +56,12 @@ components:
     description: "Prepare host system with correct network traffic rules for Ceph controllers"
     files:
       - source: scripts/rook-ceph/os/os-prep.sh
-        target: /root/uds-rke2-artifacts/rook-ceph/configure/os-prep.sh
+        target: /root/uds-rke2-artifacts/rook-ceph/os-prep.sh
         executable: true
     actions:
       onDeploy:
         after:
-          - cmd: /root/uds-rke2-artifacts/rook-ceph/configure/os-prep.sh
+          - cmd: /root/uds-rke2-artifacts/rook-ceph/os-prep.sh
             description: "Prepare traffic rule changes for Ceph controllers"
 
   - name: rook-ceph-images

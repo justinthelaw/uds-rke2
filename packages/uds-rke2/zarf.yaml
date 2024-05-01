@@ -38,12 +38,12 @@ components:
     description: "Optionally destroy an existing UDS RKE2 installation on the host system"
     files:
       - source: scripts/rke2/rke2-destroy.sh
-        target: /root/uds-rke2-artifacts/cluster/rke2-destroy.sh
+        target: /root/uds-rke2-artifacts/rke2-destroy.sh
         executable: true
     actions:
       onDeploy:
         after:
-          - cmd: /root/uds-rke2-artifacts/cluster/rke2-destroy.sh
+          - cmd: /root/uds-rke2-artifacts/rke2-destroy.sh
             description: "Remove UDS RKE2 and all related artifacts and dependencies"
 
   # TODO: air-gap this
@@ -52,12 +52,12 @@ components:
     description: "Optionally install missing pre-requisites on the host system"
     files:
       - source: scripts/os/install-deps.sh
-        target: /root/uds-rke2-artifacts/deps/install-deps.sh
+        target: /root/uds-rke2-artifacts/install-deps.sh
         executable: true
     actions:
       onDeploy:
         after:
-          - cmd: /root/uds-rke2-artifacts/deps/install-deps.sh
+          - cmd: /root/uds-rke2-artifacts/install-deps.sh
             description: "Install all UDS RKE2 related dependencies"
 
     # TODO: air-gap this
@@ -66,12 +66,12 @@ components:
     description: "Optionally apply STIG requirements to the host system"
     files:
       - source: scripts/os/os-stig.sh
-        target: /root/uds-rke2-artifacts/configure/stig/os-stig.sh
+        target: /root/uds-rke2-artifacts/os-stig.sh
         executable: true
     actions:
       onDeploy:
         after:
-          - cmd: /root/uds-rke2-artifacts/configure/stig/os-stig.sh
+          - cmd: /root/uds-rke2-artifacts/os-stig.sh
             description: "Apply the DoD Cyber STIG script for Ubuntu 20.04"
 
   - name: prepare-host
@@ -79,12 +79,12 @@ components:
     description: "Prepare host system with RKE2 installation and runtime pre-requisites"
     files:
       - source: scripts/os/os-prep.sh
-        target: /root/uds-rke2-artifacts/configure/os-prep.sh
+        target: /root/uds-rke2-artifacts/os-prep.sh
         executable: true
     actions:
       onDeploy:
         after:
-          - cmd: /root/uds-rke2-artifacts/configure/os-prep.sh
+          - cmd: /root/uds-rke2-artifacts/os-prep.sh
             description: "Prepare the necessary OS configurations for running UDS RKE2"
 
   # TODO: air-gap this
@@ -98,14 +98,14 @@ components:
       - source: scripts/rke2/rke2-config.sh
         target: /root/uds-rke2-artifacts/rke2-config.sh
         executable: true
-      - source: scripts/rke2/configs/audit-policy.yaml
-        target: /root/uds-rke2-artifacts/configs/audit-policy.yaml
+      - source: scripts/rke2/audit-policy.yaml
+        target: /root/uds-rke2-artifacts/audit-policy.yaml
         executable: false
-      - source: scripts/rke2/configs/default-pss.yaml
-        target: /root/uds-rke2-artifacts/configs/default-pss.yaml
+      - source: scripts/rke2/default-pss.yaml
+        target: /root/uds-rke2-artifacts/default-pss.yaml
         executable: false
-      - source: scripts/rke2/configs/rke2-config.yaml
-        target: /root/uds-rke2-artifacts/configs/rke2-config.yaml
+      - source: scripts/rke2/rke2-config.yaml
+        target: /root/uds-rke2-artifacts/rke2-config.yaml
         executable: false
       - source: scripts/rke2/rke2-startup.sh
         target: /root/uds-rke2-artifacts/rke2-startup.sh
@@ -158,7 +158,7 @@ components:
       onDeploy:
         after:
           - cmd: |
-              /root/rke2-startup.sh -t ${ZARF_VAR_JOIN_TOKEN} ${ZARF_VAR_RKE2_JOIN_ARGS} ${ZARF_VAR_AGENT_FLAG}
+              /root/uds-rke2-artifacts/rke2-startup.sh -t ${ZARF_VAR_JOIN_TOKEN} ${ZARF_VAR_RKE2_JOIN_ARGS} ${ZARF_VAR_AGENT_FLAG}
             description: "Start RKE2 node"
             maxTotalSeconds: 600
           - description: "Validate kube-apiserver is up"
@@ -193,9 +193,3 @@ components:
                 namespace: kube-system
                 condition: "'{.status.phase}'=Running"
             maxTotalSeconds: 300
-      onRemove:
-        after:
-          - cmd: |
-              /root/uds-rke2-artifacts/rke2-destroy.sh
-              rm -rf /root/uds-rke2-artifacts/
-            description: "Destroy all UDS RKE2 components and remove all UDS RKE2 artifacts"

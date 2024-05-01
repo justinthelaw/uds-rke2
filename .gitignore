@@ -13,6 +13,7 @@ uds-bundle-*.tar.zst
 # Builds
 build/
 builds/
+**/uds-rke2-artifacts/
 
 # Models Directory
 .model/*

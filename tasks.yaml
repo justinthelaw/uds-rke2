@@ -18,7 +18,7 @@ tasks:
         with:
           joinToken: "my-test-token"
 
-      - task: create:rook-ceph-init # TODO: swap for longhorn as default
+      - task: create:rook-ceph-init
       - task: deploy:rook-ceph-init
 
       - task: create:minio
@@ -26,4 +26,14 @@ tasks:
 
       - task: deploy:specific-core-package-release
 
-      - task: create:remove-temp-build-folder
+  - name: rke2-bootstrap-test
+    description: "Complete a stand-up and stand-down of the RKE2 cluster"
+    actions:
+      - task: create:temp-build-folder
+
+      - task: create:uds-rke2-bootstrap
+      - task: deploy:uds-rke2-bootstrap
+        with:
+          joinToken: "my-test-token"
+      
+      - task: deploy:uds-rke2-destroy

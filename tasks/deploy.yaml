@@ -81,9 +81,17 @@ tasks:
           echo "$CORE_PKG_VERSION"
           uds zarf package deploy oci://ghcr.io/defenseunicorns/packages/uds/core:${CORE_PKG_VERSION}-${FLAVOR} -a ${ARCHITECTURE} --confirm --components="metrics-server"
 
-  - name: destroy-rook-ceph
-    description: "Destroys an existing rook-ceph cluster installation and all associated data in the cluster"
+  - name: rook-ceph-destroy
+    description: "Destroys an existing Rook-Ceph cluster installation and all associated data in the cluster"
     actions:
-      - description: "Run the rook-ceph destroy script"
+      - description: "Run the Rook-Ceph destroy script"
         cmd: |
           /root/uds-rke2-artifacts/rook-ceph/rook-ceph-destroy.sh
+          
+  - name: uds-rke2-destroy
+    description: "Destroys an existing RKE2 cluster installation and all associated artifacts"
+    actions:
+      - description: "Run the RKE2 destroy script"
+        cmd: |
+          /root/uds-rke2-artifacts/cluster/rke2-destroy.sh
+          rm -rf /root/rke2-startup.sh /root/uds-rke2-artifacts/

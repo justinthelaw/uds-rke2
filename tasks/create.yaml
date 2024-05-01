@@ -50,12 +50,3 @@ tasks:
           ZARF_CONFIG="packages/init/zarf-config.yaml" uds zarf package create packages/minio/ \
             -o build/packages/ \
             --confirm
-
-  - name: remove-temp-build-folder
-    description: "Creates a temporary build folder which can be used to store packages created during the workflow"
-    actions:
-      - description: "Make the build directory at the root level of the repository"
-        cmd: |
-          rm -rf build/packages/ \
-          rm -rf build/bundles/ \
-          rm -rf zarf-sbom/

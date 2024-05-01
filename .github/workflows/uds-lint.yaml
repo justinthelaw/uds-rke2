@@ -3,13 +3,14 @@ name: UDS Lint
 on:
   push:
     branches:
-      - '!main'
+      - "main"
     paths:
-      - '**/uds.yaml'
+      - "bundles"
   pull_request:
-    branches: [main]
+    branches:
+      - "main"
     paths:
-      - '**/uds.yaml'
+      - "bundles"
 
 concurrency:
   group: udslint-${{ github.ref }}
@@ -41,9 +42,7 @@ jobs:
 
       - name: Validate uds-bundle.yaml
         run: |
-          if [ -f "uds-bundle.yaml" ]; then
-            echo "uds-bundle.yaml exists."
-            check-jsonschema uds-bundle.yaml --schemafile uds.schema.json
-          else
-            echo "uds-bundle.yaml does not exist."
-          fi
+            check-jsonschema bundles/rke2-standard/uds-bundle.yaml --schemafile uds.schema.json
+            # TODO: add back in when rke2-slim package is created
+            # check-jsonschema bundles/rke2-slim/uds-bundle.yaml --schemafile uds.schema.json
+

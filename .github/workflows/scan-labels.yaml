@@ -3,9 +3,10 @@ name: Validate Labels
 on:
   push:
     branches:
-      - '!main'
+      - "!main"
   pull_request:
-    branches: [main]
+    branches:
+      - "main"
     types: [labeled, unlabeled, opened, edited, synchronize]
 
 concurrency:

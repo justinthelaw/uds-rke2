@@ -3,7 +3,7 @@ name: Zarf Lint
 on:
   push:
     branches:
-      - '!main'
+      - 'main'
     paths:
       - '**/zarf.yaml'
   pull_request:
@@ -41,9 +41,9 @@ jobs:
 
       - name: Validate zarf.yaml
         run: |
-          if [ -f "zarf.yaml" ]; then
-            echo "zarf.yaml exists."
-            check-jsonschema zarf.yaml --schemafile zarf.schema.json
-          else
-            echo "zarf.yaml does not exist."
-          fi
+            check-jsonschema packages/init/zarf.yaml --schemafile zarf.schema.json
+            check-jsonschema packages/minio/zarf.yaml --schemafile zarf.schema.json
+            check-jsonschema packages/rook-ceph/zarf.yaml --schemafile zarf.schema.json
+            check-jsonschema packages/uds-rke2/zarf.yaml --schemafile zarf.schema.json
+            # TODO: add this back in when longhorn package is written
+            # check-jsonschema packages/longhorn/zarf.yaml --schemafile zarf.schema.json

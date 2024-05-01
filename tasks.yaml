@@ -18,8 +18,8 @@ tasks:
         with:
           joinToken: "my-test-token"
 
-      - task: create:rook-ceph-init
-      - task: deploy:rook-ceph-init
+      - task: create:uds-rke2-init
+      - task: deploy:uds-rke2-init
 
       - task: create:minio
       - task: deploy:minio

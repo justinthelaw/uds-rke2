@@ -90,13 +90,13 @@ components:
       - source: scripts/rke2-config.sh
         target: /root/uds-rke2-artifacts/rke2-config.sh
         executable: true
-      - source: scripts/configs/audit-policy.yaml
+      - source: configs/audit-policy.yaml
         target: /root/uds-rke2-artifacts/audit-policy.yaml
         executable: false
-      - source: scripts/configs/default-pss.yaml
+      - source: configs/default-pss.yaml
         target: /root/uds-rke2-artifacts/default-pss.yaml
         executable: false
-      - source: scripts/configs/rke2-config.yaml
+      - source: configs/rke2-config.yaml
         target: /root/uds-rke2-artifacts/rke2-config.yaml
         executable: false
       - source: scripts/rke2-startup.sh

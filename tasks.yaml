@@ -1,0 +1,29 @@
+# TODO: renovate setup
+# yaml-language-server: $schema=https://raw.githubusercontent.com/defenseunicorns/uds-cli/v0.10.3/tasks.schema.json
+
+includes:
+  - create: ./tasks/create.yaml
+  - deploy: ./tasks/deploy.yaml
+  - create-core: https://raw.githubusercontent.com/defenseunicorns/uds-core/v0.19.0/tasks/create.yaml
+  - deploy-core: https://raw.githubusercontent.com/defenseunicorns/uds-core/v0.19.0/tasks/deploy.yaml
+
+tasks:
+  - name: standard
+    description: "Bootstrap an RKE2 cluster, and build and deploy Rook-Ceph Zarf Init, MinIO, and UDS Core packages"
+    actions:
+      - task: create:temp-build-folder
+
+      - task: create:uds-rke2-bootstrap
+      - task: deploy:uds-rke2-bootstrap
+        with:
+          joinToken: "my-test-token"
+
+      - task: create:rook-ceph-init # TODO: swap for longhorn as default
+      - task: deploy:rook-ceph-init
+
+      - task: create:minio
+      - task: deploy:minio
+
+      - task: deploy:specific-core-package-release
+
+      - task: create:remove-temp-build-folder

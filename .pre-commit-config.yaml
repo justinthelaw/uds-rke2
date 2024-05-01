@@ -1,0 +1,126 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.0.1
+    hooks:
+      - id: check-added-large-files
+        name: Large Files check
+        args: ["--maxkb=1024"]
+
+      - id: check-merge-conflict
+        name: Merge Conflict Resolution Check
+
+      - id: end-of-file-fixer
+        name: Newline EOF Checker
+
+      - id: fix-byte-order-marker
+        name: Fix UTF-8 byte order marker
+
+      - id: trailing-whitespace
+        name: Whitespace Cleaning Check
+        args: [--markdown-linebreak-ext=md]
+
+  - repo: https://github.com/scop/pre-commit-shfmt
+    rev: v3.8.0-1
+    hooks:
+      - id: shfmt
+        name: Shell Script Format
+
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.18.0
+    hooks:
+      - id: gitleaks
+        name: GitLeaks Checks
+
+  - repo: https://github.com/sirosen/fix-smartquotes
+    rev: 0.2.0
+    hooks:
+      - id: fix-smartquotes
+
+  - repo: https://github.com/DavidAnson/markdownlint-cli2
+    rev: v0.12.1
+    hooks:
+      - id: markdownlint-cli2
+        name: Markdown Linting
+
+  - repo: https://github.com/hadolint/hadolint
+    rev: v2.12.0
+    hooks:
+      - id: hadolint-docker
+        name: Dockerfile Lint
+
+  - repo: https://github.com/gruntwork-io/pre-commit
+    rev: v0.1.23
+    hooks:
+      - id: helmlint
+        name: Helm Chart Linting
+
+  #############
+  # UDS v0.10.3
+  #############
+  # TODO: renovate setup
+
+  # ZARF PACKAGE CHECK
+  - repo: local
+    hooks:
+      - id: download-schema
+        name: "Download Zarf Schema"
+        entry: bash -c 'curl -o zarf.schema.json https://raw.githubusercontent.com/defenseunicorns/uds-cli/v0.10.3/zarf.schema.json'
+        language: system
+  - repo: https://github.com/python-jsonschema/check-jsonschema
+    rev: 0.14.0
+    hooks:
+      - id: check-jsonschema
+        name: "Validate Zarf Configs Against Schema"
+        files: "zarf.yaml"
+        types: [yaml]
+        args: ["--schemafile", "zarf.schema.json"]
+  - repo: local
+    hooks:
+      - id: delete-schema
+        name: "Delete Zarf Schema"
+        entry: bash -c 'rm -f zarf.schema.json'
+        language: system
+
+  # UDS BUNDLE CHECK
+  - repo: local
+    hooks:
+      - id: download-schema
+        name: "Download UDS Bundle Schema"
+        entry: bash -c 'curl -o uds.schema.json https://raw.githubusercontent.com/defenseunicorns/uds-cli/v0.10.3/uds.schema.json'
+        language: system
+  - repo: https://github.com/python-jsonschema/check-jsonschema
+    rev: 0.14.0
+    hooks:
+      - id: check-jsonschema
+        name: "Validate UDS Bundles Against Schema"
+        files: "uds-bundle.yaml"
+        types: [yaml]
+        args: ["--schemafile", "uds.schema.json"]
+  - repo: local
+    hooks:
+      - id: delete-schema
+        name: "Delete UDS Bundle Schema"
+        entry: bash -c 'rm -f uds.schema.json'
+        language: system
+
+  # UDS TASK CHECK
+  - repo: local
+    hooks:
+      - id: download-schema
+        name: "Download UDS Tasks Schema"
+        entry: bash -c 'curl -o tasks.schema.json https://raw.githubusercontent.com/defenseunicorns/uds-cli/v0.10.3/tasks.schema.json'
+        language: system
+  - repo: https://github.com/python-jsonschema/check-jsonschema
+    rev: 0.14.0
+    hooks:
+      - id: check-jsonschema
+        name: "Validate UDS Tasks Against Schema"
+        files: "tasks.yaml"
+        types: [yaml]
+        args: ["--schemafile", "tasks.schema.json"]
+  - repo: local
+    hooks:
+      - id: delete-schema
+        name: "Delete UDS Tasks Schema"
+        entry: bash -c 'rm -f tasks.schema.json'
+        language: system

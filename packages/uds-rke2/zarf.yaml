@@ -1,0 +1,206 @@
+# TODO: renovate setup
+# yaml-language-server: $schema=https://raw.githubusercontent.com/defenseunicorns/uds-cli/v0.10.3/zarf.schema.json
+
+kind: ZarfPackageConfig
+metadata:
+  name: uds-rke2
+  description: "UDS RKE2 cluster setup for servers and agents. WARNING: This capability requires root access for deployment."
+  url: https://github.com/justinthelaw/uds-rke2-sandbox
+  architecture: amd64
+  # TODO: release-please setup
+  version: "0.1.0"
+
+variables:
+  - name: CLUSTER_NAME
+    description: "Name of the cluster"
+    default: "uds-prod"
+  - name: JOIN_TOKEN
+    description: "Cluster joining token"
+    prompt: true
+    sensitive: true
+  - name: JOIN_ADDRESS
+    description: "IP address at which to join the node when an existing cluster exists at a different IP address"
+    default: ""
+    prompt: false
+  - name: DNS_ADDRESS
+    description: "DNS address at which to join the node when accessing via a public IP or a hostname"
+    default: ""
+    prompt: false
+  - name: AGENT_FLAG
+    description: "A flag that identifies whether the node is to be started up as an agent-only role"
+    default: ""
+    prompt: false
+    pattern: "^-a$|^$"
+
+components:
+  - name: destroy-cluster
+    required: false
+    description: "Optionally destroy an existing UDS RKE2 installation on the host system"
+    files:
+      - source: scripts/rke2/rke2-destroy.sh
+        target: /root/uds-rke2-artifacts/cluster/rke2-destroy.sh
+        executable: true
+    actions:
+      onDeploy:
+        after:
+          - cmd: |
+              # Remove UDS RKE2 installation and related dependencies
+              /root/uds-rke2-artifacts/cluster/rke2-destroy.sh
+
+              # Remove all UDS RKE2 installation artifacts
+              rm -rf /root/rke2-startup.sh /root/uds-rke2-artifacts/
+            description: "Remove UDS RKE2 and all related artifacts and dependencies"
+
+  # TODO: air-gap this
+  - name: install-deps
+    required: true
+    description: "Optionally install missing pre-requisites on the host system"
+    files:
+      - source: scripts/os/install-deps.sh
+        target: /root/uds-rke2-artifacts/deps/install-deps.sh
+        executable: true
+    actions:
+      onDeploy:
+        after:
+          - cmd: /root/uds-rke2-artifacts/deps/install-deps.sh
+            description: "Install all UDS RKE2 related dependencies"
+
+    # TODO: air-gap this
+  - name: stig-host
+    required: false
+    description: "Optionally apply STIG requirements to the host system"
+    files:
+      - source: scripts/os/os-stig.sh
+        target: /root/uds-rke2-artifacts/configure/stig/os-stig.sh
+        executable: true
+    actions:
+      onDeploy:
+        after:
+          - cmd: /root/uds-rke2-artifacts/configure/stig/os-stig.sh
+            description: "Apply the DoD Cyber STIG script for Ubuntu 20.04"
+
+  - name: prepare-host
+    required: true
+    description: "Prepare host system with RKE2 installation and runtime pre-requisites"
+    files:
+      - source: scripts/os/os-prep.sh
+        target: /root/uds-rke2-artifacts/configure/os-prep.sh
+        executable: true
+    actions:
+      onDeploy:
+        after:
+          - cmd: /root/uds-rke2-artifacts/configure/os-prep.sh
+            description: "Prepare the necessary OS configurations for running UDS RKE2"
+
+  # TODO: air-gap this
+  - name: install-and-configure-rke2
+    required: true
+    description: "Install and configure RKE2 on the host system"
+    files:
+      - source: scripts/rke2/rke2-install.sh
+        target: /root/uds-rke2-artifacts/rke2-install.sh
+        executable: true
+      - source: scripts/rke2/rke2-config.sh
+        target: /root/uds-rke2-artifacts/rke2-config.sh
+        executable: true
+      - source: scripts/rke2/configs/audit-policy.yaml
+        target: /root/uds-rke2-artifacts/configs/audit-policy.yaml
+        executable: false
+      - source: scripts/rke2/configs/default-pss.yaml
+        target: /root/uds-rke2-artifacts/configs/default-pss.yaml
+        executable: false
+      - source: scripts/rke2/configs/rke2-config.yaml
+        target: /root/uds-rke2-artifacts/configs/rke2-config.yaml
+        executable: false
+      - source: scripts/rke2/rke2-startup.sh
+        target: /root/uds-rke2-artifacts/rke2-startup.sh
+        executable: true
+    actions:
+      onDeploy:
+        after:
+          # TODO: renovate setup
+          - cmd: |
+              INSTALL_RKE2_VERSION="v1.28.6+rke2r1" /root/uds-rke2-artifacts/rke2-install.sh
+              /root/uds-rke2-artifacts/rke2-config.sh
+            description: "Install and configure UDS RKE2"
+
+  - name: join-node-args
+    required: true
+    description: "Sets node start script arguments for a non-bootstrapping node joining an existing cluster"
+    actions:
+      onDeploy:
+        before:
+          # only set the flags if entered at deploy-time for a join node
+          - cmd: |
+              extra_join_node_args=$(
+                args=""
+
+                if [ -n "${ZARF_VAR_JOIN_ADDRESS}"]; then
+                  args="-s ${ZARF_VAR_JOIN_ADDRESS}"
+                fi
+
+                if [ -n "${ZARF_VAR_DNS_ADDRESS}"]; then
+                  args="-T ${ZARF_VAR_DNS_ADDRESS}"
+                fi
+
+                echo ${args}
+              )
+
+              echo $(extra_join_node_args)
+            setVariables:
+              - name: RKE2_JOIN_ARGS
+            description: "Add delivery-engineer defined UDS RKE2 arguments to startup scripts"
+
+  # TODO: air-gap this
+  - name: start-rke2-node
+    required: true
+    description: "Start a new RKE2 node on the host system"
+    files:
+      - source: scripts/rke2/rke2-destroy.sh
+        target: /root/uds-rke2-artifacts/rke2-destroy.sh
+        executable: true
+    actions:
+      onDeploy:
+        after:
+          - cmd: |
+              /root/rke2-startup.sh -t ${ZARF_VAR_JOIN_TOKEN} ${ZARF_VAR_RKE2_JOIN_ARGS} ${ZARF_VAR_AGENT_FLAG}
+            description: "Start RKE2 node"
+            maxTotalSeconds: 600
+          - description: "Validate kube-apiserver is up"
+            wait:
+              cluster:
+                kind: Pod
+                name: component=kube-apiserver
+                namespace: kube-system
+                condition: "'{.status.phase}'=Running"
+            maxTotalSeconds: 300
+          - description: "Validate kube-controller-manager is up"
+            wait:
+              cluster:
+                kind: Pod
+                name: component=kube-controller-manager
+                namespace: kube-system
+                condition: "'{.status.phase}'=Running"
+            maxTotalSeconds: 300
+          - description: "Validate kube-proxy is up"
+            wait:
+              cluster:
+                kind: Pod
+                name: component=kube-proxy
+                namespace: kube-system
+                condition: "'{.status.phase}'=Running"
+            maxTotalSeconds: 300
+          - description: "Validate kube-scheduler is up"
+            wait:
+              cluster:
+                kind: Pod
+                name: component=kube-scheduler
+                namespace: kube-system
+                condition: "'{.status.phase}'=Running"
+            maxTotalSeconds: 300
+      onRemove:
+        after:
+          - cmd: |
+              /root/uds-rke2-artifacts/rke2-destroy.sh
+              rm -rf /root/uds-rke2-artifacts/
+            description: "Destroy all UDS RKE2 components and remove all UDS RKE2 artifacts"

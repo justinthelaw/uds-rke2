@@ -1,0 +1,122 @@
+# TODO: renovate setup
+# yaml-language-server: $schema=https://raw.githubusercontent.com/defenseunicorns/uds-cli/v0.10.3/zarf.schema.json
+
+kind: ZarfInitConfig
+metadata:
+  name: init
+  description: "Custom Zarf Init Package for RKE2 with Rook-Ceph"
+  architecture: amd64
+  # TODO: release-please setup
+  version: "0.1.0"
+
+components:
+  - name: zarf-injector
+    required: true
+    description: "Move the Zarf injector and registries binaries"
+    import:
+      # TODO: renovate setup
+      url: oci://ghcr.io/defenseunicorns/packages/init:v0.32.6
+
+  # Creates the temporary seed-registry
+  - name: zarf-seed-registry
+    required: true
+    description: "Creates a bootstrapping seed registry and prepares a volume for mounting to the permanent registry"
+    import:
+      # TODO: renovate setup
+      url: oci://ghcr.io/defenseunicorns/packages/init:v0.32.6
+    charts:
+      - name: docker-registry
+        namespace: zarf
+        valuesFiles:
+          - values/registry-values.yaml
+    actions:
+      onDeploy:
+        before:
+          - cmd: ./zarf tools kubectl get pvc zarf-docker-registry -n zarf >/dev/null 2>&1 && echo true || echo false
+            description: Set persistence for upgrading the seed registry
+            mute: true
+            setVariables:
+              - name: UPGRADE_PERSISTENCE
+          - mute: true
+            description: Set ENV variables for upgrading the seed registry
+            cmd: |
+              ./zarf tools kubectl get pvc zarf-docker-registry -n zarf >/dev/null 2>&1 && \
+              echo "" || \
+              echo "- name: REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY
+                value: \"/var/lib/registry\""
+            setVariables:
+              - name: UPGRADE_ENV_VARS
+                autoIndent: true
+
+  - name: rook-ceph-images-initial
+    required: true
+    description: "Push the Rook-Ceph images into the seed registry"
+    import:
+      path: ../rook-ceph
+      name: rook-ceph-images
+
+  - name: rook-ceph-install-deps
+    required: true
+    import:
+      path: ../rook-ceph
+      name: install-deps
+
+  - name: rook-ceph-operator
+    required: true
+    import:
+      path: ../rook-ceph
+      name: rook-ceph-operator
+
+  - name: rook-ceph-cluster
+    required: true
+    import:
+      path: ../rook-ceph
+      name: rook-ceph-cluster
+
+  - name: zarf-registry
+    required: true
+    description: "Create the permanent registry"
+    import:
+      # TODO: renovate setup
+      url: oci://ghcr.io/defenseunicorns/packages/init:v0.32.6
+
+  - name: rook-ceph-images
+    required: true
+    description: "Push the Rook-Ceph images into the permanent registry"
+    import:
+      path: ../rook-ceph
+    images:
+      - "###ZARF_PKG_TMPL_REGISTRY_IMAGE_DOMAIN######ZARF_PKG_TMPL_REGISTRY_IMAGE###:###ZARF_PKG_TMPL_REGISTRY_IMAGE_TAG###"
+
+  - name: zarf-agent
+    required: true
+    description: "Create the Zarf pod and git mutating webhook"
+    import:
+      # TODO: renovate setup
+      url: oci://ghcr.io/defenseunicorns/packages/init:v0.32.6
+
+  # TODO: air-gap this
+  - name: uds-rke2-stack
+    required: true
+    description: "Install MetalLB, Nginx, and ensure MachineID on the bootstrapping node"
+    actions:
+      onDeploy:
+        before:
+          - cmd: uds zarf tools kubectl get nodes -o=jsonpath='{.items[0].status.addresses[?(@.type=="InternalIP")].address}' | cut -d'.' -f1-3
+            description: "Load network IP base for MetalLB"
+            setVariables:
+              - name: BASE_IP
+        after:
+          - cmd: uds zarf tools kubectl rollout restart deployment coredns -n kube-system
+            description: "Restart CoreDNS to pick up internal DNS override for uds.prod"
+    charts:
+      - name: metallb
+        namespace: uds-rke2
+        url: https://metallb.github.io/metallb
+        # TODO: renovate setup
+        version: 0.13.11
+      - name: uds-rke2-stack
+        namespace: uds-rke2-stack
+        localPath: charts
+        # TODO: release-please setup
+        version: 0.1.0

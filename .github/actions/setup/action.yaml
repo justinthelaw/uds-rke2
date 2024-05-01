@@ -1,0 +1,36 @@
+name: Setup Environment
+description: UDS Environment Setup
+
+inputs:
+  registry1Username:
+    description: Registry1 Username
+  registry1Password:
+    description: Registry1 Password
+  ghToken:
+    description: GitHub Token
+
+runs:
+  using: composite
+  steps:
+    - name: Install UDS CLI
+      shell: bash
+      # TODO: renovate setup
+      run: |
+        sudo wget https://github.com/defenseunicorns/uds-cli/releases/download/v0.10.3/uds-cli_v0.10.3_Linux_amd64
+        sudo chmod +x uds-cli_v0.10.3_Linux_amd64
+        sudo mv uds-cli_v0.10.3_Linux_amd64 /usr/local/bin/uds
+
+    - name: Iron Bank Login
+      if: ${{ inputs.registry1Username != '' }}
+      shell: bash
+      env:
+        REGISTRY_USERNAME: ${{ inputs.registry1Username }}
+        REGISTRY_PASSWORD: ${{ inputs.registry1Password }}
+      run: sudo echo "${{ env.REGISTRY_PASSWORD }}" | sudo uds zarf tools registry login -u "${{ env.REGISTRY_USERNAME }}" --password-stdin registry1.dso.mil
+
+    - name: GHCR Login
+      if: ${{ inputs.ghToken != '' }}
+      shell: bash
+      env:
+        GH_TOKEN: ${{ inputs.ghToken }}
+      run: sudo echo "${{ env.GH_TOKEN }}" | sudo uds zarf tools registry login -u "dummy" --password-stdin ghcr.io

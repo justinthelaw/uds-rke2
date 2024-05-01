@@ -1,0 +1,12 @@
+{
+  "packages": {
+    ".": {
+      "release-type": "simple",
+      "draft": true,
+      "changelog-path": "CHANGELOG.md",
+      "include-v-in-tag": false,
+      "versioning": "default",
+      "extra-files": ["README.md", "zarf.yaml"]
+    }
+  }
+}

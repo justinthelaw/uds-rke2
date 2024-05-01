@@ -1,0 +1,56 @@
+cephClusterSpec:
+  mon:
+    count: 1
+    allowMultiplePerNode: true
+
+  mgr:
+    count: 1
+    allowMultiplePerNode: true
+    modules:
+      - name: rook
+        enabled: true
+
+  cephConfig:
+    # the following overrides are required for single-node Rook-Ceph to run properly
+    # see the UDS RKE2 repository's documentation, `docs/ROOK-CEPH.md`, for more details
+    global:
+      osd_pool_default_size: "1"
+      mon_warn_on_pool_no_redundancy: "false"
+      bdev_flock_retry: "20"
+      bluefs_buffered_io: "false"
+      mon_data_avail_warn: "10"
+
+  disruptionManagement:
+    managePodBudgets: false
+    osdMaintenanceTimeout: 30
+    manageMachineDisruptionBudgets: false
+
+cephBlockPool:
+  spec:
+    dataPool:
+      replicated:
+        size: 1
+
+cephFileSystem:
+  spec:
+    dataPools:
+      replicated:
+        size: 1
+      compressionMode: none
+    metadataPool:
+      replicated:
+        size: 1
+    metadataServer:
+      activeCount: 1
+      activeStandby: false
+
+cephObjectStore:
+  spec:
+    dataPools:
+      replicated:
+        size: 1
+    metadataPool:
+      replicated:
+        size: 1
+    gateway:
+      instances: 1

@@ -1,0 +1,45 @@
+name: Test UDS Capability
+
+on:
+  push:
+    branches:
+      - "main"
+  # TODO: remove the ignore-all later
+  # pull_request:
+  #   paths-ignore:
+  #     - "**.md"
+  #     - "docs/**"
+  #     - "CODEOWNERS"
+  #     - "LICENSE"
+
+  #     - ".github/workflows/commit-lint.yaml"
+  #     - ".github/workflows/zarf-lint.yaml"
+  #     - ".github/workflows/uds-lint.yaml"
+  #     - ".github/workflows/helm-lint.yaml"
+  #     - ".github/workflows/scan-labels.yaml"
+  #     - ".github/workflows/workflow-clean.yaml"
+  #     - ".github/workflows/tag-and-release.yaml"
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  test-clean-install:
+    runs-on: ubuntu-latest
+    name: Test Build and Install
+
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+
+      - name: Setup UDS
+        if: always()
+        uses: ./.github/actions/setup
+        with:
+          registry1Username: ${{secrets.IRON_BANK_ROBOT_USERNAME}}
+          registry1Password: ${{secrets.IRON_BANK_ROBOT_PASSWORD}}
+          ghToken: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create and Deploy UDS RKE2
+        run: sudo uds run standard -l warn

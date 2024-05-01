@@ -1,0 +1,41 @@
+cephClusterSpec:
+  mon:
+    count: ###ZARF_VAR_REPLICAS###
+    allowMultiplePerNode: true
+
+  mgr:
+    count: ###ZARF_VAR_REPLICAS###
+    allowMultiplePerNode: true
+    modules:
+      - name: rook
+        enabled: true
+
+cephBlockPool:
+  spec:
+    dataPool:
+      replicated:
+        size: ###ZARF_VAR_REPLICAS###
+
+cephFileSystem:
+  spec:
+    dataPools:
+      replicated:
+        size: ###ZARF_VAR_REPLICAS###
+      compressionMode: none
+    metadataPool:
+      replicated:
+        size: ###ZARF_VAR_REPLICAS###
+    metadataServer:
+      activeCount: ###ZARF_VAR_ACTIVE_METADATA_SERVERS###
+      activeStandby: true
+
+cephObjectStore:
+  spec:
+    dataPools:
+      replicated:
+        size: ###ZARF_VAR_REPLICAS###
+    metadataPool:
+      replicated:
+        size: ###ZARF_VAR_REPLICAS###
+    gateway:
+      instances: ###ZARF_VAR_REPLICAS###

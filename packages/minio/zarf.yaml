@@ -1,0 +1,31 @@
+# TODO: renovate setup
+# yaml-language-server: $schema=https://raw.githubusercontent.com/defenseunicorns/uds-cli/v0.10.3/zarf.schema.json
+
+kind: ZarfInitConfig
+metadata:
+  name: minio
+  description: "MinIO Zarf Package"
+  architecture: amd64
+  # TODO: release-please setup
+  version: "0.1.0"
+
+components:
+  - name: minio-images
+    required: true
+    description: "Push MinIO images to the Zarf seed registry"
+    images:
+      # TODO: renovate setup
+      - registry1.dso.mil/ironbank/opensource/minio/minio:RELEASE.2023-09-30T07-02-29Z # mirrors MinIO helm release v5.0.14
+      - registry1.dso.mil/ironbank/opensource/minio/mc:RELEASE.2023-09-29T16-41-22Z # mirrors MinIO helm release v5.0.14
+
+  - name: minio
+    description: "Deploy MinIO as the default bucket storage solution"
+    required: true
+    charts:
+      - name: minio
+        namespace: minio
+        # TODO: renovate setup
+        version: 5.0.14
+        url: https://charts.min.io/
+        valuesFiles:
+          - "values/minio-values.yaml"

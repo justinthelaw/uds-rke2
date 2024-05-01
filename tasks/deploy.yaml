@@ -63,9 +63,9 @@ tasks:
       - description: "Deploy the custom Zarf Init package"
         cmd: |
           uds zarf package deploy build/packages/zarf-init-amd64-*.tar.zst \
-          --set FLAVOR="single-node" \
-          --no-progress \
-          --confirm
+            --set FLAVOR="single-node" \
+            --no-progress \
+            --confirm
 
   - name: minio
     description: "Deploy the MinIO package"
@@ -73,8 +73,8 @@ tasks:
       - description: "Deploy the MinIO package"
         cmd: |
           uds zarf package deploy build/packages/zarf-package-minio-amd64-*.zst \
-          --no-progress \
-          --confirm
+            --no-progress \
+            --confirm
 
   - name: specific-core-package-release
     description: "Deploy a specific UDS Core package based on the VERSION variable"
@@ -84,10 +84,10 @@ tasks:
         cmd: |
           echo "$CORE_PKG_VERSION"
           uds zarf package deploy oci://ghcr.io/defenseunicorns/packages/uds/core:${CORE_PKG_VERSION}-${FLAVOR} \
-          -a ${ARCHITECTURE} \
-          --components metrics-server \
-          --no-progress \
-          --confirm
+            -a ${ARCHITECTURE} \
+            --components metrics-server \
+            --no-progress \
+            --confirm
 
   - name: rook-ceph-destroy
     description: "Destroys an existing Rook-Ceph cluster installation and all associated data in the cluster"

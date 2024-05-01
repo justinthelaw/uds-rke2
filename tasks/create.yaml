@@ -25,21 +25,21 @@ tasks:
     actions:
       - description: "Build UDS RKE2 Package"
         cmd: |
-          sudo uds zarf package create packages/uds-rke2/ \
-          -o build/packages/ \
-          --no-progress \
-          --confirm
+          ZARF_CONFIG="packages/rke2/zarf-config.yaml" sudo uds zarf package create packages/uds-rke2/ \
+            -o build/packages/ \
+            --no-progress \
+            --confirm
 
   - name: uds-rke2-bootstrap
     description: "Build the UDS RKE2 Zarf package, as the cluster bootstrapping node"
     actions:
       - description: "Build UDS RKE2 Package"
         cmd: |
-          sudo uds zarf package create packages/uds-rke2/ \
-          --flavor bootstrap \
-          -o build/packages/ \
-          --no-progress \
-          --confirm
+          ZARF_CONFIG="packages/rke2/zarf-config.yaml" sudo uds zarf package create packages/uds-rke2/ \
+            --flavor bootstrap \
+            -o build/packages/ \
+            --no-progress \
+            --confirm
 
   - name: uds-rke2-init
     description: "Build the custom Zarf Init package for RKE2 with Rook-Ceph"
@@ -57,7 +57,7 @@ tasks:
     actions:
       - description: "Build the MinIO package"
         cmd: |
-          ZARF_CONFIG="packages/init/zarf-config.yaml" uds zarf package create packages/minio/ \
+          uds zarf package create packages/minio/ \
             -o build/packages/ \
             --no-progress \
             --confirm

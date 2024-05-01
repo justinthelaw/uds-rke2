@@ -63,5 +63,6 @@ jobs:
 
       - name: Publish the Capability
         run: |
+          cd packages/uds-rke2
           sudo uds zarf package create --confirm -a arm64 -o oci://ghcr.io/justinthelaw/packages
           sudo uds zarf package create --confirm -a amd64 -o oci://ghcr.io/justinthelaw/packages

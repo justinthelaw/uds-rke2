@@ -25,7 +25,7 @@ tasks:
     actions:
       - description: "Build UDS RKE2 Package"
         cmd: |
-          ZARF_CONFIG="packages/rke2/zarf-config.yaml" sudo uds zarf package create packages/uds-rke2/ \
+          ZARF_CONFIG="packages/uds-rke2/zarf-config.yaml" sudo uds zarf package create packages/uds-rke2/ \
             -o build/packages/ \
             --no-progress \
             --confirm

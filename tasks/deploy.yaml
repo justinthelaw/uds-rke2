@@ -26,6 +26,7 @@ tasks:
           sudo uds zarf package deploy build/packages/zarf-package-uds-rke2-amd64-0.1.0.tar.zst \
             --set JOIN_TOKEN=${{ .inputs.joinToken }} \
             --components destroy-cluster,stig-host \
+            --no-progress \
             --confirm
 
   - name: uds-rke2-join-node
@@ -54,6 +55,7 @@ tasks:
             --set JOIN_TOKEN=${{ .inputs.joinToken }} \
             --set DNS_ADDRESS=${{ .inputs.dnsAddress }} \
             --set AGENT_FLAG=${{ .inputs.agentFlag }} \
+            --no-progress \
             --confirm
 
   - name: rook-ceph-init
@@ -63,6 +65,7 @@ tasks:
         cmd: |
           uds zarf package deploy build/packages/zarf-init-amd64-*.tar.zst \
           --set FLAVOR="single-node" \
+          --no-progress \
           --confirm
 
   - name: minio
@@ -70,7 +73,9 @@ tasks:
     actions:
       - description: "Deploy the MinIO package"
         cmd: |
-          uds zarf package deploy build/packages/zarf-package-minio-amd64-*.zst --confirm
+          uds zarf package deploy build/packages/zarf-package-minio-amd64-*.zst \
+          --no-progress \
+          --confirm
 
   - name: specific-core-package-release
     description: "Deploy a specific UDS Core package based on the VERSION variable"
@@ -79,7 +84,11 @@ tasks:
         # TODO: renovate setup
         cmd: |
           echo "$CORE_PKG_VERSION"
-          uds zarf package deploy oci://ghcr.io/defenseunicorns/packages/uds/core:${CORE_PKG_VERSION}-${FLAVOR} -a ${ARCHITECTURE} --confirm --components="metrics-server"
+          uds zarf package deploy oci://ghcr.io/defenseunicorns/packages/uds/core:${CORE_PKG_VERSION}-${FLAVOR} \
+          -a ${ARCHITECTURE} \
+          --components="metrics-server" \
+          --no-progress \
+          --confirm
 
   - name: rook-ceph-destroy
     description: "Destroys an existing Rook-Ceph cluster installation and all associated data in the cluster"
@@ -87,7 +96,7 @@ tasks:
       - description: "Run the Rook-Ceph destroy script"
         cmd: |
           /root/uds-rke2-artifacts/rook-ceph/rook-ceph-destroy.sh
-          
+
   - name: uds-rke2-destroy
     description: "Destroys an existing RKE2 cluster installation and all associated artifacts"
     actions:

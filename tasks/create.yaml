@@ -46,7 +46,7 @@ tasks:
     actions:
       - description: "Build the custom Zarf Init package"
         cmd: |
-          sudo uds ZARF_CONFIG="packages/init/zarf-config.yaml" zarf package create packages/init/ \
+          sudo ZARF_CONFIG="packages/init/zarf-config.yaml" uds zarf package create packages/init/ \
             -o build/packages/ \
             --set AGENT_IMAGE_TAG=$(uds zarf version) \
             --no-progress \

@@ -63,7 +63,6 @@ tasks:
       - description: "Deploy the custom Zarf Init package"
         cmd: |
           uds zarf package deploy build/packages/zarf-init-amd64-*.tar.zst \
-            --set FLAVOR="single-node" \
             --no-progress \
             --confirm
 

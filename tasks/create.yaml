@@ -35,20 +35,21 @@ tasks:
     actions:
       - description: "Build UDS RKE2 Package"
         cmd: |
-          ZARF_CONFIG="packages/rke2/zarf-config.yaml" sudo uds zarf package create packages/uds-rke2/ \
+          ZARF_CONFIG="packages/uds-rke2/zarf-config.yaml" sudo uds zarf package create packages/uds-rke2/ \
             --flavor bootstrap \
             -o build/packages/ \
             --no-progress \
             --confirm
 
   - name: uds-rke2-init
-    description: "Build the custom Zarf Init package for RKE2 with Rook-Ceph"
+    description: "Build the custom Zarf Init package for RKE2 with Rook-Ceph, single node-only"
     actions:
       - description: "Build the custom Zarf Init package"
         cmd: |
           ZARF_CONFIG="packages/init/zarf-config.yaml" uds zarf package create packages/init/ \
             -o build/packages/ \
             --set AGENT_IMAGE_TAG=$(uds zarf version) \
+            --set CLUSTER_CONFIGURATION="single-node"
             --no-progress \
             --confirm
 

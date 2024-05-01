@@ -10,10 +10,10 @@ metadata:
   architecture: amd64
 
 constants:
-  # Must be set at create time, using the `--set FLAVOR` flag, to pulls in the right values file
-  - name: FLAVOR
-    description: "Mock package flavor for Rook-Ceph values file swapping (`multi-node` or `single-node`)"
-    value: "###ZARF_PKG_TMPL_FLAVOR###"
+  # Must be set at create time, using the `--set CLUSTER_CONFIGURATION` flag, to pull in the right values file
+  - name: CLUSTER_CONFIGURATION
+    description: "Rook-Ceph values file swapping (`multi-node` or `single-node`)"
+    value: "single-node"
     pattern: "^(single-node|multi-node)$"
 
 variables:
@@ -27,7 +27,7 @@ variables:
     default: "us-east-1"
     prompt: true
     sensitive: true
-    # The following variable replacements are only performed when `FLAVOR` is `multi-node`
+    # The following variable replacements are only performed when `CLUSTER_CONFIGURATION` is `multi-node`
   - name: REPLICAS
     description: "Number of rook-ceph resources to deploy, should generally match the number of nodes in the cluster"
     default: "1"
@@ -97,7 +97,7 @@ components:
         namespace: rook-ceph
         valuesFiles:
           - values/cluster-values.yaml
-          - values/###ZARF_PKG_TMPL_FLAVOR###-cluster-values.yaml
+          - values/${###ZARF_CONST_CLUSTER_CONFIGURATION###}-cluster-values.yaml
     actions:
       onDeploy:
         after:

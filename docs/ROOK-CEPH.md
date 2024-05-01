@@ -2,8 +2,6 @@
 
 Rook-Ceph is the block, object and file storage solution for the RKE2 cluster init. The Ceph Cluster and storage classes are deployed (`Ready` status) prior to the permanent Zarf Docker Registry is deployed in order to provide the PVC and PV a StorageClass in the cluster.
 
-Rook is the operator that orchestrates the Ceph storage solution on the host node. `ceph-common` and `lvm2` must be installed on the host node performing the storage workloads. These dependencies are installed as part of the [rook-ceph Zarf package](../packages/rook-ceph/zarf.yaml) using the [`install-deps.sh`](../packages/rook-ceph/scripts/install-deps.sh) script.
-
 ## Usage
 
 ### Flavors

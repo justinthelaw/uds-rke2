@@ -4,8 +4,8 @@
 variables:
   - name: CORE_PKG_VERSION
     description: "The version of UDS Core package to deploy"
-    # TODO: release-please setup
-    default: "0.20.0"
+    # TODO: renovate setup
+    default: "0.21.0"
   - name: FLAVOR
     description: "Flavor of the package to use (`registry1` or `upstream`)."
     default: "registry1"
@@ -21,11 +21,10 @@ tasks:
         required: true
     actions:
       - description: "Deploy RKE2 node, with optional components enabled"
-        # TODO: release-please setup
         cmd: |
-          sudo uds zarf package deploy build/packages/zarf-package-uds-rke2-amd64-0.1.0.tar.zst \
+          sudo uds zarf package deploy build/packages/zarf-package-uds-rke2-amd64-*.tar.zst \
             --set JOIN_TOKEN=${{ .inputs.joinToken }} \
-            --components destroy-cluster,stig-host \
+            --components destroy-cluster \
             --no-progress \
             --confirm
 
@@ -86,7 +85,7 @@ tasks:
           echo "$CORE_PKG_VERSION"
           uds zarf package deploy oci://ghcr.io/defenseunicorns/packages/uds/core:${CORE_PKG_VERSION}-${FLAVOR} \
           -a ${ARCHITECTURE} \
-          --components="metrics-server" \
+          --components metrics-server \
           --no-progress \
           --confirm
 
@@ -102,5 +101,5 @@ tasks:
     actions:
       - description: "Run the RKE2 destroy script"
         cmd: |
-          /root/uds-rke2-artifacts/cluster/rke2-destroy.sh
-          rm -rf /root/rke2-startup.sh /root/uds-rke2-artifacts/
+          /root/uds-rke2-artifacts/rke2-destroy.sh
+          rm -rf /root/uds-rke2-artifacts/

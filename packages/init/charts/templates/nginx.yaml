@@ -64,11 +64,11 @@ spec:
         name: nginx
         sidecar.istio.io/inject: "false"
     spec:
+      imagePullSecrets: {{ .Values.nginx.imagePullSecrets }}
       containers:
         - name: nginx
-          # This is a copy of the official nginx 1.25.3 image on GHCR to avoid rate limiting
           # TODO: renovate setup
-          image: ghcr.io/defenseunicorns/oss/uds-k3d-nginx:alpine-1.25.3
+          image: {{ .Values.nginx.image }}
           command: ["nginx", "-g", "daemon off;"]
           ports:
             - containerPort: 80

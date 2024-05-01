@@ -10,6 +10,11 @@ metadata:
   # TODO: release-please setup
   version: "0.1.0"
 
+constants:
+  - name: INSTALL_RKE2_VERSION
+    description: "Release of RKE2 to install"
+    value: "v1.28.6+rke2r1"
+
 variables:
   - name: CLUSTER_NAME
     description: "Name of the cluster"
@@ -37,7 +42,7 @@ components:
     required: false
     description: "Optionally destroy an existing UDS RKE2 installation on the host system"
     files:
-      - source: scripts/rke2/rke2-destroy.sh
+      - source: scripts/rke2-destroy.sh
         target: /root/uds-rke2-artifacts/rke2-destroy.sh
         executable: true
     actions:
@@ -46,39 +51,11 @@ components:
           - cmd: /root/uds-rke2-artifacts/rke2-destroy.sh
             description: "Remove UDS RKE2 and all related artifacts and dependencies"
 
-  # TODO: air-gap this
-  - name: install-deps
-    required: true
-    description: "Optionally install missing pre-requisites on the host system"
-    files:
-      - source: scripts/os/install-deps.sh
-        target: /root/uds-rke2-artifacts/install-deps.sh
-        executable: true
-    actions:
-      onDeploy:
-        after:
-          - cmd: /root/uds-rke2-artifacts/install-deps.sh
-            description: "Install all UDS RKE2 related dependencies"
-
-    # TODO: air-gap this
-  - name: stig-host
-    required: false
-    description: "Optionally apply STIG requirements to the host system"
-    files:
-      - source: scripts/os/os-stig.sh
-        target: /root/uds-rke2-artifacts/os-stig.sh
-        executable: true
-    actions:
-      onDeploy:
-        after:
-          - cmd: /root/uds-rke2-artifacts/os-stig.sh
-            description: "Apply the DoD Cyber STIG script for Ubuntu 20.04"
-
   - name: prepare-host
     required: true
     description: "Prepare host system with RKE2 installation and runtime pre-requisites"
     files:
-      - source: scripts/os/os-prep.sh
+      - source: scripts/os-prep.sh
         target: /root/uds-rke2-artifacts/os-prep.sh
         executable: true
     actions:
@@ -87,36 +64,52 @@ components:
           - cmd: /root/uds-rke2-artifacts/os-prep.sh
             description: "Prepare the necessary OS configurations for running UDS RKE2"
 
-  # TODO: air-gap this
   - name: install-and-configure-rke2
     required: true
     description: "Install and configure RKE2 on the host system"
     files:
-      - source: scripts/rke2/rke2-install.sh
+      - source: https://github.com/rancher/rke2/releases/download/###ZARF_CONST_INSTALL_RKE2_VERSION###/rke2-images-core.linux-amd64.tar.zst
+        target: /root/uds-rke2-artifacts/install/rke2-images-core.linux-amd64.tar.zst
+      - source: https://github.com/rancher/rke2/releases/download/###ZARF_CONST_INSTALL_RKE2_VERSION###/rke2-images-canal.linux-amd64.tar.zst
+        target: /root/uds-rke2-artifacts/install/rke2-images-canal.linux-amd64.tar.zst
+      - source: https://github.com/rancher/rke2/releases/download/###ZARF_CONST_INSTALL_RKE2_VERSION###/rke2-images.linux-amd64.tar.zst
+        target: /root/uds-rke2-artifacts/install/rke2-images.linux-amd64.tar.zst
+      - source: https://github.com/rancher/rke2/releases/download/###ZARF_CONST_INSTALL_RKE2_VERSION###/rke2.linux-amd64.tar.gz
+        target: /root/uds-rke2-artifacts/install/rke2.linux-amd64.tar.gz
+      - source: https://github.com/rancher/rke2/releases/download/###ZARF_CONST_INSTALL_RKE2_VERSION###/sha256sum-amd64.txt
+        target: /root/uds-rke2-artifacts/install/sha256sum-amd64.txt
+      - source: https://get.rke2.io
+        target: /root/uds-rke2-artifacts/install/install.sh
+        executable: true
+      - source: scripts/rke2-destroy.sh
+        target: /root/uds-rke2-artifacts/rke2-destroy.sh
+        executable: true
+      - source: scripts/rke2-install.sh
         target: /root/uds-rke2-artifacts/rke2-install.sh
         executable: true
-      - source: scripts/rke2/rke2-config.sh
+      - source: scripts/rke2-config.sh
         target: /root/uds-rke2-artifacts/rke2-config.sh
         executable: true
-      - source: scripts/rke2/audit-policy.yaml
+      - source: scripts/configs/audit-policy.yaml
         target: /root/uds-rke2-artifacts/audit-policy.yaml
         executable: false
-      - source: scripts/rke2/default-pss.yaml
+      - source: scripts/configs/default-pss.yaml
         target: /root/uds-rke2-artifacts/default-pss.yaml
         executable: false
-      - source: scripts/rke2/rke2-config.yaml
+      - source: scripts/configs/rke2-config.yaml
         target: /root/uds-rke2-artifacts/rke2-config.yaml
         executable: false
-      - source: scripts/rke2/rke2-startup.sh
+      - source: scripts/rke2-startup.sh
         target: /root/uds-rke2-artifacts/rke2-startup.sh
         executable: true
     actions:
       onDeploy:
         after:
-          # TODO: renovate setup
           - cmd: |
-              INSTALL_RKE2_VERSION="v1.28.6+rke2r1" /root/uds-rke2-artifacts/rke2-install.sh
+              /root/uds-rke2-artifacts/install/install.sh
               /root/uds-rke2-artifacts/rke2-config.sh
+            env:
+              - "INSTALL_RKE2_ARTIFACT_PATH=/root/uds-rke2-artifacts/install"
             description: "Install and configure UDS RKE2"
 
   - name: join-node-args
@@ -146,14 +139,9 @@ components:
               - name: RKE2_JOIN_ARGS
             description: "Add delivery-engineer defined UDS RKE2 arguments to startup scripts"
 
-  # TODO: air-gap this
   - name: start-rke2-node
     required: true
     description: "Start a new RKE2 node on the host system"
-    files:
-      - source: scripts/rke2/rke2-destroy.sh
-        target: /root/uds-rke2-artifacts/rke2-destroy.sh
-        executable: true
     actions:
       onDeploy:
         after:

@@ -109,12 +109,22 @@ components:
         after:
           - cmd: uds zarf tools kubectl rollout restart deployment coredns -n kube-system
             description: "Restart CoreDNS to pick up internal DNS override for uds.prod"
+    # TODO: renovate setup
+    images:
+      - registry1.dso.mil/ironbank/opensource/metallb/controller:v0.13.11
+      - registry1.dso.mil/ironbank/opensource/metallb/speaker:v0.13.11
+      - registry1.dso.mil/ironbank/opensource/nginx/nginx-alpine:1.25.3
+      - registry1.dso.mil/ironbank/opensource/pause/pause:3.9
+      - cgr.dev/chainguard/wolfi-base:latest
     charts:
       - name: metallb
         namespace: uds-rke2
         url: https://metallb.github.io/metallb
         # TODO: renovate setup
         version: 0.13.11
+        valuesFiles:
+          - values/metallb-values.yaml
+
       - name: uds-rke2-stack
         namespace: uds-rke2-stack
         localPath: charts

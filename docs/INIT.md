@@ -11,11 +11,7 @@ The custom Zarf init package comes with MinIO, for its feature-rich S3-compatibl
 
 ## Pre-Requisites
 
-1. A properly configured host node (`Ubuntu 20.04`) is bootstrapped with an RKE2 cluster, and has at least 1 server node - this is done using the [UDS RKE2 Zarf package](../packages/uds-rke2/zarf.yaml).
-
-2. All of the host nod's required dependencies, as listed below, are setup using [`install-deps.sh`](../packages/rook-ceph/scripts/install-deps.sh). In particular rook-ceph requires the following:
-    1. LVM2
-    2. Ceph Common
+A properly configured host node (`Ubuntu 20.04`) is bootstrapped with an RKE2 cluster, and has at least 1 server node - this is done using the [UDS RKE2 Zarf package](../packages/uds-rke2/zarf.yaml).
 
 ## Create
 

@@ -36,26 +36,11 @@ variables:
     sensitive: true
 
 components:
-  # TODO: air-gap this
-  - name: install-deps
-    required: true
-    description: "Install missing pre-requisites on the host system"
-    files:
-      - source: scripts/install-deps.sh
-        target: /root/uds-rke2-artifacts/rook-ceph/install-deps.sh
-        executable: true
-    actions:
-      onDeploy:
-        after:
-          - cmd: |
-              /root/uds-rke2-artifacts/rook-ceph/install-deps.sh
-            description: "Install all Rook-Ceph related dependencies"
-
   - name: prepare-host
     required: true
     description: "Prepare host system with correct network traffic rules for Ceph controllers"
     files:
-      - source: scripts/rook-ceph/os/os-prep.sh
+      - source: scripts/rook-ceph/os-prep.sh
         target: /root/uds-rke2-artifacts/rook-ceph/os-prep.sh
         executable: true
     actions:

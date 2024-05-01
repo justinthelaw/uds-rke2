@@ -5,15 +5,16 @@
 
 This Zarf package serves as an air-gapped production environment for deploying [UDS Core](https://github.com/defenseunicorns/uds-core), individual UDS Capabilities, and UDS capabilities aggregated (bundled) via the [UDS CLI](https://github.com/defenseunicorns/uds-cli).
 
-## Prerequisites
+## Pre-Requisites
 
 ### Deployment Target
 
-- See the RKE2 documentation for host system [pre-requisites](https://docs.rke2.io/install/requirements)
-- A base installation of [Ubuntu Server 20.04](https://ubuntu.com/download/server) on your host or in a VM
+- A base installation of [Ubuntu Server 20.04+](https://ubuntu.com/download/server) on the node's host system
 - [UDS CLI](https://github.com/defenseunicorns/uds-cli/blob/main/README.md#install) using the versions specified in the [UDS Common repository](https://github.com/defenseunicorns/uds-common/blob/main/README.md#supported-tool-versions)
+- See the RKE2 documentation for host system [pre-requisites](https://docs.rke2.io/install/requirements)
+- See the Rook-Ceph documentation for the host system [pre-requisites](https://rook.io/docs/rook/latest-release/Getting-Started/Prerequisites/prerequisites/) based on the node's role and the cluster's configurations
 
-#### Aliases for UDS CLI
+### UDS CLI Aliasing
 
 Below are instructions for adding UDS CLI aliases that are useful for deployments.
 
@@ -29,25 +30,10 @@ alias udsclean="uds zarf tools clear-cache && rm -rf ~/.uds-cache && rm -rf ~/.z
 
 For fulfilling `xargs` and `kubectl` binary requirements necessary for running some of the _optional_ deployment helper scripts:
 
-1. Create a new script file in a directory that's in the system-wide PATH, such as `/usr/local/bin`. You can name it `kubectl`:
-
 ```bash
-sudo touch /usr/local/bin/kubectl
-```
-
-2. Open the new file in a text editor with root permissions and add the following:
-
-```bash
-#!/bin/bash
-uds zarf tools kubectl "$@"
-```
-
-This script will pass all arguments (`"$@"`) to the `uds zarf tools kubectl` command.
-
-3. Make the script executable:
-
-```bash
-sudo chmod +x /usr/local/bin/kubectl
+touch /usr/local/bin/kubectl 
+echo -e "#!/bin/bash\nuds zarf tools kubectl \"\$@\"" > /usr/local/bin/kubectl
+chmod +x /usr/local/bin/kubectl
 ```
 
 ### Local Development

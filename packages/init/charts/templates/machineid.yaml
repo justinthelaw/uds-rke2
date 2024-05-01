@@ -17,7 +17,7 @@ spec:
       initContainers:
         - name: generate-machine-id
           # TODO: renovate setup
-          image: cgr.dev/chainguard/wolfi-base:latest
+          image: ###ZARF_REGISTRY###/chainguard/wolfi-base:latest
           command: ["/bin/sh", "-c"]
           args:
             - echo "B0D07F1F43F246409516ADBDCCC86FCE" > /mnt/host/etc/machine-id;
@@ -31,7 +31,7 @@ spec:
       containers:
         - name: pause
           # TODO: renovate setup
-          image: registry.k8s.io/pause:3.9
+          image: ###ZARF_REGISTRY###/ironbank/opensource/pause/pause:3.9
           resources:
             limits:
               cpu: "0.1"

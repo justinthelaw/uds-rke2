@@ -142,10 +142,9 @@ Use [virt-manager](https://virt-manager.org/) to setup a VM using a GUI. Virt-ma
     - 16 CPUs
     - 32 Gb RAM
 - Use the "Add Hardware" button to mount your NVIDIA GPU, and other devices (like SSDs) to the VM
-- Under "Firmware", choose `UEFI x86_64: /usr/share/OVMF/OVMF_CODE.fd`
 - Under "CPU", enable available CPU security flaw mitigations on the CPUs
 - Under "Boot Options", enable the boot menu and reorder devices to choose your preferred default boot option
-- Remove any extraneous hardware or components that are automatically populated by `vert-manager`
+- Remove any extraneous hardware or components that are automatically populated by `virt-manager`
 
 ## Credits and Resources
 

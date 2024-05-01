@@ -68,15 +68,15 @@ components:
     required: true
     description: "Install and configure RKE2 on the host system"
     files:
-      - source: https://github.com/rancher/rke2/releases/download/###ZARF_CONST_INSTALL_RKE2_VERSION###/rke2-images-core.linux-amd64.tar.zst
+      - source: https://github.com/rancher/rke2/releases/download/###ZARF_PKG_TMPL_INSTALL_RKE2_VERSION###/rke2-images-core.linux-amd64.tar.zst
         target: /root/uds-rke2-artifacts/install/rke2-images-core.linux-amd64.tar.zst
-      - source: https://github.com/rancher/rke2/releases/download/###ZARF_CONST_INSTALL_RKE2_VERSION###/rke2-images-canal.linux-amd64.tar.zst
+      - source: https://github.com/rancher/rke2/releases/download/###ZARF_PKG_TMPL_INSTALL_RKE2_VERSION###/rke2-images-canal.linux-amd64.tar.zst
         target: /root/uds-rke2-artifacts/install/rke2-images-canal.linux-amd64.tar.zst
-      - source: https://github.com/rancher/rke2/releases/download/###ZARF_CONST_INSTALL_RKE2_VERSION###/rke2-images.linux-amd64.tar.zst
+      - source: https://github.com/rancher/rke2/releases/download/###ZARF_PKG_TMPL_INSTALL_RKE2_VERSION###/rke2-images.linux-amd64.tar.zst
         target: /root/uds-rke2-artifacts/install/rke2-images.linux-amd64.tar.zst
-      - source: https://github.com/rancher/rke2/releases/download/###ZARF_CONST_INSTALL_RKE2_VERSION###/rke2.linux-amd64.tar.gz
+      - source: https://github.com/rancher/rke2/releases/download/###ZARF_PKG_TMPL_INSTALL_RKE2_VERSION###/rke2.linux-amd64.tar.gz
         target: /root/uds-rke2-artifacts/install/rke2.linux-amd64.tar.gz
-      - source: https://github.com/rancher/rke2/releases/download/###ZARF_CONST_INSTALL_RKE2_VERSION###/sha256sum-amd64.txt
+      - source: https://github.com/rancher/rke2/releases/download/###ZARF_PKG_TMPL_INSTALL_RKE2_VERSION###/sha256sum-amd64.txt
         target: /root/uds-rke2-artifacts/install/sha256sum-amd64.txt
       - source: https://get.rke2.io
         target: /root/uds-rke2-artifacts/install/install.sh

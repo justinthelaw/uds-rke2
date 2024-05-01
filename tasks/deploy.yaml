@@ -1,0 +1,89 @@
+# TODO: renovate setup
+# yaml-language-server: $schema=https://raw.githubusercontent.com/defenseunicorns/uds-cli/v0.10.3/tasks.schema.json
+
+variables:
+  - name: CORE_PKG_VERSION
+    description: "The version of UDS Core package to deploy"
+    # TODO: release-please setup
+    default: "0.20.0"
+  - name: FLAVOR
+    description: "Flavor of the package to use (`registry1` or `upstream`)."
+    default: "registry1"
+  - name: ARCHITECTURE
+    default: "amd64"
+
+tasks:
+  - name: uds-rke2-bootstrap
+    description: "Deploy the UDS RKE2 Zarf package, as the cluster bootstrapping node"
+    inputs:
+      joinToken:
+        description: "Cluster joining token"
+        required: true
+    actions:
+      - description: "Deploy RKE2 node, with optional components enabled"
+        # TODO: release-please setup
+        cmd: |
+          sudo uds zarf package deploy build/packages/zarf-package-uds-rke2-amd64-0.1.0.tar.zst \
+            --set JOIN_TOKEN=${{ .inputs.joinToken }} \
+            --components destroy-cluster,stig-host \
+            --confirm
+
+  - name: uds-rke2-join-node
+    description: "Deploy the UDS RKE2 Zarf package, as a cluster joining node"
+    inputs:
+      joinToken:
+        description: "Cluster joining token"
+        required: true
+      joinAddress:
+        description: "IP address at which to join the node when an existing cluster exists at a different IP address"
+        default: ""
+        required: false
+      dnsAddress:
+        description: "DNS address at which to join the node when accessing via a public IP or a hostname"
+        default: ""
+        required: false
+      agentFlag:
+        description: "Join the cluster as an agent-only node with `-a` flag "
+        default: ""
+        required: false
+    actions:
+      - description: "Deploy RKE2 node"
+        cmd: |
+          sudo uds zarf package deploy build/packages/zarf-package-uds-rke2-amd64-*.tar.zst \
+            --set JOIN_ADDRESS=${{ .inputs.joinAddress }} \
+            --set JOIN_TOKEN=${{ .inputs.joinToken }} \
+            --set DNS_ADDRESS=${{ .inputs.dnsAddress }} \
+            --set AGENT_FLAG=${{ .inputs.agentFlag }} \
+            --confirm
+
+  - name: rook-ceph-init
+    description: "Deploy the custom Zarf Init Package for RKE2 with Rook-Ceph"
+    actions:
+      - description: "Deploy the custom Zarf Init package"
+        cmd: |
+          uds zarf package deploy build/packages/zarf-init-amd64-*.tar.zst \
+          --set FLAVOR="single-node" \
+          --confirm
+
+  - name: minio
+    description: "Deploy the MinIO package"
+    actions:
+      - description: "Deploy the MinIO package"
+        cmd: |
+          uds zarf package deploy build/packages/zarf-package-minio-amd64-*.zst --confirm
+
+  - name: specific-core-package-release
+    description: "Deploy a specific UDS Core package based on the VERSION variable"
+    actions:
+      - description: "Deploy the standard UDS Core package"
+        # TODO: renovate setup
+        cmd: |
+          echo "$CORE_PKG_VERSION"
+          uds zarf package deploy oci://ghcr.io/defenseunicorns/packages/uds/core:${CORE_PKG_VERSION}-${FLAVOR} -a ${ARCHITECTURE} --confirm --components="metrics-server"
+
+  - name: destroy-rook-ceph
+    description: "Destroys an existing rook-ceph cluster installation and all associated data in the cluster"
+    actions:
+      - description: "Run the rook-ceph destroy script"
+        cmd: |
+          /root/uds-rke2-artifacts/rook-ceph/rook-ceph-destroy.sh

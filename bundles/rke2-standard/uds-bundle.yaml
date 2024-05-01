@@ -1,0 +1,107 @@
+# TODO: renovate setup
+# yaml-language-server: $schema=https://raw.githubusercontent.com/defenseunicorns/uds-cli/v0.10.3/uds.schema.json
+
+kind: UDSBundle
+metadata:
+  name: rke2-standard
+  description: A UDS bundle for bootstrapping an RKE2 cluster and installing the standard UDS Core package in the cluster
+  # TODO: release-please setup
+  version: "0.1.0"
+  architecture: amd64
+
+packages:
+  - name: uds-rke2-bootstrap
+    description: Deploys the bootstrapping node flavor of the UDS RKE2 Zarf package
+    # repository: ghcr.io/justinthelaw/packages/uds-rke2
+    repository: oci://ttl.sh/gavinlaw/uds-rke2
+    # TODO: release-please setup
+    ref: "0.1.0-bootstrap"
+
+  - name: init
+    description: Deploys the custom Zarf Init package
+    # repository: ghcr.io/justinthelaw/packages/uds-rke2/init
+    repository: oci://ttl.sh/gavinlaw/init
+    ref: "v0.32.6"
+
+  - name: minio
+    description: Deploys the MinIO Zarf package
+    # repository: ghcr.io/justinthelaw/packages/uds-rke2/init
+    repository: oci://ttl.sh/gavinlaw/minio
+    # TODO: release-please setup
+    ref: "0.1.0"
+
+  - name: uds-core
+    repository: ghcr.io/defenseunicorns/packages/uds/core
+    # TODO: renovate setup
+    ref: "0.20.0-registry1"
+    overrides:
+      loki:
+        loki:
+          values:
+            # Override default dns service name for Loki Gateway
+            - path: "global.dnsService"
+              value: "rke2-coredns-rke2-coredns"
+            - path: loki.storage.s3.endpoint
+              value: ""
+            - path: loki.storage.s3.secretAccessKey
+              value: ""
+            - path: loki.storage.s3.accessKeyId
+              value: ""
+          variables:
+            - name: LOKI_CHUNKS_BUCKET
+              description: "The object storage bucket for Loki chunks"
+              path: loki.storage.bucketNames.chunks
+            - name: LOKI_RULER_BUCKET
+              description: "The object storage bucket for Loki ruler"
+              path: loki.storage.bucketNames.ruler
+            - name: LOKI_ADMIN_BUCKET
+              description: "The object storage bucket for Loki admin"
+              path: loki.storage.bucketNames.admin
+            - name: LOKI_S3_REGION
+              description: "The S3 region"
+              path: loki.storage.s3.region
+            - name: LOKI_IRSA_ROLE_ARN
+              description: "The irsa role annotation"
+              path: serviceAccount.annotations.irsa/role-arn
+            - name: LOKI_WRITE_REPLICAS
+              path: write.replicas
+              description: "Loki write replicas"
+              default: "1"
+            - name: LOKI_READ_REPLICAS
+              path: read.replicas
+              description: "Loki read replicas"
+              default: "1"
+            - name: LOKI_BACKEND_REPLICAS
+              path: backend.replicas
+              description: "Loki backend replicas"
+              default: "1"
+
+      velero:
+        velero:
+          variables:
+            - name: VELERO_USE_SECRET
+              description: "Toggle use secret off to use IRSA."
+              path: credentials.useSecret
+            - name: VELERO_IRSA_ROLE_ARN
+              description: "IRSA role arn for annotation"
+              path: serviceAccount.server.annotations.irsa/role-arn
+
+      istio-admin-gateway:
+        uds-istio-config:
+          variables:
+            - name: ADMIN_TLS_CERT
+              description: "The TLS cert for the admin gateway (must be base64 encoded)"
+              path: tls.cert
+            - name: ADMIN_TLS_KEY
+              description: "The TLS key for the admin gateway (must be base64 encoded)"
+              path: tls.key
+
+      istio-tenant-gateway:
+        uds-istio-config:
+          variables:
+            - name: TENANT_TLS_CERT
+              description: "The TLS cert for the tenant gateway (must be base64 encoded)"
+              path: tls.cert
+            - name: TENANT_TLS_KEY
+              description: "The TLS key for the tenant gateway (must be base64 encoded)"
+              path: tls.key

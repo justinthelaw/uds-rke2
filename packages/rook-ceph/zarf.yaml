@@ -1,0 +1,126 @@
+# TODO: renovate setup
+# yaml-language-server: $schema=https://raw.githubusercontent.com/defenseunicorns/uds-cli/v0.10.3/zarf.schema.json
+
+kind: ZarfPackageConfig
+metadata:
+  name: rook-ceph
+  description: "Rook-Ceph Zarf Package"
+  # TODO: release-please setup
+  version: "0.1.0"
+  architecture: amd64
+
+constants:
+  # Must be set at create time, using the `--set FLAVOR` flag, to pulls in the right values file
+  - name: FLAVOR
+    description: "Mock package flavor for Rook-Ceph values file swapping (`multi-node` or `single-node`)"
+    value: "single-node"
+    pattern: "^(single-node|multi-node)$"
+    # The following variable replacements are only performed when `FLAVOR` is `multi-node`
+  - name: REPLICAS
+    description: "Number of rook-ceph resources to deploy, should generally match the number of nodes in the cluster"
+    value: "1"
+  - name: ACTIVE_METADATA_SERVERS
+    description: "Number of metadata servers active at the same time, separate from the number of replicas"
+    value: "1"
+
+variables:
+  - name: DEVICE_FILTER
+    description: "Regular expression matching all devices to use for Ceph storage, example '^sd.'"
+    # default looks for any device or partition that contains the word "ceph" in it
+    default: ".*\/*ceph.*"
+    prompt: true
+  - name: REGION
+    description: "Desired provisioning region."
+    default: "us-east-1"
+    prompt: true
+    sensitive: true
+
+components:
+  # TODO: air-gap this
+  - name: install-deps
+    required: true
+    description: "Install missing pre-requisites on the host system"
+    files:
+      - source: scripts/install-deps.sh
+        target: /root/uds-rke2-artifacts/rook-ceph/deps/install-deps.sh
+        executable: true
+    actions:
+      onDeploy:
+        after:
+          - cmd: |
+              /root/uds-rke2-artifacts/rook-ceph/deps/install-deps.sh
+            description: "Install all Rook-Ceph related dependencies"
+
+  - name: prepare-host
+    required: true
+    description: "Prepare host system with correct network traffic rules for Ceph controllers"
+    files:
+      - source: scripts/rook-ceph/os/os-prep.sh
+        target: /root/uds-rke2-artifacts/rook-ceph/configure/os-prep.sh
+        executable: true
+    actions:
+      onDeploy:
+        after:
+          - cmd: /root/uds-rke2-artifacts/rook-ceph/configure/os-prep.sh
+            description: "Prepare traffic rule changes for Ceph controllers"
+
+  - name: rook-ceph-images
+    required: true
+    description: "Push rook-ceph images to the Zarf seed registry"
+    # TODO: renovate setup
+    images:
+      - registry1.dso.mil/ironbank/opensource/ceph/ceph:v18.2.2
+      - registry1.dso.mil/ironbank/rook/ceph:v1.14.0
+      - registry1.dso.mil/ironbank/opensource/ceph/ceph-csi:v3.11.0
+      - registry1.dso.mil/ironbank/opensource/kubernetes-sigs/sig-storage/csi-node-driver-registrar:v2.10.1
+      - registry1.dso.mil/ironbank/opensource/kubernetes-sigs/sig-storage/csi-provisioner:v4.0.1
+      - registry1.dso.mil/ironbank/opensource/kubernetes-sigs/sig-storage/csi-snapshotter:v7.0.2
+      - registry1.dso.mil/ironbank/opensource/kubernetes-sigs/sig-storage/csi-attacher:v4.5.1
+      - registry1.dso.mil/ironbank/opensource/kubernetes-sigs/sig-storage/csi-resizer:v1.10.1
+
+  - name: rook-ceph-operator
+    required: true
+    description: "Deploy the Rook operator"
+    charts:
+      # TODO: renovate setup
+      - name: rook-ceph
+        url: https://charts.rook.io/release
+        version: v1.14.0
+        namespace: rook-ceph
+        valuesFiles:
+          - values/operator-values.yaml
+    # This action is a workaround to https://github.com/rook/rook/issues/12786
+    actions:
+      onDeploy:
+        after:
+          - cmd: |
+              ./zarf tools kubectl patch serviceaccount default -n rook-ceph -p '{"imagePullSecrets": [{"name": "private-registry"}]}'
+            description: "Add pull secrets for Rook-Ceph cluster"
+
+  - name: rook-ceph-cluster
+    required: true
+    description: "Deploy the Ceph Cluster and the storage capabilities"
+    files:
+      # DANGER: will destroy data in the cluster - only copied-in for delivery engineer usage as necessary
+      - source: scripts/rook-ceph-destroy.sh
+        target: /root/uds-rke2-artifacts/rook-ceph/rook-ceph-destroy.sh
+        executable: true
+    charts:
+      - name: rook-ceph-cluster
+        url: https://charts.rook.io/release
+        version: v1.14.0
+        namespace: rook-ceph
+        valuesFiles:
+          - values/cluster-values.yaml
+          - values/###ZARF_PKG_TMPL_FLAVOR###-cluster-values.yaml
+    actions:
+      onDeploy:
+        after:
+          - wait:
+              cluster:
+                kind: cephcluster
+                name: rook-ceph
+                condition: "'{.status.phase}'=Ready"
+                namespace: rook-ceph
+            maxTotalSeconds: 300
+            description: Waiting for CephCluster to be ready

@@ -1,0 +1,61 @@
+# ISO
+*.iso
+
+# Zarf packages
+zarf*.tar.zst
+zarf-sbom/
+temp/
+tmp/
+
+# UDS bundles
+uds-bundle-*.tar.zst
+
+# Builds
+build/
+builds/
+
+# Models Directory
+.model/*
+
+# Python directories
+__pycache__/
+.pytest_cache/
+.ruff_cache/
+
+# Distribution / packaging
+*.egg-info/
+*.egg
+.python-version
+config.yaml
+
+# Environments
+.env
+.venv
+env/
+venv/
+
+# PyCharm
+.idea/
+
+# VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+!.vscode/*.code-snippets
+
+# Local History for Visual Studio Code
+.history/
+
+# JavaScript and TypeScript
+node_modules
+/build
+/.svelte-kit
+/package
+vite.config.js.timestamp-*
+vite.config.ts.timestamp-*
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/

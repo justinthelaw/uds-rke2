@@ -1,0 +1,61 @@
+# TODO: renovate setup
+# yaml-language-server: $schema=https://raw.githubusercontent.com/defenseunicorns/uds-cli/v0.10.3/tasks.schema.json
+
+tasks:
+  - name: install-deps
+    description: "Installs dependencies used in the creation of various packages if not already installed"
+    actions:
+      - description: "Install required dependencies for package creation if not present on machine"
+        cmd: |
+          if ! command -v npm &>/dev/null; then
+            echo "npm is not installed. Installing npm..."
+            apt-get install npm -y
+          else
+            echo "npm is already installed."
+          fi
+
+  - name: temp-build-folder
+    description: "Creates a temporary build folder which can be used to store packages created during the workflow"
+    actions:
+      - description: "Make the build directory at the root level of the repository"
+        cmd: "mkdir -p build/packages/ build/bundles/"
+
+  - name: uds-rke2
+    description: "Build the UDS RKE2 Zarf package, as a cluster joining node"
+    actions:
+      - description: "Build UDS RKE2 Package"
+        cmd: "sudo uds zarf package create packages/uds-rke2/ -o build/packages/ --confirm"
+
+  - name: uds-rke2-bootstrap
+    description: "Build the UDS RKE2 Zarf package, as the cluster bootstrapping node"
+    actions:
+      - description: "Build UDS RKE2 Package"
+        cmd: "sudo uds zarf package create packages/uds-rke2/ --flavor bootstrap -o build/packages/ --confirm"
+
+  - name: rook-ceph-init
+    description: "Build the custom Zarf Init package for RKE2 with Rook-Ceph"
+    actions:
+      - description: "Build the custom Zarf Init package"
+        cmd: |
+          ZARF_CONFIG="packages/init/zarf-config.yaml" uds zarf package create packages/init/ \
+            -o build/packages/ \
+            --set AGENT_IMAGE_TAG=$(uds zarf version) \
+            --confirm
+
+  - name: minio
+    description: "Build the MinIO package"
+    actions:
+      - description: "Build the MinIO package"
+        cmd: |
+          ZARF_CONFIG="packages/init/zarf-config.yaml" uds zarf package create packages/minio/ \
+            -o build/packages/ \
+            --confirm
+
+  - name: remove-temp-build-folder
+    description: "Creates a temporary build folder which can be used to store packages created during the workflow"
+    actions:
+      - description: "Make the build directory at the root level of the repository"
+        cmd: |
+          rm -rf build/packages/ \
+          rm -rf build/bundles/ \
+          rm -rf zarf-sbom/

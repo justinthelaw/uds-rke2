@@ -1,0 +1,11 @@
+# After creating this resource Rook will create credentials and connection information:
+# - A secret will be created in the same namespace, with the same name, that provides AWS style access keys
+# - A configmap will be created in the same namespace, with the same name, that provides a host, port, and bucket name for connecting
+apiVersion: objectbucket.io/v1alpha1
+kind: ObjectBucketClaim
+metadata:
+  name: uds-bucket
+  namespace: rook-ceph
+spec:
+  generateBucketName: uds-bucket
+  storageClassName: ceph-bucket

@@ -1,0 +1,61 @@
+# Mirrors MinIO helm release v5.0.14
+image:
+  repository: ###ZARF_REGISTRY###/ironbank/opensource/minio/minio
+  # TODO: renovate setup
+  tag: RELEASE.2023-09-30T07-02-29Z
+  pullPolicy: IfNotPresent
+
+imagePullSecrets:
+  - name: "private-registry"
+
+# Mirrors MinIO helm release v5.0.14
+mcImage:
+  repository: ###ZARF_REGISTRY###/ironbank/opensource/minio/mc
+  # TODO: renovate setup
+  tag: RELEASE.2023-09-29T16-41-22Z
+  pullPolicy: IfNotPresent
+
+replicas: 1
+mode: standalone
+
+# Some reasonable requests instead of the bonkers defaults
+resources:
+  requests:
+    memory: 256Mi
+    cpu: 150m
+persistence:
+  size: 50Gi
+
+buckets:
+  - name: uds
+
+# uds test user
+users:
+  - accessKey: uds
+    secretKey: uds-secret
+    policy: readwrite-username-policy
+
+policies:
+  - name: readwrite-username-policy
+    statements:
+      - effect: Allow # this is the default
+        resources:
+          - "arn:aws:s3:::${aws:username}*/*"
+        actions:
+          - "s3:AbortMultipartUpload"
+          - "s3:GetObject"
+          - "s3:DeleteObject"
+          - "s3:PutObject"
+          - "s3:ListMultipartUploadParts"
+      - resources:
+          - "arn:aws:s3:::${aws:username}*"
+        actions:
+          - "s3:CreateBucket"
+          - "s3:DeleteBucket"
+          - "s3:GetBucketLocation"
+          - "s3:ListBucket"
+          - "s3:ListBucketMultipartUploads"
+
+postJob:
+  podAnnotations:
+    sidecar.istio.io/inject: "false"

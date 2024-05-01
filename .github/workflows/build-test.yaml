@@ -41,4 +41,4 @@ jobs:
           ghToken: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Create and Deploy UDS RKE2
-        run: sudo uds run rke2-bootstrap-test
+        run: sudo uds run rke2-bootstrap-test --no-progress

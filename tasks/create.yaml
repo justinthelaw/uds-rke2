@@ -25,7 +25,7 @@ tasks:
     actions:
       - description: "Build UDS RKE2 Package"
         cmd: |
-          ZARF_CONFIG="packages/uds-rke2/zarf-config.yaml" sudo uds zarf package create packages/uds-rke2/ \
+           sudo ZARF_CONFIG="packages/uds-rke2/zarf-config.yaml" uds zarf package create packages/uds-rke2/ \
             -o build/packages/ \
             --no-progress \
             --confirm
@@ -35,7 +35,7 @@ tasks:
     actions:
       - description: "Build UDS RKE2 Package"
         cmd: |
-          ZARF_CONFIG="packages/uds-rke2/zarf-config.yaml" sudo uds zarf package create packages/uds-rke2/ \
+           sudo ZARF_CONFIG="packages/uds-rke2/zarf-config.yaml" uds zarf package create packages/uds-rke2/ \
             --flavor bootstrap \
             -o build/packages/ \
             --no-progress \
@@ -46,7 +46,7 @@ tasks:
     actions:
       - description: "Build the custom Zarf Init package"
         cmd: |
-          ZARF_CONFIG="packages/init/zarf-config.yaml" uds zarf package create packages/init/ \
+          sudo uds ZARF_CONFIG="packages/init/zarf-config.yaml" zarf package create packages/init/ \
             -o build/packages/ \
             --set AGENT_IMAGE_TAG=$(uds zarf version) \
             --no-progress \
@@ -57,7 +57,7 @@ tasks:
     actions:
       - description: "Build the MinIO package"
         cmd: |
-          uds zarf package create packages/minio/ \
+          sudo uds zarf package create packages/minio/ \
             -o build/packages/ \
             --no-progress \
             --confirm

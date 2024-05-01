@@ -62,7 +62,7 @@ tasks:
     actions:
       - description: "Deploy the custom Zarf Init package"
         cmd: |
-          uds zarf package deploy build/packages/zarf-init-amd64-*.tar.zst \
+          sudo uds zarf package deploy build/packages/zarf-init-amd64-*.tar.zst \
             --no-progress \
             --confirm
 
@@ -71,7 +71,7 @@ tasks:
     actions:
       - description: "Deploy the MinIO package"
         cmd: |
-          uds zarf package deploy build/packages/zarf-package-minio-amd64-*.zst \
+          sudo uds zarf package deploy build/packages/zarf-package-minio-amd64-*.zst \
             --no-progress \
             --confirm
 
@@ -82,7 +82,7 @@ tasks:
         # TODO: renovate setup
         cmd: |
           echo "$CORE_PKG_VERSION"
-          uds zarf package deploy oci://ghcr.io/defenseunicorns/packages/uds/core:${CORE_PKG_VERSION}-${FLAVOR} \
+          sudo uds zarf package deploy oci://ghcr.io/defenseunicorns/packages/uds/core:${CORE_PKG_VERSION}-${FLAVOR} \
             -a ${ARCHITECTURE} \
             --components metrics-server \
             --no-progress \

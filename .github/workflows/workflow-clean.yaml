@@ -21,7 +21,7 @@ on:
         required: false
 
 concurrency:
-  group: cleanup-${{ github.ref }}
+  group: workflow-cleanup-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:

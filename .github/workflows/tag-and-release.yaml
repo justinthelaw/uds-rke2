@@ -2,10 +2,14 @@ name: Publish UDS Capability
 
 on:
   push:
-    branches: 
+    branches:
       - "main"
     tags:
       - "*"
+
+concurrency:
+  group: tag-and-release-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   tag-new-version:

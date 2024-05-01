@@ -12,7 +12,7 @@ on:
       - '**/zarf.yaml'
 
 concurrency:
-  group: zarflint-${{ github.ref }}
+  group: zarf-lint-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:

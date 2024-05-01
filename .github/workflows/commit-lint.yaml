@@ -10,7 +10,7 @@ on:
     types: [opened, edited, synchronize]
 
 concurrency:
-  group: commitlint-${{ github.ref }}
+  group: commit-lint-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:

@@ -10,7 +10,7 @@ on:
     types: [labeled, unlabeled, opened, edited, synchronize]
 
 concurrency:
-  group: labelslint-${{ github.ref }}
+  group: scan-labels-${{ github.ref }}
   cancel-in-progress: true
 
 permissions:

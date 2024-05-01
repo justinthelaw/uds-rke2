@@ -19,6 +19,10 @@ permissions:
   id-token: write
   contents: read
 
+concurrency:
+  group: build-test-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   test-clean-install:
     runs-on: ubuntu-latest

@@ -43,12 +43,7 @@ components:
     actions:
       onDeploy:
         after:
-          - cmd: |
-              # Remove UDS RKE2 installation and related dependencies
-              /root/uds-rke2-artifacts/cluster/rke2-destroy.sh
-
-              # Remove all UDS RKE2 installation artifacts
-              rm -rf /root/rke2-startup.sh /root/uds-rke2-artifacts/
+          - cmd: /root/uds-rke2-artifacts/cluster/rke2-destroy.sh
             description: "Remove UDS RKE2 and all related artifacts and dependencies"
 
   # TODO: air-gap this

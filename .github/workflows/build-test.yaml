@@ -5,24 +5,23 @@ on:
     branches:
       - "main"
   # TODO: remove the ignore-all later
-  # pull_request:
-  #   paths-ignore:
-  #     - "**.md"
-  #     - "docs/**"
-  #     - "CODEOWNERS"
-  #     - "LICENSE"
-
-  #     - ".github/workflows/commit-lint.yaml"
-  #     - ".github/workflows/zarf-lint.yaml"
-  #     - ".github/workflows/uds-lint.yaml"
-  #     - ".github/workflows/helm-lint.yaml"
-  #     - ".github/workflows/scan-labels.yaml"
-  #     - ".github/workflows/workflow-clean.yaml"
-  #     - ".github/workflows/tag-and-release.yaml"
+  pull_request:
+      branches:
+        - "main"
+      paths:
+        - "bundles"
+        - "packages"
+        - "tasks"
+        - ".github/workflows/build-test.yaml"
+        - "tasks.yaml"
 
 permissions:
   id-token: write
   contents: read
+
+concurrency:
+  group: build-test-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   test-clean-install:
@@ -42,4 +41,4 @@ jobs:
           ghToken: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Create and Deploy UDS RKE2
-        run: sudo uds run standard -l warn
+        run: sudo uds run rke2-bootstrap-test --no-progress

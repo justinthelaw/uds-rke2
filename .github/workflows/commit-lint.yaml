@@ -3,13 +3,14 @@ name: Commit Lint
 on:
   push:
     branches:
-      - '!main'
+      - "!main"
   pull_request:
-    branches: [main]
+    branches:
+      - "main"
     types: [opened, edited, synchronize]
 
 concurrency:
-  group: commitlint-${{ github.ref }}
+  group: commit-lint-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:

@@ -9,13 +9,6 @@ metadata:
   version: "0.1.0"
   architecture: amd64
 
-constants:
-  # Must be set at create time, using the `--set CLUSTER_CONFIGURATION` flag, to pull in the right values file
-  - name: CLUSTER_CONFIGURATION
-    description: "Rook-Ceph values file swapping (`multi-node` or `single-node`)"
-    value: "single-node"
-    pattern: "^(single-node|multi-node)$"
-
 variables:
   - name: DEVICE_FILTER
     description: "Regular expression matching all devices to use for Ceph storage, example '^sd.'"

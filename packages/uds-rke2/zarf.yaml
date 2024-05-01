@@ -10,11 +10,6 @@ metadata:
   # TODO: release-please setup
   version: "0.1.0"
 
-constants:
-  - name: RKE2_VERSION
-    description: "Release of RKE2 to install"
-    value: "v1.28.6+rke2r1"
-
 variables:
   - name: CLUSTER_NAME
     description: "Name of the cluster"

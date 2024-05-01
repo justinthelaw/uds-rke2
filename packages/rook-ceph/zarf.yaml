@@ -13,15 +13,8 @@ constants:
   # Must be set at create time, using the `--set FLAVOR` flag, to pulls in the right values file
   - name: FLAVOR
     description: "Mock package flavor for Rook-Ceph values file swapping (`multi-node` or `single-node`)"
-    value: "single-node"
+    value: "###ZARF_PKG_TMPL_FLAVOR###"
     pattern: "^(single-node|multi-node)$"
-    # The following variable replacements are only performed when `FLAVOR` is `multi-node`
-  - name: REPLICAS
-    description: "Number of rook-ceph resources to deploy, should generally match the number of nodes in the cluster"
-    value: "1"
-  - name: ACTIVE_METADATA_SERVERS
-    description: "Number of metadata servers active at the same time, separate from the number of replicas"
-    value: "1"
 
 variables:
   - name: DEVICE_FILTER
@@ -34,6 +27,13 @@ variables:
     default: "us-east-1"
     prompt: true
     sensitive: true
+    # The following variable replacements are only performed when `FLAVOR` is `multi-node`
+  - name: REPLICAS
+    description: "Number of rook-ceph resources to deploy, should generally match the number of nodes in the cluster"
+    default: "1"
+  - name: ACTIVE_METADATA_SERVERS
+    description: "Number of metadata servers active at the same time, separate from the number of replicas"
+    default: "1"
 
 components:
   - name: prepare-host

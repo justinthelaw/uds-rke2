@@ -41,7 +41,7 @@ tasks:
             --no-progress \
             --confirm
 
-  - name: uds-rke2-init
+  - name: rook-ceph-init
     description: "Build the custom Zarf Init package for RKE2 with Rook-Ceph, single node-only"
     actions:
       - description: "Build the custom Zarf Init package"

@@ -18,9 +18,15 @@ constants:
 
 variables:
   - name: DEVICE_FILTER
-    description: "Regular expression matching all devices to use for Ceph storage, example '^sd.'"
+    description: "Regular expression to filter storage devices, example '^sd.'"
     # default looks for any device or partition that contains the word "ceph" in it
     default: "ceph"
+    prompt: true
+  - name: DEVICE_FILTER
+    description: "Name of the device to be formatted for storage"
+    # run `lsblk` or `lvdisplay` to find the exact device name
+    # default assumes that `dm-0`` is the default LVM that the OS lives in
+    default: "dm-1"
     prompt: true
   - name: REGION
     description: "Desired provisioning region."

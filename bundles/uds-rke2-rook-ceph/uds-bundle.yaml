@@ -3,7 +3,7 @@
 
 kind: UDSBundle
 metadata:
-  name: rke2-standard
+  name: uds-rke2-bootstrap
   description: A UDS bundle for bootstrapping an RKE2 cluster and installing the standard UDS Core package in the cluster
   # TODO: release-please setup
   version: "0.1.0"
@@ -12,28 +12,25 @@ metadata:
 packages:
   - name: uds-rke2-bootstrap
     description: Deploys the bootstrapping node flavor of the UDS RKE2 Zarf package
-    # repository: ghcr.io/justinthelaw/packages/uds-rke2
-    repository: oci://ttl.sh/gavinlaw/uds-rke2
+    repository: ghcr.io/justinthelaw/packages/uds/rke2
     # TODO: release-please setup
     ref: "0.1.0-bootstrap"
 
-  - name: init
+  - name: uds-rke2-init
     description: Deploys the custom Zarf Init package
-    # repository: ghcr.io/justinthelaw/packages/uds-rke2/init
-    repository: oci://ttl.sh/gavinlaw/init
+    repository: ghcr.io/justinthelaw/packages/zarf/rook-ceph-init
     ref: "v0.32.6"
 
   - name: minio
     description: Deploys the MinIO Zarf package
-    # repository: ghcr.io/justinthelaw/packages/uds-rke2/init
-    repository: oci://ttl.sh/gavinlaw/minio
+    repository: ghcr.io/justinthelaw/packages/uds/minio
     # TODO: release-please setup
     ref: "0.1.0"
 
   - name: uds-core
     repository: ghcr.io/defenseunicorns/packages/uds/core
     # TODO: renovate setup
-    ref: "0.20.0-registry1"
+    ref: "0.21.0-registry1"
     overrides:
       loki:
         loki:

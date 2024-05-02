@@ -3,8 +3,8 @@
 
 kind: ZarfInitConfig
 metadata:
-  name: minio
-  description: "MinIO Zarf Package"
+  name: uds-rke2-minio
+  description: "UDS RKE2 MinIO Zarf Package"
   architecture: amd64
   # TODO: release-please setup
   version: "0.1.0"

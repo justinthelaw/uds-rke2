@@ -3,7 +3,7 @@
 
 kind: ZarfInitConfig
 metadata:
-  name: init
+  name: rook-ceph-init
   description: "Custom Zarf Init Package for RKE2 with Rook-Ceph"
   architecture: amd64
   # TODO: release-please setup
@@ -89,7 +89,6 @@ components:
       # TODO: renovate setup
       url: oci://ghcr.io/defenseunicorns/packages/init:v0.32.6
 
-  # TODO: air-gap this
   - name: uds-rke2-stack
     required: true
     description: "Install MetalLB, Nginx, and ensure MachineID on the bootstrapping node"

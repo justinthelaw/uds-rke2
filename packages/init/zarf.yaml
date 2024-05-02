@@ -55,12 +55,6 @@ components:
       path: ../rook-ceph
       name: rook-ceph-images
 
-  - name: rook-ceph-install-deps
-    required: true
-    import:
-      path: ../rook-ceph
-      name: install-deps
-
   - name: rook-ceph-operator
     required: true
     import:

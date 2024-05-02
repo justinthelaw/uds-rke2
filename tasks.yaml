@@ -13,8 +13,8 @@ tasks:
     actions:
       - task: create:temp-build-folder
 
-      - task: create:uds-rke2-bootstrap
-      - task: deploy:uds-rke2-bootstrap
+      - task: create:uds-rke2
+      - task: deploy:uds-rke2
         with:
           joinToken: "my-test-token"
 

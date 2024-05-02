@@ -4,13 +4,13 @@ set -e
 
 # Check if RKE2 is installed
 if ! command -v rke2 &>/dev/null; then
-	echo "RKE2 is not installed on this system. Nothing to destroy."
+	echo "RKE2 is not installed on the host. Nothing to destroy."
 	exit 0
 fi
 
 echo ""
 echo "****************************************************"
-echo "*** WARNING: This will DESTROY your RKE2 cluster ***"
+echo "**** WARNING: This will DESTROY your RKE2 node ****"
 echo "****************************************************"
 echo ""
 echo "****************************************************"

@@ -7,7 +7,6 @@ metadata:
   description: "UDS RKE2 cluster setup for servers and agents. WARNING: This capability requires root access for deployment."
   url: https://github.com/justinthelaw/uds-rke2-sandbox
   architecture: amd64
-  yolo: true
   # TODO: release-please setup
   version: "0.1.0"
 
@@ -182,38 +181,3 @@ components:
                 namespace: kube-system
                 condition: "'{.status.phase}'=Running"
             maxTotalSeconds: 300
-
-  - name: uds-rke2-stack
-    required: true
-    description: "Install MetalLB, Nginx, and ensure MachineID on the bootstrapping node"
-    actions:
-      onDeploy:
-        before:
-          - cmd: uds zarf tools kubectl get nodes -o=jsonpath='{.items[0].status.addresses[?(@.type=="InternalIP")].address}' | cut -d'.' -f1-3
-            description: "Load network IP base for MetalLB"
-            setVariables:
-              - name: BASE_IP
-        after:
-          - cmd: uds zarf tools kubectl rollout restart deployment coredns -n kube-system
-            description: "Restart CoreDNS to pick up internal DNS override for uds.prod"
-    # TODO: renovate setup
-    images:
-      - registry1.dso.mil/ironbank/opensource/metallb/controller:v0.13.11
-      - registry1.dso.mil/ironbank/opensource/metallb/speaker:v0.13.11
-      - registry1.dso.mil/ironbank/opensource/nginx/nginx-alpine:1.25.3
-      - registry1.dso.mil/ironbank/opensource/pause/pause:3.9
-      - cgr.dev/chainguard/wolfi-base:latest
-    charts:
-      - name: metallb
-        namespace: uds-rke2
-        url: https://metallb.github.io/metallb
-        # TODO: renovate setup
-        version: 0.13.11
-        valuesFiles:
-          - ../init/values/metallb-values.yaml
-
-      - name: uds-rke2-stack
-        namespace: uds-rke2-stack
-        localPath: ../init/charts
-        # TODO: release-please setup
-        version: 0.1.0

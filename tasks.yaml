@@ -31,7 +31,7 @@ tasks:
     actions:
       - task: create:temp-build-folder
 
-      - task: create:uds-rke2-bootstrap
+      - task: create:uds-rke2
       - task: deploy:uds-rke2-bootstrap
         with:
           joinToken: "my-test-token"

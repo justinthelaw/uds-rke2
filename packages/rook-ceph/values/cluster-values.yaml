@@ -1,3 +1,6 @@
+imagePullSecrets:
+  - name: private-registry
+
 # Installs a debugging toolbox deployment
 toolbox:
   # Enable the debugging toolbox. See [toolbox](../Troubleshooting/ceph-toolbox.md)
@@ -60,12 +63,11 @@ cephClusterSpec:
   # Use select devices for storage
   storage:
     useAllNodes: true
-    useAllDevices: true
+    useAllDevices: false
     deviceFilter: ###ZARF_VAR_DEVICE_FILTER###
     config:
       # see the following for more details: https://docs.ceph.com/en/latest/rados/configuration/storage-devices/#osd-back-ends
       osdsPerDevice: "1"
-      storeType: bluestore
 
   # automate [data cleanup process](https://github.com/rook/rook/blob/master/Documentation/Storage-Configuration/ceph-teardown.md#delete-the-data-on-hosts) in cluster destruction.
   cleanupPolicy:
@@ -91,9 +93,6 @@ cephClusterSpec:
     # allowUninstallWithVolumes defines how the uninstall should be performed
     # If set to true, cephCluster deletion does not wait for the PVs to be deleted.
     allowUninstallWithVolumes: false
-
-imagePullSecrets:
-  - name: private-registry
 
 cephBlockPool:
   enabled: true

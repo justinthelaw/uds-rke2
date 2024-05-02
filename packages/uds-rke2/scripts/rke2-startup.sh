@@ -79,6 +79,7 @@ version = 2
 
 [plugins."io.containerd.internal.v1.opt"]
   path = "/var/lib/rancher/rke2/agent/containerd"
+
 [plugins."io.containerd.grpc.v1.cri"]
   stream_server_address = "127.0.0.1"
   stream_server_port = "10010"
@@ -86,9 +87,6 @@ version = 2
   enable_unprivileged_ports = true
   enable_unprivileged_icmp = true
   sandbox_image = "index.docker.io/rancher/mirrored-pause:3.6"
-
-# [plugins."io.containerd.grpc.v1.cri".registry]
-# config_path = "/etc/containerd/certs.d:/etc/docker/certs.d"
 
 [plugins."io.containerd.grpc.v1.cri".containerd]
   snapshotter = "overlayfs"

@@ -20,7 +20,7 @@ variables:
   - name: DEVICE_FILTER
     description: "Regular expression matching all devices to use for Ceph storage, example '^sd.'"
     # default looks for any device or partition that contains the word "ceph" in it
-    default: ".*\/*ceph.*"
+    default: "dm-1"
     prompt: true
   - name: REGION
     description: "Desired provisioning region."

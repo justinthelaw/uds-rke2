@@ -19,6 +19,7 @@ variables:
   - name: CLUSTER_NAME
     description: "Name of the cluster"
     default: "uds-prod"
+    prompt: true
   - name: JOIN_TOKEN
     description: "Cluster joining token"
     prompt: true
@@ -123,18 +124,22 @@ components:
               extra_join_node_args=$(
                 args=""
 
-                if [ -n "${ZARF_VAR_JOIN_ADDRESS}"]; then
-                  args="-s ${ZARF_VAR_JOIN_ADDRESS}"
+                if [ -n "${ZARF_VAR_JOIN_ADDRESS}" ]; then
+                  args="${args} -s ${ZARF_VAR_JOIN_ADDRESS}"
                 fi
 
-                if [ -n "${ZARF_VAR_DNS_ADDRESS}"]; then
-                  args="-T ${ZARF_VAR_DNS_ADDRESS}"
+                if [ -n "${ZARF_VAR_DNS_ADDRESS}" ]; then
+                  args="${args} -T ${ZARF_VAR_DNS_ADDRESS}"
+                fi
+
+                if [ -n "${ZARF_VAR_AGENT_FLAG}" ]; then
+                  args="${args} ${ZARF_VAR_AGENT_FLAG}"
                 fi
 
                 echo ${args}
               )
 
-              echo $(extra_join_node_args)
+              echo ${extra_join_node_args}
             setVariables:
               - name: RKE2_JOIN_ARGS
             description: "Add delivery-engineer defined UDS RKE2 arguments to startup scripts"
@@ -146,7 +151,7 @@ components:
       onDeploy:
         after:
           - cmd: |
-              /root/uds-rke2-artifacts/rke2-startup.sh -t ${ZARF_VAR_JOIN_TOKEN} ${ZARF_VAR_RKE2_JOIN_ARGS} ${ZARF_VAR_AGENT_FLAG}
+              /root/uds-rke2-artifacts/rke2-startup.sh -t ${ZARF_VAR_JOIN_TOKEN} ${ZARF_VAR_RKE2_JOIN_ARGS}
             description: "Start RKE2 node"
             maxTotalSeconds: 600
           - description: "Validate kube-apiserver is up"

@@ -97,7 +97,7 @@ components:
         namespace: rook-ceph
         valuesFiles:
           - values/cluster-values.yaml
-          - values/${###ZARF_CONST_CLUSTER_CONFIGURATION###}-cluster-values.yaml
+          - values/###ZARF_CONST_CLUSTER_CONFIGURATION###-cluster-values.yaml
     actions:
       onDeploy:
         after:

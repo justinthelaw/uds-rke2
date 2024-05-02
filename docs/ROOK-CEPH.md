@@ -86,4 +86,12 @@ k delete ns rook-ceph
 uds zarf destroy --confirm
 ```
 
-5. Delete the data on hosts and zap disks following the [upstream guide](https://rook.io/docs/rook/v1.11/Getting-Started/ceph-teardown/#delete-the-data-on-hosts)
+5. Delete the data on hosts and zap disks following the [upstream guide](https://rook.io/docs/rook/v1.11/Getting-Started/ceph-teardown/#delete-the-data-on-hosts):
+
+```bash
+# replace with the name of your actual disk being wiped and zapped
+export DISK="/dev/ubuntu-vg/ceph"
+
+wipefs -a -f $DISK
+sgdisk --zap-all $DISK
+```

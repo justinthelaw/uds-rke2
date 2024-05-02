@@ -66,7 +66,7 @@ cephClusterSpec:
     useAllDevices: false
     deviceFilter: ###ZARF_VAR_DEVICE_FILTER###
     device: 
-      - name: ###ZARF_VAR_DEVICE###
+      - name: ###ZARF_VAR_DEVICE_NAME###
     config:
       # see the following for more details: https://docs.ceph.com/en/latest/rados/configuration/storage-devices/#osd-back-ends
       osdsPerDevice: "1"

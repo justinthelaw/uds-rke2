@@ -22,7 +22,7 @@ variables:
     # default looks for any device or partition that contains the word "ceph" in it
     default: "ceph"
     prompt: true
-  - name: DEVICE_FILTER
+  - name: DEVICE_NAME
     description: "Name of the device to be formatted for storage"
     # run `lsblk` or `lvdisplay` to find the exact device name
     # default assumes that `dm-0`` is the default LVM that the OS lives in

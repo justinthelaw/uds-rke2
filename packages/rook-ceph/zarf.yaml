@@ -64,7 +64,7 @@ variables:
   # The following determines the redundancy (size or count) of the Ceph cluster's monitors, managers and data pools
   # These are only applicable to `CLUSTER_CONFIGURATION=multi-node`, and the minimum suggested HA configuration ratio is:
   #   REPLICAS="3"
-  #   ACTIVE_METADATA_SERVERS="1"
+  #   ACTIVE_METADATA_SERVERS="1" (if ceph file store is enabled)
   - name: REPLICAS
     description: "Number of redundant resources to deploy, should generally match the number of nodes in the cluster"
     default: "3"

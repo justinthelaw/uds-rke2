@@ -1,3 +1,8 @@
+# See the UDS RKE2 repository's documentation, `docs/ROOK-CEPH.md` for more details on values overrides
+
+imagePullSecrets:
+  - name: private-registry
+
 image:
   repository: ###ZARF_REGISTRY###/ironbank/rook/ceph
   # TODO: renovate setup
@@ -42,9 +47,6 @@ csi:
     repository: ###ZARF_REGISTRY###/ironbank/opensource/kubernetes-sigs/sig-storage/csi-resizer
     # TODO: renovate setup
     tag: v1.10.1
-
-imagePullSecrets:
-  - name: private-registry
 
 # -- Runs Ceph Pods as privileged to be able to write to `hostPaths` in environments with SELinux restrictions.
 hostpathRequiresPrivileged: true

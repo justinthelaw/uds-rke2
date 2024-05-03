@@ -63,7 +63,7 @@ cephClusterSpec:
     devices:
       - name: ###ZARF_VAR_DEVICE_NAME###
     config:
-      osdsPerDevice: 1
+      osdsPerDevice: "1"
 
 cephBlockPool:
   enabled: ###ZARF_VAR_ENABLE_CEPH_BLOCK_STORE###

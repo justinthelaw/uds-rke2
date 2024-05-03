@@ -9,8 +9,10 @@ image:
   tag: v1.14.0
 
 data:
-  ROOK_CSI_ENABLE_CEPHFS: "false"
-  ROOK_CSI_ENABLE_RBD: "true"
+  # Number of device storage provisioners per node
+  CSI_PROVISIONER_REPLICAS: "1"
+  # TODO: turn back down to INFO for production
+  ROOK_LOG_LEVEL: "DEBUG"
 
 csi:
   cephFSKernelMountOptions: "ms_mode=secure"
@@ -48,5 +50,5 @@ csi:
     # TODO: renovate setup
     tag: v1.10.1
 
-# -- Runs Ceph Pods as privileged to be able to write to `hostPaths` in environments with SELinux restrictions.
+# Runs Ceph Pods as privileged to be able to write to `hostPaths` in environments with SELinux restrictions.
 hostpathRequiresPrivileged: true

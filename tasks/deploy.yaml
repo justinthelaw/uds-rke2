@@ -89,11 +89,15 @@ tasks:
             --confirm
 
   - name: rook-ceph-destroy
-    description: "Destroys an existing Rook-Ceph cluster installation and all associated data in the cluster"
+    description: "Destroys an existing Rook-Ceph cluster installation and all associated data on the host node"
+    inputs:
+      disk:
+        description: "The Ceph-formatted disk name (e.g. /dev/ubuntu-vg/ceph) that is to be wiped."
+        required: true
     actions:
       - description: "Run the Rook-Ceph destroy script"
         cmd: |
-          /root/uds-rke2-artifacts/rook-ceph/rook-ceph-destroy.sh
+          DISK=${{ .inputs.disk }} /root/uds-rke2-artifacts/rook-ceph/rook-ceph-destroy.sh
 
   - name: uds-rke2-destroy
     description: "Destroys an existing RKE2 cluster installation and all associated artifacts"

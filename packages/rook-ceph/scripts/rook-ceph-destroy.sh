@@ -41,21 +41,10 @@ kubectl delete configmaps --all -n rook-ceph
 kubectl delete ns rook-ceph
 
 # Remove the remaining Rook-Ceph data on the host
+wipefs -a -f $DISK
+sgdisk --zap-all $DISK
+dd if=/dev/zero of="$DISK" bs=1M count=100 oflag=direct,dsync
+blkdiscard $DISK
+partprobe $DISK
 
-# Prompt the user for the disk name
-read -p "Please enter the disk name (e.g. /dev/ubuntu-vg/ceph): " DISK
-
-# Confirm the user's choice
-read -p "Are you sure you want to wipe all data on the host $DISK? [y/N] " response
-
-if [[ "$response" =~ ^([yY][eE][sS]|[yY])$ ]]; then
-	echo "Wiping all data on $DISK..."
-	wipefs -a -f $DISK
-	sgdisk --zap-all $DISK
-	dd if=/dev/zero of="$DISK" bs=1M count=100 oflag=direct,dsync
-	blkdiscard $DISK
-	partprobe $DISK
-	rm -rf /var/lib/rook/
-else
-	echo "Operation cancelled."
-fi
+rm -rf /var/lib/rook/

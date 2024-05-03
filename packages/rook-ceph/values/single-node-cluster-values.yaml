@@ -24,7 +24,7 @@ cephClusterSpec:
     global:
       osd_pool_default_size: "1"
       osd_pool_default_min_size: "1"
-      osd_pool_default_pg_num: "2"
+      osd_pool_default_pg_num: "1"
       mon_warn_on_pool_no_redundancy: "false"
       bdev_flock_retry: "20"
       bluefs_buffered_io: "false"

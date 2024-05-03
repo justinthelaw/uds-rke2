@@ -10,11 +10,11 @@ toolbox:
 
 cephClusterSpec:
   mon:
-    count: 1
+    count: "1"
     allowMultiplePerNode: true
 
   mgr:
-    count: 1
+    count: "1"
     allowMultiplePerNode: true
     modules:
       - name: rook
@@ -66,45 +66,45 @@ cephClusterSpec:
       osdsPerDevice: "1"
 
 cephBlockPool:
-  enabled: true
+  enabled: ###ZARF_VAR_ENABLE_CEPH_BLOCK_STORE###
   spec:
     failureDomain: host
-    isDefault: true
+    isDefault: ###ZARF_VAR_CEPH_BLOCK_STORE_AS_DEFAULT###
     replicated:
-      size: 1
+      size: "1"
 
 cephFileSystem:
-  enabled: true
+  enabled: ###ZARF_VAR_ENABLE_CEPH_FILE_STORE###
   spec:
     dataPools:
       - failureDomain: host
         replicated:
-          size: 1
+          size: "1"
         compressionMode: none
     metadataPool:
       replicated:
-        size: 1
+        size: "1"
     metadataServer:
-      activeCount: 1
+      activeCount: "1"
       activeStandby: false
   storageClass:
-    isDefault: false
+    isDefault: ###ZARF_VAR_CEPH_FILE_STORE_AS_DEFAULT###
 
 cephObjectStore:
-  enabled: true
+  enabled: ###ZARF_VAR_ENABLE_CEPH_BLOCK_STORE###
   spec:
     dataPools:
       replicated:
-        size: 1
+        size: "1"
     metadataPool:
       replicated:
-        size: 1
+        size: "1"
       failureDomain: host
     dataPool:
       failureDomain: host
     gateway:
-      instances: 1
+      instances: "1"
   storageClass:
-    isDefault: false
+    isDefault: ###ZARF_VAR_CEPH_OBJECT_STORE_AS_DEFAULT###
     parameters:
       region: ###ZARF_VAR_REGION###

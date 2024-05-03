@@ -17,6 +17,39 @@ constants:
     pattern: "^(single-node|multi-node)$"
 
 variables:
+  # The following disable and enable StorageClasses available through the Rook-Ceph cluster
+  - name: ENABLE_CEPH_BLOCK_STORE
+    description: "Boolean to enable (true) or disable (false) the Ceph block storage type"
+    default: "true"
+    pattern: "^(true|false)$"
+    prompt: true
+  - name: ENABLE_CEPH_OBJECT_STORE
+    description: "Boolean to enable (true) or disable (false) the Ceph object storage type"
+    default: "true"
+    pattern: "^(true|false)$"
+    prompt: true
+  - name: ENABLE_CEPH_FILE_STORE
+    description: "Boolean to enable (true) or disable (false) the Ceph file storage type"
+    default: "true"
+    pattern: "^(true|false)$"
+    prompt: true
+  - name: CEPH_BLOCK_STORE_AS_DEFAULT
+    description: "Sets the block store as default StorageClass in the cluster"
+    default: "true"
+    pattern: "^(true|false)$"
+    prompt: false
+  - name: CEPH_OBJECT_STORE_AS_DEFAULT
+    description: "Sets the object store as default StorageClass in the cluster"
+    default: "false"
+    pattern: "^(true|false)$"
+    prompt: false
+  - name: CEPH_FILE_STORE_AS_DEFAULT
+    description: "Sets the file store as default StorageClass in the cluster"
+    default: "false"
+    pattern: "^(true|false)$"
+    prompt: false
+
+  # The following determines where the data is stored on the nodes, AFTER node taints/tolerations are applied
   - name: DEVICE_NAME
     description: "The node's device k-name to be used for BlueStore formatting and storage"
     # Empty and zap the disk, then run `lsblk --all --list --output KNAME,NAME,SIZE,TYPE,MOUNTPOINT` to find the KNAME
@@ -27,13 +60,19 @@ variables:
     default: "us-east-1"
     prompt: true
     sensitive: true
-    # The following variable replacements are only performed when `CLUSTER_CONFIGURATION` is `multi-node`
+
+  # The following determines the redundancy (size or count) of the Ceph cluster's monitors, managers and data pools
+  # These are only applicable to `CLUSTER_CONFIGURATION=multi-node`, and the minimum suggested HA configuration ratio is:
+  #   REPLICAS="3"
+  #   ACTIVE_METADATA_SERVERS="1"
   - name: REPLICAS
-    description: "Number of rook-ceph resources to deploy, should generally match the number of nodes in the cluster"
-    default: "1"
+    description: "Number of redundant resources to deploy, should generally match the number of nodes in the cluster"
+    default: "3"
+    prompt: false
   - name: ACTIVE_METADATA_SERVERS
-    description: "Number of metadata servers active at the same time, separate from the number of replicas"
+    description: "Number of file store metadata servers active at the same time, separate from the number of replicas"
     default: "1"
+    prompt: false
 
 components:
   - name: prepare-host

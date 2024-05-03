@@ -51,15 +51,15 @@ cephClusterSpec:
       osdsPerDevice: "1"
 
 cephBlockPool:
-  enabled: true
+  enabled: ###ZARF_VAR_ENABLE_CEPH_BLOCK_STORE###
   spec:
     failureDomain: host
-    isDefault: true
+    isDefault: ###ZARF_VAR_CEPH_BLOCK_STORE_AS_DEFAULT###
     replicated:
       size: ###ZARF_VAR_REPLICAS###
 
 cephFileSystem:
-  enabled: true
+  enabled: ###ZARF_VAR_ENABLE_CEPH_FILE_STORE###
   spec:
     dataPools:
       - failureDomain: host
@@ -73,10 +73,10 @@ cephFileSystem:
       activeCount: ###ZARF_VAR_ACTIVE_METADATA_SERVERS###
       activeStandby: false
   storageClass:
-    isDefault: false
+    isDefault: ###ZARF_VAR_CEPH_FILE_STORE_AS_DEFAULT###
 
 cephObjectStore:
-  enabled: true
+  enabled: ###ZARF_VAR_ENABLE_CEPH_BLOCK_STORE###
   spec:
     dataPools:
       replicated:
@@ -90,6 +90,6 @@ cephObjectStore:
     gateway:
       instances: 1
   storageClass:
-    isDefault: false
+    isDefault: ###ZARF_VAR_CEPH_OBJECT_STORE_AS_DEFAULT###
     parameters:
       region: ###ZARF_VAR_REGION###

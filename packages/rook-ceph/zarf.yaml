@@ -55,6 +55,11 @@ variables:
     # Empty and zap the disk, then run `lsblk --all --list --output KNAME,NAME,SIZE,TYPE,MOUNTPOINT` to find the KNAME
     default: "dm-1"
     prompt: true
+  - name: DEVICE_CLASS
+    description: "The node's backing device for the block device"
+    # See https://docs.ceph.com/en/latest/rados/operations/crush-map/#device-classes for more details
+    default: "nvme"
+    prompt: true
   - name: REGION
     description: "Desired provisioning region."
     default: "us-east-1"

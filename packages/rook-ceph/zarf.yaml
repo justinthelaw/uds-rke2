@@ -74,6 +74,14 @@ variables:
     default: "1"
     prompt: false
 
+  # The following enables or disables monitoring based on Prometheus availability
+  # Ceph-specific Prometheus rules can be added: https://github.com/rook/rook/tree/master/deploy/charts/rook-ceph-cluster/prometheus
+  - name: ENABLE_MONITORING
+    description: "Boolean to enable (true) or disable (false) Prometheus monitoring"
+    default: "false"
+    pattern: "^(true|false)$"
+    prompt: true
+
 components:
   - name: prepare-host
     required: true

@@ -1,3 +1,27 @@
+imagePullSecrets:
+  - name: private-registry
+
+# Installs a debugging toolbox deployment
+toolbox:
+  # Enable the debugging toolbox. See [toolbox](../Troubleshooting/ceph-toolbox.md)
+  enabled: true
+  # TODO: setup renovate
+  image: ###ZARF_REGISTRY###/ironbank/opensource/ceph/ceph:v18.2.2
+
+  containerSecurityContext:
+    runAsNonRoot: true
+    runAsUser: 2016
+    runAsGroup: 2016
+    capabilities:
+      drop: ["ALL"]
+
+  resources:
+    limits:
+      memory: "1Gi"
+    requests:
+      cpu: "100m"
+      memory: "128Mi"
+
 cephClusterSpec:
   mon:
     count: 1
@@ -20,31 +44,180 @@ cephClusterSpec:
       bluefs_buffered_io: "false"
       mon_data_avail_warn: "10"
 
+  cephVersion:
+    # TODO: setup renovate
+    image: ###ZARF_REGISTRY###/ironbank/opensource/ceph/ceph:v18.2.2
+    allowUnsupported: true
+
+  # enable the ceph dashboard for viewing cluster status
+  dashboard:
+    enabled: true
+    # serve the dashboard under a subpath (useful when you are accessing the dashboard via a reverse proxy)
+    # urlPrefix: /ceph-dashboard
+    # serve the dashboard at the given port.
+    # port: 8443
+    # Serve the dashboard using SSL (if using ingress to expose the dashboard and `ssl: true` you need to set
+    # the corresponding "backend protocol" annotation(s) for your ingress controller of choice)
+    ssl: false
+
+  monitoring:
+    # requires Prometheus to be pre-installed
+    # TODO: turn this on after UDS Core Prometheus is integrated
+    enabled: false
+    rulesNamespace: rook-ceph
+    createPrometheusRules: false
+
   disruptionManagement:
     managePodBudgets: false
     osdMaintenanceTimeout: 30
     manageMachineDisruptionBudgets: false
 
+  # The path on the host where configuration files will be persisted. Must be specified.
+  # Important: if you reinstall the cluster, make sure you delete this directory from each host or else the mons will fail to start on the new cluster.
+  # In Minikube, the '/data' directory is configured to persist across reboots. Use "/data/rook" in Minikube environment.
+  dataDirHostPath: /var/lib/rook
+
+  network:
+    # Use host networking to avoid CNI causing storage issues
+    # Equivalent to legacy `hostNetwork: true`
+    provider: host
+    # Encrypt connections to/from storage
+    connections:
+      encryption:
+        enabled: true
+
+  # Use select devices for storage
+  storage:
+    useAllNodes: true
+    useAllDevices: true
+    devices: 
+      - name: ###ZARF_VAR_DEVICE_NAME###
+    config:
+      # see the following for more details: https://docs.ceph.com/en/latest/rados/configuration/storage-devices/#osd-back-ends
+      osdsPerDevice: "1"
+
+  # automate [data cleanup process](https://github.com/rook/rook/blob/master/Documentation/Storage-Configuration/ceph-teardown.md#delete-the-data-on-hosts) in cluster destruction.
+  cleanupPolicy:
+    # Since cluster cleanup is destructive to data, confirmation is required.
+    # To destroy all Rook data on hosts during uninstall, confirmation must be set to "yes-really-destroy-data".
+    # This value should only be set when the cluster is about to be deleted. After the confirmation is set,
+    # Rook will immediately stop configuring the cluster and only wait for the delete command.
+    # If the empty string is set, Rook will not destroy any data on hosts during uninstall.
+    confirmation: ""
+    # sanitizeDisks represents settings for sanitizing OSD disks on cluster deletion
+    sanitizeDisks:
+      # method indicates if the entire disk should be sanitized or simply ceph's metadata
+      # in both case, re-install is possible
+      # possible choices are 'complete' or 'quick' (default)
+      method: quick
+      # dataSource indicate where to get random bytes from to write on the disk
+      # possible choices are 'zero' (default) or 'random'
+      # using random sources will consume entropy from the system and will take much more time then the zero source
+      dataSource: zero
+      # iteration overwrite N times instead of the default (1)
+      # takes an integer value
+      iteration: 1
+    # allowUninstallWithVolumes defines how the uninstall should be performed
+    # If set to true, cephCluster deletion does not wait for the PVs to be deleted.
+    allowUninstallWithVolumes: false
+
 cephBlockPool:
+  enabled: true
+  # see https://github.com/rook/rook/blob/master/Documentation/CRDs/Block-Storage/ceph-block-pool-crd.md#spec for available configuration
   spec:
-    dataPool:
-      replicated:
-        size: 1
+    failureDomain: host
+    isDefault: true
+    replicated:
+      size: 1
+    reclaimPolicy: Retain
+    volumeBindingMode: "Immediate"
+    allowVolumeExpansion: true
+    mountOptions: []
+    # see https://kubernetes.io/docs/concepts/storage/storage-classes/#allowed-topologies
+    allowedTopologies: []
+    #        - matchLabelExpressions:
+    #            - key: rook-ceph-role
+    #              values:
+    #                - storage-node
+    # see https://github.com/rook/rook/blob/master/Documentation/Storage-Configuration/Block-Storage-RBD/block-storage.md#provision-storage for available configuration
+    parameters:
+      # (optional) mapOptions is a comma-separated list of map options.
+      # For krbd options refer
+      # https://docs.ceph.com/docs/master/man/8/rbd/#kernel-rbd-krbd-options
+      # For nbd options refer
+      # https://docs.ceph.com/docs/master/man/8/rbd-nbd/#options
+      # mapOptions: lock_on_read,queue_depth=1024
+
+      # (optional) unmapOptions is a comma-separated list of unmap options.
+      # For krbd options refer
+      # https://docs.ceph.com/docs/master/man/8/rbd/#kernel-rbd-krbd-options
+      # For nbd options refer
+      # https://docs.ceph.com/docs/master/man/8/rbd-nbd/#options
+      # unmapOptions: force
+
+      # RBD image format. Defaults to "2".
+      imageFormat: "2"
+
+      # RBD image features, equivalent to OR'd bitfield value: 63
+      # Available for imageFormat: "2". Older releases of CSI RBD
+      # support only the `layering` feature. The Linux kernel (KRBD) supports the
+      # full feature complement as of 5.4
+      imageFeatures: layering
+
+      # These secrets contain Ceph admin credentials.
+      csi.storage.k8s.io/provisioner-secret-name: rook-csi-rbd-provisioner
+      csi.storage.k8s.io/provisioner-secret-namespace: "{{ .Release.Namespace }}"
+      csi.storage.k8s.io/controller-expand-secret-name: rook-csi-rbd-provisioner
+      csi.storage.k8s.io/controller-expand-secret-namespace: "{{ .Release.Namespace }}"
+      csi.storage.k8s.io/node-stage-secret-name: rook-csi-rbd-node
+      csi.storage.k8s.io/node-stage-secret-namespace: "{{ .Release.Namespace }}"
+      # Specify the filesystem type of the volume. If not specified, csi-provisioner
+      # will set default as `ext4`. Note that `xfs` is not recommended due to potential deadlock
+      # in hyperconverged settings where the volume is mounted on the same node as the osds.
+      csi.storage.k8s.io/fstype: ext4
 
 cephFileSystem:
+  enabled: false
+  # see https://github.com/rook/rook/blob/master/Documentation/CRDs/Shared-Filesystem/ceph-filesystem-crd.md#filesystem-settings for available configuration
   spec:
     dataPools:
-      replicated:
-        size: 1
-      compressionMode: none
+      - failureDomain: host
+        # Optional and highly recommended, 'data0' by default, see https://github.com/rook/rook/blob/master/Documentation/CRDs/Shared-Filesystem/ceph-filesystem-crd.md#pools
+        name: data0
+        replicated:
+          size: 1
+        compressionMode: none
     metadataPool:
       replicated:
         size: 1
     metadataServer:
       activeCount: 1
       activeStandby: false
+  storageClass:
+    isDefault: false
+    # (Optional) specify a data pool to use, must be the name of one of the data pools above, 'data0' by default
+    pool: data0
+    reclaimPolicy: Retain
+    allowVolumeExpansion: true
+    volumeBindingMode: "Immediate"
+    mountOptions: []
+    # see https://github.com/rook/rook/blob/master/Documentation/Storage-Configuration/Shared-Filesystem-CephFS/filesystem-storage.md#provision-storage for available configuration
+    parameters:
+      # The secrets contain Ceph admin credentials.
+      csi.storage.k8s.io/provisioner-secret-name: rook-csi-cephfs-provisioner
+      csi.storage.k8s.io/provisioner-secret-namespace: "{{ .Release.Namespace }}"
+      csi.storage.k8s.io/controller-expand-secret-name: rook-csi-cephfs-provisioner
+      csi.storage.k8s.io/controller-expand-secret-namespace: "{{ .Release.Namespace }}"
+      csi.storage.k8s.io/node-stage-secret-name: rook-csi-cephfs-node
+      csi.storage.k8s.io/node-stage-secret-namespace: "{{ .Release.Namespace }}"
+      # Specify the filesystem type of the volume. If not specified, csi-provisioner
+      # will set default as `ext4`. Note that `xfs` is not recommended due to potential deadlock
+      # in hyperconverged settings where the volume is mounted on the same node as the osds.
+      csi.storage.k8s.io/fstype: ext4
 
 cephObjectStore:
+  enabled: true
+  # see https://github.com/rook/rook/blob/master/Documentation/CRDs/Object-Storage/ceph-object-store-crd.md#object-store-settings for available configuration
   spec:
     dataPools:
       replicated:
@@ -52,5 +225,31 @@ cephObjectStore:
     metadataPool:
       replicated:
         size: 1
+      failureDomain: host
+    dataPool:
+      failureDomain: host
+      erasureCoded:
+        dataChunks: 2
+        codingChunks: 1
+    preservePoolsOnDelete: true
     gateway:
       instances: 1
+      port: 80
+      resources:
+        limits:
+          cpu: "2000m"
+          memory: "2Gi"
+        requests:
+          cpu: "1000m"
+          memory: "1Gi"
+      # securePort: 443
+      # sslCertificateRef:
+      priorityClassName: system-cluster-critical
+  storageClass:
+    isDefault: false
+    reclaimPolicy: Retain
+    allowVolumeExpansion: true
+    volumeBindingMode: "Immediate"
+    # see https://github.com/rook/rook/blob/master/Documentation/Storage-Configuration/Object-Storage-RGW/ceph-object-bucket-claim.md#storageclass for available configuration
+    parameters:
+      region: ###ZARF_VAR_REGION###

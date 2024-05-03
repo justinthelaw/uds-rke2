@@ -17,10 +17,10 @@ constants:
     pattern: "^(single-node|multi-node)$"
 
 variables:
-  - name: DEVICE_FILTER
-    description: "Regular expression to filter storage devices, example '^sd.'"
-    # default looks for any device or partition that contains the word "ceph" in it
-    default: "ceph"
+  - name: DEVICE_NAME
+    description: "The node's device k-name to be used for BlueStore formatting and storage"
+    # Empty and zap the disk, then run `lsblk --all --list --output KNAME,NAME,SIZE,TYPE,MOUNTPOINT` to find the KNAME
+    default: "dm-1"
     prompt: true
   - name: REGION
     description: "Desired provisioning region."
@@ -96,7 +96,6 @@ components:
         version: v1.14.0
         namespace: rook-ceph
         valuesFiles:
-          - values/cluster-values.yaml
           - values/###ZARF_PKG_TMPL_CLUSTER_CONFIGURATION###-cluster-values.yaml
     actions:
       onDeploy:

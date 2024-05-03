@@ -11,6 +11,8 @@ variables:
     default: "registry1"
   - name: ARCHITECTURE
     default: "amd64"
+  - name: DISK_NAME
+    description: "The name of a Ceph-formatted disk (e.g. /dev/ubuntu-vg/ceph) that is to be wiped."
 
 tasks:
   - name: uds-rke2-bootstrap
@@ -81,7 +83,7 @@ tasks:
       - description: "Deploy the standard UDS Core package"
         # TODO: renovate setup
         cmd: |
-          echo "$CORE_PKG_VERSION"
+          echo ${CORE_PKG_VERSION}
           sudo uds zarf package deploy oci://ghcr.io/defenseunicorns/packages/uds/core:${CORE_PKG_VERSION}-${FLAVOR} \
             -a ${ARCHITECTURE} \
             --components metrics-server \
@@ -90,14 +92,10 @@ tasks:
 
   - name: rook-ceph-destroy
     description: "Destroys an existing Rook-Ceph cluster installation and all associated data on the host node"
-    inputs:
-      disk:
-        description: "The Ceph-formatted disk name (e.g. /dev/ubuntu-vg/ceph) that is to be wiped."
-        required: true
     actions:
       - description: "Run the Rook-Ceph destroy script"
         cmd: |
-          DISK=${{ .inputs.disk }} /root/uds-rke2-artifacts/rook-ceph/rook-ceph-destroy.sh
+          DISK_NAME=${DISK_NAME} /root/uds-rke2-artifacts/rook-ceph/rook-ceph-destroy.sh
 
   - name: uds-rke2-destroy
     description: "Destroys an existing RKE2 cluster installation and all associated artifacts"

@@ -34,9 +34,6 @@ cephClusterSpec:
   mgr:
     count: 1
     allowMultiplePerNode: true
-    modules:
-      - name: "rook"
-        enabled: true
 
   cephConfig:
     global:
@@ -145,6 +142,7 @@ cephBlockPools:
       isDefault: ###ZARF_VAR_CEPH_BLOCK_STORE_AS_DEFAULT###
       replicated:
         size: 1
+        requireSafeReplicaSize: false
     storageClass:
       name: ceph-block
       enabled: ###ZARF_VAR_ENABLE_CEPH_BLOCK_STORE###
@@ -224,9 +222,8 @@ cephObjectStores:
           size: 1
       dataPool:
         failureDomain: host
-        erasureCoded:
-          dataChunks: 2
-          codingChunks: 1
+        replicated:
+          size: 1
       preservePoolsOnDelete: true
       gateway:
         port: 80

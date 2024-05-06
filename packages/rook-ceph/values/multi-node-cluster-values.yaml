@@ -36,9 +36,6 @@ cephClusterSpec:
   mgr:
     count: "###ZARF_VAR_REPLICAS###"
     allowMultiplePerNode: true
-    modules:
-      - name: "rook"
-        enabled: true
 
   dashboard:
     enabled: true
@@ -228,9 +225,8 @@ cephObjectStores:
           size: "###ZARF_VAR_REPLICAS###"
       dataPool:
         failureDomain: host
-        erasureCoded:
-          dataChunks: 2
-          codingChunks: 1
+        replicated:
+          size: "###ZARF_VAR_REPLICAS###"
       preservePoolsOnDelete: true
       gateway:
         port: 80

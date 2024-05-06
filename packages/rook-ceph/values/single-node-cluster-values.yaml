@@ -131,7 +131,7 @@ cephClusterSpec:
     config:
       deviceClass: ###ZARF_VAR_DEVICE_CLASS###
       # Needs to be defined when disks are smaller than 100 GB
-      databaseSizeMB: ###ZARF_VAR_DATABASE_SIZE###
+      databaseSizeMB: "###ZARF_VAR_DATABASE_SIZE###"
       osdsPerDevice: "1"
 
   # No need for dynamic resource management in single-node Rook-Ceph cluster

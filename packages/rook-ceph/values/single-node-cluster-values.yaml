@@ -67,45 +67,49 @@ cephClusterSpec:
       deviceClass: ###ZARF_VAR_DEVICE_CLASS###
 
 cephBlockPools:
-  enabled: ###ZARF_VAR_ENABLE_CEPH_BLOCK_STORE###
-  spec:
-    failureDomain: "host"
-    isDefault: ###ZARF_VAR_CEPH_BLOCK_STORE_AS_DEFAULT###
-    replicated:
-      size: 1
+  - name: ceph-blockpool
+    spec:
+      failureDomain: "host"
+      isDefault: ###ZARF_VAR_CEPH_BLOCK_STORE_AS_DEFAULT###
+      replicated:
+        size: 1
+    storageClass:
+      enabled: ###ZARF_VAR_ENABLE_CEPH_BLOCK_STORE###
 
 cephFileSystems:
-  enabled: ###ZARF_VAR_ENABLE_CEPH_FILE_STORE###
-  spec:
-    dataPools:
-      - failureDomain: "host"
+  - name: ceph-filesystem
+    spec:
+      dataPools:
+        - failureDomain: "host"
+          replicated:
+            size: 1
+          compressionMode: "none"
+      metadataPool:
         replicated:
           size: 1
-        compressionMode: "none"
-    metadataPool:
-      replicated:
-        size: 1
-    metadataServer:
-      activeCount: 1
-      activeStandby: false
-  storageClass:
-    isDefault: ###ZARF_VAR_CEPH_FILE_STORE_AS_DEFAULT###
+      metadataServer:
+        activeCount: 1
+        activeStandby: false
+    storageClass:
+      isDefault: ###ZARF_VAR_CEPH_FILE_STORE_AS_DEFAULT###
+      enabled: ###ZARF_VAR_ENABLE_CEPH_FILE_STORE###
 
 cephObjectStores:
-  enabled: ###ZARF_VAR_ENABLE_CEPH_BLOCK_STORE###
-  spec:
-    dataPools:
-      replicated:
-        size: 1
-    metadataPool:
-      replicated:
-        size: 1
-      failureDomain: "host"
-    dataPool:
-      failureDomain: "host"
-    gateway:
-      instances: 1
-  storageClass:
-    isDefault: ###ZARF_VAR_CEPH_OBJECT_STORE_AS_DEFAULT###
-    parameters:
-      region: ###ZARF_VAR_REGION###
+  - name: ceph-objectstore
+    spec:
+      dataPools:
+        replicated:
+          size: 1
+      metadataPool:
+        replicated:
+          size: 1
+        failureDomain: "host"
+      dataPool:
+        failureDomain: "host"
+      gateway:
+        instances: 1
+    storageClass:
+      enabled: ###ZARF_VAR_ENABLE_CEPH_BLOCK_STORE###
+      isDefault: ###ZARF_VAR_CEPH_OBJECT_STORE_AS_DEFAULT###
+      parameters:
+        region: ###ZARF_VAR_REGION###

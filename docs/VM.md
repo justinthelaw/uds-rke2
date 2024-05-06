@@ -146,7 +146,7 @@ Use [virt-manager](https://virt-manager.org/) to setup a VM using a GUI. Virt-ma
 
 #### Option 2
 
-Alternatively, you can modify and use the following CLI method for standing up a VM using virt:
+Alternatively, you can modify and use the following CLI method for standing up a VM using [virt-install](https://linux.die.net/man/1/virt-install):
 
 ```bash
 virt-install \
@@ -218,6 +218,8 @@ The application of the following configuration repository will **_enhance_** you
     - [virsh](https://libvirt.org/manpages/virsh.html)
     - [virtIO](https://wiki.libvirt.org/page/Virtio)
     - [virtio-blk vs. virtio-scsi](https://mpolednik.github.io/2017/01/23/virtio-blk-vs-virtio-scsi/)
+    - [virt-install](https://linux.die.net/man/1/virt-install)
+    - [virt-manager](https://virt-manager.org/)
   - Linux Kernel
     - [KVM](https://www.kernel.org/doc/html/latest/virt/kvm/index.html)
     - [VFIO](https://www.kernel.org/doc/html/latest/driver-api/vfio.html?highlight=vfio%20pci)

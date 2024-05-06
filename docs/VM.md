@@ -196,7 +196,12 @@ ssh $default_user@$vm_ip_address
 
 ### Setup the VM
 
-Now that the VM is up and running, you can clone and use the [install dependencies script](./vm/scripts/install-deps.sh) and [STIG script](./vm/scripts/os-stig.sh) to install the necessary base packages required to secure the machine according to [DoD Cyber STIG standards](https://public.cyber.mil/stigs/).
+Now that the VM is up and running, you can clone and use the [install dependencies script](./vm/scripts/install-deps.sh) to install the necessary base packages required to secure the machine according to [DoD Cyber STIG standards](https://public.cyber.mil/stigs/).
+
+> [!CAUTION]
+> STIG configurations on a machine are hard and/or impossible to reverse, so please do not run this script directly on your personal machine.
+
+The [STIG script](./vm/scripts/os-stig.sh) takes the latest Ansible playbooks from [DoD Cyber's STIG automation content](https://dl.dod.cyber.mil/wp-content/uploads/stigs) to perform the STIG'ing.
 
 ### Optional CLI Configuration
 

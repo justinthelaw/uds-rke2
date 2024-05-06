@@ -45,7 +45,7 @@ chmod +x /usr/local/bin/kubectl
 
 ### Virtual Machines
 
-> ![CAUTION]
+> [!CAUTION]
 > Due to the the disk formatting operations, networking and STIG'ing configurations that are applied to a node's host, it is highly recommended that the contents of this repository are not directly installed on a personal machine's OS.
 
 The best way to test UDS RKE2 is to spin-up 1 or more nodes using virtual machines or networks.

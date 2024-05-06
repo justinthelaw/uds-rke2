@@ -198,6 +198,10 @@ ssh $default_user@$vm_ip_address
 
 Now that the VM is up and running, you can clone and use the [install dependencies script](./vm/scripts/install-deps.sh) and [STIG script](./vm/scripts/os-stig.sh) to install the necessary base packages required to secure the machine according to [DoD Cyber STIG standards](https://public.cyber.mil/stigs/).
 
+### Optional CLI Configuration
+
+The application of the following configuration repository will **_enhance_** your developer experience: https://github.com/justinthelaw/law-config
+
 ## Credits and Resources
 
 - Docs

@@ -66,7 +66,7 @@ cephClusterSpec:
       osdsPerDevice: "1"
       deviceClass: ###ZARF_VAR_DEVICE_CLASS###
 
-cephBlockPool:
+cephBlockPools:
   enabled: ###ZARF_VAR_ENABLE_CEPH_BLOCK_STORE###
   spec:
     failureDomain: "host"
@@ -74,7 +74,7 @@ cephBlockPool:
     replicated:
       size: 1
 
-cephFileSystem:
+cephFileSystems:
   enabled: ###ZARF_VAR_ENABLE_CEPH_FILE_STORE###
   spec:
     dataPools:
@@ -91,7 +91,7 @@ cephFileSystem:
   storageClass:
     isDefault: ###ZARF_VAR_CEPH_FILE_STORE_AS_DEFAULT###
 
-cephObjectStore:
+cephObjectStores:
   enabled: ###ZARF_VAR_ENABLE_CEPH_BLOCK_STORE###
   spec:
     dataPools:

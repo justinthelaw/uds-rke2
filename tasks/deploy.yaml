@@ -68,6 +68,7 @@ tasks:
     description: "Deploy the custom Zarf Init Package for RKE2 with Rook-Ceph"
     actions:
       - description: "Deploy the custom Zarf Init package"
+        # TODO: modify the enabled and defaults
         cmd: |
           sudo uds zarf package deploy build/packages/zarf-init-amd64-*.tar.zst \
             --no-progress \

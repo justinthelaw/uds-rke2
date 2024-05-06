@@ -62,6 +62,8 @@ tasks:
   # TODO: local-path init
   # TODO: longhorn init
 
+  # TODO: exemptions for each storage flavor
+
   - name: rook-ceph-init
     description: "Deploy the custom Zarf Init Package for RKE2 with Rook-Ceph"
     actions:

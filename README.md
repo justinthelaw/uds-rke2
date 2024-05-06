@@ -43,6 +43,17 @@ chmod +x /usr/local/bin/kubectl
 
 ## Usage
 
+### Virtual Machines
+
+> ![CAUTION]
+> Due to the the disk formatting operations, networking and STIG'ing configurations that are applied to a node's host, it is highly recommended that the contents of this repository are not directly installed on a personal machine's OS.
+
+The best way to test UDS RKE2 is to spin-up 1 or more nodes using virtual machines or networks.
+
+[LeapfrogAI](https://github.com/defenseunicorns/leapfrogai), the main support target of this bundle, requires GPU passthrough to all worker nodes that will have a taint for attracting pods with GPU resource and workload requirements.
+
+Please see the [VM setup documentation](./docs/VM.md) and VM setup scripts to learn more about this setup.
+
 ### Bundles
 
 There are 3 main "flavors" of the UDS RKE2 Core bundle, with 4 distinct flavors in total. Each flavor revolves around the storage and persistence layer of the cluster, and comes with its own documentation on configuration and installation, as linked in the bulleted list below. Please refer to that documentation for more details on each bundle flavor's recommendations and capabilities.

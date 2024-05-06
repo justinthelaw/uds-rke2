@@ -55,7 +55,7 @@ repos:
         name: Helm Chart Linting
 
   #############
-  # UDS v0.10.3
+  # UDS v0.10.4
   #############
   # TODO: renovate setup
 
@@ -64,7 +64,7 @@ repos:
     hooks:
       - id: download-schema
         name: "Download Zarf Schema"
-        entry: bash -c 'curl -o zarf.schema.json https://raw.githubusercontent.com/defenseunicorns/uds-cli/v0.10.3/zarf.schema.json'
+        entry: bash -c 'curl -o zarf.schema.json https://raw.githubusercontent.com/defenseunicorns/uds-cli/v0.10.4/zarf.schema.json'
         language: system
   - repo: https://github.com/python-jsonschema/check-jsonschema
     rev: 0.14.0
@@ -86,7 +86,7 @@ repos:
     hooks:
       - id: download-schema
         name: "Download UDS Bundle Schema"
-        entry: bash -c 'curl -o uds.schema.json https://raw.githubusercontent.com/defenseunicorns/uds-cli/v0.10.3/uds.schema.json'
+        entry: bash -c 'curl -o uds.schema.json https://raw.githubusercontent.com/defenseunicorns/uds-cli/v0.10.4/uds.schema.json'
         language: system
   - repo: https://github.com/python-jsonschema/check-jsonschema
     rev: 0.14.0
@@ -108,7 +108,7 @@ repos:
     hooks:
       - id: download-schema
         name: "Download UDS Tasks Schema"
-        entry: bash -c 'curl -o tasks.schema.json https://raw.githubusercontent.com/defenseunicorns/uds-cli/v0.10.3/tasks.schema.json'
+        entry: bash -c 'curl -o tasks.schema.json https://raw.githubusercontent.com/defenseunicorns/uds-cli/v0.10.4/tasks.schema.json'
         language: system
   - repo: https://github.com/python-jsonschema/check-jsonschema
     rev: 0.14.0

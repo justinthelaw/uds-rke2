@@ -50,17 +50,22 @@ variables:
     prompt: false
 
   # The following determines where the data is stored on the nodes, AFTER node taints/tolerations are applied
-  # DEVICE_NAME and DEVICE_CLASS are only relevant in a `single-node` deployment, whereas
+  # DEVICE_NAME, DATABASE_SIZE, and DEVICE_CLASS are only relevant in a `single-node` deployment, whereas
   # DEVICE_FILTER is used for a `multi-node` deployment
   - name: DEVICE_NAME
-    description: "The node's device k-name to be used for BlueStore formatting and storage"
+    description: "The node's device or logical volume k-name to be used for BlueStore formatting and storage"
     # Empty and zap the disk, then run `lsblk --all --list --output KNAME,NAME,SIZE,TYPE,MOUNTPOINT` to find the KNAME
     default: "dm-1"
     prompt: true
   - name: DEVICE_CLASS
-    description: "The node's backing device for the block device"
+    description: "The storage type of the node's device or logical volume"
     # See https://docs.ceph.com/en/latest/rados/operations/crush-map/#device-classes for more details
     default: "nvme"
+    prompt: true
+  - name: DATABASE_SIZE
+    description: "The amount of storage available in the node's device, in MB"
+    # 90000 MB = 90 GiB
+    default: "90000"
     prompt: true
   - name: DEVICE_FILTER
     description: "A REGEX expression for filtering which devices are to be used for BlueStore formatting and storage"

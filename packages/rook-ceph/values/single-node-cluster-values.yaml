@@ -113,14 +113,26 @@ cephClusterSpec:
         cpu: "50m"
         memory: "50Mi"
 
+  # The option to automatically remove OSDs that are out and are safe to destroy.
+  removeOSDsIfOutAndSafeToRemove: true
+
+  # priority classes to apply to ceph resources
+  priorityClassNames:
+    mon: system-node-critical
+    osd: system-node-critical
+    mgr: system-cluster-critical
+
   storage:
     useAllNodes: true
     useAllDevices: true
+    # single-node, single-device configuration
     devices:
       - name: ###ZARF_VAR_DEVICE_NAME###
     config:
-      osdsPerDevice: "1"
       deviceClass: ###ZARF_VAR_DEVICE_CLASS###
+      # Needs to be defined when disks are smaller than 100 GB
+      databaseSizeMB: ###ZARF_VAR_DATABASE_SIZE###
+      osdsPerDevice: "1"
 
   # No need for dynamic resource management in single-node Rook-Ceph cluster
   disruptionManagement:

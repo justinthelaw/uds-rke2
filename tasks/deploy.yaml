@@ -68,15 +68,15 @@ tasks:
     description: "Deploy the custom Zarf Init Package for RKE2 with Rook-Ceph"
     actions:
       - description: "Deploy the custom Zarf Init package"
-        # TODO: modify the enabled and defaults
+        # File storage is disabled by default, but can be enabled as necessary
         cmd: |
           sudo uds zarf package deploy build/packages/zarf-init-amd64-*.tar.zst \
             --no-progress \
-            --set ENABLE_CEPH_BLOCK_STORE="false" \
+            --set ENABLE_CEPH_BLOCK_STORE="true" \
             --set ENABLE_CEPH_OBJECT_STORE="true" \
             --set ENABLE_CEPH_FILE_STORE="false" \
-            --set CEPH_BLOCK_STORE_AS_DEFAULT="false" \
-            --set CEPH_OBJECT_STORE_AS_DEFAULT="true" \
+            --set CEPH_BLOCK_STORE_AS_DEFAULT="true" \
+            --set CEPH_OBJECT_STORE_AS_DEFAULT="false" \
             --set CEPH_FILE_STORE_AS_DEFAULT="false" \
             --confirm
 

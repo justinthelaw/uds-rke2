@@ -1,0 +1,21 @@
+apiVersion: uds.dev/v1alpha1
+kind: Exemption
+metadata:
+  name: metallb
+  namespace: uds-policy-exemptions
+spec:
+  exemptions:
+    - policies:
+        - DisallowHostNamespaces
+        - DisallowPrivileged
+        - RequireNonRootUser
+        - DropAllCapabilities
+        - RestrictHostPathWrite
+        - RestrictVolumeTypes
+        - RestrictCapabilities
+        - RestrictHostPorts
+      matcher:
+        namespace: "metallb-system"
+        name: ".*"
+      title: "all pods"
+      description: "Exempt MetalLB from policy enforcement"

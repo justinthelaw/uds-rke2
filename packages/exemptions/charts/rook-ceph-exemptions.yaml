@@ -1,0 +1,21 @@
+apiVersion: uds.dev/v1alpha1
+kind: Exemption
+metadata:
+  name: rook-ceph
+  namespace: uds-policy-exemptions
+spec:
+  exemptions:
+    - policies:
+        - DisallowHostNamespaces
+        - DisallowPrivileged
+        - RequireNonRootUser
+        - DropAllCapabilities
+        - RestrictHostPathWrite
+        - RestrictVolumeTypes
+        - RestrictCapabilities
+        - RestrictHostPorts
+      matcher:
+        namespace: "rook-ceph"
+        name: ".*"
+      title: "all pods"
+      description: "Exempt Rook-Ceph from policy enforcement"

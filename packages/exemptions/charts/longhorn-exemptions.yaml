@@ -1,0 +1,21 @@
+apiVersion: uds.dev/v1alpha1
+kind: Exemption
+metadata:
+  name: longhorn
+  namespace: uds-policy-exemptions
+spec:
+  exemptions:
+    - policies:
+        - DisallowHostNamespaces
+        - DisallowPrivileged
+        - RequireNonRootUser
+        - DropAllCapabilities
+        - RestrictHostPathWrite
+        - RestrictVolumeTypes
+        - RestrictCapabilities
+        - RestrictHostPorts
+      matcher:
+        namespace: "longhorn-system"
+        name: ".*"
+      title: "all pods"
+      description: "Exempt Longhorn from policy enforcement"

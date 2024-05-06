@@ -84,7 +84,7 @@ variables:
   #   --set ACTIVE_METADATA_SERVERS=1
   - name: REPLICAS
     description: "Number of redundant resources to deploy, should generally match the number of nodes in the cluster"
-    default: "1"
+    default: "3"
     prompt: false
   - name: ACTIVE_METADATA_SERVERS
     description: "Number of file store metadata servers active at the same time, separate from the number of replicas"
@@ -134,7 +134,7 @@ components:
       # TODO: renovate setup
       - name: rook-ceph
         url: https://charts.rook.io/release
-        version: v1.14.3
+        version: v1.14.0
         namespace: rook-ceph
         valuesFiles:
           - values/operator-values.yaml

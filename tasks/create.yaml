@@ -25,10 +25,15 @@ tasks:
     actions:
       - description: "Build UDS RKE2 Package"
         cmd: |
-           sudo ZARF_CONFIG="packages/uds-rke2/zarf-config.yaml" uds zarf package create packages/uds-rke2/ \
-            -o build/packages/ \
-            --no-progress \
-            --confirm
+          sudo ZARF_CONFIG="packages/uds-rke2/zarf-config.yaml" uds zarf package create packages/uds-rke2/ \
+           -o build/packages/ \
+           --no-progress \
+           --confirm
+
+  # TODO: local-path init
+  # TODO: longhorn init
+
+  # TODO: exemptions for each storage flavor
 
   - name: rook-ceph-init
     description: "Build the custom Zarf Init package for RKE2 with Rook-Ceph, single node-only"

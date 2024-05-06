@@ -59,6 +59,9 @@ tasks:
             --no-progress \
             --confirm
 
+  # TODO: local-path init
+  # TODO: longhorn init
+
   - name: rook-ceph-init
     description: "Deploy the custom Zarf Init Package for RKE2 with Rook-Ceph"
     actions:

@@ -13,6 +13,7 @@ variables:
     default: "amd64"
   - name: DISK_NAME
     description: "The name of a Ceph-formatted disk (e.g. /dev/ubuntu-vg/ceph) that is to be wiped."
+    default: "/dev/ubuntu-vg/ceph"
 
 tasks:
   - name: uds-rke2-bootstrap

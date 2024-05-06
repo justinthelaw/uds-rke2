@@ -42,7 +42,7 @@ kubectl delete ns rook-ceph
 fi
 
 # Remove the remaining Rook-Ceph data on the host
-if [ -b "$DISK_NAME" ]; then
+if [ -n "$DISK_NAME" ]; then
     wipefs -a -f $DISK_NAME
     sgdisk --zap-all $DISK_NAME
     dd if=/dev/zero of="$DISK_NAME" bs=1M count=100 oflag=direct,dsync

@@ -1,0 +1,4 @@
+package:
+  create:
+    set:
+      cluster_configuration: "single-node"

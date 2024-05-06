@@ -8,6 +8,7 @@ includes:
   - deploy-core: https://raw.githubusercontent.com/defenseunicorns/uds-core/v0.19.0/tasks/deploy.yaml
 
 tasks:
+  # rook-ceph workflow
   - name: standard
     description: "Bootstrap an RKE2 cluster, and build and deploy Rook-Ceph Zarf Init, MinIO, and UDS Core packages"
     actions:
@@ -20,6 +21,25 @@ tasks:
 
       - task: create:rook-ceph-init
       - task: deploy:rook-ceph-init
+
+      - task: create:minio
+      - task: deploy:minio
+
+      - task: deploy:specific-core-package-release
+
+  # longhorn single-node workflow
+  - name: longhorn-standard
+    description: "Bootstrap an RKE2 cluster, and build and deploy Longhorn Zarf Init, MinIO, and UDS Core packages"
+    actions:
+      - task: create:temp-build-folder
+
+      - task: create:uds-rke2
+      - task: deploy:uds-rke2-bootstrap
+        with:
+          joinToken: "my-test-token"
+
+      - task: create:longhorn-init
+      - task: deploy:longhorn-init
 
       - task: create:minio
       - task: deploy:minio

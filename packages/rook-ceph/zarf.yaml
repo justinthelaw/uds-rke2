@@ -50,6 +50,8 @@ variables:
     prompt: false
 
   # The following determines where the data is stored on the nodes, AFTER node taints/tolerations are applied
+  # DEVICE_NAME and DEVICE_CLASS are only relevant in a `single-node` deployment, whereas
+  # DEVICE_FILTER is used for a `multi-node` deployment
   - name: DEVICE_NAME
     description: "The node's device k-name to be used for BlueStore formatting and storage"
     # Empty and zap the disk, then run `lsblk --all --list --output KNAME,NAME,SIZE,TYPE,MOUNTPOINT` to find the KNAME
@@ -60,6 +62,11 @@ variables:
     # See https://docs.ceph.com/en/latest/rados/operations/crush-map/#device-classes for more details
     default: "nvme"
     prompt: true
+  - name: DEVICE_FILTER
+    description: "A REGEX expression for filtering which devices are to be used for BlueStore formatting and storage"
+    # Empty and zap the disk, then run `lsblk --all --list --output KNAME,NAME,SIZE,TYPE,MOUNTPOINT` to find the KNAME
+    default: "^(dm-1)$"
+    prompt: true
   - name: REGION
     description: "Desired provisioning region."
     default: "us-east-1"
@@ -67,12 +74,12 @@ variables:
     sensitive: true
 
   # The following determines the redundancy (size or count) of the Ceph cluster's monitors, managers and data pools
-  # These are only applicable to `CLUSTER_CONFIGURATION=multi-node`, and the minimum suggested HA configuration ratio is:
-  #   REPLICAS="3"
-  #   ACTIVE_METADATA_SERVERS="1" (if ceph file store is enabled)
+  # The minimum suggested HA configuration example can be seen below:
+  #   --set REPLICAS=3
+  #   --set ACTIVE_METADATA_SERVERS=1
   - name: REPLICAS
     description: "Number of redundant resources to deploy, should generally match the number of nodes in the cluster"
-    default: "3"
+    default: "1"
     prompt: false
   - name: ACTIVE_METADATA_SERVERS
     description: "Number of file store metadata servers active at the same time, separate from the number of replicas"
@@ -122,7 +129,7 @@ components:
       # TODO: renovate setup
       - name: rook-ceph
         url: https://charts.rook.io/release
-        version: v1.14.0
+        version: v1.14.3
         namespace: rook-ceph
         valuesFiles:
           - values/operator-values.yaml

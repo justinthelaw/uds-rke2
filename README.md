@@ -16,7 +16,7 @@ This Zarf package serves as an air-gapped production environment for deploying [
 
 ### UDS CLI Aliasing
 
-Below are instructions for adding UDS CLI aliases that are useful for deployments.
+Below are instructions for adding UDS CLI aliases that are useful for deployments that occur in an air-gap with only the UDS CLI binary available to the delivery engineer.
 
 For general CLI UX, put the following in your shell configuration (e.g., `/root/.bashrc`):
 
@@ -41,16 +41,28 @@ chmod +x /usr/local/bin/kubectl
 - All pre-requisites listed in [Deployment Target](#deployment-target)
 - [Docker](https://docs.docker.com/get-docker/) or [Podman](https://podman.io/getting-started/installation) for running, building, and pulling images
 
-## Create
+## Usage
+
+### Bundles
+
+There are 3 main "flavors" of the UDS RKE2 Core bundle, with 4 distinct flavors in total. Each flavor revolves around the storage and persistence layer of the cluster, and comes with its own documentation on configuration and installation, as linked in the bulleted list below. Please refer to that documentation for more details on each bundle flavor's recommendations and capabilities.
+
+1. [Local Path Provisioner](./docs/LOCAL-PATH.md) + [MinIO](./docs/MINIO.md)
+2. [Longhorn](./docs/LONGHORN.md) + [MinIO](./docs/MINIO.md)
+3. [Rook-Ceph](./docs/ROOK-CEPH.md)
+    - (3a) Single Node
+    - (3b) Multi-Node (3 or more)
+
+### Create
 
 <!-- TODO: create instructions -->
 
-## Deploy
+### Deploy
 
 <!-- TODO: release-please setup -->
 <!-- TODO: deploy instructions -->
 
-## Remove
+### Remove
 
 <!-- TODO: remove instructions -->
 
@@ -66,6 +78,7 @@ Below are resources to explain some of the rationale and inner workings of the R
 - [MinIO Configuration](docs/MINIO.md)
 - [Rook-Ceph Configuration](docs/ROOK-CEPH.md)
 - [Longhorn Configuration](docs/LONGHORN.md)
+- [Local Path Provisioner](docs/LOCAL-PATH.md)
 - [Custom Zarf Init](docs/INIT.md)
 
 ### Virtual Machine Setup and Testing
@@ -80,6 +93,7 @@ Below are resources to explain some of the rationale and inner workings of the R
 - [UDS Core](https://github.com/defenseunicorns/uds-core)
 - [UDS K3D](https://github.com/defenseunicorns/uds-k3d)
 - [UDS RKE2 Image Builder](https://github.com/defenseunicorns/uds-rke2-image-builder)
+- [Experimental UDS RKE2 Core Bundle](https://github.com/docandrew/uds-core-rke2)
 - [RKE2 Zarf Init](https://github.com/defenseunicorns/zarf-package-rke2-init)
 - [Zarf Longhorn Init](https://github.com/defenseunicorns/zarf-init-longhorn)
 - [UDS Rook-Ceph Capability](https://github.com/defenseunicorns/uds-capability-rook-ceph)

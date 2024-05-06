@@ -2,7 +2,7 @@
 
 ## RKE2 Install
 
-The [RKE2 Install script](../packages/uds-rke2/scripts/rke2/rke2-install.sh) installs RKE2, suitable for both server and agent nodes, following the upstream [RKE2 air-gapped install guide](https://docs.rke2.io/install/airgap). The basic steps involved in our current script involve:
+The [RKE2 install script](../packages/uds-rke2/scripts/rke2/rke2-install.sh) installs RKE2, suitable for both server and agent nodes, following the upstream [RKE2 air-gapped install guide](https://docs.rke2.io/install/airgap). The basic steps involved in our current script involve:
 
 - Staging image tarballs: Image tarballs are downloaded and placed in the correct location for usage in an airgap (see [here](https://docs.rke2.io/install/airgap#tarball-method))
 - Run the RKE2 install script from upstream: This is pulled directly from RKE2 docs [here](https://docs.rke2.io/install/airgap#rke2-installsh-script-install)
@@ -20,6 +20,8 @@ The final portion of the build copies a few files into the image and ensures the
 
 Additionally the etcd user and a sysctl config are added for RKE2. This follows the process documented in the [RKE2 CIS Hardening guide](https://docs.rke2.io/security/hardening_guide#ensure-etcd-is-configured-properly).
 
+Finally, configuration of the cluster's networking and default services is provided to allow the RKE2 cluster to be compatible or replaced with the components and services setup by [UDS Core](https://github.com/defenseunicorns/uds-core).
+
 ## RKE2 Startup
 
 > [!IMPORTANT]  
@@ -27,7 +29,7 @@ Additionally the etcd user and a sysctl config are added for RKE2. This follows 
 
 RKE2 provides excellent tooling to build an RKE2 cluster, but when considering the STIG guides for RKE2 and deploying via IaC there is additional runtime configuration required. The [RKE2 Startup script](../packages/uds-rke2/scripts/rke2/configs/rke2-startup.sh) injected during [OS preparation](./OS.md) is not required for startup, but it abstracts away some setup complexity.
 
-## Script Parameters
+### Script Parameters
 
 This script provides a number of optional parameters depending on your desired configuration:
 
@@ -36,7 +38,7 @@ This script provides a number of optional parameters depending on your desired c
 - `-a`: RKE2 has server or agent nodes. Agent nodes are Kubernetes worker nodes and do not host critical services like etcd or control-plane deployments.
 - `-T <dns address>`: By default cluster generated certificate is only valid for the loopback address and private IPs it can find on interfaces. When accessing cluster from a hostname or public IP, they need to be provided so they can be added to the cluster certificate.
 
-## Recommended Usage
+### Script Usage
 
 This script should be run on each node with a minimum of 3 server nodes for an HA setup, plus additional agent nodes as needed. Ideally you should also setup load-balancing for server nodes (at minimum round-robin with DNS) so that a single node failure does not cause access issues.
 
@@ -47,7 +49,7 @@ An example setup is provided below:
 - Node3: `/root/rke2-startup.sh -t <token> -s <rke2_lb_address> -T <rke2_dns_address>`
 - NodeN (agent nodes): `/root/rke2-startup.sh -t <token> -s <rke2_lb_address> -a`
 
-## Additional RKE2 Links
+## Additional Info
 
 - [RKE2 Releases](https://github.com/rancher/rke2/releases)
 - [Air-Gap Install](https://docs.rke2.io/install/airgap#tarball-method)

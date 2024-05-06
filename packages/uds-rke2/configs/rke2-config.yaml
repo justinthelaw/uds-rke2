@@ -4,8 +4,8 @@ write-kubeconfig-mode: "0640"
 secrets-encryption: true
 pod-security-admission-config-file: /etc/rancher/rke2/default-pss.yaml
 disable:
-  - rke2-ingress-nginx
-  - rke2-metrics-server
+  - rke2-ingress-nginx # for rook-ceph conflicts
+  - rke2-metrics-server # UDS Core already comes with a pre-configured metrics server
 kube-controller-manager-arg:
   - tls-min-version=VersionTLS12
   - tls-cipher-suites=TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305,TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384

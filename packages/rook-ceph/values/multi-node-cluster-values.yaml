@@ -30,11 +30,11 @@ cephClusterSpec:
     allowUnsupported: true
 
   mon:
-    count: ###ZARF_VAR_REPLICAS###
+    count: "###ZARF_VAR_REPLICAS###"
     allowMultiplePerNode: true
 
   mgr:
-    count: ###ZARF_VAR_REPLICAS###
+    count: "###ZARF_VAR_REPLICAS###"
     allowMultiplePerNode: true
     modules:
       - name: "rook"
@@ -148,7 +148,7 @@ cephBlockPools:
       failureDomain: "host"
       isDefault: ###ZARF_VAR_CEPH_BLOCK_STORE_AS_DEFAULT###
       replicated:
-        size: ###ZARF_VAR_REPLICAS###
+        size: "###ZARF_VAR_REPLICAS###"
     storageClass:
       name: ceph-block
       enabled: ###ZARF_VAR_ENABLE_CEPH_BLOCK_STORE###
@@ -181,11 +181,11 @@ cephFileSystems:
     spec:
       metadataPool:
         replicated:
-          size: ###ZARF_VAR_REPLICAS###
+          size: "###ZARF_VAR_REPLICAS###"
       dataPools:
         - failureDomain: "host"
           replicated:
-            size: ###ZARF_VAR_REPLICAS###
+            size: "###ZARF_VAR_REPLICAS###"
           name: data0
       metadataServer:
         activeCount: ###ZARF_VAR_ACTIVE_METADATA_SERVERS###
@@ -225,7 +225,7 @@ cephObjectStores:
       metadataPool:
         failureDomain: "host"
         replicated:
-          size: ###ZARF_VAR_REPLICAS###
+          size: "###ZARF_VAR_REPLICAS###"
       dataPool:
         failureDomain: host
         erasureCoded:
@@ -241,7 +241,7 @@ cephObjectStores:
           requests:
             cpu: "1000m"
             memory: "1Gi"
-        instances: ###ZARF_VAR_REPLICAS###
+        instances: "###ZARF_VAR_REPLICAS###"
         priorityClassName: system-cluster-critical
     storageClass:
       name: ceph-objectstore

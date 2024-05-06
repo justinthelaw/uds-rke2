@@ -34,6 +34,9 @@ cephClusterSpec:
   mgr:
     count: 1
     allowMultiplePerNode: true
+    modules:
+      - name: rook
+        enabled: true
 
   cephConfig:
     global:
@@ -109,9 +112,6 @@ cephClusterSpec:
       requests:
         cpu: "50m"
         memory: "50Mi"
-
-  # The option to automatically remove OSDs that are out and are safe to destroy.
-  removeOSDsIfOutAndSafeToRemove: true
 
   # priority classes to apply to ceph resources
   priorityClassNames:

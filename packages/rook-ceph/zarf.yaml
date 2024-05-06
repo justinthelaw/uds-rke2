@@ -30,7 +30,7 @@ variables:
     prompt: true
   - name: ENABLE_CEPH_FILE_STORE
     description: "Boolean to enable (true) or disable (false) the Ceph file storage type"
-    default: "true"
+    default: "false"
     pattern: "^(true|false)$"
     prompt: true
   - name: CEPH_BLOCK_STORE_AS_DEFAULT

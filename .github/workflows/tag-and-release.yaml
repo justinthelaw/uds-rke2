@@ -34,12 +34,12 @@ jobs:
         run: |
           CURRENT_REF="${{ github.ref }}"
           echo "Current branch or tag reference: $CURRENT_REF"
-
           if [[ "$CURRENT_REF" == "refs/tags/dev" ]] || [[ "${{ steps.tag.outputs.release_created }}" == 'true' ]]; then
-            echo "release_created=true" >> $GITHUB_ENV
+            echo "release_created=true" >> $GITHUB_OUTPUT
           else
-            echo "release_created=false" >> $GITHUB_ENV
+            echo "release_created=false" >> $GITHUB_OUTPUT
           fi
+        shell: bash
 
   publish-uds-package:
     needs: tag-new-version

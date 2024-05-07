@@ -24,15 +24,6 @@ tasks:
           version: ${VERSION}
           target_repo: ghcr.io/justinthelaw/packages/uds
 
-  - name: rook-ceph-init
-    description: "Publish the custom Zarf Init package"
-    actions:
-      - task: publish:package
-        with:
-          path: build/packages/rook-ceph
-          version: ${VERSION}
-          target_repo: ghcr.io/justinthelaw/packages/uds/rook-ceph
-
   - name: local-path-init
     description: "Publish the custom Zarf Init package"
     actions:
@@ -50,6 +41,15 @@ tasks:
           path: build/packages/longhorn
           version: ${VERSION}
           target_repo: ghcr.io/justinthelaw/packages/uds/longhorn
+
+  - name: rook-ceph-init
+    description: "Publish the custom Zarf Init package"
+    actions:
+      - task: publish:package
+        with:
+          path: build/packages/rook-ceph
+          version: ${VERSION}
+          target_repo: ghcr.io/justinthelaw/packages/uds/rook-ceph
 
   - name: minio
     description: "Publish the MinIO package"

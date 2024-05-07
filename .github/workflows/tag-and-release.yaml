@@ -74,9 +74,31 @@ jobs:
         run: |
           echo "Publishing for tag: ${{ github.ref }}"
           if [[ "${{ github.ref }}" == "refs/tags/dev" ]]; then
+            sudo uds run create:uds-rke2 --set VERSION=dev
+            sudo uds run publish:uds-rke2 --set VERSION=dev
+            # TODO: add these back in when actually built
+            # sudo uds run create:local-path-init --set VERSION=dev
+            # sudo uds run publish:local-path-init --set VERSION=dev
+            # sudo uds run create:longhorn-init --set VERSION=dev
+            # sudo uds run publish:longhorn-init --set VERSION=dev
+            sudo uds run create:rook-ceph-init --set VERSION=dev
+            sudo uds run publish:rook-ceph-init --set VERSION=dev
+            sudo uds run create:minio --set VERSION=dev
+            sudo uds run publish:minio --set VERSION=dev
+            sudo uds run create:uds-rke2-exemptions --set VERSION=dev
+            sudo uds run publish:uds-rke2-exemptions --set VERSION=dev
+          else
             sudo uds run create:uds-rke2
             sudo uds run publish:uds-rke2
-          else
-            sudo run create:uds-rke2
-            sudo uds run publish:uds-rke2
+            # TODO: add these back in when actually built
+            # sudo uds run create:local-path-init
+            # sudo uds run publish:local-path-init
+            # sudo uds run create:longhorn-init
+            # sudo uds run publish:longhorn-init
+            sudo uds run create:rook-ceph-init
+            sudo uds run publish:rook-ceph-init
+            sudo uds run create:minio
+            sudo uds run publish:minio
+            sudo uds run create:uds-rke2-exemptions
+            sudo uds run publish:uds-rke2-exemptions
           fi

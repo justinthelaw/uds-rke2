@@ -61,8 +61,6 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Publish the Capability
+      - name: Publish UDS RKE2
         run: |
-          cd packages/uds-rke2
-          sudo uds zarf package create --confirm -a arm64 -o oci://ghcr.io/justinthelaw/packages
-          sudo uds zarf package create --confirm -a amd64 -o oci://ghcr.io/justinthelaw/packages
+          sudo uds run publish:uds-rke2

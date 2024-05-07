@@ -4,22 +4,26 @@
 kind: UDSBundle
 metadata:
   name: uds-rke2-bootstrap
-  description: A UDS bundle for bootstrapping an RKE2 cluster and installing the standard UDS Core package in the cluster
-  # TODO: release-please setup
+  description: "A UDS bundle for bootstrapping an RKE2 cluster and installing the standard UDS Core package in the cluster"
+  # x-release-please-start-version
   version: "0.1.0"
+  # x-release-please-end
   architecture: amd64
 
 packages:
-  - name: uds-rke2-bootstrap
-    description: Deploys the bootstrapping node flavor of the UDS RKE2 Zarf package
-    repository: ghcr.io/justinthelaw/packages/uds/rke2
-    # TODO: release-please setup
-    ref: "0.1.0-bootstrap"
+  - name: uds-rke2
+    description: "Deploys the UDS RKE2 Zarf package"
+    repository: ghcr.io/justinthelaw/packages/uds/uds-rke2
+    # x-release-please-start-version
+    ref: "0.1.0"
+    # x-release-please-end
 
-  - name: uds-rke2-init
-    description: Deploys the custom Zarf Init package
-    repository: ghcr.io/justinthelaw/packages/zarf/rook-ceph-init
-    ref: "v0.32.6"
+  - name: rook-ceph-init
+    description: "Deploys the custom Zarf Init package"
+    repository: ghcr.io/justinthelaw/packages/uds/rook-ceph/init
+    ref: "v0.33.0"
+    optionalComponents:
+      - metrics-server
 
   - name: uds-core
     repository: ghcr.io/defenseunicorns/packages/uds/core
@@ -98,7 +102,8 @@ packages:
               path: tls.key
 
   - name: rook-ceph-exemptions
-    description: Deploys the Rook-Ceph UDS Core Pepr policy exemptions
-    repository: ghcr.io/justinthelaw/packages/uds/rook-ceph-exemptions
-    # TODO: release-please setup
+    description: "Deploys the Rook-Ceph UDS Core Pepr policy exemptions"
+    repository: ghcr.io/justinthelaw/packages/uds/rook-ceph/exemptions
+    # x-release-please-start-version
     ref: "0.1.0"
+    # x-release-please-end

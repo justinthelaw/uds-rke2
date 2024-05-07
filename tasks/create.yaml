@@ -18,7 +18,12 @@ tasks:
     description: "Creates a temporary build folder which can be used to store packages created during the workflow"
     actions:
       - description: "Make the build directory at the root level of the repository"
-        cmd: "mkdir -p build/packages/ && mkdir -p build/bundles/"
+        cmd: |
+          mkdir -p build/packages/
+          mkdir -p build/bundles/
+          mkdir -p build/bundles/rook-ceph/
+          mkdir -p build/bundles/longhorn/
+          mkdir -p build/bundles/local-path/
 
   - name: uds-rke2
     description: "Build the UDS RKE2 Zarf package"
@@ -41,7 +46,7 @@ tasks:
       - description: "Build the custom Zarf Init package"
         cmd: |
           sudo ZARF_CONFIG="packages/init/zarf-config.yaml" uds zarf package create packages/init/ \
-            -o build/packages/ \
+            -o build/packages/rook-ceph/ \
             --set AGENT_IMAGE_TAG=$(uds zarf version) \
             --flavor rook-ceph \
             --no-progress \

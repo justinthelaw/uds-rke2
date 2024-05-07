@@ -1,0 +1,17 @@
+# TODO: renovate setup
+# yaml-language-server: $schema=https://raw.githubusercontent.com/defenseunicorns/uds-cli/v0.10.4/tasks.schema.json
+
+includes:
+  - publish: https://raw.githubusercontent.com/defenseunicorns/uds-common/v0.4.2/tasks/publish.yaml
+
+tasks:
+  - name: uds-rke2
+    description: "Publish the UDS RKE2 Zarf package"
+    actions:
+      - task: publish:package
+        with:
+          path: packages/uds-rke2/
+          # x-release-please-start-version
+          version: "0.1.0"
+          # x-release-please-end
+          target_repo: ghcr.io/justinthelaw/packages/uds

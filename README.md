@@ -68,7 +68,6 @@ There are 3 main "flavors" of the UDS RKE2 Core bundle, with 4 distinct flavors 
 
 ### Deploy
 
-<!-- TODO: release-please setup -->
 <!-- TODO: deploy instructions -->
 
 ### Remove

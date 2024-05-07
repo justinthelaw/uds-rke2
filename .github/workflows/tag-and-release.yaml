@@ -32,8 +32,10 @@ jobs:
       - name: Create Publish Flag
         id: release-flag
         run: |
-          echo "Current branch or tag reference: ${{ github.ref }}"
-          if [[ "${{ github.ref }}" == *"/dev"* ]] || [[ "${{ steps.tag.outputs.release_created }}" == 'true' ]]; then
+          CURRENT_REF="${{ github.ref }}"
+          echo "Current branch or tag reference: $CURRENT_REF"
+
+          if [[ "$CURRENT_REF" == "refs/tags/dev" ]] || [[ "${{ steps.tag.outputs.release_created }}" == 'true' ]]; then
             echo "release_created=true" >> $GITHUB_ENV
           else
             echo "release_created=false" >> $GITHUB_ENV
@@ -41,7 +43,7 @@ jobs:
 
   publish-uds-package:
     needs: tag-new-version
-    if: needs.tag-new-version.outputs.release_created == 'true'
+    if: ${{ needs.tag-new-version.outputs.release_created == 'true'}}
     runs-on: ubuntu-latest
     name: Publish Package
 

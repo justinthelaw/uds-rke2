@@ -15,3 +15,12 @@ tasks:
           version: "0.1.0"
           # x-release-please-end
           target_repo: ghcr.io/justinthelaw/packages/uds
+
+  - name: uds-rke2-dev
+    description: "Publish the UDS RKE2 Zarf dev package"
+    actions:
+      - task: publish:package
+        with:
+          path: packages/uds-rke2/
+          version: "dev"
+          target_repo: ghcr.io/justinthelaw/packages/uds

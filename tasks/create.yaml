@@ -26,11 +26,11 @@ tasks:
     actions:
       - description: "Make the build directory at the root level of the repository"
         cmd: |
-          mkdir -p build/packages/
-          mkdir -p build/bundles/
-          mkdir -p build/packages/rook-ceph/
-          mkdir -p build/packages/longhorn/
-          mkdir -p build/packages/local-path/
+          sudo mkdir -p build/packages/
+          sudo mkdir -p build/bundles/
+          sudo mkdir -p build/packages/rook-ceph/
+          sudo mkdir -p build/packages/longhorn/
+          sudo mkdir -p build/packages/local-path/
 
   - name: uds-rke2
     description: "Build the UDS RKE2 Zarf package"
@@ -56,7 +56,7 @@ tasks:
             --set VERSION=${VERSION} \
             --confirm
 
-  - name: longhorn-init-single-node
+  - name: longhorn-init
     description: "Build the custom Zarf Init package for RKE2 with longhorn"
     actions:
       - description: "Build the custom Zarf Init package"

@@ -73,7 +73,7 @@ jobs:
       - name: Publish UDS RKE2
         run: |
           echo "Publishing for tag: ${{ github.ref }}"
-          if [[ "${{ github.ref }}" == *"/dev"* ]]; then
+          if [[ "${{ github.ref }}" == "refs/tags/dev" ]]; then
             sudo uds run publish:uds-rke2-dev
           else
             sudo uds run publish:uds-rke2

@@ -5,7 +5,8 @@ on:
     branches:
       - "main"
     tags:
-      - "*"
+      - "dev"
+      - "v*.*.*"
 
 concurrency:
   group: tag-and-release-${{ github.ref }}
@@ -30,7 +31,12 @@ jobs:
 
       - name: Create Publish Flag
         id: release-flag
-        run: echo "release_created=${{ steps.tag.outputs.release_created || false }}" >> $GITHUB_OUTPUT
+        run: |
+          if [[ "${{ github.ref }}" == *"dev"* ]] || ${{ steps.tag.outputs.release_created }}; then
+            echo "release_created=true" >> $GITHUB_OUTPUT
+          else
+            echo "release_created=false" >> $GITHUB_OUTPUT
+          fi
 
   publish-uds-package:
     needs: tag-new-version
@@ -61,8 +67,10 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Publish the Capability
+      - name: Publish UDS RKE2
         run: |
-          cd packages/uds-rke2
-          sudo uds zarf package create --confirm -a arm64 -o oci://ghcr.io/justinthelaw/packages
-          sudo uds zarf package create --confirm -a amd64 -o oci://ghcr.io/justinthelaw/packages
+          if [[ "${{ github.ref }}" == *"dev"* ]]; then
+            sudo uds run publish:uds-rke2-dev
+          else
+            sudo uds run publish:uds-rke2
+          fi

@@ -6,8 +6,9 @@ metadata:
   name: uds-rke2-minio
   description: "UDS RKE2 MinIO Zarf Package"
   architecture: amd64
-  # TODO: release-please setup
+  # x-release-please-start-version
   version: "0.1.0"
+  # x-release-please-end
 
 components:
   - name: minio-images

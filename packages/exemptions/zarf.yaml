@@ -5,8 +5,9 @@ kind: ZarfPackageConfig
 metadata:
   name: exemptions-package
   description: "UDS RKE2 service Pepr exemptions"
-  # TODO: release-please setup
+  # x-release-please-start-version
   version: "0.1.0"
+  # x-release-please-end
   architecture: amd64
 
 components:
@@ -21,9 +22,7 @@ components:
 
   - name: local-path-exemptions
     description: "MetalLB UDS Core Pepr policy exemptions"
-    only:
-      flavor: local-path
-    required: true
+    required: false
     manifests:
       - name: local-path-exemptions
         namespace: uds-policy-exemptions
@@ -32,9 +31,7 @@ components:
 
   - name: longhorn-exemptions
     description: "MetalLB UDS Core Pepr policy exemptions"
-    only:
-      flavor: longhorn
-    required: true
+    required: false
     manifests:
       - name: longhorn-exemptions
         namespace: uds-policy-exemptions
@@ -43,9 +40,7 @@ components:
 
   - name: rook-ceph-exemptions
     description: "MetalLB UDS Core Pepr policy exemptions"
-    only:
-      flavor: rook-ceph
-    required: true
+    required: false
     manifests:
       - name: rook-ceph-exemptions
         namespace: uds-policy-exemptions

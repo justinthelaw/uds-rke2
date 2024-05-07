@@ -2,11 +2,18 @@
   "packages": {
     ".": {
       "release-type": "simple",
-      "draft": true,
       "changelog-path": "CHANGELOG.md",
-      "include-v-in-tag": false,
       "versioning": "default",
-      "extra-files": ["README.md", "zarf.yaml"]
+      "extra-files": [
+        "packages/uds-rke2/zarf.yaml",
+        "packages/exemptions/zarf.yaml",
+        "packages/init/zarf.yaml",
+        "packages/rook-ceph/zarf.yaml",
+        "packages/minio/zarf.yaml",
+        "tasks/publish.yaml",
+        "docs/MINIO.md",
+        "bundles/uds-rke2-rook-ceph/uds-bundle.yaml"
+      ]
     }
   }
 }

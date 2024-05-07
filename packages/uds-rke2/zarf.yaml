@@ -7,8 +7,9 @@ metadata:
   description: "UDS RKE2 cluster setup for servers and agents. WARNING: This capability requires root access for deployment."
   url: https://github.com/justinthelaw/uds-rke2-sandbox
   architecture: amd64
-  # TODO: release-please setup
+  # x-release-please-start-version
   version: "0.1.0"
+  # x-release-please-end
 
 constants:
   - name: RKE2_VERSION

@@ -16,7 +16,7 @@ components:
       - name: metallb-exemptions
         namespace: uds-policy-exemptions
         files:
-          - manifests/metallb-exemption.yaml
+          - charts/metallb-exemptions.yaml
 
   - name: local-path-exemptions
     description: "MetalLB UDS Core Pepr policy exemptions"

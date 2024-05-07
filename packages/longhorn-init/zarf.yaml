@@ -55,18 +55,6 @@ components:
       path: ../longhorn
       name: longhorn-images
 
-  - name: rook-ceph-operator
-    required: true
-    import:
-      path: ../rook-ceph
-      name: rook-ceph-operator
-
-  - name: rook-ceph-cluster
-    required: true
-    import:
-      path: ../rook-ceph
-      name: rook-ceph-cluster
-
   - name: zarf-registry
     required: true
     description: "Create the permanent registry"
@@ -74,11 +62,11 @@ components:
       # TODO: renovate setup
       url: oci://ghcr.io/defenseunicorns/packages/init:v0.32.6
 
-  - name: rook-ceph-images
+  - name: longhorn-images
     required: true
-    description: "Push the Rook-Ceph images into the permanent registry"
+    description: "Push the Longhorn images into the permanent registry"
     import:
-      path: ../rook-ceph
+      path: ../longhorn
     images:
       - "###ZARF_PKG_TMPL_REGISTRY_IMAGE_DOMAIN######ZARF_PKG_TMPL_REGISTRY_IMAGE###:###ZARF_PKG_TMPL_REGISTRY_IMAGE_TAG###"
 

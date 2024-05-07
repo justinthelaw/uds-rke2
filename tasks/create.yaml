@@ -31,8 +31,6 @@ tasks:
            --confirm
 
   # TODO: local-path init
-  # TODO: longhorn init
-
   # TODO: exemptions for each storage flavor
 
   - name: rook-ceph-init
@@ -45,6 +43,28 @@ tasks:
             --set AGENT_IMAGE_TAG=$(uds zarf version) \
             --no-progress \
             --confirm
+
+  - name: longhorn-init-single-node
+    description: "Build the custom Zarf Init package for RKE2 with longhorn, single node-only"
+    actions:
+      - description: "Build the custom Zarf Init package"
+        cmd: |
+          sudo ZARF_CONFIG="packages/longhorn-init/zarf-config.yaml" uds zarf package create packages/longhorn-init/ \
+            -o build/packages/ \
+            --set AGENT_IMAGE_TAG=$(uds zarf version) \
+            --no-progress \
+            --confirm
+
+  # - name: longhorn-init-multi-node
+  #   description: "Build the custom Zarf Init package for RKE2 with longhorn for multiple nodes"
+  #   actions:
+  #     - description: "Build the custom Zarf Init package"
+  #       cmd: |
+  #         sudo ZARF_CONFIG="packages/longhorn-init/zarf-config.yaml" uds zarf package create packages/longhorn-init/ \
+  #           -o build/packages/ \
+  #           --set AGENT_IMAGE_TAG=$(uds zarf version) \
+  #           --no-progress \
+  #           --confirm
 
   - name: minio
     description: "Build the MinIO package"

@@ -38,14 +38,15 @@ tasks:
         with:
           joinToken: "my-test-token"
 
-      - task: create:longhorn-init
-      - task: deploy:longhorn-init
+      - task: create:longhorn-init-single-node
+      - task: deploy:longhorn-init-single-node
 
       - task: create:minio
       - task: deploy:minio
 
       - task: deploy:specific-core-package-release
 
+  # test the rke2 bootstrapping workflow
   - name: rke2-bootstrap-test
     description: "Complete a stand-up and stand-down of the RKE2 cluster"
     actions:
@@ -55,5 +56,5 @@ tasks:
       - task: deploy:uds-rke2-bootstrap
         with:
           joinToken: "my-test-token"
-      
+
       - task: deploy:uds-rke2-destroy

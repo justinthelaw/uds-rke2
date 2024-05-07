@@ -60,7 +60,6 @@ tasks:
             --confirm
 
   # TODO: local-path init
-  # TODO: longhorn init
 
   # TODO: exemptions for each storage flavor
 
@@ -78,6 +77,28 @@ tasks:
             --set CEPH_BLOCK_STORE_AS_DEFAULT="true" \
             --set CEPH_OBJECT_STORE_AS_DEFAULT="false" \
             --set CEPH_FILE_STORE_AS_DEFAULT="false" \
+            --confirm
+
+  - name: longhorn-init-single-node
+    description: "Deploy the custom Zarf Init Package for RKE2 with longhorn (single-node flavor)."
+    actions:
+      - description: "Deploy the custom Zarf Init package"
+        # File storage is disabled by default, but can be enabled as necessary
+        cmd: |
+          sudo uds zarf package deploy build/packages/zarf-init-amd64-longhorn-*.tar.zst \
+            --no-progress \
+            --set LONGHORN_VAR="true" \
+            --confirm
+
+  - name: longhorn-init-multi-node
+    description: "Deploy the custom Zarf Init Package for RKE2 with longhorn (multi-node flavor)."
+    actions:
+      - description: "Deploy the custom Zarf Init package"
+        # File storage is disabled by default, but can be enabled as necessary
+        cmd: |
+          sudo uds zarf package deploy build/packages/zarf-init-amd64-longhorn-*.tar.zst \
+            --no-progress \
+            --set LONGHORN_VAR_2="true" \
             --confirm
 
   - name: minio

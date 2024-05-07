@@ -6,9 +6,7 @@ metadata:
   name: init
   description: "Custom Zarf Init Package for RKE2"
   architecture: amd64
-  # x-release-please-start-version
-  version: "0.1.0"
-  # x-release-please-end
+  version: "###ZARF_PKG_TMPL_VERSION###"
 
 components:
   - name: zarf-injector

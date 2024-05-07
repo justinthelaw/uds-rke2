@@ -1,5 +1,8 @@
 package:
   create:
     set:
-    # TODO: renovate setup
+      # TODO: renovate setup
       rke2_version: "v1.28.6+rke2r1"
+      # x-release-please-start-version
+      version: "0.1.0"
+      # x-release-please-end

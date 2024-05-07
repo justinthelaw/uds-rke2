@@ -1,6 +1,13 @@
 # TODO: renovate setup
 # yaml-language-server: $schema=https://raw.githubusercontent.com/defenseunicorns/uds-cli/v0.10.4/tasks.schema.json
 
+variables:
+  - name: VERSION
+    description: "Explicitly set the version, overriding the official release tag"
+    # x-release-please-start-version
+    default: "0.1.0"
+    # x-release-please-end
+
 tasks:
   - name: install-deps
     description: "Installs dependencies used in the creation of various packages if not already installed"
@@ -21,9 +28,9 @@ tasks:
         cmd: |
           mkdir -p build/packages/
           mkdir -p build/bundles/
-          mkdir -p build/bundles/rook-ceph/
-          mkdir -p build/bundles/longhorn/
-          mkdir -p build/bundles/local-path/
+          mkdir -p build/packages/rook-ceph/
+          mkdir -p build/packages/longhorn/
+          mkdir -p build/packages/local-path/
 
   - name: uds-rke2
     description: "Build the UDS RKE2 Zarf package"
@@ -33,15 +40,37 @@ tasks:
           sudo ZARF_CONFIG="packages/uds-rke2/zarf-config.yaml" uds zarf package create packages/uds-rke2/ \
            -o build/packages/ \
            --no-progress \
+           --set VERSION=${VERSION} \
            --confirm
 
-  # TODO: local-path init
-  # TODO: longhorn init
+  - name: local-path-init
+    description: "Build the custom Zarf Init package for RKE2 with Rook-Ceph"
+    actions:
+      - description: "Build the custom Zarf Init package"
+        cmd: |
+          sudo ZARF_CONFIG="packages/init/zarf-config.yaml" uds zarf package create packages/init/ \
+            -o build/packages/local-path/ \
+            --set AGENT_IMAGE_TAG=$(uds zarf version) \
+            --flavor local-path \
+            --no-progress \
+            --set VERSION=${VERSION} \
+            --confirm
 
-  # TODO: exemptions for each storage flavor
+  - name: longhorn-init-single-node
+    description: "Build the custom Zarf Init package for RKE2 with longhorn"
+    actions:
+      - description: "Build the custom Zarf Init package"
+        cmd: |
+          sudo ZARF_CONFIG="packages/init/zarf-config.yaml" uds zarf package create packages/init/ \
+            -o build/packages/longhorn/ \
+            --set AGENT_IMAGE_TAG=$(uds zarf version) \
+            --flavor longhorn \
+            --no-progress \
+            --set VERSION=${VERSION} \
+            --confirm
 
   - name: rook-ceph-init
-    description: "Build the custom Zarf Init package for RKE2 with Rook-Ceph, single node-only"
+    description: "Build the custom Zarf Init package for RKE2 with Rook-Ceph"
     actions:
       - description: "Build the custom Zarf Init package"
         cmd: |
@@ -50,6 +79,18 @@ tasks:
             --set AGENT_IMAGE_TAG=$(uds zarf version) \
             --flavor rook-ceph \
             --no-progress \
+            --set VERSION=${VERSION} \
+            --confirm
+
+  - name: uds-rke2-exemptions
+    description: "Build the UDS RKE2 service Pepr policy exemptions package"
+    actions:
+      - description: "Build the Pepr policy exemptions package"
+        cmd: |
+          sudo ZARF_CONFIG="packages/exemptions/zarf-config.yaml" uds zarf package create packages/exemptions/ \
+            -o build/packages/ \
+            --no-progress \
+            --set VERSION=${VERSION} \
             --confirm
 
   - name: minio
@@ -57,7 +98,8 @@ tasks:
     actions:
       - description: "Build the MinIO package"
         cmd: |
-          sudo uds zarf package create packages/minio/ \
+          sudo ZARF_CONFIG="packages/minio/zarf-config.yaml" uds zarf package create packages/minio/ \
             -o build/packages/ \
             --no-progress \
+            --set VERSION=${VERSION} \
             --confirm

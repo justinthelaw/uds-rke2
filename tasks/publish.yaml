@@ -4,23 +4,67 @@
 includes:
   - publish: https://raw.githubusercontent.com/defenseunicorns/uds-common/v0.4.2/tasks/publish.yaml
 
+variables:
+  - name: VERSION
+    description: "Explicitly set the version, overriding the official release tag"
+    # x-release-please-start-version
+    default: "0.1.0"
+    # x-release-please-end
+  - name: FLAVOR
+    description: "Override the flavor of the base task from uds-common"
+    default: ""
+
 tasks:
   - name: uds-rke2
     description: "Publish the UDS RKE2 Zarf package"
     actions:
       - task: publish:package
         with:
-          path: packages/uds-rke2
-          # x-release-please-start-version
-          version: "0.1.0"
-          # x-release-please-end
+          path: build/packages
+          version: ${VERSION}
           target_repo: ghcr.io/justinthelaw/packages/uds
 
-  - name: uds-rke2-dev
-    description: "Publish the UDS RKE2 Zarf dev package"
+  - name: rook-ceph-init
+    description: "Publish the custom Zarf Init package"
     actions:
       - task: publish:package
         with:
-          path: packages/uds-rke2
-          version: "dev"
+          path: build/packages/rook-ceph
+          version: ${VERSION}
+          target_repo: ghcr.io/justinthelaw/packages/uds/rook-ceph
+
+  - name: local-path-init
+    description: "Publish the custom Zarf Init package"
+    actions:
+      - task: publish:package
+        with:
+          path: build/packages/local-path
+          version: ${VERSION}
+          target_repo: ghcr.io/justinthelaw/packages/uds/local-path
+
+  - name: longhorn-init
+    description: "Publish the custom Zarf Init package"
+    actions:
+      - task: publish:package
+        with:
+          path: build/packages/longhorn
+          version: ${VERSION}
+          target_repo: ghcr.io/justinthelaw/packages/uds/longhorn
+
+  - name: minio
+    description: "Publish the MinIO package"
+    actions:
+      - task: publish:package
+        with:
+          path: build/packages/minio
+          version: ${VERSION}
+          target_repo: ghcr.io/justinthelaw/packages/uds
+
+  - name: uds-rke2-exemptions
+    description: "Publish the UDS RKE2 service Pepr policy exemptions package"
+    actions:
+      - task: publish:package
+        with:
+          path: build/packages/exemptions
+          version: ${VERSION}
           target_repo: ghcr.io/justinthelaw/packages/uds

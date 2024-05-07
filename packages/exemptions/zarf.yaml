@@ -3,12 +3,10 @@
 
 kind: ZarfPackageConfig
 metadata:
-  name: exemptions-package
-  description: "UDS RKE2 service Pepr exemptions"
-  # x-release-please-start-version
-  version: "0.1.0"
-  # x-release-please-end
+  name: uds-rke2-exemptions
+  description: "UDS RKE2 service Pepr policy exemptions"
   architecture: amd64
+  version: "###ZARF_PKG_TMPL_VERSION###"
 
 components:
   - name: metallb-exemptions

@@ -4,6 +4,7 @@
 includes:
   - create: ./tasks/create.yaml
   - deploy: ./tasks/deploy.yaml
+  - publish: ./tasks/publish.yaml
   - create-core: https://raw.githubusercontent.com/defenseunicorns/uds-core/v0.19.0/tasks/create.yaml
   - deploy-core: https://raw.githubusercontent.com/defenseunicorns/uds-core/v0.19.0/tasks/deploy.yaml
 

@@ -1,24 +1,35 @@
 # TODO: renovate setup
 # yaml-language-server: $schema=https://raw.githubusercontent.com/defenseunicorns/uds-cli/v0.10.4/tasks.schema.json
 
-includes:
-  - publish: https://raw.githubusercontent.com/defenseunicorns/uds-common/v0.4.2/tasks/publish.yaml
-
 variables:
   - name: VERSION
     description: "Explicitly set the version, overriding the official release tag"
     # x-release-please-start-version
     default: "0.1.0"
     # x-release-please-end
-  - name: FLAVOR
-    description: "Override the flavor of the base task from uds-common"
-    default: ""
 
 tasks:
+  - name: publish
+    description: "Publish packages for the amd64 architectures"
+    inputs:
+      path:
+        description: "Path to the zarf package being published"
+        required: true
+      version:
+        description: "The version of the package to publish"
+        required: true
+      target_repo:
+        description: "The repository to publish into"
+        required: true
+    actions:
+      - description: "Publish packages for the amd64 and arm64 architectures"
+        cmd: |
+          sudo uds zarf package publish ${{ .inputs.path }}/zarf-package-*-amd64-${{ .inputs.version }}.tar.zst oci://${{ .inputs.target_repo }}
+
   - name: uds-rke2
     description: "Publish the UDS RKE2 Zarf package"
     actions:
-      - task: publish:package
+      - task: publish
         with:
           path: build/packages
           version: ${VERSION}
@@ -27,7 +38,7 @@ tasks:
   - name: local-path-init
     description: "Publish the custom Zarf Init package"
     actions:
-      - task: publish:package
+      - task: publish
         with:
           path: build/packages/local-path
           version: ${VERSION}
@@ -36,7 +47,7 @@ tasks:
   - name: longhorn-init
     description: "Publish the custom Zarf Init package"
     actions:
-      - task: publish:package
+      - task: publish
         with:
           path: build/packages/longhorn
           version: ${VERSION}
@@ -45,7 +56,7 @@ tasks:
   - name: rook-ceph-init
     description: "Publish the custom Zarf Init package"
     actions:
-      - task: publish:package
+      - task: publish
         with:
           path: build/packages/rook-ceph
           version: ${VERSION}
@@ -54,7 +65,7 @@ tasks:
   - name: minio
     description: "Publish the MinIO package"
     actions:
-      - task: publish:package
+      - task: publish
         with:
           path: build/packages
           version: ${VERSION}
@@ -63,7 +74,7 @@ tasks:
   - name: uds-rke2-exemptions
     description: "Publish the UDS RKE2 service Pepr policy exemptions package"
     actions:
-      - task: publish:package
+      - task: publish
         with:
           path: build/packages
           version: ${VERSION}

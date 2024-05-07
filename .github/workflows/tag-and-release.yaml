@@ -32,7 +32,7 @@ jobs:
       - name: Create Publish Flag
         id: release-flag
         run: |
-          if [[ "${{ github.ref }}" == *"dev"* ]] || ${{ steps.tag.outputs.release_created }}; then
+          if [[ "${{ github.ref }}" == *"dev"* ]] || [[ "${{ steps.tag.outputs.release_created" == 'true'}} ]]; then
             echo "release_created=true" >> $GITHUB_OUTPUT
           else
             echo "release_created=false" >> $GITHUB_OUTPUT

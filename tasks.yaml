@@ -83,3 +83,14 @@ tasks:
       - task: create:rook-ceph-init
       - task: create:uds-rke2-exemptions
       - task: create:minio
+
+  - name: publish-all
+    description: "Builds all Zarf packages in the repository"
+    actions:
+      - task: publish:uds-rke2
+      # TODO: add these back in when actually built
+      # - task: publish:local-path-init
+      # - task: publish:longhorn-init
+      - task: publish:rook-ceph-init
+      - task: publish:uds-rke2-exemptions
+      - task: publish:minio

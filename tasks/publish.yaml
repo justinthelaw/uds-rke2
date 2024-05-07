@@ -10,7 +10,7 @@ tasks:
     actions:
       - task: publish:package
         with:
-          path: packages/uds-rke2/
+          path: packages/uds-rke2
           # x-release-please-start-version
           version: "0.1.0"
           # x-release-please-end
@@ -21,6 +21,6 @@ tasks:
     actions:
       - task: publish:package
         with:
-          path: packages/uds-rke2/
+          path: packages/uds-rke2
           version: "dev"
           target_repo: ghcr.io/justinthelaw/packages/uds

@@ -6,8 +6,9 @@ metadata:
   name: init
   description: "Custom Zarf Init Package for RKE2"
   architecture: amd64
-  # TODO: release-please setup
+  # x-release-please-start-version
   version: "0.1.0"
+  # x-release-please-end
 
 components:
   - name: zarf-injector
@@ -15,7 +16,7 @@ components:
     description: "Move the Zarf injector and registries binaries"
     import:
       # TODO: renovate setup
-      url: oci://ghcr.io/defenseunicorns/packages/init:v0.32.6
+      url: oci://ghcr.io/defenseunicorns/packages/init:v0.33.0
 
   # Creates the temporary seed-registry
   - name: zarf-seed-registry
@@ -23,7 +24,7 @@ components:
     description: "Creates a bootstrapping seed registry and prepares a volume for mounting to the permanent registry"
     import:
       # TODO: renovate setup
-      url: oci://ghcr.io/defenseunicorns/packages/init:v0.32.6
+      url: oci://ghcr.io/defenseunicorns/packages/init:v0.33.0
     charts:
       - name: docker-registry
         namespace: zarf
@@ -94,7 +95,7 @@ components:
     description: "Create the permanent registry"
     import:
       # TODO: renovate setup
-      url: oci://ghcr.io/defenseunicorns/packages/init:v0.32.6
+      url: oci://ghcr.io/defenseunicorns/packages/init:v0.33.0
 
   - name: rook-ceph-images
     required: true
@@ -111,7 +112,7 @@ components:
     description: "Create the Zarf pod and git mutating webhook"
     import:
       # TODO: renovate setup
-      url: oci://ghcr.io/defenseunicorns/packages/init:v0.32.6
+      url: oci://ghcr.io/defenseunicorns/packages/init:v0.33.0
 
   - name: uds-rke2-stack
     required: true
@@ -145,5 +146,6 @@ components:
       - name: uds-rke2-stack
         namespace: uds-rke2-stack
         localPath: charts
-        # TODO: release-please setup
-        version: 0.1.0
+        # x-release-please-start-version
+        version: "0.1.0"
+        # x-release-please-end

@@ -92,8 +92,9 @@ This example will override the default users and buckets provisioned in the MinI
 packages:
   - name: uds-rke2
     repository: ghcr.io/justinthelaw/packages/uds-rke2
-    # TODO: release-please setup
-    ref: 0.1.0
+    # x-release-please-start-version
+    ref: "0.1.0"
+    # x-release-please-end
     overrides:
       uds-rke2-stack:
         minio:
@@ -124,8 +125,9 @@ This example will show how to expose the ability to override the default users, 
 packages:
   - name: uds-rke2
     repository: ghcr.io/justinthelaw/packages/uds-rke2
-    # TODO: release-please setup
-    ref: 0.1.0
+    # x-release-please-start-version
+    ref: "0.1.0"
+    # x-release-please-end
     overrides:
       uds-rke2-stack:
         minio:

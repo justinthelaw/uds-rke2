@@ -41,7 +41,7 @@ jobs:
 
   publish-uds-package:
     needs: tag-new-version
-    if: ${{ needs.tag-new-version.outputs.release_created == 'true'}}
+    if: needs.tag-new-version.outputs.release_created == 'true'
     runs-on: ubuntu-latest
     name: Publish Package
 

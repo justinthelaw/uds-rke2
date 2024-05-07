@@ -2,6 +2,8 @@
 
 Local Path Provisioner is an RKE2 development Storage Class meant to be used on development environments. This storage class is not recommended for production deployments nor environments where multi-node, high-availability and/or redundancy are requirements.
 
+Local Path Provisioner can still be useful if paired with an operator with built-in persistence and backup capabilities, like [MySQL](https://dev.mysql.com/doc/mysql-operator/en/mysql-operator-backups.html), and/or a disaster recovery/backup system, like [Velero](https://velero.io/docs/).
+
 ## Usage
 
 The UDS bundle and custom Zarf Init for each flavor of the UDS RKE2 bootstrap automatically instantiates the associated resources and StorageClass automatically. If you are installing the cluster manually Zarf package by Zarf package, you can opt to perform the installation of the Local Path Provisioner using the following:

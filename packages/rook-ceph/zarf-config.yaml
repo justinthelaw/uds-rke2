@@ -1,4 +1,4 @@
 package:
   create:
     set:
-      cluster_configuration: "single-node"
+      cluster_configuration: "multi-node"

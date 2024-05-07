@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-# Install dependencies and cli tools needed by other scripts
+# Install dependencies and cli tools needed by os-stig.sh
 echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
 
 echo "Checking for required dependencies on the host..."

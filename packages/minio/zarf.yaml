@@ -1,10 +1,10 @@
 # TODO: renovate setup
-# yaml-language-server: $schema=https://raw.githubusercontent.com/defenseunicorns/uds-cli/v0.10.3/zarf.schema.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/defenseunicorns/uds-cli/v0.10.4/zarf.schema.json
 
 kind: ZarfInitConfig
 metadata:
-  name: minio
-  description: "MinIO Zarf Package"
+  name: uds-rke2-minio
+  description: "UDS RKE2 MinIO Zarf Package"
   architecture: amd64
   # TODO: release-please setup
   version: "0.1.0"
@@ -28,4 +28,4 @@ components:
         version: 5.0.14
         url: https://charts.min.io/
         valuesFiles:
-          - "values/minio-values.yaml"
+          - "values.yaml"

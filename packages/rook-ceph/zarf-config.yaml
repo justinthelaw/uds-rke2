@@ -1,3 +1,4 @@
 package:
   create:
-    max_package_size: "1000000000"
+    set:
+      cluster_configuration: "multi-node"

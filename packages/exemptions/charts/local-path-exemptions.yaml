@@ -1,0 +1,21 @@
+apiVersion: uds.dev/v1alpha1
+kind: Exemption
+metadata:
+  name: local-path-storage
+  namespace: uds-policy-exemptions
+spec:
+  exemptions:
+    - policies:
+        - DisallowHostNamespaces
+        - DisallowPrivileged
+        - RequireNonRootUser
+        - DropAllCapabilities
+        - RestrictHostPathWrite
+        - RestrictVolumeTypes
+        - RestrictCapabilities
+        - RestrictHostPorts
+      matcher:
+        namespace: "local-path-storage"
+        name: ".*"
+      title: "all pods"
+      description: "Exempt Local Path Provisioner from policy enforcement"

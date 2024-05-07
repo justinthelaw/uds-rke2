@@ -1,0 +1,53 @@
+# TODO: renovate setup
+# yaml-language-server: $schema=https://raw.githubusercontent.com/defenseunicorns/uds-cli/v0.10.4/zarf.schema.json
+
+kind: ZarfPackageConfig
+metadata:
+  name: exemptions-package
+  description: "UDS RKE2 service Pepr exemptions"
+  # TODO: release-please setup
+  version: "0.1.0"
+  architecture: amd64
+
+components:
+  - name: metallb-exemptions
+    description: "MetalLB UDS Core Pepr policy exemptions"
+    required: true
+    manifests:
+      - name: metallb-exemptions
+        namespace: uds-policy-exemptions
+        files:
+          - manifests/metallb-exemption.yaml
+
+  - name: local-path-exemptions
+    description: "MetalLB UDS Core Pepr policy exemptions"
+    only:
+      flavor: local-path
+    required: true
+    manifests:
+      - name: local-path-exemptions
+        namespace: uds-policy-exemptions
+        files:
+          - charts/local-path-exemptions.yaml
+
+  - name: longhorn-exemptions
+    description: "MetalLB UDS Core Pepr policy exemptions"
+    only:
+      flavor: longhorn
+    required: true
+    manifests:
+      - name: longhorn-exemptions
+        namespace: uds-policy-exemptions
+        files:
+          - charts/longhorn-exemptions.yaml
+
+  - name: rook-ceph-exemptions
+    description: "MetalLB UDS Core Pepr policy exemptions"
+    only:
+      flavor: rook-ceph
+    required: true
+    manifests:
+      - name: rook-ceph-exemptions
+        namespace: uds-policy-exemptions
+        files:
+          - charts/rook-ceph-exemptions.yaml

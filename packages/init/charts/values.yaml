@@ -1,0 +1,5 @@
+nginx:
+  imagePullSecrets:
+    - name: "private-registry"
+
+  image: ###ZARF_REGISTRY###/ironbank/opensource/nginx/nginx-alpine:1.25.3

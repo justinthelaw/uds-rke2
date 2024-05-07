@@ -1,10 +1,10 @@
 # TODO: renovate setup
-# yaml-language-server: $schema=https://raw.githubusercontent.com/defenseunicorns/uds-cli/v0.10.3/zarf.schema.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/defenseunicorns/uds-cli/v0.10.4/zarf.schema.json
 
 kind: ZarfInitConfig
 metadata:
   name: init
-  description: "Custom Zarf Init Package for RKE2 with Rook-Ceph"
+  description: "Custom Zarf Init Package for RKE2"
   architecture: amd64
   # TODO: release-please setup
   version: "0.1.0"
@@ -48,27 +48,43 @@ components:
               - name: UPGRADE_ENV_VARS
                 autoIndent: true
 
+  ###########
+  # LONGHORN
+  ###########
+
+  # TODO: add `longhorn`` flavor here
+
+  ########################
+  # LOCAL PATH PROVISIONER
+  ########################
+
+  # TODO: add `local-path` flavor here
+
+  ###########
+  # ROOK-CEPH
+  ###########
+
   - name: rook-ceph-images-initial
     required: true
+    only:
+      flavor: rook-ceph
     description: "Push the Rook-Ceph images into the seed registry"
     import:
       path: ../rook-ceph
       name: rook-ceph-images
 
-  - name: rook-ceph-install-deps
-    required: true
-    import:
-      path: ../rook-ceph
-      name: install-deps
-
   - name: rook-ceph-operator
     required: true
+    only:
+      flavor: rook-ceph
     import:
       path: ../rook-ceph
       name: rook-ceph-operator
 
   - name: rook-ceph-cluster
     required: true
+    only:
+      flavor: rook-ceph
     import:
       path: ../rook-ceph
       name: rook-ceph-cluster
@@ -82,6 +98,8 @@ components:
 
   - name: rook-ceph-images
     required: true
+    only:
+      flavor: rook-ceph
     description: "Push the Rook-Ceph images into the permanent registry"
     import:
       path: ../rook-ceph
@@ -95,7 +113,6 @@ components:
       # TODO: renovate setup
       url: oci://ghcr.io/defenseunicorns/packages/init:v0.32.6
 
-  # TODO: air-gap this
   - name: uds-rke2-stack
     required: true
     description: "Install MetalLB, Nginx, and ensure MachineID on the bootstrapping node"
@@ -109,12 +126,22 @@ components:
         after:
           - cmd: uds zarf tools kubectl rollout restart deployment coredns -n kube-system
             description: "Restart CoreDNS to pick up internal DNS override for uds.prod"
+    # TODO: renovate setup
+    images:
+      - registry1.dso.mil/ironbank/opensource/metallb/controller:v0.13.11
+      - registry1.dso.mil/ironbank/opensource/metallb/speaker:v0.13.11
+      - registry1.dso.mil/ironbank/opensource/nginx/nginx-alpine:1.25.3
+      - registry1.dso.mil/ironbank/opensource/pause/pause:3.9
+      - cgr.dev/chainguard/wolfi-base:latest
     charts:
       - name: metallb
         namespace: uds-rke2
         url: https://metallb.github.io/metallb
         # TODO: renovate setup
         version: 0.13.11
+        valuesFiles:
+          - values/metallb-values.yaml
+
       - name: uds-rke2-stack
         namespace: uds-rke2-stack
         localPath: charts

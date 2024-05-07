@@ -5,17 +5,18 @@
 
 This Zarf package serves as an air-gapped production environment for deploying [UDS Core](https://github.com/defenseunicorns/uds-core), individual UDS Capabilities, and UDS capabilities aggregated (bundled) via the [UDS CLI](https://github.com/defenseunicorns/uds-cli).
 
-## Prerequisites
+## Pre-Requisites
 
 ### Deployment Target
 
-- See the RKE2 documentation for host system [pre-requisites](https://docs.rke2.io/install/requirements)
-- A base installation of [Ubuntu Server 20.04](https://ubuntu.com/download/server) on your host or in a VM
+- A base installation of [Ubuntu Server 20.04+](https://ubuntu.com/download/server) on the node's host system
 - [UDS CLI](https://github.com/defenseunicorns/uds-cli/blob/main/README.md#install) using the versions specified in the [UDS Common repository](https://github.com/defenseunicorns/uds-common/blob/main/README.md#supported-tool-versions)
+- See the RKE2 documentation for host system [pre-requisites](https://docs.rke2.io/install/requirements)
+- See the Rook-Ceph documentation for the host system [pre-requisites](https://rook.io/docs/rook/latest-release/Getting-Started/Prerequisites/prerequisites/) based on the node's role and the cluster's configurations
 
-#### Aliases for UDS CLI
+### UDS CLI Aliasing
 
-Below are instructions for adding UDS CLI aliases that are useful for deployments.
+Below are instructions for adding UDS CLI aliases that are useful for deployments that occur in an air-gap with only the UDS CLI binary available to the delivery engineer.
 
 For general CLI UX, put the following in your shell configuration (e.g., `/root/.bashrc`):
 
@@ -29,25 +30,10 @@ alias udsclean="uds zarf tools clear-cache && rm -rf ~/.uds-cache && rm -rf ~/.z
 
 For fulfilling `xargs` and `kubectl` binary requirements necessary for running some of the _optional_ deployment helper scripts:
 
-1. Create a new script file in a directory that's in the system-wide PATH, such as `/usr/local/bin`. You can name it `kubectl`:
-
 ```bash
-sudo touch /usr/local/bin/kubectl
-```
-
-2. Open the new file in a text editor with root permissions and add the following:
-
-```bash
-#!/bin/bash
-uds zarf tools kubectl "$@"
-```
-
-This script will pass all arguments (`"$@"`) to the `uds zarf tools kubectl` command.
-
-3. Make the script executable:
-
-```bash
-sudo chmod +x /usr/local/bin/kubectl
+touch /usr/local/bin/kubectl 
+echo -e "#!/bin/bash\nuds zarf tools kubectl \"\$@\"" > /usr/local/bin/kubectl
+chmod +x /usr/local/bin/kubectl
 ```
 
 ### Local Development
@@ -55,16 +41,37 @@ sudo chmod +x /usr/local/bin/kubectl
 - All pre-requisites listed in [Deployment Target](#deployment-target)
 - [Docker](https://docs.docker.com/get-docker/) or [Podman](https://podman.io/getting-started/installation) for running, building, and pulling images
 
-## Create
+## Usage
+
+### Virtual Machines
+
+> [!CAUTION]
+> Due to the the disk formatting operations, networking and STIG'ing configurations that are applied to a node's host, it is highly recommended that the contents of this repository are not directly installed on a personal machine.
+
+The best way to test UDS RKE2 is to spin-up 1 or more nodes using virtual machines or networks.
+
+[LeapfrogAI](https://github.com/defenseunicorns/leapfrogai), the main support target of this bundle, requires GPU passthrough to all worker nodes that will have a taint for attracting pods with GPU resource and workload requirements.
+
+Please see the [VM setup documentation](./docs/VM.md) and VM setup scripts to learn more about manually creating development VM.
+
+### Bundles
+
+There are 3 main "flavors" of the UDS RKE2 Core bundle, with 4 distinct flavors in total. Each flavor revolves around the storage and persistence layer of the cluster, and comes with its own documentation on configuration and installation, as linked in the bulleted list below. Please refer to that documentation for more details on each bundle flavor's recommendations and capabilities.
+
+1. [Local Path Provisioner](./docs/LOCAL-PATH.md) + [MinIO](./docs/MINIO.md)
+2. [Longhorn](./docs/LONGHORN.md) + [MinIO](./docs/MINIO.md)
+3. [Rook-Ceph](./docs/ROOK-CEPH.md)
+
+### Create
 
 <!-- TODO: create instructions -->
 
-## Deploy
+### Deploy
 
 <!-- TODO: release-please setup -->
 <!-- TODO: deploy instructions -->
 
-## Remove
+### Remove
 
 <!-- TODO: remove instructions -->
 
@@ -80,6 +87,7 @@ Below are resources to explain some of the rationale and inner workings of the R
 - [MinIO Configuration](docs/MINIO.md)
 - [Rook-Ceph Configuration](docs/ROOK-CEPH.md)
 - [Longhorn Configuration](docs/LONGHORN.md)
+- [Local Path Provisioner](docs/LOCAL-PATH.md)
 - [Custom Zarf Init](docs/INIT.md)
 
 ### Virtual Machine Setup and Testing
@@ -94,6 +102,7 @@ Below are resources to explain some of the rationale and inner workings of the R
 - [UDS Core](https://github.com/defenseunicorns/uds-core)
 - [UDS K3D](https://github.com/defenseunicorns/uds-k3d)
 - [UDS RKE2 Image Builder](https://github.com/defenseunicorns/uds-rke2-image-builder)
+- [Experimental UDS RKE2 Core Bundle](https://github.com/docandrew/uds-core-rke2)
 - [RKE2 Zarf Init](https://github.com/defenseunicorns/zarf-package-rke2-init)
 - [Zarf Longhorn Init](https://github.com/defenseunicorns/zarf-init-longhorn)
 - [UDS Rook-Ceph Capability](https://github.com/defenseunicorns/uds-capability-rook-ceph)

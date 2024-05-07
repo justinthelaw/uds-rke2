@@ -10,9 +10,14 @@ tmp/
 # UDS bundles
 uds-bundle-*.tar.zst
 
+# Secrets
+**/*.cert
+**/*.key
+
 # Builds
 build/
 builds/
+**/uds-rke2-artifacts/
 
 # Models Directory
 .model/*

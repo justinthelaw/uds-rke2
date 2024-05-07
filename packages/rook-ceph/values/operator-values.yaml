@@ -1,14 +1,21 @@
+# See the UDS RKE2 repository's documentation, `docs/ROOK-CEPH.md` for more details on values overrides
+
+imagePullSecrets:
+  - name: private-registry
+
 image:
   repository: ###ZARF_REGISTRY###/ironbank/rook/ceph
   # TODO: renovate setup
   tag: v1.14.0
 
-data:
-  ROOK_CSI_ENABLE_CEPHFS: "false"
-  ROOK_CSI_ENABLE_RBD: "true"
-
 csi:
   cephFSKernelMountOptions: "ms_mode=secure"
+
+  # Number of device storage provisioners per node
+  provisionerReplicas: 1
+  
+  # TODO: turn back down to INFO for production
+  logLevel: "DEBUG"
 
   readAffinity:
     enabled: true
@@ -16,35 +23,32 @@ csi:
   cephcsi:
     repository: ###ZARF_REGISTRY###/ironbank/opensource/ceph/ceph-csi
     # TODO: renovate setup
-    tag: v3.11.0
+    tag: "v3.11.0"
 
   registrar:
     repository: ###ZARF_REGISTRY###/ironbank/opensource/kubernetes-sigs/sig-storage/csi-node-driver-registrar
     # TODO: renovate setup
-    tag: v2.10.1
+    tag: "v2.10.1"
 
   provisioner:
     repository: ###ZARF_REGISTRY###/ironbank/opensource/kubernetes-sigs/sig-storage/csi-provisioner
     # TODO: renovate setup
-    tag: v4.0.1
+    tag: "v4.0.1"
 
   snapshotter:
     repository: ###ZARF_REGISTRY###/ironbank/opensource/kubernetes-sigs/sig-storage/csi-snapshotter
     # TODO: renovate setup
-    tag: v7.0.2
+    tag: "v7.0.2"
 
   attacher:
     repository: ###ZARF_REGISTRY###/ironbank/opensource/kubernetes-sigs/sig-storage/csi-attacher
     # TODO: renovate setup
-    tag: v4.5.1
+    tag: "v4.5.1"
 
   resizer:
     repository: ###ZARF_REGISTRY###/ironbank/opensource/kubernetes-sigs/sig-storage/csi-resizer
     # TODO: renovate setup
-    tag: v1.10.1
+    tag: "v1.10.1"
 
-imagePullSecrets:
-  - name: private-registry
-
-# -- Runs Ceph Pods as privileged to be able to write to `hostPaths` in environments with SELinux restrictions.
+# Runs Ceph Pods as privileged to be able to write to `hostPaths` in environments with SELinux restrictions.
 hostpathRequiresPrivileged: true

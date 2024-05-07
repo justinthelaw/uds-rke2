@@ -35,7 +35,7 @@ jobs:
 
       - name: Download UDS Schema
         # TODO: renovate setup
-        run: curl -o uds.schema.json https://raw.githubusercontent.com/defenseunicorns/uds-cli/v0.10.3/uds.schema.json
+        run: curl -o uds.schema.json https://raw.githubusercontent.com/defenseunicorns/uds-cli/v0.10.4/uds.schema.json
 
       - name: Install jsonschema
         run: pip install check-jsonschema==0.28.0

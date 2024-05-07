@@ -1,0 +1,10 @@
+imagePullSecrets:
+  - name: "private-registry"
+
+# TODO: renovate setup
+speaker:
+  image: ###ZARF_REGISTRY###/ironbank/opensource/metallb/speaker:v18.2.2
+
+# TODO: renovate setup
+controller:
+  image: ###ZARF_REGISTRY###/ironbank/opensource/metallb/controller:v0.13.11

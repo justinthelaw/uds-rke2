@@ -1,33 +1,76 @@
 # TODO: renovate setup
-# yaml-language-server: $schema=https://raw.githubusercontent.com/defenseunicorns/uds-cli/v0.10.3/zarf.schema.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/defenseunicorns/uds-cli/v0.10.4/zarf.schema.json
 
 kind: ZarfPackageConfig
 metadata:
   name: rook-ceph
-  description: "Rook-Ceph Zarf Package"
+  description: "UDS RKE2 Rook-Ceph Zarf Package"
   # TODO: release-please setup
   version: "0.1.0"
   architecture: amd64
 
 constants:
-  # Must be set at create time, using the `--set FLAVOR` flag, to pulls in the right values file
-  - name: FLAVOR
-    description: "Mock package flavor for Rook-Ceph values file swapping (`multi-node` or `single-node`)"
-    value: "single-node"
+  # Must be set at create time, using the `--set CLUSTER_CONFIGURATION` flag, to pull in the right values file
+  - name: CLUSTER_CONFIGURATION
+    description: "Rook-Ceph values file swapping (`multi-node` or `single-node`)"
+    value: "###ZARF_PKG_TMPL_CLUSTER_CONFIGURATION###"
     pattern: "^(single-node|multi-node)$"
-    # The following variable replacements are only performed when `FLAVOR` is `multi-node`
-  - name: REPLICAS
-    description: "Number of rook-ceph resources to deploy, should generally match the number of nodes in the cluster"
-    value: "1"
-  - name: ACTIVE_METADATA_SERVERS
-    description: "Number of metadata servers active at the same time, separate from the number of replicas"
-    value: "1"
 
 variables:
+  # The following disable and enable StorageClasses available through the Rook-Ceph cluster
+  - name: ENABLE_CEPH_BLOCK_STORE
+    description: "Boolean to enable (true) or disable (false) the Ceph block storage type"
+    default: "true"
+    pattern: "^(true|false)$"
+    prompt: true
+  - name: ENABLE_CEPH_OBJECT_STORE
+    description: "Boolean to enable (true) or disable (false) the Ceph object storage type"
+    default: "true"
+    pattern: "^(true|false)$"
+    prompt: true
+  - name: ENABLE_CEPH_FILE_STORE
+    description: "Boolean to enable (true) or disable (false) the Ceph file storage type"
+    default: "false"
+    pattern: "^(true|false)$"
+    prompt: true
+  - name: CEPH_BLOCK_STORE_AS_DEFAULT
+    description: "Sets the block store as default StorageClass in the cluster"
+    default: "true"
+    pattern: "^(true|false)$"
+    prompt: false
+  - name: CEPH_OBJECT_STORE_AS_DEFAULT
+    description: "Sets the object store as default StorageClass in the cluster"
+    default: "false"
+    pattern: "^(true|false)$"
+    prompt: false
+  - name: CEPH_FILE_STORE_AS_DEFAULT
+    description: "Sets the file store as default StorageClass in the cluster"
+    default: "false"
+    pattern: "^(true|false)$"
+    prompt: false
+
+  # The following determines where the data is stored on the nodes, AFTER node taints/tolerations are applied
+  # DEVICE_NAME, DATABASE_SIZE, and DEVICE_CLASS are only relevant in a `single-node` deployment, whereas
+  # DEVICE_FILTER is used for a `multi-node` deployment
+  - name: DEVICE_NAME
+    description: "The node's device or logical volume k-name to be used for BlueStore formatting and storage"
+    # Empty and zap the disk, then run `lsblk --all --list --output KNAME,NAME,SIZE,TYPE,MOUNTPOINT` to find the KNAME
+    default: "dm-1"
+    prompt: true
+  - name: DEVICE_CLASS
+    description: "The storage type of the node's device or logical volume"
+    # See https://docs.ceph.com/en/latest/rados/operations/crush-map/#device-classes for more details
+    default: "nvme"
+    prompt: true
+  - name: DATABASE_SIZE
+    description: "The amount of storage available in the node's device, in MB"
+    # 90000 MB = 90 GiB
+    default: "90000"
+    prompt: true
   - name: DEVICE_FILTER
-    description: "Regular expression matching all devices to use for Ceph storage, example '^sd.'"
-    # default looks for any device or partition that contains the word "ceph" in it
-    default: ".*\/*ceph.*"
+    description: "A REGEX expression for filtering which devices are to be used for BlueStore formatting and storage"
+    # Empty and zap the disk, then run `lsblk --all --list --output KNAME,NAME,SIZE,TYPE,MOUNTPOINT` to find the KNAME
+    default: "^(dm-1)$"
     prompt: true
   - name: REGION
     description: "Desired provisioning region."
@@ -35,33 +78,39 @@ variables:
     prompt: true
     sensitive: true
 
-components:
-  # TODO: air-gap this
-  - name: install-deps
-    required: true
-    description: "Install missing pre-requisites on the host system"
-    files:
-      - source: scripts/install-deps.sh
-        target: /root/uds-rke2-artifacts/rook-ceph/deps/install-deps.sh
-        executable: true
-    actions:
-      onDeploy:
-        after:
-          - cmd: |
-              /root/uds-rke2-artifacts/rook-ceph/deps/install-deps.sh
-            description: "Install all Rook-Ceph related dependencies"
+  # The following determines the redundancy (size or count) of the Ceph cluster's monitors, managers and data pools
+  # The minimum suggested HA configuration example can be seen below:
+  #   --set REPLICAS=3
+  #   --set ACTIVE_METADATA_SERVERS=1
+  - name: REPLICAS
+    description: "Number of redundant resources to deploy, should generally match the number of nodes in the cluster"
+    default: "3"
+    prompt: false
+  - name: ACTIVE_METADATA_SERVERS
+    description: "Number of file store metadata servers active at the same time, separate from the number of replicas"
+    default: "1"
+    prompt: false
 
+  # The following enables or disables monitoring based on Prometheus availability
+  # Ceph-specific Prometheus rules can be added: https://github.com/rook/rook/tree/master/deploy/charts/rook-ceph-cluster/prometheus
+  - name: ENABLE_MONITORING
+    description: "Boolean to enable (true) or disable (false) Prometheus monitoring"
+    default: "false"
+    pattern: "^(true|false)$"
+    prompt: true
+
+components:
   - name: prepare-host
     required: true
     description: "Prepare host system with correct network traffic rules for Ceph controllers"
     files:
-      - source: scripts/rook-ceph/os/os-prep.sh
-        target: /root/uds-rke2-artifacts/rook-ceph/configure/os-prep.sh
+      - source: scripts/rook-ceph/os-prep.sh
+        target: /root/uds-rke2-artifacts/rook-ceph/os-prep.sh
         executable: true
     actions:
       onDeploy:
         after:
-          - cmd: /root/uds-rke2-artifacts/rook-ceph/configure/os-prep.sh
+          - cmd: /root/uds-rke2-artifacts/rook-ceph/os-prep.sh
             description: "Prepare traffic rule changes for Ceph controllers"
 
   - name: rook-ceph-images
@@ -111,8 +160,7 @@ components:
         version: v1.14.0
         namespace: rook-ceph
         valuesFiles:
-          - values/cluster-values.yaml
-          - values/###ZARF_PKG_TMPL_FLAVOR###-cluster-values.yaml
+          - values/###ZARF_PKG_TMPL_CLUSTER_CONFIGURATION###-cluster-values.yaml
     actions:
       onDeploy:
         after:

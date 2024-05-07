@@ -15,3 +15,5 @@ package:
       registry_image_tag: "2.8.3"
 
       gitea_image: "gitea/gitea:1.21.2-rootless"
+
+      cluster_configuration: "multi-node"

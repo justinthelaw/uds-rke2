@@ -1,8 +1,9 @@
+> [!IMPORTANT]
+> Rook-Ceph is meant for enterprise-grade, multi-node clusters and thus, Rook-Ceph in single-node configuration is not currently supported; however, the single-node contents of this package may see future work that will soldify single-node support for testing adn development environments where high availability and redundancy are not required.
+
 # Rook-Ceph Configuration
 
 Rook-Ceph is the block, object and file storage solution for the RKE2 cluster init. The Ceph Cluster and storage classes are deployed (`Ready` status) prior to the permanent Zarf Docker Registry is deployed in order to provide the PVC and PV a StorageClass in the cluster.
-
-Rook is the operator that orchestrates the Ceph storage solution on the host node. `ceph-common` and `lvm2` must be installed on the host node performing the storage workloads. These dependencies are installed as part of the [rook-ceph Zarf package](../packages/rook-ceph/zarf.yaml) using the [`install-deps.sh`](../packages/rook-ceph/scripts/install-deps.sh) script.
 
 ## Usage
 
@@ -27,17 +28,9 @@ Usage of the storage provided by Rook-Ceph is similar to any other storage class
 
 `ceph-filesystem` is the RWX capability. By default, this is turned off in the [Ceph cluster common values file](../packages/rook-ceph/common/cluster-values-common.yaml) and [Operator values file](../packages/rook-ceph/values/operator-values.yaml). To use this class, you can modify the values files and create a PVC with the `ceph-filesystem` storage class.
 
-For an S3 compatible bucket, you can create and apply an `ObjectBucketClaim` CRD, like this example [`uds-bucket` bucket](../packages/rook-ceph/common/uds-bucket.yaml). In your Kubernetes deployments that use a Rook-Ceph bucket store, the following values can be obtained using `kubectl` commands:
+For an S3 compatible bucket, you can create and apply an `ObjectBucketClaim` and an `ObjectUser` according to these [examples and instructions from Rook](https://github.com/rook/rook/blob/1af97d09a8ee9a4ab7d2631585b8853cd79b4ea4/Documentation/Getting-Started/example-configurations.md#object-storage).
 
-<!-- TODO: check on the AWS_HOST and PORT values below, based on bucket CRD -->
-
-```bash
-export AWS_HOST=<BUCKET_NAME>.<NAMESPACE>.svc.cluster.local
-export PORT=80 # likely port that is exposed by the bucket
-export BUCKET_NAME=$(uds zarf tools kubectl -n default get cm uds -o jsonpath='{.data.BUCKET_NAME}')
-export AWS_ACCESS_KEY_ID=$(uds zarf tools kubectl -n default get secret uds -o jsonpath='{.data.AWS_ACCESS_KEY_ID}' | base64 --decode)
-export AWS_SECRET_ACCESS_KEY=$(uds zarf tools kubectl -n default get secret uds -o jsonpath='{.data.AWS_SECRET_ACCESS_KEY}' | base64 --decode)
-```
+For using the toolbox as a means to configure the Ceph cluster or use Ceph to manipulate your node, you can follow [Rook's example toolbox job manifest](https://github.com/rook/rook/blob/master/deploy/examples/toolbox-job.yaml).
 
 ## Upgrades
 
@@ -88,4 +81,17 @@ k delete ns rook-ceph
 uds zarf destroy --confirm
 ```
 
-5. Delete the data on hosts and zap disks following the [upstream guide](https://rook.io/docs/rook/v1.11/Getting-Started/ceph-teardown/#delete-the-data-on-hosts)
+5. Delete the data on hosts and zap disks following the [upstream guide](https://rook.io/docs/rook/v1.11/Getting-Started/ceph-teardown/#delete-the-data-on-hosts):
+
+```bash
+# remove persistent rook operator data
+rm -rf /var/lib/rook/
+# replace with the name of your actual disk being wiped and zapped
+export DISK="/dev/ubuntu-vg/ceph"
+
+wipefs -a -f $DISK
+sgdisk --zap-all $DISK
+dd if=/dev/zero of="$DISK" bs=1M count=100 oflag=direct,dsync
+blkdiscard $DISK
+partprobe $DISK
+```

@@ -1,10 +1,10 @@
 # MinIO Configuration
 
-MinIO is an optional package that deploys a MinIO layer, for a full-featured and simplified S3 object storage API and service, on top of the Rook-Ceph storage solutions. MinIO can be deployed as a component as part of the UDS RKE2 [standard bundle](../bundles/rke2-standard/uds-bundle.yaml), but is not included in the [slim bundle](../bundles/rke2-slim/uds-bundle.yaml).
+MinIO is an optional package that deploys a MinIO layer, for a full-featured and simplified S3 object storage API and service, on top of the [Local Path Provisioner](./LOCAL-PATH.md) or [Longhorn](./LONGHORN.md) storage solutions. MinIO can be deployed as a component as part of the UDS RKE2 [standard bundle](../bundles/rke2-standard/uds-bundle.yaml), but is not included in the [slim bundle](../bundles/rke2-slim/uds-bundle.yaml).
 
 ## Usage
 
-By default, the provided Minio instance provisions a minimal set up that includes a single bucket named `uds` that is accessible by the `uds` user:
+By default, the provided MinIO instance provisions a minimal set up that includes a single bucket named `uds` that is accessible by the `uds` user:
 
 ```yaml
 users:
@@ -13,20 +13,20 @@ users:
     policy: readwrite-username-policy
 ```
 
-You can port-forward ```uds zarf tools kubectl port-forward service/minio 9000:9000 -n uds-rke2-stack``` to access the service externally from where you can use any s3 compatible client to configure your buckets or the minio (mc) cli to handle other configurations, users or policy management. Similar functions could be performed in-cluster as well via a Job or other means.
+You can port-forward ```uds zarf tools kubectl port-forward service/minio 9000:9000 -n uds-rke2-stack``` to access the service externally from where you can use any S3-compatible client to configure your buckets or the MinIO (`mc`) cli to handle other configurations, users or policy management. Similar functions could be performed in-cluster as well via a Job or other means.
 
 ## Quickstart
 
 ```bash
-# port-forward the Minio service
+# port-forward the MinIO service
 uds zarf tools kubectl port-forward service/minio 9000:9000 -n uds-rke2-stack
 
-# Get the Minio Admin Credentials
+# Get the MinIO Admin Credentials
 ROOT_PASSWORD=$(uds zarf tools kubectl get secret "minio" -n "uds-rke2-stack" -o json | jq -r '.data.rootPassword' | base64 --decode)
 ROOT_USER=$(uds zarf tools kubectl get secret "minio" -n "uds-rke2-stack" -o json | jq -r '.data.rootUser' | base64 --decode)
 ```
 
-### Minio CLI
+### MinIO CLI
 
 ```bash
 # Configure MC Alias
@@ -49,9 +49,9 @@ mc admin policy ls my-alias
 
 Please see the [reference](https://min.io/docs/minio/linux/reference/minio-mc-admin.html) docs for the mc tool for further administrative usage examples.
 
-## Configuring Minio in This Package
+## Configuring MinIO in This Package
 
-The Minio config provided in this package cannot be modified at deploy time without building a custom version of the package that overrides the values file defaults in [minio-values.yaml](../packages/init/values/minio-values.yaml).
+The MinIO config provided in this package cannot be modified at deploy time without building a custom version of the package that overrides the values file defaults in [minio-values.yaml](../packages/init/values/minio-values.yaml).
 
 Example Values File:
 
@@ -74,15 +74,15 @@ users:
     policy: readwrite
 ```
 
-Please see the Minio chart's [values](https://github.com/minio/minio/blob/master/helm/minio/values.yaml) file for more examples.
+Please see the MinIO chart's [values](https://github.com/minio/minio/blob/master/helm/minio/values.yaml) file for more examples.
 
-## Configuring Minio in a Bundle
+## Configuring MinIO in a Bundle
 
-If you are building a uds bundle and are using uds-k3d as a base for that bundle, you might want to configure the bundle to be able to customize the minio deployment either at bundle create or deploy time.
+If you are building a uds bundle and are using uds-k3d as a base for that bundle, you might want to configure the bundle to be able to customize the MinIO deployment either at bundle create or deploy time.
 
-### Configure Create Time Minio Overrides
+### Configure Create Time MinIO Overrides
 
-This example will override the default users and buckets provisioned in the minio instance. These are bundle create time overrides.
+This example will override the default users and buckets provisioned in the MinIO instance. These are bundle create time overrides.
 
 > **_NOTE:_** Because the underlying fields for `users` and `buckets` are arrays, overriding these options via values will result in the default `uds` user and `uds` bucket not being created.
 
@@ -114,9 +114,9 @@ packages:
               - name: "myotherapp"
 ```
 
-### Configure Deploy Time Minio Overrides
+### Configure Deploy Time MinIO Overrides
 
-This example will show how to expose the ability to override the default users, policies, service accounts and buckets provisioned in the minio instance at bundle deploy time.
+This example will show how to expose the ability to override the default users, policies, service accounts and buckets provisioned in the MinIO instance at bundle deploy time.
 
 ```yaml
 # uds-bundle.yaml
@@ -131,16 +131,16 @@ packages:
         minio:
           variables:
             - name: buckets
-              description: "Set Minio Buckets"
+              description: "Set MinIO Buckets"
               path: buckets
             - name: svcaccts
-              description: "Minio Service Accounts"
+              description: "MinIO Service Accounts"
               path: svcaccts
             - name: users
-              description: "Minio Users"
+              description: "MinIO Users"
               path: users
             - name: policies
-              description: "Minio policies"
+              description: "MinIO policies"
               path: policies
 ```
 

@@ -1,5 +1,7 @@
 # See the UDS RKE2 repository's documentation, `docs/ROOK-CEPH.md` for more details on values overrides
 
+# Please use UDS overrides to accomplish the definition of environment or node-specific configurations, like deviceFilters per node
+
 imagePullSecrets:
   - name: private-registry
 
@@ -8,92 +10,238 @@ toolbox:
   # TODO: setup renovate
   image: ###ZARF_REGISTRY###/ironbank/opensource/ceph/ceph:v18.2.2
 
+monitoring:
+  enabled: ###ZARF_VAR_ENABLE_MONITORING###
+  # Whether to create the Prometheus rules for Ceph alerts
+  createPrometheusRules: false
+  # The namespace in which to create the prometheus rules, if different from the rook cluster namespace.
+  # If you have multiple rook-ceph clusters in the same k8s cluster, choose the same namespace (ideally, namespace with prometheus
+  # deployed) to set rulesNamespaceOverride for all the clusters. Otherwise, you will get duplicate alerts with multiple alert definitions.
+  rulesNamespaceOverride: {}
+  # allow adding custom labels and annotations to the prometheus rule
+  prometheusRule:
+    labels: {}
+    annotations: {}
+
 cephClusterSpec:
-  mon:
-    count: ###ZARF_VAR_REPLICAS###
-    allowMultiplePerNode: true
-
-  mgr:
-    count: ###ZARF_VAR_REPLICAS###
-    allowMultiplePerNode: true
-    modules:
-      - name: rook
-        enabled: true
-
   cephVersion:
     # TODO: setup renovate
     image: ###ZARF_REGISTRY###/ironbank/opensource/ceph/ceph:v18.2.2
     allowUnsupported: true
 
+  mon:
+    count: "###ZARF_VAR_REPLICAS###"
+    allowMultiplePerNode: false
+
+  mgr:
+    count: "###ZARF_VAR_REPLICAS###"
+    allowMultiplePerNode: false
+    modules:
+      - name: rook
+        enabled: true
+
   dashboard:
     enabled: true
     ssl: false
 
-  monitoring:
-    enabled: ###ZARF_VAR_ENABLE_MONITORING###
-    rulesNamespace: rook-ceph
-    createPrometheusRules: false
-
   network:
     # Use host networking to avoid CNI causing storage issues
     # Equivalent to legacy `hostNetwork: true`
-    provider: host
+    provider: "host"
     connections:
       encryption:
-        enabled: true
+        enabled: false
+      compression:
+        enabled: false
+
+  # These are the defaults, but can/should be modified as needed based on environment-specific needs
+  resources:
+    mgr:
+      limits:
+        memory: "1Gi"
+      requests:
+        cpu: "500m"
+        memory: "512Mi"
+    mon:
+      limits:
+        memory: "2Gi"
+      requests:
+        cpu: "1000m"
+        memory: "1Gi"
+    osd:
+      limits:
+        memory: "4Gi"
+      requests:
+        cpu: "1000m"
+        memory: "4Gi"
+    mgr-sidecar:
+      limits:
+        memory: "100Mi"
+      requests:
+        cpu: "100m"
+        memory: "40Mi"
+    crashcollector:
+      limits:
+        memory: "60Mi"
+      requests:
+        cpu: "100m"
+        memory: "60Mi"
+    logcollector:
+      limits:
+        memory: "1Gi"
+      requests:
+        cpu: "100m"
+        memory: "100Mi"
+    cleanup:
+      limits:
+        memory: "1Gi"
+      requests:
+        cpu: "500m"
+        memory: "100Mi"
+    exporter:
+      limits:
+        memory: "128Mi"
+      requests:
+        cpu: "50m"
+        memory: "50Mi"
+
+  # priority classes to apply to ceph resources
+  priorityClassNames:
+    mon: system-node-critical
+    osd: system-node-critical
+    mgr: system-cluster-critical
 
   storage:
     useAllNodes: true
-    useAllDevices: true
-    devices:
-      - name: ###ZARF_VAR_DEVICE_NAME###
+    useAllDevices: false
+    deviceFilter: ###ZARF_VAR_DEVICE_FILTER###
     config:
-      osdsPerDevice: "1"
+      # crushRoot: "custom-root" # specify a non-default root label for the CRUSH map
+      # metadataDevice: "md0" # specify a non-rotational storage so ceph-volume will use it as block db device of bluestore.
+      # databaseSizeMB: "1024" # uncomment if the disks are smaller than 100 GB
+      osdsPerDevice: "1" # this value can be overridden at the node or device level
+      # encryptedDevice: "false" # the default value for this option is "false"
+    # Individual nodes and their config can be specified as well, but 'useAllNodes' above must be set to false. Then, only the named
+    # nodes below will be used as storage resources. Each node's 'name' field should match their 'kubernetes.io/hostname' label.
+    nodes:
+      # - name: "172.17.4.201"
+      #   devices: # specific devices to use for storage can be specified for each node
+      #     - name: "sdb"
+      #     - name: "nvme01" # multiple osds can be created on high performance devices
+      #       config:
+      #         osdsPerDevice: "5"
+      #     - name: "/dev/disk/by-id/ata-ST4000DM004-XXXX" # devices can be specified using full udev paths
+      #   config: # configuration can be specified at the node level which overrides the cluster level config
+      # - name: "172.17.4.301"
+      #   deviceFilter: "^sd."
 
 cephBlockPools:
-  - name: ceph-block
+  - name: ceph-blockpool
     spec:
-      failureDomain: host
+      failureDomain: "host"
+      isDefault: ###ZARF_VAR_CEPH_BLOCK_STORE_AS_DEFAULT###
       replicated:
-        size: ###ZARF_VAR_REPLICAS###
-      storageClass:
-        enabled: ###ZARF_VAR_ENABLE_CEPH_BLOCK_STORE###
-        isDefault: ###ZARF_VAR_CEPH_BLOCK_STORE_AS_DEFAULT###
+        size: "###ZARF_VAR_REPLICAS###"
+    storageClass:
+      name: ceph-block
+      enabled: ###ZARF_VAR_ENABLE_CEPH_BLOCK_STORE###
+      isDefault: ###ZARF_VAR_CEPH_FILE_STORE_AS_DEFAULT###
+      reclaimPolicy: Delete
+      allowVolumeExpansion: true
+      volumeBindingMode: "Immediate"
+      parameters:
+        # RBD image format. Defaults to "2".
+        imageFormat: "2"
+        # RBD image features, equivalent to OR'd bitfield value: 63
+        # Available for imageFormat: "2". Older releases of CSI RBD
+        # support only the `layering` feature. The Linux kernel (KRBD) supports the
+        # full feature complement as of 5.4
+        imageFeatures: layering
+        # These secrets contain Ceph admin credentials.
+        csi.storage.k8s.io/provisioner-secret-name: rook-csi-rbd-provisioner
+        csi.storage.k8s.io/provisioner-secret-namespace: "{{ .Release.Namespace }}"
+        csi.storage.k8s.io/controller-expand-secret-name: rook-csi-rbd-provisioner
+        csi.storage.k8s.io/controller-expand-secret-namespace: "{{ .Release.Namespace }}"
+        csi.storage.k8s.io/node-stage-secret-name: rook-csi-rbd-node
+        csi.storage.k8s.io/node-stage-secret-namespace: "{{ .Release.Namespace }}"
+        # Specify the filesystem type of the volume. If not specified, csi-provisioner
+        # will set default as `ext4`. Note that `xfs` is not recommended due to potential deadlock
+        # in hyperconverged settings where the volume is mounted on the same node as the osds.
+        csi.storage.k8s.io/fstype: ext4
 
 cephFileSystems:
   - name: ceph-filesystem
     spec:
-      dataPools:
-        - failureDomain: host
-          replicated:
-            size: ###ZARF_VAR_REPLICAS###
-          compressionMode: none
       metadataPool:
         replicated:
-          size: ###ZARF_VAR_REPLICAS###
+          size: "###ZARF_VAR_REPLICAS###"
+      dataPools:
+        - failureDomain: "host"
+          replicated:
+            size: "###ZARF_VAR_REPLICAS###"
+          name: data0
       metadataServer:
         activeCount: ###ZARF_VAR_ACTIVE_METADATA_SERVERS###
-        activeStandby: false
+        activeStandby: true
+        # These are the defaults, but can/should be modified as needed based on environment-specific needs
+        resources:
+          limits:
+            memory: "4Gi"
+          requests:
+            cpu: "1000m"
+            memory: "4Gi"
+        priorityClassName: system-cluster-critical
     storageClass:
+      name: ceph-filesystem
       enabled: ###ZARF_VAR_ENABLE_CEPH_FILE_STORE###
       isDefault: ###ZARF_VAR_CEPH_FILE_STORE_AS_DEFAULT###
+      # (Optional) specify a data pool to use, must be the name of one of the data pools above, 'data0' by default
+      pool: data0
+      reclaimPolicy: Delete
+      allowVolumeExpansion: true
+      volumeBindingMode: "Immediate"
+      parameters:
+        csi.storage.k8s.io/provisioner-secret-name: rook-csi-cephfs-provisioner
+        csi.storage.k8s.io/provisioner-secret-namespace: "{{ .Release.Namespace }}"
+        csi.storage.k8s.io/controller-expand-secret-name: rook-csi-cephfs-provisioner
+        csi.storage.k8s.io/controller-expand-secret-namespace: "{{ .Release.Namespace }}"
+        csi.storage.k8s.io/node-stage-secret-name: rook-csi-cephfs-node
+        csi.storage.k8s.io/node-stage-secret-namespace: "{{ .Release.Namespace }}"
+        # Specify the filesystem type of the volume. If not specified, csi-provisioner
+        # will set default as `ext4`. Note that `xfs` is not recommended due to potential deadlock
+        # in hyperconverged settings where the volume is mounted on the same node as the osds.
+        csi.storage.k8s.io/fstype: ext4
 
 cephObjectStores:
   - name: ceph-objectstore
     spec:
-      dataPools:
-        replicated:
-          size: ###ZARF_VAR_REPLICAS###
       metadataPool:
+        failureDomain: "host"
         replicated:
-          size: ###ZARF_VAR_REPLICAS###
-        failureDomain: host
+          size: "###ZARF_VAR_REPLICAS###"
       dataPool:
         failureDomain: host
+        replicated:
+          size: "###ZARF_VAR_REPLICAS###"
+      preservePoolsOnDelete: true
       gateway:
-        instances: 1
+        port: 80
+        # These are the defaults, but can/should be modified as needed based on environment-specific needs
+        resources:
+          limits:
+            memory: "2Gi"
+          requests:
+            cpu: "1000m"
+            memory: "1Gi"
+        instances: "###ZARF_VAR_REPLICAS###"
+        priorityClassName: system-cluster-critical
     storageClass:
+      name: ceph-objectstore
       enabled: ###ZARF_VAR_ENABLE_CEPH_BLOCK_STORE###
       isDefault: ###ZARF_VAR_CEPH_OBJECT_STORE_AS_DEFAULT###
+      reclaimPolicy: Delete
+      volumeBindingMode: "Immediate"
       parameters:
         region: ###ZARF_VAR_REGION###
+      ingress:
+        enabled: false

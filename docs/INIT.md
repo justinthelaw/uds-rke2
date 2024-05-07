@@ -1,6 +1,10 @@
 # Custom Zarf Init
 
-The custom Zarf init package comes with MinIO, for its feature-rich S3-compatible API, and Rook-Ceph as the backing S3-compatible object storage solution.
+The custom Zarf init package comes with 3 flavors:
+
+1. `local-path`: [Local Path Provisioner](./LOCAL-PATH.md) as the backing StorageClass with MinIO for its S3-compatible API
+2. `longhorn`: [Longhorn](./LONGHORN.md) as the backing StorageClass with MinIO for its S3-compatible API
+3. `rook-ceph`: [Rook-Ceph](./ROOK-CEPH.md) as a comprehensive block, object, and file StorageClass set with a built-in S3-compatible API
 
 ## Order of Deployment
 
@@ -15,7 +19,7 @@ A properly configured host node (`Ubuntu 20.04`) is bootstrapped with an RKE2 cl
 
 ## Create
 
-The below is used to manually create the custom Zarf init package, which is usually done with the UDS RKE2 [standard](../bundles/rke2-standard/uds-bundle.yaml) or [slim](../bundles/rke2-slim/uds-bundle.yaml).
+The below is used to manually create the custom Zarf init package, which is usually done with [UDS tasks](../tasks.yaml) or the [UDS bundles](https://github.com/justinthelaw/uds-rke2/tree/main/bundles) in this repository.
 
 ```bash
 # Login to registry1

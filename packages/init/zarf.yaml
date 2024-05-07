@@ -3,8 +3,8 @@
 
 kind: ZarfInitConfig
 metadata:
-  name: rook-ceph-init
-  description: "Custom Zarf Init Package for RKE2 with Rook-Ceph"
+  name: init
+  description: "Custom Zarf Init Package for RKE2"
   architecture: amd64
   # TODO: release-please setup
   version: "0.1.0"
@@ -48,8 +48,26 @@ components:
               - name: UPGRADE_ENV_VARS
                 autoIndent: true
 
+  ###########
+  # LONGHORN
+  ###########
+
+  # TODO: add `longhorn`` flavor here
+
+  ########################
+  # LOCAL PATH PROVISIONER
+  ########################
+
+  # TODO: add `local-path` flavor here
+
+  ###########
+  # ROOK-CEPH
+  ###########
+
   - name: rook-ceph-images-initial
     required: true
+    only:
+      flavor: rook-ceph
     description: "Push the Rook-Ceph images into the seed registry"
     import:
       path: ../rook-ceph
@@ -57,12 +75,16 @@ components:
 
   - name: rook-ceph-operator
     required: true
+    only:
+      flavor: rook-ceph
     import:
       path: ../rook-ceph
       name: rook-ceph-operator
 
   - name: rook-ceph-cluster
     required: true
+    only:
+      flavor: rook-ceph
     import:
       path: ../rook-ceph
       name: rook-ceph-cluster
@@ -76,6 +98,8 @@ components:
 
   - name: rook-ceph-images
     required: true
+    only:
+      flavor: rook-ceph
     description: "Push the Rook-Ceph images into the permanent registry"
     import:
       path: ../rook-ceph

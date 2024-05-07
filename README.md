@@ -52,7 +52,7 @@ The best way to test UDS RKE2 is to spin-up 1 or more nodes using virtual machin
 
 [LeapfrogAI](https://github.com/defenseunicorns/leapfrogai), the main support target of this bundle, requires GPU passthrough to all worker nodes that will have a taint for attracting pods with GPU resource and workload requirements.
 
-Please see the [VM setup documentation](./docs/VM.md) and VM setup scripts to learn more about this setup.
+Please see the [VM setup documentation](./docs/VM.md) and VM setup scripts to learn more about manually creating development VM.
 
 ### Bundles
 
@@ -61,8 +61,6 @@ There are 3 main "flavors" of the UDS RKE2 Core bundle, with 4 distinct flavors 
 1. [Local Path Provisioner](./docs/LOCAL-PATH.md) + [MinIO](./docs/MINIO.md)
 2. [Longhorn](./docs/LONGHORN.md) + [MinIO](./docs/MINIO.md)
 3. [Rook-Ceph](./docs/ROOK-CEPH.md)
-    - (3a) Single Node
-    - (3b) Multi-Node (3 or more)
 
 ### Create
 

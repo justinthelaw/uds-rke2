@@ -30,7 +30,7 @@ variables:
     prompt: true
   - name: ENABLE_CEPH_FILE_STORE
     description: "Boolean to enable (true) or disable (false) the Ceph file storage type"
-    default: "true"
+    default: "false"
     pattern: "^(true|false)$"
     prompt: true
   - name: CEPH_BLOCK_STORE_AS_DEFAULT
@@ -50,15 +50,27 @@ variables:
     prompt: false
 
   # The following determines where the data is stored on the nodes, AFTER node taints/tolerations are applied
+  # DEVICE_NAME, DATABASE_SIZE, and DEVICE_CLASS are only relevant in a `single-node` deployment, whereas
+  # DEVICE_FILTER is used for a `multi-node` deployment
   - name: DEVICE_NAME
-    description: "The node's device k-name to be used for BlueStore formatting and storage"
+    description: "The node's device or logical volume k-name to be used for BlueStore formatting and storage"
     # Empty and zap the disk, then run `lsblk --all --list --output KNAME,NAME,SIZE,TYPE,MOUNTPOINT` to find the KNAME
     default: "dm-1"
     prompt: true
   - name: DEVICE_CLASS
-    description: "The node's backing device for the block device"
+    description: "The storage type of the node's device or logical volume"
     # See https://docs.ceph.com/en/latest/rados/operations/crush-map/#device-classes for more details
     default: "nvme"
+    prompt: true
+  - name: DATABASE_SIZE
+    description: "The amount of storage available in the node's device, in MB"
+    # 90000 MB = 90 GiB
+    default: "90000"
+    prompt: true
+  - name: DEVICE_FILTER
+    description: "A REGEX expression for filtering which devices are to be used for BlueStore formatting and storage"
+    # Empty and zap the disk, then run `lsblk --all --list --output KNAME,NAME,SIZE,TYPE,MOUNTPOINT` to find the KNAME
+    default: "^(dm-1)$"
     prompt: true
   - name: REGION
     description: "Desired provisioning region."
@@ -67,9 +79,9 @@ variables:
     sensitive: true
 
   # The following determines the redundancy (size or count) of the Ceph cluster's monitors, managers and data pools
-  # These are only applicable to `CLUSTER_CONFIGURATION=multi-node`, and the minimum suggested HA configuration ratio is:
-  #   REPLICAS="3"
-  #   ACTIVE_METADATA_SERVERS="1" (if ceph file store is enabled)
+  # The minimum suggested HA configuration example can be seen below:
+  #   --set REPLICAS=3
+  #   --set ACTIVE_METADATA_SERVERS=1
   - name: REPLICAS
     description: "Number of redundant resources to deploy, should generally match the number of nodes in the cluster"
     default: "3"

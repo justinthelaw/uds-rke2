@@ -1,3 +1,6 @@
+> [!IMPORTANT]
+> Rook-Ceph is meant for enterprise-grade, multi-node clusters and thus, Rook-Ceph in single-node configuration is not currently supported; however, the single-node contents of this package may see future work that will soldify single-node support for testing adn development environments where high availability and redundancy are not required.
+
 # Rook-Ceph Configuration
 
 Rook-Ceph is the block, object and file storage solution for the RKE2 cluster init. The Ceph Cluster and storage classes are deployed (`Ready` status) prior to the permanent Zarf Docker Registry is deployed in order to provide the PVC and PV a StorageClass in the cluster.

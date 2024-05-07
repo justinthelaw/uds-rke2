@@ -16,4 +16,4 @@ package:
 
       gitea_image: "gitea/gitea:1.21.2-rootless"
 
-      cluster_configuration: "single-node"
+      cluster_configuration: "multi-node"

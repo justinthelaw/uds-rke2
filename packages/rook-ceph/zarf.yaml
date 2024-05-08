@@ -5,17 +5,7 @@ kind: ZarfPackageConfig
 metadata:
   name: rook-ceph
   description: "UDS RKE2 Rook-Ceph Zarf Package"
-<<<<<<< HEAD
-<<<<<<< HEAD
-  # TODO: release-please setup
-=======
-  # x-release-please-start-version
->>>>>>> origin/main
-  version: "0.1.0"
-  # x-release-please-end
-=======
   version: "###ZARF_PKG_TMPL_VERSION###"
->>>>>>> origin/main
   architecture: amd64
 
 constants:

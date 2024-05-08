@@ -2,7 +2,6 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/defenseunicorns/uds-cli/v0.10.4/tasks.schema.json
 
 includes:
-  - setup: ./tasks/setup.yaml
   - create: ./tasks/create.yaml
   - deploy: ./tasks/deploy.yaml
   - publish: ./tasks/publish.yaml
@@ -13,8 +12,6 @@ tasks:
   - name: rke2-bootstrap-test
     description: "Complete a stand-up and stand-down of the ONLY the RKE2 cluster"
     actions:
-      - task: setup:temp-build-folder
-
       - task: create:uds-rke2
       - task: deploy:uds-rke2-bootstrap
         with:

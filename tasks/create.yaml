@@ -1,9 +1,6 @@
 # TODO: renovate setup
 # yaml-language-server: $schema=https://raw.githubusercontent.com/defenseunicorns/uds-cli/v0.10.4/tasks.schema.json
 
-includes:
-  - setup: setup.yaml
-
 variables:
   - name: VERSION
     description: "Explicitly set the version, overriding the official release tag"
@@ -15,7 +12,6 @@ tasks:
   - name: all
     description: "Builds all Zarf packages in the repository"
     actions:
-      - task: setup:temp-build-folder
       - task: uds-rke2
       # TODO: add these back in when actually built
       # - task: local-path

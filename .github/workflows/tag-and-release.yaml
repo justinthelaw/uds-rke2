@@ -69,10 +69,10 @@ jobs:
           echo "Publishing for tag: ${{ github.ref }}"
 
           if [[ "${{ github.ref }}" == "refs/tags/dev" ]]; then
-            sudo uds run create:all --set VERSION=dev
-            sudo uds run publish:all --set VERSION=dev
+            sudo uds run create:all --set VERSION=dev --no-progress
+            sudo uds run publish:all --set VERSION=dev --no-progress
           else
-            sudo uds run create:all
-            sudo uds run publish:all
+            sudo uds run create:all --no-progress
+            sudo uds run publish:all --no-progress
           fi
         shell: bash

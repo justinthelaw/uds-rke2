@@ -93,7 +93,7 @@ packages:
   - name: uds-rke2
     repository: ghcr.io/justinthelaw/packages/uds/uds-rke2
     # x-release-please-start-version
-    ref: "0.1.0"
+    ref: "0.2.0"
     # x-release-please-end
     overrides:
       uds-rke2-stack:
@@ -126,7 +126,7 @@ packages:
   - name: uds-rke2
     repository: ghcr.io/justinthelaw/packages/uds-rke2
     # x-release-please-start-version
-    ref: "0.1.0"
+    ref: "0.2.0"
     # x-release-please-end
     overrides:
       uds-rke2-stack:

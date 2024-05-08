@@ -109,9 +109,9 @@ tasks:
     actions:
       - task: create
         with:
-          path: packages/uds-rke2-exemptions/
+          path: packages/exemptions/
           outputPath: build/packages/
-          zarfConfig: packages/uds-rke2-exemptions/zarf-config.yaml
+          zarfConfig: packages/exemptions/zarf-config.yaml
 
   - name: minio
     description: "Build the MinIO package"

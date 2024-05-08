@@ -6,11 +6,9 @@ variables:
     description: "The version of UDS Core package to deploy"
     # TODO: renovate setup
     default: "0.21.0"
-  - name: FLAVOR
+  - name: CORE_PKG_FLAVOR
     description: "Flavor of the package to use (`registry1` or `upstream`)."
     default: "registry1"
-  - name: ARCHITECTURE
-    default: "amd64"
   - name: DISK_NAME
     description: "The name of a Ceph-formatted disk (e.g. /dev/ubuntu-vg/ceph) that is to be wiped."
     default: "dm-1"
@@ -60,13 +58,27 @@ tasks:
             --no-progress \
             --confirm
 
-  # TODO: local-path init
-<<<<<<< HEAD
-=======
-  # TODO: longhorn init
->>>>>>> origin/main
+  - name: uds-rke2-exemptions
+    description: "Deploy the UDS RKE2 service Pepr policy exemptions package"
+    actions:
+      - description: "Deploy the UDS RKE2 service Pepr policy exemptions package"
+        cmd: |
+          sudo uds zarf package deploy build/packages/zarf-package-uds-rke2-exemptions-amd64-*.zst \
+            --no-progress \
+            --components local-path,longhorn,rook-ceph \
+            --confirm
 
-  # TODO: exemptions for each storage flavor
+  # TODO: local-path init
+
+  - name: longhorn-init
+    description: "Deploy the custom Zarf Init Package for RKE2 with Longhorn"
+    actions:
+      - description: "Deploy the custom Zarf Init package"
+        cmd: |
+          sudo uds zarf package deploy build/packages/zarf-init-amd64-*.tar.zst \
+            --no-progress \
+            --set LONGHORN_VAR="true" \
+            --confirm
 
   - name: rook-ceph-init
     description: "Deploy the custom Zarf Init Package for RKE2 with Rook-Ceph"
@@ -74,11 +86,7 @@ tasks:
       - description: "Deploy the custom Zarf Init package"
         # File storage is disabled by default, but can be enabled as necessary
         cmd: |
-<<<<<<< HEAD
-          sudo uds zarf package deploy build/packages/zarf-init-amd64-*.tar.zst \
-=======
           sudo uds zarf package deploy build/packages/rook-ceph-init/zarf-init-amd64-*.tar.zst \
->>>>>>> origin/main
             --no-progress \
             --set ENABLE_CEPH_BLOCK_STORE="true" \
             --set ENABLE_CEPH_OBJECT_STORE="true" \
@@ -87,31 +95,6 @@ tasks:
             --set CEPH_OBJECT_STORE_AS_DEFAULT="false" \
             --set CEPH_FILE_STORE_AS_DEFAULT="false" \
             --confirm
-<<<<<<< HEAD
-
-  - name: longhorn-init-single-node
-    description: "Deploy the custom Zarf Init Package for RKE2 with longhorn (single-node flavor)."
-    actions:
-      - description: "Deploy the custom Zarf Init package"
-        # File storage is disabled by default, but can be enabled as necessary
-        cmd: |
-          sudo uds zarf package deploy build/packages/zarf-init-amd64-longhorn-*.tar.zst \
-            --no-progress \
-            --set LONGHORN_VAR="true" \
-            --confirm
-
-  - name: longhorn-init-multi-node
-    description: "Deploy the custom Zarf Init Package for RKE2 with longhorn (multi-node flavor)."
-    actions:
-      - description: "Deploy the custom Zarf Init package"
-        # File storage is disabled by default, but can be enabled as necessary
-        cmd: |
-          sudo uds zarf package deploy build/packages/zarf-init-amd64-longhorn-*.tar.zst \
-            --no-progress \
-            --set LONGHORN_VAR_2="true" \
-            --confirm
-=======
->>>>>>> origin/main
 
   - name: minio
     description: "Deploy the MinIO package"
@@ -126,11 +109,9 @@ tasks:
     description: "Deploy a specific UDS Core package based on the VERSION variable"
     actions:
       - description: "Deploy the standard UDS Core package"
-        # TODO: renovate setup
         cmd: |
-          echo ${CORE_PKG_VERSION}
-          sudo uds zarf package deploy oci://ghcr.io/defenseunicorns/packages/uds/core:${CORE_PKG_VERSION}-${FLAVOR} \
-            -a ${ARCHITECTURE} \
+          sudo uds zarf package deploy oci://ghcr.io/defenseunicorns/packages/uds/core:${CORE_PKG_VERSION}-${CORE_PKG_FLAVOR} \
+            -a amd64 \
             --components metrics-server \
             --no-progress \
             --confirm

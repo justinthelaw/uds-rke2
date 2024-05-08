@@ -64,15 +64,47 @@ There are 3 main "flavors" of the UDS RKE2 Core bundle, with 4 distinct flavors 
 
 ### Create
 
-<!-- TODO: create instructions -->
+See the UDS [`create` tasks](./tasks/create.yaml) file for more details.
+
+To create all packages and bundles, do the following:
+
+```bash
+uds run create:all
+```
 
 ### Deploy
 
-<!-- TODO: deploy instructions -->
+See the UDS [`deploy` tasks](./tasks/deploy.yaml) file for more details.
+
+To deploy all packages and bundles, do the following:
+
+```bash
+uds run deploy:all
+```
+
+### Publish
+
+See the UDS [`publish` tasks](./tasks/publish.yaml) file for more details.
+
+To publish all packages and bundles, do the following:
+
+```bash
+uds run publish:all
+```
 
 ### Remove
 
-<!-- TODO: remove instructions -->
+#### Artifacts
+
+Run the following to remove all build artifacts:
+
+```bash
+rm -rf build/ zarf-sbom/
+```
+
+#### Packages
+
+See the [Configuration section](#configuration) for more details on each specific package in each of the bundle flavors.
 
 ## Additional Info
 

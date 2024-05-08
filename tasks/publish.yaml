@@ -1,26 +1,154 @@
 # TODO: renovate setup
 # yaml-language-server: $schema=https://raw.githubusercontent.com/defenseunicorns/uds-cli/v0.10.4/tasks.schema.json
 
-includes:
-  - publish: https://raw.githubusercontent.com/defenseunicorns/uds-common/v0.4.2/tasks/publish.yaml
+variables:
+  - name: VERSION
+    description: "Explicitly set the version, overriding the official release tag"
+    # x-release-please-start-version
+    default: "0.1.0"
+    # x-release-please-end
 
 tasks:
+  - name: all
+    description: "Builds all Zarf packages in the repository"
+    actions:
+      - task: uds-rke2
+      # TODO: add these back in when actually built
+      # - task: local-path
+      # - task: local-path-init
+      # - task: longhorn
+      # - task: longhorn-init
+      - task: rook-ceph
+      - task: rook-ceph-init-multi-node
+      # - task: rook-ceph-init-single-node
+      - task: uds-rke2-exemptions
+      - task: minio
+
+  - name: publish
+    description: "Publish a Zarf package for the amd64 architectures"
+    inputs:
+      path:
+        description: "Path to the Zarf package being published"
+        required: true
+      name:
+        description: "Name of the Zarf package being published"
+        required: true
+      targetRepo:
+        description: "Repository to publish Zarf package into"
+        required: true
+    actions:
+      - description: "Publish the Zarf package for the amd64 architectures"
+        cmd: |
+          sudo uds zarf package publish \
+            "${{ .inputs.path }}/zarf-package-${{ .inputs.name }}-amd64-${VERSION}.tar.zst" \
+            "oci://${{ .inputs.targetRepo }}" \
+            --no-progress \
+            --no-log-file \
+            --log-level warn \
+            -a amd64
+
+  - name: init
+    description: "Publish a Zarf Init package for the amd64 architectures"
+    inputs:
+      path:
+        description: "Path to the Zarf Init package being published"
+        required: true
+      targetRepo:
+        description: "Repository to publish Zarf Init package into"
+        required: true
+    actions:
+      - description: "Publish the Zarf init package for the amd64 architectures"
+        cmd: |
+          sudo uds zarf package publish \
+            "${{ .inputs.path }}/zarf-init-amd64-$(uds zarf version).tar.zst" \
+            "oci://${{ .inputs.targetRepo }}" \
+            --no-progress \
+            --no-log-file \
+            --log-level warn \
+            -a amd64
+
   - name: uds-rke2
     description: "Publish the UDS RKE2 Zarf package"
     actions:
-      - task: publish:package
+      - task: publish
         with:
-          path: packages/uds-rke2/
-          # x-release-please-start-version
-          version: "0.1.0"
-          # x-release-please-end
-          target_repo: ghcr.io/justinthelaw/packages/uds
+          path: build/packages
+          name: uds-rke2
+          targetRepo: ghcr.io/justinthelaw/packages/uds
 
-  - name: uds-rke2-dev
-    description: "Publish the UDS RKE2 Zarf dev package"
+  - name: local-path
+    description: "Publish the Local Path Provisioner package"
     actions:
-      - task: publish:package
+      - task: publish
         with:
-          path: packages/uds-rke2/
-          version: "dev"
-          target_repo: ghcr.io/justinthelaw/packages/uds
+          path: build/packages/local-path
+          name: local-path
+          targetRepo: ghcr.io/justinthelaw/packages/uds/local-path
+
+  - name: local-path-init
+    description: "Publish the custom Zarf Init package"
+    actions:
+      - task: init
+        with:
+          path: build/packages/local-path
+          targetRepo: ghcr.io/justinthelaw/packages/uds/local-path
+
+  - name: longhorn
+    description: "Publish the Longhorn package"
+    actions:
+      - task: publish
+        with:
+          path: build/packages/longhorn
+          name: longhorn
+          targetRepo: ghcr.io/justinthelaw/packages/uds/longhorn
+
+  - name: longhorn-init
+    description: "Publish the custom Zarf Init package"
+    actions:
+      - task: init
+        with:
+          path: build/packages/longhorn
+          targetRepo: ghcr.io/justinthelaw/packages/uds/longhorn
+
+  - name: rook-ceph
+    description: "Publish the Rook-Ceph package"
+    actions:
+      - task: publish
+        with:
+          path: build/packages/rook-ceph
+          name: rook-ceph
+          targetRepo: ghcr.io/justinthelaw/packages/uds/rook-ceph
+
+  - name: rook-ceph-init-multi-node
+    description: "Publish the custom Zarf Init package"
+    actions:
+      - task: init
+        with:
+          path: build/packages/rook-ceph/multi-node
+          targetRepo: ghcr.io/justinthelaw/packages/uds/rook-ceph/multi-node
+
+  - name: rook-ceph-init-single-node
+    description: "Publish the custom Zarf Init package"
+    actions:
+      - task: init
+        with:
+          path: build/packages/rook-ceph/single-node
+          targetRepo: ghcr.io/justinthelaw/packages/uds/longhorn/single-node
+
+  - name: minio
+    description: "Publish the MinIO package"
+    actions:
+      - task: publish
+        with:
+          path: build/packages
+          name: minio
+          targetRepo: ghcr.io/justinthelaw/packages/uds
+
+  - name: uds-rke2-exemptions
+    description: "Publish the UDS RKE2 service Pepr policy exemptions package"
+    actions:
+      - task: publish
+        with:
+          path: build/packages
+          name: uds-rke2-exemptions
+          targetRepo: ghcr.io/justinthelaw/packages/uds

@@ -1,0 +1,36 @@
+# TODO: renovate setup
+# yaml-language-server: $schema=https://raw.githubusercontent.com/defenseunicorns/uds-cli/v0.10.4/zarf.schema.json
+
+kind: ZarfPackageConfig
+metadata:
+  name: local-path
+  description: "UDS RKE2 Local Path Provisioner Zarf Package"
+  version: "###ZARF_PKG_TMPL_VERSION###"
+  architecture: amd64
+
+constants:
+  - name: CONSTANT
+    description: "CONSTANT"
+    value: "###ZARF_PKG_TMPL_CONSTANT###"
+    pattern: "^(CONSTANT)$"
+
+variables:
+  - name: VARIABLE
+    description: "VARIABLE"
+    default: "VARIABLE"
+    pattern: "^(VARIABLE)$"
+    prompt: true
+
+components:
+  - name: prepare-host
+    required: true
+    description: "Prepare host system"
+    files:
+      - source: scripts/os-prep.sh
+        target: /root/uds-rke2-artifacts/local-path/os-prep.sh
+        executable: true
+    actions:
+      onDeploy:
+        after:
+          - cmd: /root/uds-rke2-artifacts/local-path/os-prep.sh
+            description: "Prepare host for Local Path Provisioner"

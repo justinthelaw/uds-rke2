@@ -17,14 +17,15 @@ tasks:
     actions:
       - description: "Publish the Zarf package for the amd64 architectures"
         cmd: |
-          sudo uds zarf package publish ${{ .inputs.path }}/zarf-package-${{ .inputs.name }}-*.tar.zst oci://${{ .inputs.targetRepo }}
+          echo "Publishing ${{ .inputs.path }}/zarf-package-${{ .inputs.name }}-*.tar.zst to oci://${{ .inputs.targetRepo }}"
+          sudo uds zarf package publish "${{ .inputs.path }}/zarf-package-${{ .inputs.name }}-*.tar.zst" "oci://${{ .inputs.targetRepo }}"
 
   - name: uds-rke2
     description: "Publish the UDS RKE2 Zarf package"
     actions:
       - task: publish
         with:
-          path: build/packages
+          path: ./build/packages
           name: uds-rke2
           targetRepo: ghcr.io/justinthelaw/packages/uds
 
@@ -33,7 +34,7 @@ tasks:
     actions:
       - task: publish
         with:
-          path: build/packages/local-path
+          path: ./build/packages/local-path
           name: init
           targetRepo: ghcr.io/justinthelaw/packages/uds/local-path
 
@@ -42,7 +43,7 @@ tasks:
     actions:
       - task: publish
         with:
-          path: build/packages/longhorn
+          path: ./build/packages/longhorn
           name: init
           targetRepo: ghcr.io/justinthelaw/packages/uds/longhorn
 
@@ -51,7 +52,7 @@ tasks:
     actions:
       - task: publish
         with:
-          path: build/packages/rook-ceph
+          path: ./build/packages/rook-ceph
           name: init
           targetRepo: ghcr.io/justinthelaw/packages/uds/rook-ceph
 
@@ -60,7 +61,7 @@ tasks:
     actions:
       - task: publish
         with:
-          path: build/packages
+          path: ./build/packages
           name: minio
           targetRepo: ghcr.io/justinthelaw/packages/uds
 
@@ -69,6 +70,6 @@ tasks:
     actions:
       - task: publish
         with:
-          path: build/packages
+          path: ./build/packages
           name: uds-rke2-exemptions
           targetRepo: ghcr.io/justinthelaw/packages/uds

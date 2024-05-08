@@ -19,8 +19,7 @@ tasks:
       # - task: longhorn
       # - task: longhorn-init
       - task: rook-ceph
-      - task: rook-ceph-init-multi-node
-      # - task: rook-ceph-init-single-node
+      - task: rook-ceph-init
       - task: uds-rke2-exemptions
       - task: minio
 
@@ -122,13 +121,13 @@ tasks:
           outputPath: build/packages/rook-ceph
           zarfConfig: packages/rook-ceph/zarf-config.yaml
 
-  - name: rook-ceph-init-multi-node
+  - name: rook-ceph-init
     description: "Build the Rook-Ceph Zarf Init package"
     actions:
       - task: init
         with:
           flavor: rook-ceph
-          outputPath: build/packages/rook-ceph/multi-node
+          outputPath: build/packages/rook-ceph
 
   - name: uds-rke2-exemptions
     description: "Build the UDS RKE2 service Pepr policy exemptions package"

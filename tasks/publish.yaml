@@ -19,8 +19,8 @@ tasks:
       # - task: longhorn
       # - task: longhorn-init
       - task: rook-ceph
-      - task: rook-ceph-init-multi-node
-      # - task: rook-ceph-init-single-node
+      - task: rook-ceph-init
+      # - task: rook-ceph-init
       - task: uds-rke2-exemptions
       - task: minio
 
@@ -83,7 +83,7 @@ tasks:
         with:
           path: build/packages/local-path
           name: local-path
-          targetRepo: ghcr.io/justinthelaw/packages/uds/local-path
+          targetRepo: ghcr.io/justinthelaw/packages/uds
 
   - name: local-path-init
     description: "Publish the custom Zarf Init package"
@@ -91,7 +91,7 @@ tasks:
       - task: init
         with:
           path: build/packages/local-path
-          targetRepo: ghcr.io/justinthelaw/packages/uds/local-path
+          targetRepo: ghcr.io/justinthelaw/packages/uds/
 
   - name: longhorn
     description: "Publish the Longhorn package"
@@ -100,7 +100,7 @@ tasks:
         with:
           path: build/packages/longhorn
           name: longhorn
-          targetRepo: ghcr.io/justinthelaw/packages/uds/longhorn
+          targetRepo: ghcr.io/justinthelaw/packages/uds
 
   - name: longhorn-init
     description: "Publish the custom Zarf Init package"
@@ -108,7 +108,7 @@ tasks:
       - task: init
         with:
           path: build/packages/longhorn
-          targetRepo: ghcr.io/justinthelaw/packages/uds/longhorn
+          targetRepo: ghcr.io/justinthelaw/packages/uds/
 
   - name: rook-ceph
     description: "Publish the Rook-Ceph package"
@@ -117,23 +117,15 @@ tasks:
         with:
           path: build/packages/rook-ceph
           name: rook-ceph
-          targetRepo: ghcr.io/justinthelaw/packages/uds/rook-ceph
+          targetRepo: ghcr.io/justinthelaw/packages/uds
 
-  - name: rook-ceph-init-multi-node
+  - name: rook-ceph-init
     description: "Publish the custom Zarf Init package"
     actions:
       - task: init
         with:
-          path: build/packages/rook-ceph/multi-node
-          targetRepo: ghcr.io/justinthelaw/packages/uds/rook-ceph/multi-node
-
-  - name: rook-ceph-init-single-node
-    description: "Publish the custom Zarf Init package"
-    actions:
-      - task: init
-        with:
-          path: build/packages/rook-ceph/single-node
-          targetRepo: ghcr.io/justinthelaw/packages/uds/longhorn/single-node
+          path: build/packages/
+          targetRepo: ghcr.io/justinthelaw/packages/uds/
 
   - name: minio
     description: "Publish the MinIO package"

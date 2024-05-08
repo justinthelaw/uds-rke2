@@ -45,7 +45,7 @@ tasks:
       - task: publish
         with:
           path: build/packages/local-path
-          name: local-path-init
+          name: init
           version: ${VERSION}
           target_repo: ghcr.io/justinthelaw/packages/uds/local-path
 
@@ -55,7 +55,7 @@ tasks:
       - task: publish
         with:
           path: build/packages/longhorn
-          name: longhorn-init
+          name: init
           version: ${VERSION}
           target_repo: ghcr.io/justinthelaw/packages/uds/longhorn
 
@@ -65,7 +65,7 @@ tasks:
       - task: publish
         with:
           path: build/packages/rook-ceph
-          name: rook-ceph-init
+          name: init
           version: ${VERSION}
           target_repo: ghcr.io/justinthelaw/packages/uds/rook-ceph
 

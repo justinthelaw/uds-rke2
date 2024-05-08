@@ -51,7 +51,14 @@ components:
   # LONGHORN
   ###########
 
-  # TODO: add `longhorn`` flavor here
+  - name: longhorn-images-initial
+    required: true
+    only:
+      flavor: longhorn
+    description: "Push the Longhorn images into the seed registry"
+    import:
+      path: ../longhorn
+      name: longhorn-images
 
   ########################
   # LOCAL PATH PROVISIONER
@@ -94,6 +101,30 @@ components:
     import:
       # TODO: renovate setup
       url: oci://ghcr.io/defenseunicorns/packages/init:v0.33.0
+
+  ########################
+  # LOCAL PATH PROVISIONER
+  ########################
+
+  # TODO: add `local-path` flavor here
+
+  ###########
+  # LONGHORN
+  ###########
+
+  - name: longhorn-images
+    required: true
+    only:
+      flavor: longhorn
+    description: "Push the Longhorn images into the permanent registry"
+    import:
+      path: ../longhorn
+    images:
+      - "###ZARF_PKG_TMPL_REGISTRY_IMAGE_DOMAIN######ZARF_PKG_TMPL_REGISTRY_IMAGE###:###ZARF_PKG_TMPL_REGISTRY_IMAGE_TAG###"
+
+  ###########
+  # ROOK-CEPH
+  ###########
 
   - name: rook-ceph-images
     required: true

@@ -22,13 +22,16 @@ tasks:
           fi
 
   - name: temp-build-folder
-    description: "Creates a temporary build folder which can be used to store packages created during the workflow"
+    description: "Creates a temporary build folder which can be used to store packages and bundles"
     actions:
       - description: "Make the build directory at the root level of the repository"
         cmd: |
-          sudo mkdir -p build/packages/
-          sudo mkdir -p build/bundles/
-          sudo mkdir -p build/packages/rook-ceph/
+          sudo mkdir -p build/bundles/uds-rke2-local-path/
+          sudo mkdir -p build/bundles/uds-rke2-longhorn/
+          sudo mkdir -p build/bundles/uds-rke2-rook-ceph/multi-node/
+          sudo mkdir -p build/bundles/uds-rke2-rook-ceph/single-node/
+          sudo mkdir -p build/packages/rook-ceph/multi-node/
+          sudo mkdir -p build/packages/rook-ceph/single-node/
           sudo mkdir -p build/packages/longhorn/
           sudo mkdir -p build/packages/local-path/
 
@@ -38,9 +41,13 @@ tasks:
       - task: temp-build-folder
       - task: uds-rke2
       # TODO: add these back in when actually built
+      # - task: local-path
       # - task: local-path-init
+      # - task: longhorn
       # - task: longhorn-init
-      - task: rook-ceph-init
+      - task: rook-ceph
+      - task: rook-ceph-init-multi-node
+      # - task: rook-ceph-init-single-node
       - task: uds-rke2-exemptions
       - task: minio
 
@@ -61,11 +68,33 @@ tasks:
         cmd: |
           sudo ZARF_CONFIG="${{ .inputs.zarfConfig }}" uds zarf package create "${{ .inputs.path }}" \
             -o "${{ .inputs.outputPath }}" \
+            --set VERSION=${VERSION} \
             --no-progress \
             --no-log-file \
             --log-level warn \
             -a amd64 \
-            --set VERSION=${VERSION} \
+            --confirm
+
+  - name: init
+    description: "Create a custom Zarf Init package for the amd64 architectures"
+    inputs:
+      flavor:
+        description: "Flavor of the Zarf package being created"
+        required: true
+      outputPath:
+        description: "Output path to the Zarf package being created"
+        required: true
+    actions:
+      - description: "Create the Zarf package for the amd64 architectures"
+        cmd: |
+          sudo ZARF_CONFIG="packages/init/zarf-config.yaml" uds zarf package create packages/init/ \
+            -o "${{ .inputs.outputPath }}" \
+            --flavor "${{ .inputs.flavor }}" \
+            --set AGENT_IMAGE_TAG=$(uds zarf version) \
+            --no-progress \
+            --no-log-file \
+            --log-level warn \
+            -a amd64 \
             --confirm
 
   - name: uds-rke2
@@ -77,8 +106,8 @@ tasks:
           outputPath: build/packages/
           zarfConfig: packages/uds-rke2/zarf-config.yaml
 
-  - name: local-path-init
-    description: "Build the custom Zarf Init package for RKE2 with Rook-Ceph"
+  - name: local-path
+    description: "Build the Local Path Provisioner Zarf package"
     actions:
       - task: create
         with:
@@ -86,8 +115,16 @@ tasks:
           outputPath: build/packages/local-path/
           zarfConfig: packages/local-path/zarf-config.yaml
 
-  - name: longhorn-init
-    description: "Build the custom Zarf Init package for RKE2 with longhorn"
+  - name: local-path-init
+    description: "Build the Local Path Provisioner Zarf Init package"
+    actions:
+      - task: init
+        with:
+          flavor: local-path
+          outputPath: build/packages/local-path
+
+  - name: longhorn
+    description: "Build the Longhorn Zarf package"
     actions:
       - task: create
         with:
@@ -95,14 +132,30 @@ tasks:
           outputPath: build/packages/longhorn/
           zarfConfig: packages/longhorn/zarf-config.yaml
 
-  - name: rook-ceph-init
-    description: "Build the custom Zarf Init package for RKE2 with Rook-Ceph"
+  - name: longhorn-init
+    description: "Build the Longhorn Zarf Init package"
+    actions:
+      - task: init
+        with:
+          flavor: longhorn
+          outputPath: build/packages/longhorn
+
+  - name: rook-ceph
+    description: "Build the Rook-Ceph Zarf package"
     actions:
       - task: create
         with:
           path: packages/rook-ceph/
           outputPath: build/packages/rook-ceph
           zarfConfig: packages/rook-ceph/zarf-config.yaml
+
+  - name: rook-ceph-init-multi-node
+    description: "Build the Rook-Ceph Zarf Init package"
+    actions:
+      - task: init
+        with:
+          flavor: rook-ceph
+          outputPath: build/packages/rook-ceph/multi-node
 
   - name: uds-rke2-exemptions
     description: "Build the UDS RKE2 service Pepr policy exemptions package"

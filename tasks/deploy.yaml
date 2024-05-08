@@ -60,10 +60,6 @@ tasks:
             --no-progress \
             --confirm
 
-  # TODO: local-path init
-  # TODO: longhorn init
-
-
   - name: uds-rke2-exemptions
     description: "Deploy the UDS RKE2 service Pepr policy exemptions package"
     actions:
@@ -72,6 +68,18 @@ tasks:
           sudo uds zarf package deploy build/packages/zarf-package-uds-rke2-exemptions-amd64-*.zst \
             --no-progress \
             --components local-path,longhorn,rook-ceph \
+            --confirm
+
+  # TODO: local-path init
+
+  - name: longhorn-init
+    description: "Deploy the custom Zarf Init Package for RKE2 with Longhorn"
+    actions:
+      - description: "Deploy the custom Zarf Init package"
+        cmd: |
+          sudo uds zarf package deploy build/packages/zarf-init-amd64-*.tar.zst \
+            --no-progress \
+            --set LONGHORN_VAR="true" \
             --confirm
 
   - name: rook-ceph-init

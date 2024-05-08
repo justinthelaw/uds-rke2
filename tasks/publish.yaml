@@ -10,21 +10,24 @@ variables:
 
 tasks:
   - name: publish
-    description: "Publish packages for the amd64 architectures"
+    description: "Publish a Zarf package for the amd64 architectures"
     inputs:
       path:
-        description: "Path to the zarf package being published"
+        description: "Path to the Zarf package being published"
+        required: true
+      name:
+        description: "Name of the Zarf package being published"
         required: true
       version:
-        description: "The version of the package to publish"
+        description: "Version of the Zarf package being publish"
         required: true
       target_repo:
-        description: "The repository to publish into"
+        description: "Repository to publish Zarf package into"
         required: true
     actions:
-      - description: "Publish packages for the amd64 and arm64 architectures"
+      - description: "Publish the Zarf package for the amd64 architectures"
         cmd: |
-          sudo uds zarf package publish ${{ .inputs.path }}/zarf-package-*-amd64-${{ .inputs.version }}.tar.zst oci://${{ .inputs.target_repo }}
+          sudo uds zarf package publish ${{ .inputs.path }}/zarf-package-${{ .inputs.name }}*.tar.zst oci://${{ .inputs.target_repo }}
 
   - name: uds-rke2
     description: "Publish the UDS RKE2 Zarf package"
@@ -32,6 +35,7 @@ tasks:
       - task: publish
         with:
           path: build/packages
+          name: uds-rke2
           version: ${VERSION}
           target_repo: ghcr.io/justinthelaw/packages/uds
 
@@ -41,6 +45,7 @@ tasks:
       - task: publish
         with:
           path: build/packages/local-path
+          name: local-path-init
           version: ${VERSION}
           target_repo: ghcr.io/justinthelaw/packages/uds/local-path
 
@@ -50,6 +55,7 @@ tasks:
       - task: publish
         with:
           path: build/packages/longhorn
+          name: longhorn-init
           version: ${VERSION}
           target_repo: ghcr.io/justinthelaw/packages/uds/longhorn
 
@@ -59,6 +65,7 @@ tasks:
       - task: publish
         with:
           path: build/packages/rook-ceph
+          name: rook-ceph-init
           version: ${VERSION}
           target_repo: ghcr.io/justinthelaw/packages/uds/rook-ceph
 
@@ -68,6 +75,7 @@ tasks:
       - task: publish
         with:
           path: build/packages
+          name: minio
           version: ${VERSION}
           target_repo: ghcr.io/justinthelaw/packages/uds
 
@@ -77,5 +85,6 @@ tasks:
       - task: publish
         with:
           path: build/packages
+          name: uds-rke2-exemptions
           version: ${VERSION}
           target_repo: ghcr.io/justinthelaw/packages/uds

@@ -6,7 +6,7 @@ metadata:
   name: uds-rke2-bootstrap
   description: "A UDS bundle for bootstrapping an RKE2 cluster and installing the standard UDS Core package in the cluster"
   # x-release-please-start-version
-  version: "0.1.0"
+  version: "0.2.0"
   # x-release-please-end
   architecture: amd64
 
@@ -15,7 +15,7 @@ packages:
     description: "Deploys the UDS RKE2 Zarf package"
     repository: ghcr.io/justinthelaw/packages/uds/uds-rke2
     # x-release-please-start-version
-    ref: "0.1.0"
+    ref: "0.2.0"
     # x-release-please-end
 
   - name: rook-ceph-init-multi-node
@@ -114,5 +114,5 @@ packages:
     description: "Deploys the Rook-Ceph UDS Core Pepr policy exemptions"
     repository: ghcr.io/justinthelaw/packages/uds/rook-ceph/exemptions
     # x-release-please-start-version
-    ref: "0.1.0"
+    ref: "0.2.0"
     # x-release-please-end

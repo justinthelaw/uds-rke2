@@ -125,7 +125,7 @@ tasks:
       - task: init
         with:
           path: build/packages/rook-ceph/multi-node
-          targetRepo: ghcr.io/justinthelaw/packages/uds/longhorn/multi-node
+          targetRepo: ghcr.io/justinthelaw/packages/uds/rook-ceph/multi-node
 
   - name: rook-ceph-init-single-node
     description: "Publish the custom Zarf Init package"

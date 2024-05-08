@@ -124,7 +124,7 @@ tasks:
     actions:
       - task: init
         with:
-          path: build/packages
+          path: build/packages/rook-ceph
           targetRepo: ghcr.io/justinthelaw/packages/uds
 
   - name: minio

@@ -74,8 +74,8 @@ tasks:
     actions:
       - task: create
         with:
-          path: packages/uds-rke2/
-          outputPath: build/packages/
+          path: packages/uds-rke2
+          outputPath: build/packages
           zarfConfig: packages/uds-rke2/zarf-config.yaml
 
   - name: local-path
@@ -83,8 +83,8 @@ tasks:
     actions:
       - task: create
         with:
-          path: packages/local-path/
-          outputPath: build/packages/local-path/
+          path: packages/local-path
+          outputPath: build/packages/local-path
           zarfConfig: packages/local-path/zarf-config.yaml
 
   - name: local-path-init
@@ -100,8 +100,8 @@ tasks:
     actions:
       - task: create
         with:
-          path: packages/longhorn/
-          outputPath: build/packages/longhorn/
+          path: packages/longhorn
+          outputPath: build/packages/longhorn
           zarfConfig: packages/longhorn/zarf-config.yaml
 
   - name: longhorn-init
@@ -117,7 +117,7 @@ tasks:
     actions:
       - task: create
         with:
-          path: packages/rook-ceph/
+          path: packages/rook-ceph
           outputPath: build/packages/rook-ceph
           zarfConfig: packages/rook-ceph/zarf-config.yaml
 
@@ -134,8 +134,8 @@ tasks:
     actions:
       - task: create
         with:
-          path: packages/exemptions/
-          outputPath: build/packages/
+          path: packages/exemptions
+          outputPath: build/packages
           zarfConfig: packages/exemptions/zarf-config.yaml
 
   - name: minio
@@ -143,6 +143,6 @@ tasks:
     actions:
       - task: create
         with:
-          path: packages/minio/
-          outputPath: build/packages/
+          path: packages/minio
+          outputPath: build/packages
           zarfConfig: packages/minio/zarf-config.yaml

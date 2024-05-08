@@ -2,6 +2,17 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/defenseunicorns/uds-cli/v0.10.4/tasks.schema.json
 
 tasks:
+  - name: all
+    description: "Builds all Zarf packages in the repository"
+    actions:
+      - task: uds-rke2
+      # TODO: add these back in when actually built
+      # - task: local-path-init
+      # - task: longhorn-init
+      - task: rook-ceph-init
+      - task: uds-rke2-exemptions
+      - task: minio
+
   - name: publish
     description: "Publish a Zarf package for the amd64 architectures"
     inputs:

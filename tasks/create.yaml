@@ -32,6 +32,18 @@ tasks:
           sudo mkdir -p build/packages/longhorn/
           sudo mkdir -p build/packages/local-path/
 
+  - name: all
+    description: "Builds all Zarf packages in the repository"
+    actions:
+      - task: temp-build-folder
+      - task: uds-rke2
+      # TODO: add these back in when actually built
+      # - task: local-path-init
+      # - task: longhorn-init
+      - task: rook-ceph-init
+      - task: uds-rke2-exemptions
+      - task: minio
+
   - name: create
     description: "Create a Zarf package for the amd64 architectures"
     inputs:
@@ -48,13 +60,13 @@ tasks:
       - description: "Create the Zarf package for the amd64 architectures"
         cmd: |
           sudo ZARF_CONFIG="${{ .inputs.zarfConfig }}" uds zarf package create "${{ .inputs.path }}" \
-           -o "${{ .inputs.outputPath }}" \
-           --no-progress \
-           --no-log-file \
-           --log-level warn \
-           -a amd64 \
-           --set VERSION=${VERSION} \
-           --confirm
+            -o "${{ .inputs.outputPath }}" \
+            --no-progress \
+            --no-log-file \
+            --log-level warn \
+            -a amd64 \
+            --set VERSION=${VERSION} \
+            --confirm
 
   - name: uds-rke2
     description: "Build the UDS RKE2 Zarf package"

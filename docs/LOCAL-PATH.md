@@ -6,7 +6,15 @@ Local Path Provisioner can still be useful if paired with an operator with built
 
 ## Usage
 
-The UDS bundle and custom Zarf Init for each flavor of the UDS RKE2 bootstrap automatically instantiates the associated resources and StorageClass automatically. If you are installing the cluster manually Zarf package by Zarf package, you can opt to perform the installation of the Local Path Provisioner using the following:
+### Zarf Package
+
+The UDS bundle and custom Zarf Init for each flavor of the UDS RKE2 bootstrap automatically instantiates the StorageClass, Persistent Volumes, and configurations automatically. Configuration is controlled by exposed Zarf variables that modify the custom Local Path Provisioner charts.
+
+Further customization and configurations can be found in the resources located within the [Additional Info](#additional-info) section.
+
+### Manual Upstream
+
+If you are installing the cluster manually Zarf package by Zarf package, you can opt to perform the installation of the Local Path Provisioner using the following:
 
 ```bash
 # Install the stable version of the Local Path Provisioner
@@ -19,8 +27,10 @@ uds zarf tools kubectl patch storageclass local-path -p '{"metadata": {"annotati
 uds zarf tools kubectl delete -f https://raw.githubusercontent.com/rancher/local-path-provisioner/v0.0.26/deploy/local-path-storage.yaml
 ```
 
-Further customization of the StorageClass and instantiations of PVs or PVCs can be found in [Additional Info](#additional-info) section.
+Further customization and configurations can be found in the resources located within the [Additional Info](#additional-info) section.
 
 ## Additional Info
 
 - [Local Path Provisioner Repository](https://github.com/rancher/local-path-provisioner)
+- [Host Path Information](https://kubernetes.io/docs/concepts/storage/volumes/#hostpath)
+- [Local Store Information](https://kubernetes.io/docs/concepts/storage/volumes/#local)

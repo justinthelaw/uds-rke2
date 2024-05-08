@@ -124,8 +124,8 @@ tasks:
     actions:
       - task: init
         with:
-          path: build/packages/
-          targetRepo: ghcr.io/justinthelaw/packages/uds/
+          path: build/packages
+          targetRepo: ghcr.io/justinthelaw/packages/uds
 
   - name: minio
     description: "Publish the MinIO package"

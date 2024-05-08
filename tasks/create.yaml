@@ -32,74 +32,80 @@ tasks:
           sudo mkdir -p build/packages/longhorn/
           sudo mkdir -p build/packages/local-path/
 
+  - name: create
+    description: "Create a Zarf package for the amd64 architectures"
+    inputs:
+      path:
+        description: "Path to the Zarf package being created"
+        required: true
+      outputPath:
+        description: "Output path to the Zarf package being created"
+        required: true
+      zarfConfig:
+        description: "Zarf Config of the Zarf package being created"
+        required: true
+    actions:
+      - description: "Create the Zarf package for the amd64 architectures"
+        cmd: |
+          sudo ZARF_CONFIG="${{ .inputs.zarfConfig }}" uds zarf package create "${{ .inputs.path }}" \
+           -o "${{ .inputs.outputPath }}" \
+           --no-progress \
+           --no-log-file \
+           --log-level warn \
+           -a amd64 \
+           --set VERSION=${VERSION} \
+           --confirm
+
   - name: uds-rke2
     description: "Build the UDS RKE2 Zarf package"
     actions:
-      - description: "Build UDS RKE2 Package"
-        cmd: |
-          sudo ZARF_CONFIG="packages/uds-rke2/zarf-config.yaml" uds zarf package create packages/uds-rke2/ \
-           -o build/packages/ \
-           --no-progress \
-           --set VERSION=${VERSION} \
-           --confirm
+      - task: create
+        with:
+          path: packages/uds-rke2/
+          outputPath: build/packages/
+          zarfConfig: packages/uds-rke2/zarf-config.yaml
 
   - name: local-path-init
     description: "Build the custom Zarf Init package for RKE2 with Rook-Ceph"
     actions:
-      - description: "Build the custom Zarf Init package"
-        cmd: |
-          sudo ZARF_CONFIG="packages/init/zarf-config.yaml" uds zarf package create packages/init/ \
-            -o build/packages/local-path/ \
-            --set AGENT_IMAGE_TAG=$(uds zarf version) \
-            --flavor local-path \
-            --no-progress \
-            --set VERSION=${VERSION} \
-            --confirm
+      - task: create
+        with:
+          path: packages/local-path/
+          outputPath: build/packages/local-path/
+          zarfConfig: packages/local-path/zarf-config.yaml
 
   - name: longhorn-init
     description: "Build the custom Zarf Init package for RKE2 with longhorn"
     actions:
-      - description: "Build the custom Zarf Init package"
-        cmd: |
-          sudo ZARF_CONFIG="packages/init/zarf-config.yaml" uds zarf package create packages/init/ \
-            -o build/packages/longhorn/ \
-            --set AGENT_IMAGE_TAG=$(uds zarf version) \
-            --flavor longhorn \
-            --no-progress \
-            --set VERSION=${VERSION} \
-            --confirm
+      - task: create
+        with:
+          path: packages/longhorn/
+          outputPath: build/packages/longhorn/
+          zarfConfig: packages/longhorn/zarf-config.yaml
 
   - name: rook-ceph-init
     description: "Build the custom Zarf Init package for RKE2 with Rook-Ceph"
     actions:
-      - description: "Build the custom Zarf Init package"
-        cmd: |
-          sudo ZARF_CONFIG="packages/init/zarf-config.yaml" uds zarf package create packages/init/ \
-            -o build/packages/rook-ceph/ \
-            --set AGENT_IMAGE_TAG=$(uds zarf version) \
-            --flavor rook-ceph \
-            --no-progress \
-            --set VERSION=${VERSION} \
-            --confirm
+      - task: create
+        with:
+          path: packages/rook-ceph/
+          outputPath: build/packages/rook-ceph
+          zarfConfig: packages/rook-ceph/zarf-config.yaml
 
   - name: uds-rke2-exemptions
     description: "Build the UDS RKE2 service Pepr policy exemptions package"
     actions:
-      - description: "Build the Pepr policy exemptions package"
-        cmd: |
-          sudo ZARF_CONFIG="packages/exemptions/zarf-config.yaml" uds zarf package create packages/exemptions/ \
-            -o build/packages/ \
-            --no-progress \
-            --set VERSION=${VERSION} \
-            --confirm
+      - task: create
+        with:
+          path: packages/uds-rke2-exemptions/
+          outputPath: build/packages/
+          zarfConfig: packages/uds-rke2-exemptions/zarf-config.yaml
 
   - name: minio
     description: "Build the MinIO package"
     actions:
-      - description: "Build the MinIO package"
-        cmd: |
-          sudo ZARF_CONFIG="packages/minio/zarf-config.yaml" uds zarf package create packages/minio/ \
-            -o build/packages/ \
-            --no-progress \
-            --set VERSION=${VERSION} \
-            --confirm
+      - task: create
+        with:
+          path: packages/minio/
+          outputPath: build/packages/
+          zarfConfig: packages/minio/zarf-config.yaml

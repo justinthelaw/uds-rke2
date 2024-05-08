@@ -5,9 +5,7 @@ kind: ZarfPackageConfig
 metadata:
   name: rook-ceph
   description: "UDS RKE2 Rook-Ceph Zarf Package"
-  # x-release-please-start-version
-  version: "0.1.0"
-  # x-release-please-end
+  version: "###ZARF_PKG_TMPL_VERSION###"
   architecture: amd64
 
 constants:
@@ -105,7 +103,7 @@ components:
     required: true
     description: "Prepare host system with correct network traffic rules for Ceph controllers"
     files:
-      - source: scripts/rook-ceph/os-prep.sh
+      - source: scripts/os-prep.sh
         target: /root/uds-rke2-artifacts/rook-ceph/os-prep.sh
         executable: true
     actions:

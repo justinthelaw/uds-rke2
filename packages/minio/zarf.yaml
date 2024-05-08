@@ -1,14 +1,12 @@
 # TODO: renovate setup
 # yaml-language-server: $schema=https://raw.githubusercontent.com/defenseunicorns/uds-cli/v0.10.4/zarf.schema.json
 
-kind: ZarfInitConfig
+kind: ZarfPackageConfig
 metadata:
-  name: uds-rke2-minio
+  name: minio
   description: "UDS RKE2 MinIO Zarf Package"
   architecture: amd64
-  # x-release-please-start-version
-  version: "0.1.0"
-  # x-release-please-end
+  version: "###ZARF_PKG_TMPL_VERSION###"
 
 components:
   - name: minio-images

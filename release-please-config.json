@@ -5,12 +5,14 @@
       "changelog-path": "CHANGELOG.md",
       "versioning": "default",
       "extra-files": [
-        "packages/uds-rke2/zarf.yaml",
-        "packages/exemptions/zarf.yaml",
-        "packages/init/zarf.yaml",
-        "packages/rook-ceph/zarf.yaml",
-        "packages/minio/zarf.yaml",
+        "packages/uds-rke2/zarf-config.yaml",
+        "packages/exemptions/zarf-config.yaml",
+        "packages/rook-ceph/zarf-config.yaml",
+        "packages/minio/zarf-config.yaml",
+        "packages/init/zarf-config.yaml",
+        "packages/init/charts/Chart.yaml",
         "tasks/publish.yaml",
+        "tasks/create.yaml",
         "docs/MINIO.md",
         "bundles/uds-rke2-rook-ceph/uds-bundle.yaml"
       ]

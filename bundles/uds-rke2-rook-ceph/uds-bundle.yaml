@@ -18,12 +18,21 @@ packages:
     ref: "0.1.0"
     # x-release-please-end
 
-  - name: rook-ceph-init
+  - name: rook-ceph-init-multi-node
     description: "Deploys the custom Zarf Init package"
-    repository: ghcr.io/justinthelaw/packages/uds/rook-ceph/init
+    repository: ghcr.io/justinthelaw/packages/uds/rook-ceph/multi-node/init
+    # TODO: renovate setup
     ref: "v0.33.0"
     optionalComponents:
       - metrics-server
+
+  # - name: rook-ceph-init-single-node
+  #   description: "Deploys the custom Zarf Init package"
+  #   repository: ghcr.io/justinthelaw/packages/uds/rook-ceph/single-node/init
+      # TODO: renovate setup
+  #   ref: "v0.33.0"
+  #   optionalComponents:
+  #     - metrics-server
 
   - name: uds-core
     repository: ghcr.io/defenseunicorns/packages/uds/core

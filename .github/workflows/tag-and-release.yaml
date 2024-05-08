@@ -34,6 +34,7 @@ jobs:
         run: |
           CURRENT_REF="${{ github.ref }}"
           echo "Current branch or tag reference: $CURRENT_REF"
+
           if [[ "$CURRENT_REF" == "refs/tags/dev" ]] || [[ "${{ steps.tag.outputs.release_created }}" == 'true' ]]; then
             echo "release_created=true" >> $GITHUB_OUTPUT
           else
@@ -63,18 +64,15 @@ jobs:
           registry1Password: ${{secrets.IRON_BANK_ROBOT_PASSWORD}}
           ghToken: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@343f7c4344506bcbf9b4de18042ae17996df046d # v3.0.0
-        with:
-          registry: ghcr.io
-          username: ${{ github.repository_owner }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Publish UDS RKE2
         run: |
           echo "Publishing for tag: ${{ github.ref }}"
+
           if [[ "${{ github.ref }}" == "refs/tags/dev" ]]; then
-            sudo uds run publish:uds-rke2-dev
+            sudo uds run create:all --set VERSION=dev --no-progress
+            sudo uds run publish:all --set VERSION=dev --no-progress
           else
-            sudo uds run publish:uds-rke2
+            sudo uds run create:all --no-progress
+            sudo uds run publish:all --no-progress
           fi
+        shell: bash

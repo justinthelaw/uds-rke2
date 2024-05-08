@@ -9,29 +9,9 @@ includes:
   - deploy-core: https://raw.githubusercontent.com/defenseunicorns/uds-core/v0.19.0/tasks/deploy.yaml
 
 tasks:
-  - name: standard
-    description: "Bootstrap an RKE2 cluster, and build and deploy Rook-Ceph Zarf Init, MinIO, and UDS Core packages"
-    actions:
-      - task: create:temp-build-folder
-
-      - task: create:uds-rke2
-      - task: deploy:uds-rke2-bootstrap
-        with:
-          joinToken: "my-test-token"
-
-      - task: create:rook-ceph-init
-      - task: deploy:rook-ceph-init
-
-      - task: create:minio
-      - task: deploy:minio
-
-      - task: deploy:specific-core-package-release
-
   - name: rke2-bootstrap-test
-    description: "Complete a stand-up and stand-down of the RKE2 cluster"
+    description: "Complete a stand-up and stand-down of the ONLY the RKE2 cluster"
     actions:
-      - task: create:temp-build-folder
-
       - task: create:uds-rke2
       - task: deploy:uds-rke2-bootstrap
         with:
@@ -39,12 +19,53 @@ tasks:
 
       - task: deploy:uds-rke2-destroy
 
-  - name: rook-ceph-init-test
-    description: "Complete a stand-up and stand-down of a Rook Operator and Ceph Cluster"
+  - name: local-path-bootstrap
+    description: "Bootstrap an RKE2 cluster, with Local Path Provisioner Zarf Init, MinIO, and UDS Core packages"
     actions:
-      - task: create:temp-build-folder
+      - task: setup:temp-build-folder
+
+      - task: create:uds-rke2
+      - task: deploy:uds-rke2-bootstrap
+        with:
+          joinToken: "my-test-token"
+
+      - task: create:local-path-init
+      - task: deploy:local-path-init
+
+      - task: create:minio
+      - task: deploy:minio
+
+      - task: deploy:specific-core-package-release
+
+  - name: longhorn-bootstrap
+    description: "Bootstrap an RKE2 cluster, with Longhorn Zarf Init, MinIO, and UDS Core packages"
+    actions:
+      - task: setup:temp-build-folder
+
+      - task: create:uds-rke2
+      - task: deploy:uds-rke2-bootstrap
+        with:
+          joinToken: "my-test-token"
+
+      - task: create:longhorn-init
+      - task: deploy:longhorn-init
+
+      - task: create:minio
+      - task: deploy:minio
+
+      - task: deploy:specific-core-package-release
+
+  - name: rook-ceph-bootstrap
+    description: "Bootstrap an RKE2 cluster, with Rook-Ceph Zarf Init and UDS Core packages"
+    actions:
+      - task: setup:temp-build-folder
+
+      - task: create:uds-rke2
+      - task: deploy:uds-rke2-bootstrap
+        with:
+          joinToken: "my-test-token"
 
       - task: create:rook-ceph-init
       - task: deploy:rook-ceph-init
 
-      - task: deploy:rook-ceph-destroy
+      - task: deploy:specific-core-package-release

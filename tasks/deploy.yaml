@@ -6,11 +6,9 @@ variables:
     description: "The version of UDS Core package to deploy"
     # TODO: renovate setup
     default: "0.21.0"
-  - name: FLAVOR
+  - name: CORE_PKG_FLAVOR
     description: "Flavor of the package to use (`registry1` or `upstream`)."
     default: "registry1"
-  - name: ARCHITECTURE
-    default: "amd64"
   - name: DISK_NAME
     description: "The name of a Ceph-formatted disk (e.g. /dev/ubuntu-vg/ceph) that is to be wiped."
     default: "dm-1"
@@ -111,11 +109,9 @@ tasks:
     description: "Deploy a specific UDS Core package based on the VERSION variable"
     actions:
       - description: "Deploy the standard UDS Core package"
-        # TODO: renovate setup
         cmd: |
-          echo ${CORE_PKG_VERSION}
-          sudo uds zarf package deploy oci://ghcr.io/defenseunicorns/packages/uds/core:${CORE_PKG_VERSION}-${FLAVOR} \
-            -a ${ARCHITECTURE} \
+          sudo uds zarf package deploy oci://ghcr.io/defenseunicorns/packages/uds/core:${CORE_PKG_VERSION}-${CORE_PKG_FLAVOR} \
+            -a amd64 \
             --components metrics-server \
             --no-progress \
             --confirm

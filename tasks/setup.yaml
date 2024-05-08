@@ -1,0 +1,17 @@
+# TODO: renovate setup
+# yaml-language-server: $schema=https://raw.githubusercontent.com/defenseunicorns/uds-cli/v0.10.4/tasks.schema.json
+
+tasks:
+  - name: temp-build-folder
+    description: "Creates a temporary build folder which can be used to store packages and bundles"
+    actions:
+      - description: "Make the build directory at the root level of the repository"
+        cmd: |
+          sudo mkdir -p build/bundles/uds-rke2-local-path/
+          sudo mkdir -p build/bundles/uds-rke2-longhorn/
+          sudo mkdir -p build/bundles/uds-rke2-rook-ceph/multi-node/
+          sudo mkdir -p build/bundles/uds-rke2-rook-ceph/single-node/
+          sudo mkdir -p build/packages/rook-ceph/multi-node/
+          sudo mkdir -p build/packages/rook-ceph/single-node/
+          sudo mkdir -p build/packages/longhorn/
+          sudo mkdir -p build/packages/local-path/

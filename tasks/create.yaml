@@ -1,6 +1,9 @@
 # TODO: renovate setup
 # yaml-language-server: $schema=https://raw.githubusercontent.com/defenseunicorns/uds-cli/v0.10.4/tasks.schema.json
 
+includes:
+  - setup: ./tasks/setup.yaml
+
 variables:
   - name: VERSION
     description: "Explicitly set the version, overriding the official release tag"
@@ -9,36 +12,10 @@ variables:
     # x-release-please-end
 
 tasks:
-  - name: install-deps
-    description: "Installs dependencies used in the creation of various packages if not already installed"
-    actions:
-      - description: "Install required dependencies for package creation if not present on machine"
-        cmd: |
-          if ! command -v npm &>/dev/null; then
-            echo "npm is not installed. Installing npm..."
-            sudo apt-get -y install npm
-          else
-            echo "npm is already installed."
-          fi
-
-  - name: temp-build-folder
-    description: "Creates a temporary build folder which can be used to store packages and bundles"
-    actions:
-      - description: "Make the build directory at the root level of the repository"
-        cmd: |
-          sudo mkdir -p build/bundles/uds-rke2-local-path/
-          sudo mkdir -p build/bundles/uds-rke2-longhorn/
-          sudo mkdir -p build/bundles/uds-rke2-rook-ceph/multi-node/
-          sudo mkdir -p build/bundles/uds-rke2-rook-ceph/single-node/
-          sudo mkdir -p build/packages/rook-ceph/multi-node/
-          sudo mkdir -p build/packages/rook-ceph/single-node/
-          sudo mkdir -p build/packages/longhorn/
-          sudo mkdir -p build/packages/local-path/
-
   - name: all
     description: "Builds all Zarf packages in the repository"
     actions:
-      - task: temp-build-folder
+      - task: setup:temp-build-folder
       - task: uds-rke2
       # TODO: add these back in when actually built
       # - task: local-path

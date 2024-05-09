@@ -34,3 +34,4 @@ Further customization and configurations can be found in the resources located w
 - [Local Path Provisioner Repository](https://github.com/rancher/local-path-provisioner)
 - [Host Path Information](https://kubernetes.io/docs/concepts/storage/volumes/#hostpath)
 - [Local Store Information](https://kubernetes.io/docs/concepts/storage/volumes/#local)
+- [The Difference Between `hostPath` and `local`](https://stackoverflow.com/a/63492933)

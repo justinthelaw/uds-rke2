@@ -121,7 +121,7 @@ components:
   # LOCAL PATH PROVISIONER
   ########################
 
-  - name: local-path-images
+  - name: local-path-provisioner-images
     required: true
     only:
       flavor: local-path

@@ -46,9 +46,9 @@ chmod +x /usr/local/bin/kubectl
 ### Virtual Machines
 
 > [!CAUTION]
-> Due to the the disk formatting operations, networking and STIG'ing configurations that are applied to a node's host, it is highly recommended that the contents of this repository are not directly installed on a personal machine.
+> Due to the the disk formatting operations, networking and STIG configurations that are applied to a node's host, it is highly recommended that the contents of this repository are not directly installed on a personal machine.
 
-The best way to test UDS RKE2 is to spin-up 1 or more nodes using virtual machines or networks.
+The best way to test UDS RKE2 is to spin-up one or more nodes using a containerized method, such as virtual machines or networks.
 
 [LeapfrogAI](https://github.com/defenseunicorns/leapfrogai), the main support target of this bundle, requires GPU passthrough to all worker nodes that will have a taint for attracting pods with GPU resource and workload requirements.
 

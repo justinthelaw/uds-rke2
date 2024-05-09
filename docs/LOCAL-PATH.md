@@ -1,8 +1,8 @@
 # Local Path Provisioner
 
-Local Path Provisioner is an RKE2 development Storage Class meant to be used on development environments. This storage class is not recommended for production deployments nor environments where multi-node, high-availability and/or redundancy are requirements.
+Local Path Provisioner is an RKE2 development StorageClass meant to be used on development environments. This StorageClass is not recommended for production deployments nor environments where multi-node, high-availability and/or redundancy are requirements.
 
-Local Path Provisioner can still be useful if paired with an operator with built-in persistence and backup capabilities, like [MySQL](https://dev.mysql.com/doc/mysql-operator/en/mysql-operator-backups.html), and/or a disaster recovery/backup system, like [Velero](https://velero.io/docs/).
+Local Path Provisioner can still be useful if paired with an operator with built-in persistence and backup capabilities, like [MySQL](https://dev.mysql.com/doc/mysql-operator/en/mysql-operator-backups.html), and/or a disaster recovery/backup system, like [Velero](https://velero.io/docs/). Cron-jobs can also be scheduled to provide node or disk-level backups to outside services, like AWS S3, or storage hardware, like an external HDD.
 
 ## Usage
 

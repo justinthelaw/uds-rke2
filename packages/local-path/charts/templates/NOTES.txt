@@ -3,7 +3,7 @@ You can create a hostPath-backed persistent volume with a persistent volume clai
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: local-path-pvc
+  name: uds-local-path-storage
 spec:
   accessModes:
     - ReadWriteOnce

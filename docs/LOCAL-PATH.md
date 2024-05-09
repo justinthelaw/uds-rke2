@@ -25,7 +25,7 @@ k apply -f https://raw.githubusercontent.com/rancher/local-path-provisioner/v0.0
 # Set the Local Path Provisioner storage class as the default storage class:
 k patch storageclass local-path -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
 
-# Check the status local-path-provisioner pods and namespace
+# Check the status and resources of `local-path-provisioner`
 k -n local-path-storage get pods -l app=local-path-provisioner
 k -n local-path-storage logs -f -l app=local-path-provisioner # get <pod-name>
 k -n local-path-storage get pods <pod-name> -o yaml

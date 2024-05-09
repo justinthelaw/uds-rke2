@@ -7,6 +7,7 @@
       "extra-files": [
         "packages/uds-rke2/zarf-config.yaml",
         "packages/exemptions/zarf-config.yaml",
+        "packages/longhorn/zarf-config.yaml",
         "packages/rook-ceph/zarf-config.yaml",
         "packages/minio/zarf-config.yaml",
         "packages/init/zarf-config.yaml",

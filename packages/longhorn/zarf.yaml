@@ -9,8 +9,7 @@ kind: ZarfPackageConfig
 metadata:
   name: longhorn
   description: "UDS RKE2 Longhorn Zarf Package"
-  # TODO: release-please setup
-  version: "0.1.0"
+  version: "###ZARF_PKG_TMPL_VERSION###"
   architecture: amd64
 
 constants:

@@ -1,4 +1,7 @@
 package:
   create:
     set:
+      # x-release-please-start-version
+      version: "0.2.0"
+      # x-release-please-end
       cluster_configuration: "single-node"

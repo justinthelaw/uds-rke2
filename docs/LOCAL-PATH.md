@@ -6,6 +6,14 @@ Local Path Provisioner can still be useful if paired with an operator with built
 
 ## Usage
 
+### Pre-Requisites
+
+Ensure that the local volume mount points are accessible to the cluster. For example, the default mount point for all nodes is `/uds/local-path-storage/`, which means your storage devices, logical or physical, must be mounted at point `/uds` on that node. An example of a logical volume mount is as follows:
+
+```bash
+mount ubuntu/vg/extra /uds
+```
+
 ### Zarf Package
 
 The UDS bundle and custom Zarf Init for each flavor of the UDS RKE2 bootstrap automatically instantiates the StorageClass, Persistent Volumes, and configurations automatically. Configuration is controlled by exposed Zarf variables that modify the custom Local Path Provisioner charts.

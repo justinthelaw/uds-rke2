@@ -11,6 +11,7 @@
         "packages/local-path/zarf-config.yaml",
         "packages/minio/zarf-config.yaml",
         "packages/init/zarf-config.yaml",
+        "packages/init/zarf.yaml",
         "packages/init/charts/Chart.yaml",
         "tasks/publish.yaml",
         "tasks/create.yaml",

@@ -41,8 +41,9 @@ jobs:
         run: pip install check-jsonschema==0.28.0
 
       - name: Validate uds-bundle.yaml
+        # TODO: add these back in when actually built
         run: |
-            check-jsonschema bundles/rke2-standard/uds-bundle.yaml --schemafile uds.schema.json
-            # TODO: add back in when rke2-slim package is created
-            # check-jsonschema bundles/rke2-slim/uds-bundle.yaml --schemafile uds.schema.json
+            check-jsonschema bundles/uds-rke2-local-path/uds-bundle.yaml --schemafile uds.schema.json
+            # check-jsonschema bundles/uds-rke2-longhorn/uds-bundle.yaml --schemafile uds.schema.json
+            check-jsonschema bundles/uds-rke2-rook-ceph/uds-bundle.yaml --schemafile uds.schema.json
 

@@ -68,14 +68,21 @@ tasks:
             --components local-path,longhorn,rook-ceph \
             --confirm
 
-  # TODO: local-path init
+  - name: local-path-init
+    description: "Deploy the custom Zarf Init Package for RKE2 with Longhorn"
+    actions:
+      - description: "Deploy the custom Zarf Init package"
+        cmd: |
+          sudo uds zarf package deploy build/packages/local-path/zarf-init-amd64-*.tar.zst \
+            --no-progress \
+            --confirm
 
   - name: longhorn-init
     description: "Deploy the custom Zarf Init Package for RKE2 with Longhorn"
     actions:
       - description: "Deploy the custom Zarf Init package"
         cmd: |
-          sudo uds zarf package deploy build/packages/zarf-init-amd64-*.tar.zst \
+          sudo uds zarf package deploy build/packages/longhorn/zarf-init-amd64-*.tar.zst \
             --no-progress \
             --set LONGHORN_VAR="true" \
             --confirm

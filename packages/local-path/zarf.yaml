@@ -12,7 +12,7 @@ constants:
   - name: DEFAULT_NODE_PROVISIONING_PATH
     description: "The absolute path, besides root (`/`), to provision the volumes when node-specific paths aren't specified"
     value: "###ZARF_PKG_TMPL_DEFAULT_NODE_PROVISIONING_PATH###"
-    pattern: ^\/(?!\/)[a-zA-Z0-9_\-\/]+(?<!\/)\/?$
+    pattern: ^(\/(?!\/)[a-zA-Z0-9_\-\/]+(?<!\/)\/?)$
 
 variables:
   - name: IS_DEFAULT_STORAGECLASS
@@ -29,7 +29,7 @@ variables:
     description: "The absolute path, besides root (`/`), to provision the volumes"
     default: "###ZARF_PKG_TMPL_DEFAULT_NODE_PROVISIONING_PATH###"
     prompt: false
-    pattern: ^\/(?!\/)[a-zA-Z0-9_\-\/]+(?<!\/)\/?$
+    pattern: ^(\/(?!\/)[a-zA-Z0-9_\-\/]+(?<!\/)\/?)$
 
 components:
   - name: local-path-provisioner-images

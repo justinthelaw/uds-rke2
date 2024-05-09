@@ -17,14 +17,22 @@ Further customization and configurations can be found in the resources located w
 If you are installing the cluster manually Zarf package by Zarf package, you can opt to perform the installation of the Local Path Provisioner using the following:
 
 ```bash
+alias k="uds zarf tools kubectl"
+
 # Install the stable version of the Local Path Provisioner
-uds zarf tools kubectl apply -f https://raw.githubusercontent.com/rancher/local-path-provisioner/v0.0.26/deploy/local-path-storage.yaml
+k apply -f https://raw.githubusercontent.com/rancher/local-path-provisioner/v0.0.26/deploy/local-path-storage.yaml
 
 # Set the Local Path Provisioner storage class as the default storage class:
-uds zarf tools kubectl patch storageclass local-path -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
+k patch storageclass local-path -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
+
+# Check the status local-path-provisioner pods and namespace
+k -n local-path-storage get pods -l app=local-path-provisioner
+k -n local-path-storage logs -f -l app=local-path-provisioner # get <pod-name>
+k -n local-path-storage get pods <pod-name> -o yaml
+k get storageclass local-path -o yaml
 
 # Uninstall
-uds zarf tools kubectl delete -f https://raw.githubusercontent.com/rancher/local-path-provisioner/v0.0.26/deploy/local-path-storage.yaml
+k delete -f https://raw.githubusercontent.com/rancher/local-path-provisioner/v0.0.26/deploy/local-path-storage.yaml
 ```
 
 Further customization and configurations can be found in the resources located within the [Additional Info](#additional-info) section.

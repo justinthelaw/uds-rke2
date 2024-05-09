@@ -69,6 +69,20 @@ See the UDS [`create` tasks](./tasks/create.yaml) file for more details.
 To create all packages and bundles, do the following:
 
 ```bash
+# Login to Registry1
+set +o history
+export REGISTRY1_USERNAME="YOUR-USERNAME-HERE"
+export REGISTRY1_PASSWORD="YOUR-PASSWORD-HERE"
+echo $REGISTRY1_PASSWORD | zarf tools registry login registry1.dso.mil --username $REGISTRY1_USERNAME --password-stdin
+set -o history
+
+# Login to ghcr
+set +o history
+export GHCR_USERNAME="YOUR-USERNAME-HERE"
+export GHCR_PASSWORD="YOUR-PASSWORD-HERE"
+echo $GHCR_PASSWORD | zarf tools registry login ghcr.io --username $GHCR_USERNAME --password-stdin
+set -o history
+
 uds run create:all
 ```
 
@@ -79,6 +93,9 @@ See the UDS [`deploy` tasks](./tasks/deploy.yaml) file for more details.
 To deploy all packages and bundles, do the following:
 
 ```bash
+# create self-signed test certs
+uds run create:tls-cert
+
 uds run deploy:all
 ```
 
@@ -89,6 +106,13 @@ See the UDS [`publish` tasks](./tasks/publish.yaml) file for more details.
 To publish all packages and bundles, do the following:
 
 ```bash
+# Login to GHCR
+set +o history
+export GHCR_USERNAME="YOUR-USERNAME-HERE"
+export GHCR_PASSWORD="YOUR-PASSWORD-HERE"
+echo $GHCR_PASSWORD | zarf tools registry login ghcr.io --username $GHCR_USERNAME --password-stdin
+set -o history
+
 uds run publish:all
 ```
 
@@ -99,7 +123,7 @@ uds run publish:all
 Run the following to remove all build artifacts:
 
 ```bash
-rm -rf build/ zarf-sbom/
+rm -rf build/ **/zarf-sbom/
 ```
 
 #### Packages

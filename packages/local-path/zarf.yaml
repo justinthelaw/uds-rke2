@@ -3,34 +3,61 @@
 
 kind: ZarfPackageConfig
 metadata:
-  name: local-path
-  description: "UDS RKE2 Local Path Provisioner Zarf Package"
+  name: local-path-provisioner
+  description: "Rancher's Local Path Provisioner Zarf Package"
   version: "###ZARF_PKG_TMPL_VERSION###"
   architecture: amd64
 
 constants:
-  - name: CONSTANT
-    description: "CONSTANT"
-    value: "###ZARF_PKG_TMPL_CONSTANT###"
-    pattern: "^(CONSTANT)$"
+  - name: DEFAULT_NODE_PROVISIONING_PATH
+    description: "The absolute path, besides root (`/`), to provision the volumes when node-specific paths aren't specified"
+    value: "###ZARF_PKG_TMPL_DEFAULT_NODE_PROVISIONING_PATH###"
+    pattern: "^\/(?!\/).+$"
 
 variables:
-  - name: VARIABLE
-    description: "VARIABLE"
-    default: "VARIABLE"
-    pattern: "^(VARIABLE)$"
-    prompt: true
+  - name: IS_DEFAULT_STORAGECLASS
+    description: "Make Local Path Provisioner's StorageClass the default for the cluster"
+    default: "true"
+    prompt: false
+    pattern: "^(true|false)$"
+  - name: VOLUME_TYPE
+    description: "The default volume type the StorageClass creates"
+    default: "local"
+    prompt: false
+    pattern: "^(local|hostPath)$"
+  - name: VOLUME_DIRECTORY
+    description: "The absolute path, besides root (`/`), to provision the volumes"
+    default: "###ZARF_PKG_TMPL_DEFAULT_NODE_PROVISIONING_PATH###"
+    prompt: false
+    pattern: "^\/(?!\/).+$"
 
 components:
-  - name: prepare-host
+  - name: local-path-provisioner-images
     required: true
-    description: "Prepare host system"
-    files:
-      - source: scripts/os-prep.sh
-        target: /root/uds-rke2-artifacts/local-path/os-prep.sh
-        executable: true
+    description: "Push Local Path Provisioner images to the Zarf seed registry"
+    # TODO: renovate setup
+    images:
+      - docker.io/rancher/local-path-provisioner:v0.0.26
+      - cgr.dev/chainguard/busybox:latest
+
+  - name: local-path-provisioner
+    required: true
+    description: "Deploy Local Path Provisioner"
+    charts:
+      - name: local-path-provisioner
+        namespace: local-path-storage
+        url: https://charts.rook.io/release
+        # TODO: renovate setup
+        version: v0.0.26
+        localPath: charts
     actions:
       onDeploy:
         after:
-          - cmd: /root/uds-rke2-artifacts/local-path/os-prep.sh
-            description: "Prepare host for Local Path Provisioner"
+          - wait:
+              cluster:
+                kind: Pod
+                name: app=local-path-provisioner
+                namespace: local-path-storage
+                condition: "'{.status.phase}'=Ready"
+            maxTotalSeconds: 300
+            description: Waiting for Local Path Provisioner to be ready

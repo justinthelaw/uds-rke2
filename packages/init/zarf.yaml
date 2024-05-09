@@ -64,7 +64,22 @@ components:
   # LOCAL PATH PROVISIONER
   ########################
 
-  # TODO: add `local-path` flavor here
+  - name: local-path-images-initial
+    required: true
+    only:
+      flavor: local-path
+    description: "Push the Local Path Provisioner images into the seed registry"
+    import:
+      path: ../local-path
+      name: local-path-images
+
+  - name: local-path-provisioner
+    required: true
+    only:
+      flavor: local-path
+    import:
+      path: ../local-path
+      name: local-path-provisioner
 
   ###########
   # ROOK-CEPH
@@ -106,7 +121,15 @@ components:
   # LOCAL PATH PROVISIONER
   ########################
 
-  # TODO: add `local-path` flavor here
+  - name: local-path-images
+    required: true
+    only:
+      flavor: local-path
+    description: "Push the Local Path Provisioner images into the permanent registry"
+    import:
+      path: ../local-path
+    images:
+      - "###ZARF_PKG_TMPL_REGISTRY_IMAGE_DOMAIN######ZARF_PKG_TMPL_REGISTRY_IMAGE###:###ZARF_PKG_TMPL_REGISTRY_IMAGE_TAG###"
 
   ###########
   # LONGHORN

@@ -17,7 +17,7 @@ package:
       gitea_image: "gitea/gitea:1.21.2-rootless"
 
       # x-release-please-start-version
-      version: "0.1.0"
+      version: "0.2.0"
       # x-release-please-end
 
       ###########
@@ -25,3 +25,11 @@ package:
       ###########
 
       cluster_configuration: "multi-node"
+
+  deploy:
+    set:
+      ########################
+      # LOCAL PATH PROVISIONER
+      ########################
+
+      default_node_provisioning_path: /uds/local-path-storage/

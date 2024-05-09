@@ -64,14 +64,14 @@ components:
   # LOCAL PATH PROVISIONER
   ########################
 
-  - name: local-path-images-initial
+  - name: local-path-provisioner-images-initial
     required: true
     only:
       flavor: local-path
     description: "Push the Local Path Provisioner images into the seed registry"
     import:
       path: ../local-path
-      name: local-path-images
+      name: local-path-provisioner-images
 
   - name: local-path-provisioner
     required: true

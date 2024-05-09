@@ -4,6 +4,5 @@ package:
       # x-release-please-start-version
       version: "0.2.0"
       # x-release-please-end
-  deploy:
-    set:
+
       default_node_provisioning_path: /uds/local-path-storage/

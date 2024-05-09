@@ -24,16 +24,14 @@ package:
 
       gitea_image: "gitea/gitea:1.21.2-rootless"
 
-      ###########
-      # ROOK-CEPH
-      ###########
-
-      cluster_configuration: "multi-node"
-
-  deploy:
-    set:
       ########################
       # LOCAL PATH PROVISIONER
       ########################
 
       default_node_provisioning_path: /uds/local-path-storage/
+
+      ###########
+      # ROOK-CEPH
+      ###########
+
+      cluster_configuration: "multi-node"

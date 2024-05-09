@@ -44,7 +44,6 @@ components:
     charts:
       - name: local-path-provisioner
         namespace: local-path-storage
-        url: https://charts.rook.io/release
         # TODO: renovate setup
         version: v0.0.26
         localPath: charts

@@ -16,8 +16,6 @@ helperImage:
 imagePullSecrets:
   - private-registry
 
-registrySecret: private-registry
-
 ## For creating the StorageClass automatically:
 storageClass:
   create: true

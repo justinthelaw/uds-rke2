@@ -31,7 +31,7 @@ spec:
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image }}"
-          imagePullPolicy: {{ .Values.image.imagePullPolicy }}
+          imagePullPolicy: {{ .Values.imagePullPolicy }}
           command:
             - local-path-provisioner
             - --debug

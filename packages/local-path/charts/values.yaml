@@ -1,16 +1,13 @@
 replicaCount: 1
 commonLabels: {}
 
-image:
-  repository: ###ZARF_REGISTRY###/rancher/local-path-provisioner
-  # TODO: renovate setup
-  tag: 0.0.26
-  pullPolicy: IfNotPresent
+# TODO: renovate setup
+image: ###ZARF_REGISTRY###/rancher/local-path-provisioner:v0.0.26
+imagePullPolicy: IfNotPresent
 
-helperImage:
-  repository: ###ZARF_REGISTRY###/chainguard/busybox
-  # TODO: renovate setup
-  tag: latest
+ # TODO: renovate setup
+helperPod: 
+  image: ###ZARF_REGISTRY###/chainguard/busybox:latest
 
 imagePullSecrets:
   - name: private-registry

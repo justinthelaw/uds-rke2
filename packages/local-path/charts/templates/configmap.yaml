@@ -53,5 +53,5 @@ data:
           env:
             - name: VOL_DIR
               value: {{ .Values.configmap.helperPod.env.volDir }}
-          image: {{ .Values.helperImage.repository }}:{{ .Values.helperImage.tag }}
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          image: {{ .Values.helperPod.image }}
+          imagePullPolicy: {{ .Values.imagePullPolicy }}

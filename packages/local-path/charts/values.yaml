@@ -1,9 +1,11 @@
 replicaCount: 1
 commonLabels: {}
 
-# TODO: renovate setup
-image: ###ZARF_REGISTRY###/rancher/local-path-provisioner:v0.0.26
 imagePullPolicy: IfNotPresent
+
+# TODO: renovate setup
+localPathProvisioner:
+  image: ###ZARF_REGISTRY###/rancher/local-path-provisioner:v0.0.26
 
  # TODO: renovate setup
 helperPod: 

@@ -30,7 +30,7 @@ spec:
         - name: {{ .Chart.Name }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "{{ .Values.image }}"
+          image: {{ .Values.localPathProvisioner.image }}
           imagePullPolicy: {{ .Values.imagePullPolicy }}
           command:
             - local-path-provisioner

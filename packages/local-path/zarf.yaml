@@ -47,6 +47,8 @@ components:
         # TODO: renovate setup
         version: v0.0.26
         localPath: charts
+        valuesFiles:
+          - values/local-path-provisioner-values.yaml
     actions:
       onDeploy:
         after:

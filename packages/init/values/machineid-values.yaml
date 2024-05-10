@@ -1,0 +1,12 @@
+machineid:
+  imagePullSecrets:
+    - name: "private-registry"
+
+  image: 
+    pause:
+      # TODO: renovate setup
+      image: ###ZARF_REGISTRY###/ironbank/opensource/pause/pause:3.9
+    
+    wolfi:
+      # TODO: renovate setup
+      image: ###ZARF_REGISTRY###/chainguard/wolfi-base:latest

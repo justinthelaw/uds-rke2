@@ -27,4 +27,4 @@ components:
         version: 5.0.14
         url: https://charts.min.io/
         valuesFiles:
-          - "values.yaml"
+          - "values/minio-values.yaml"

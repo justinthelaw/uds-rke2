@@ -58,13 +58,13 @@ nodePathMap:
 # `volumeBindingMode: Immediate` can be used in  StorageClass definition.
 # Please note that `nodePathMap` and `sharedFileSystemPath` are mutually exclusive.
 # If `sharedFileSystemPath` is used, then `nodePathMap` must be set to `[]`.
-# sharedFileSystemPath: ""
+sharedFileSystemPath: ""
 
 # `storageClassConfigs` allows the provisioner to manage multiple independent storage classes.
 # Each storage class must have a unique name, and contains the same fields as shown above for
 # a single storage class setup, EXCEPT for the provisionerName, which is the same for all
 # storage classes, and name, which is the key of the map.
-# storageClassConfigs: {}
+storageClassConfigs: {}
 #   my-storage-class:
 #     storageClass:
 #       create: true

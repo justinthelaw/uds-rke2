@@ -43,7 +43,7 @@ spec:
             - --provisioner-name
             - {{ template "local-path-provisioner.provisionerName" . }}
             - --helper-image
-            - "{{ .Values.helperImage.repository }}:{{ .Values.helperImage.tag }}"
+            - "{{ .Values.helperPod.image }}"
             - --configmap-name
             - {{ .Values.configmap.name }}
           {{- if .Values.workerThreads }}

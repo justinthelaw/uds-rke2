@@ -4,7 +4,7 @@ commonLabels: {}
 image:
   repository: ###ZARF_REGISTRY###/rancher/local-path-provisioner
   # TODO: renovate setup
-  tag: v0.0.26
+  tag: 0.0.26
   pullPolicy: IfNotPresent
 
 helperImage:

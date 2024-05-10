@@ -39,6 +39,8 @@ data:
     metadata:
       name: helper-pod
     spec:
+      imagePullSecrets:
+        {{- toYaml  .Values.imagePullSecrets | indent 8 }}
       priorityClassName: system-node-critical
       tolerations:
         - key: node.kubernetes.io/disk-pressure

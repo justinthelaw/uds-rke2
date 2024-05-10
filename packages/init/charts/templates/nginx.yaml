@@ -64,7 +64,10 @@ spec:
         name: nginx
         sidecar.istio.io/inject: "false"
     spec:
-      imagePullSecrets: {{ .Values.nginx.imagePullSecrets }}
+      imagePullSecrets:
+        {{- with .Values.imagePullSecrets }}
+        {{- toYaml . | nindent 2 }}
+        {{- end }}
       containers:
         - name: nginx
           # TODO: renovate setup

@@ -11,7 +11,11 @@ Local Path Provisioner can still be useful if paired with an operator with built
 Ensure that the local volume mount points are accessible to the cluster. For example, the default mount point for all nodes is `/opt/uds`, which means your storage devices, logical or physical, must be mounted at point `/opt/uds` on that node. An example of a logical volume mount is as follows:
 
 ```bash
-mount ubuntu/vg/extra /opt/uds
+# mount the device to an existing filepath
+sudo mount ubuntu/vg/extra /opt/uds
+
+# change permissions to the nonroot or nobody user for local storage volume creation
+sudo chown -Rv 65534:65534 /opt/uds
 ```
 
 Issues with the mount or filesystem in general will be recorded in a `local-path-storage` helper pod within the cluster during PV provisioning.

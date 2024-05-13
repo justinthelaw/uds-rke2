@@ -5,4 +5,4 @@ package:
       version: "0.2.0"
       # x-release-please-end
 
-      default_node_provisioning_path: /uds/local-path-storage/
+      node_path_map_values_file: values/node-path-map-values.yaml

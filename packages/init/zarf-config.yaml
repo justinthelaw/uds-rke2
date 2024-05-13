@@ -28,7 +28,7 @@ package:
       # LOCAL PATH PROVISIONER
       ########################
 
-      default_node_provisioning_path: /uds/local-path-storage/
+      node_path_map_values_file: values/node-path-map-values.yaml
 
       ###########
       # ROOK-CEPH

@@ -7,28 +7,20 @@ metadata:
 {{ include "local-path-provisioner.labels" . | indent 4 }}
 data:
   config.json: |-
-    {{- $config := dict }}
-    {{- with .Values.nodePathMap }}
-    {{- $config = set $config "nodePathMap" . }}
-    {{- end }}
-    {{- with .Values.sharedFileSystemPath }}
-    {{- $config = set $config "sharedFileSystemPath" . }}
-    {{- end }}
-    {{- with .Values.storageClassConfigs }}
-    {{- $configs := dict }}
-    {{- range $key, $value := . }}
-      {{- $configValue := dict }}
-      {{- with $value.nodePathMap }}
-      {{- $configValue = set $configValue "nodePathMap" . }}
-      {{- end }}
-      {{- with $value.sharedFileSystemPath }}
-      {{- $configValue = set $configValue "sharedFileSystemPath" . }}
-      {{- end }}
-      {{- $configs = set $configs $key $configValue }}
-    {{- end }}
-    {{- $config = set $config "storageClassConfigs" $configs }}
-    {{- end }}
-    {{- $config | toPrettyJson | nindent 4 }}
+    {
+      "nodePathMap": [
+        {{- range $nodePathMap := .Values.nodePathMap }}
+        {
+          "node": "{{ $nodePathMap.node }}",
+          "paths": [
+            {{- range $path := $nodePathMap.paths }}
+            "{{ $path }}"{{ if not $last }},{{ end }}
+            {{- end }}
+          ]
+        }{{ if not $last }},{{ end }}
+        {{- end }}
+      ]
+    }
   setup: |-
     {{- .Values.configmap.setup | nindent 4 }}
   teardown: |-
@@ -50,8 +42,5 @@ data:
           effect: NoSchedule
       containers:
         - name: helper-pod
-          env:
-            - name: VOL_DIR
-              value: {{ .Values.configmap.helperPod.env.volDir }}
           image: {{ .Values.helperPod.image }}
           imagePullPolicy: {{ .Values.imagePullPolicy }}

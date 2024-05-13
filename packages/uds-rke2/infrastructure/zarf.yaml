@@ -31,7 +31,7 @@ components:
       - cgr.dev/chainguard/wolfi-base:latest
     charts:
       - name: metallb
-        namespace: uds-rke2
+        namespace: uds-rke2-infrastructure
         url: https://metallb.github.io/metallb
         # TODO: renovate setup
         version: 0.13.11
@@ -39,7 +39,7 @@ components:
           - values/metallb-values.yaml
 
       - name: uds-rke2-stack
-        namespace: uds-rke2-stack
+        namespace: uds-rke2-infrastructure
         localPath: charts
         version: "###ZARF_PKG_TMPL_VERSION###"
         valuesFiles:

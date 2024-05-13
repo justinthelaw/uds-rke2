@@ -2,11 +2,10 @@ machineid:
   imagePullSecrets:
     - name: "private-registry"
 
-  image: 
-    pause:
-      # TODO: renovate setup
-      image: registry1.dso.mil/ironbank/opensource/pause/pause:3.9
-    
-    wolfi:
-      # TODO: renovate setup
-      image: registry1.dso.mil/chainguard/wolfi-base:latest
+  pause:
+    # TODO: renovate setup
+    image: registry1.dso.mil/ironbank/opensource/pause/pause:3.9
+
+  wolfi:
+    # TODO: renovate setup
+    image: registry1.dso.mil/chainguard/wolfi-base:latest

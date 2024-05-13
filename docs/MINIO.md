@@ -89,30 +89,24 @@ This example will override the default users and buckets provisioned in the MinI
 ```yaml
 # uds-bundle.yaml
 
-packages:
-  - name: uds-rke2
-    repository: ghcr.io/justinthelaw/packages/uds/uds-rke2
-    # x-release-please-start-version
-    ref: "0.2.0"
-    # x-release-please-end
+[...]
     overrides:
-      uds-rke2-stack:
-        minio:
-          values:
-          - path: "users"
-            value:
-              - accessKey: console
-                secretKey: "console-secret"
-                policy: consoleAdmin
-              - accessKey: logging
-                secretKey: "logging-secret"
-                policy: readwrite
-          - path: "buckets"
-            value:
-              - name: "loki"  
-              - name: "velero"
-              - name: "myapp"
-              - name: "myotherapp"
+      minio:
+        values:
+        - path: "users"
+          value:
+            - accessKey: console
+              secretKey: "console-secret"
+              policy: consoleAdmin
+            - accessKey: logging
+              secretKey: "logging-secret"
+              policy: readwrite
+        - path: "buckets"
+          value:
+            - name: "loki"  
+            - name: "velero"
+            - name: "myapp"
+            - name: "myotherapp"
 ```
 
 ### Configure Deploy Time MinIO Overrides

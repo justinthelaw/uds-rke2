@@ -18,14 +18,15 @@ tasks:
     description: "Builds all Zarf packages in the repository"
     actions:
       - task: uds-rke2
+      - task: uds-rke2-infrastructure
+      - task: uds-rke2-exemptions
+      - task: local-path
+      - task: local-path-init
       # TODO: add these back in when actually built
-      # - task: local-path
-      # - task: local-path-init
       # - task: longhorn
       # - task: longhorn-init
       - task: rook-ceph
       - task: rook-ceph-init
-      - task: uds-rke2-exemptions
       - task: minio
 
   - name: create
@@ -83,6 +84,24 @@ tasks:
           outputPath: build/packages
           zarfConfig: packages/uds-rke2/zarf-config.yaml
 
+  - name: uds-rke2-infrastructure
+    description: "Build the UDS RKE2 Infrastructure Zarf package"
+    actions:
+      - task: create
+        with:
+          path: packages/uds-rke2/infrastructure
+          outputPath: build/packages
+          zarfConfig: packages/uds-rke2/zarf-config.yaml
+
+  - name: uds-rke2-exemptions
+    description: "Build the UDS RKE2 service Pepr policy exemptions package"
+    actions:
+      - task: create
+        with:
+          path: packages/uds-rke2/exemptions
+          outputPath: build/packages
+          zarfConfig: packages/uds-rke2/zarf-config.yaml
+
   - name: local-path
     description: "Build the Local Path Provisioner Zarf package"
     actions:
@@ -133,15 +152,6 @@ tasks:
         with:
           flavor: rook-ceph
           outputPath: build/packages/rook-ceph
-
-  - name: uds-rke2-exemptions
-    description: "Build the UDS RKE2 service Pepr policy exemptions package"
-    actions:
-      - task: create
-        with:
-          path: packages/exemptions
-          outputPath: build/packages
-          zarfConfig: packages/exemptions/zarf-config.yaml
 
   - name: minio
     description: "Build the MinIO package"

@@ -58,12 +58,21 @@ tasks:
             --no-progress \
             --confirm
 
+  - name: uds-rke2-infrastructure
+    description: "Deploy the UDS RKE2 Infrastructure package"
+    actions:
+      - description: "Deploy the UDS RKE2 Infrastructure package"
+        cmd: |
+          sudo uds zarf package deploy build/packages/zarf-package-infrastructure-amd64-*.zst \
+            --no-progress \
+            --confirm
+
   - name: uds-rke2-exemptions
     description: "Deploy the UDS RKE2 service Pepr policy exemptions package"
     actions:
       - description: "Deploy the UDS RKE2 service Pepr policy exemptions package"
         cmd: |
-          sudo uds zarf package deploy build/packages/zarf-package-uds-rke2-exemptions-amd64-*.zst \
+          sudo uds zarf package deploy build/packages/zarf-package-exemptions-amd64-*.zst \
             --no-progress \
             --components local-path,longhorn,rook-ceph \
             --confirm

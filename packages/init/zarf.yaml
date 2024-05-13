@@ -6,7 +6,6 @@ metadata:
   name: init
   description: "Custom Zarf Init Package for RKE2"
   architecture: amd64
-  version: "###ZARF_PKG_TMPL_VERSION###"
 
 components:
   - name: zarf-injector
@@ -165,42 +164,3 @@ components:
     import:
       # TODO: renovate setup
       url: oci://ghcr.io/defenseunicorns/packages/init:v0.33.0
-
-  - name: uds-rke2-stack
-    required: true
-    description: "Install MetalLB, Nginx, and ensure MachineID on the bootstrapping node"
-    actions:
-      onDeploy:
-        before:
-          - cmd: uds zarf tools kubectl get nodes -o=jsonpath='{.items[0].status.addresses[?(@.type=="InternalIP")].address}' | cut -d'.' -f1-3
-            description: "Load network IP base for MetalLB"
-            setVariables:
-              - name: BASE_IP
-        after:
-          - cmd: uds zarf tools kubectl rollout restart deployment coredns -n kube-system
-            description: "Restart CoreDNS to pick up internal DNS override for uds.prod"
-    # TODO: renovate setup
-    images:
-      - registry1.dso.mil/ironbank/opensource/metallb/controller:v0.13.11
-      - registry1.dso.mil/ironbank/opensource/metallb/speaker:v0.13.11
-      - registry1.dso.mil/ironbank/opensource/nginx/nginx-alpine:1.25.3
-      - registry1.dso.mil/ironbank/opensource/pause/pause:3.9
-      - cgr.dev/chainguard/wolfi-base:latest
-    charts:
-      - name: metallb
-        namespace: uds-rke2
-        url: https://metallb.github.io/metallb
-        # TODO: renovate setup
-        version: 0.13.11
-        valuesFiles:
-          - values/metallb-values.yaml
-
-      - name: uds-rke2-stack
-        namespace: uds-rke2-stack
-        localPath: charts
-        # x-release-please-start-version
-        version: "0.2.0"
-        # x-release-please-end
-        valuesFiles:
-          - values/nginx-values.yaml
-          - values/machineid-values.yaml

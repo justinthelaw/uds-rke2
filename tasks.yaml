@@ -30,10 +30,16 @@ tasks:
       - task: create:local-path-init
       - task: deploy:local-path-init
 
+      - task: create:uds-rke2-infrastructure
+      - task: deploy:uds-rke2-infrastructure
+
       - task: create:minio
       - task: deploy:minio
 
       - task: deploy:specific-core-package-release
+
+      - task: create:uds-rke2-exemptions
+      - task: deploy:uds-rke2-exemptions
 
   - name: longhorn-bootstrap
     description: "Bootstrap an RKE2 cluster, with Longhorn Zarf Init, MinIO, and UDS Core packages"
@@ -46,10 +52,16 @@ tasks:
       - task: create:longhorn-init
       - task: deploy:longhorn-init
 
+      - task: create:uds-rke2-infrastructure
+      - task: deploy:uds-rke2-infrastructure
+
       - task: create:minio
       - task: deploy:minio
 
       - task: deploy:specific-core-package-release
+
+      - task: create:uds-rke2-exemptions
+      - task: deploy:uds-rke2-exemptions
 
   - name: rook-ceph-bootstrap
     description: "Bootstrap an RKE2 cluster, with Rook-Ceph Zarf Init and UDS Core packages"
@@ -62,4 +74,10 @@ tasks:
       - task: create:rook-ceph-init
       - task: deploy:rook-ceph-init
 
+      - task: create:uds-rke2-infrastructure
+      - task: deploy:uds-rke2-infrastructure
+
       - task: deploy:specific-core-package-release
+
+      - task: create:uds-rke2-exemptions
+      - task: deploy:uds-rke2-exemptions

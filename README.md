@@ -126,7 +126,7 @@ Run the following to remove all build artifacts:
 rm -rf build/ **/zarf-sbom/
 ```
 
-Run the following to completely destroy the RKE2 cluster and all of its artifacts from the node's host:
+Run the following to completely destroy the UDS RKE2 node and all of UDS RKE2's artifacts from the node's host:
 
 ```bash
 uds run deploy:uds-rke2-destroy

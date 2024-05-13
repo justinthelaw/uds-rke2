@@ -1,0 +1,16 @@
+imagePullSecrets:
+  - name: "private-registry"
+
+speaker:
+  image:
+    repository: registry1.dso.mil/ironbank/opensource/metallb/speaker
+    # TODO: renovate setup
+    tag: v18.2.2
+    pullPolicy: IfNotPresent
+
+controller:
+  image:
+    repository: registry1.dso.mil/ironbank/opensource/metallb/controller
+    # TODO: renovate setup
+    tag: v0.13.11
+    pullPolicy: IfNotPresent

@@ -13,15 +13,15 @@ tasks:
     description: "Builds all Zarf packages in the repository"
     actions:
       - task: uds-rke2
+      - task: uds-rke2-infrastructure
+      - task: uds-rke2-exemptions
+      - task: local-path
+      - task: local-path-init
       # TODO: add these back in when actually built
-      # - task: local-path
-      # - task: local-path-init
       # - task: longhorn
       # - task: longhorn-init
       - task: rook-ceph
       - task: rook-ceph-init
-      # - task: rook-ceph-init
-      - task: uds-rke2-exemptions
       - task: minio
 
   - name: publish
@@ -75,6 +75,24 @@ tasks:
           path: build/packages
           name: uds-rke2
           targetRepo: ghcr.io/justinthelaw/packages/uds
+
+  - name: uds-rke2-infrastructure
+    description: "Publish the UDS RKE2 Infrastructure Zarf package"
+    actions:
+      - task: publish
+        with:
+          path: build/packages
+          name: uds-rke2-infrastructure
+          targetRepo: ghcr.io/justinthelaw/packages/uds/uds-rke2
+
+  - name: uds-rke2-exemptions
+    description: "Publish the UDS RKE2 service Pepr policy exemptions package"
+    actions:
+      - task: publish
+        with:
+          path: build/packages
+          name: uds-rke2-exemptions
+          targetRepo: ghcr.io/justinthelaw/packages/uds/uds-rke2
 
   - name: local-path
     description: "Publish the Local Path Provisioner package"
@@ -134,13 +152,4 @@ tasks:
         with:
           path: build/packages
           name: minio
-          targetRepo: ghcr.io/justinthelaw/packages/uds
-
-  - name: uds-rke2-exemptions
-    description: "Publish the UDS RKE2 service Pepr policy exemptions package"
-    actions:
-      - task: publish
-        with:
-          path: build/packages
-          name: uds-rke2-exemptions
           targetRepo: ghcr.io/justinthelaw/packages/uds

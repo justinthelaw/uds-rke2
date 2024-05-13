@@ -6,13 +6,6 @@ The custom Zarf init package comes with 3 flavors:
 2. `longhorn`: [Longhorn](./LONGHORN.md) as the backing StorageClass with MinIO for its S3-compatible API
 3. `rook-ceph`: [Rook-Ceph](./ROOK-CEPH.md) as a comprehensive block, object, and file StorageClass set with a built-in S3-compatible API
 
-## Order of Deployment
-
-1. A Zarf seed registry, and its contents, are bootstrapped (persistent volume) to the host file system
-2. Rook-Ceph is deployed and configured to provide block, file, and object storage classes
-3. Zarf seed registry contents to pushed permanent Zarf docker registry, which is now bound to the newly deployed Rook-Ceph storage class
-4. MinIO is deployed and configured to provide an S3-like API layer on top of Rook-Ceph's object storage class
-
 ## Pre-Requisites
 
 A properly configured host node (`Ubuntu 20.04`) is bootstrapped with an RKE2 cluster, and has at least 1 server node - this is done using the [UDS RKE2 Zarf package](../packages/uds-rke2/zarf.yaml).

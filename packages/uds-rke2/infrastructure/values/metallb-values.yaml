@@ -10,6 +10,9 @@ speaker:
   frr:
     enabled: false
 
+frrK8s:
+  enabled: false
+
 controller:
   image:
     repository: registry1.dso.mil/ironbank/opensource/metallb/controller

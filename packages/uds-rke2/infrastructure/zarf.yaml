@@ -38,7 +38,7 @@ components:
         valuesFiles:
           - values/metallb-values.yaml
 
-      - name: uds-rke2-stack
+      - name: uds-rke2-infrastructure
         namespace: uds-rke2-infrastructure
         localPath: charts
         version: "###ZARF_PKG_TMPL_VERSION###"

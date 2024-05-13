@@ -52,8 +52,8 @@ components:
           - wait:
               cluster:
                 kind: Pod
-                name: app=local-path-provisioner
+                name: app.kubernetes.io/name=local-path-provisioner
                 namespace: local-path-storage
-                condition: "'{.status.phase}'=Ready"
+                condition: "'{.status.phase}'=Running"
             maxTotalSeconds: 300
             description: Waiting for Local Path Provisioner to be ready

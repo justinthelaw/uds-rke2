@@ -142,9 +142,9 @@ Below are resources to explain some of the rationale and inner workings of the R
 
 ### Configuration
 
-- [Operating System Configuration Scripts](docs/OS.md)
-- [RKE2-Specific Configuration Scripts](docs/RKE2.md)
-- [DNS Configuration and Assumptions](docs/DNS.md)
+- [Operating System Configuration](docs/OS.md)
+- [RKE2-Specific Configuration](docs/RKE2.md)
+- [UDS-RKE2 Infrastructure and Exemptions](docs/UDS-RKE2.md)
 - [MinIO Configuration](docs/MINIO.md)
 - [Rook-Ceph Configuration](docs/ROOK-CEPH.md)
 - [Longhorn Configuration](docs/LONGHORN.md)

@@ -38,7 +38,7 @@ storageClass:
 podAnnotations: {}
 
 podSecurityContext:
-  runAsNonRoot: false
+  runAsNonRoot: true
 
 securityContext:
   allowPrivilegeEscalation: false
@@ -87,6 +87,10 @@ configmap:
     #!/bin/sh
 
     set -eu
+
+    echo $(whoami)
+
+    dirname $VOL_DIR | ll
 
     mkdir -m 0777 -p "$VOL_DIR"
 

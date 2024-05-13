@@ -12,4 +12,4 @@
 nodePathMap:
   - node: DEFAULT_PATH_FOR_NON_LISTED_NODES
     paths:
-      -  ###ZARF_VAR_DEFAULT_NODE_PROVISIONING_PATH###
+      -  "/opt/uds"

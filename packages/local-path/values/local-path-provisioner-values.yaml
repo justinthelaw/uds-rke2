@@ -88,10 +88,6 @@ configmap:
 
     set -eu
 
-    echo $(whoami)
-
-    dirname $VOL_DIR | ll
-
     mkdir -m 0777 -p "$VOL_DIR"
 
   teardown: |-

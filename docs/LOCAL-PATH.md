@@ -8,10 +8,10 @@ Local Path Provisioner can still be useful if paired with an operator with built
 
 ### Pre-Requisites
 
-Ensure that the local volume mount points are accessible to the cluster. For example, the default mount point for all nodes is `/uds/local-path-storage/`, which means your storage devices, logical or physical, must be mounted at point `/uds` on that node. An example of a logical volume mount is as follows:
+Ensure that the local volume mount points are accessible to the cluster. For example, the default mount point for all nodes is `/opt/uds`, which means your storage devices, logical or physical, must be mounted at point `/opt/uds` on that node. An example of a logical volume mount is as follows:
 
 ```bash
-mount ubuntu/vg/extra /uds
+mount ubuntu/vg/extra /opt/uds
 ```
 
 ### Zarf Package

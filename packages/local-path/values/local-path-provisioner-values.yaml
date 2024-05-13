@@ -90,11 +90,12 @@ configmap:
 
     # Function to check mount point and print remaining space
     check_mount() {
-        if [ -d "$VOL_DIR" ]; then
+        local dir="$1"
+        if [ -d "$dir" ]; then
             # Get permissions and owner information
-            permissions=$(ls -ld "$VOL_DIR" | awk '{print $1}')
-            owner=$(ls -ld "$VOL_DIR" | awk '{print $3":"$4}')
-            echo "Mount Point: $VOL_DIR"
+            permissions=$(ls -ld "$dir" | awk '{print $1}')
+            owner=$(ls -ld "$dir" | awk '{print $3":"$4}')
+            echo "Mount Point: $dir"
             echo "Permissions: $permissions"
             echo "Owner/Group: $owner"
 
@@ -102,25 +103,31 @@ configmap:
             current_user=$(whoami)
             if [ "$owner" != "$current_user:$current_user" ]; then
                 # Attempt to modify permissions using sudo chown
-                sudo chown "$current_user:$current_user" "$VOL_DIR"
+                sudo chown "$current_user:$current_user" "$dir"
                 echo "Permissions modified using sudo chown"
             else
                 echo "Directory is already owned by $current_user"
             fi
+
+            # Recursively check parent directories
+            parent_dir=$(dirname "$dir")
+            if [ "$parent_dir" != "$dir" ]; then
+                check_mount "$parent_dir"
+            fi
         else
-            echo "Mount Point $VOL_DIR does not exist"
-            echo "Creating Volume Directory in $VOL_DIR..."
-            mkdir -m 0777 -p "$VOL_DIR"
-            check_mount
+            echo "Mount Point $dir does not exist"
+            echo "Creating Volume Directory in $dir..."
+            mkdir -m 0777 -p "$dir"
+            check_mount "$dir"
         fi
     }
 
-    # Check if mount points were provided as an argument
+    # Check if mount point was provided as an argument
     if [ -z "$VOL_DIR" ]; then
         echo "VOL_DIR was not specified"
         exit 1
     else
-        check_mount
+        check_mount "$VOL_DIR"
     fi
 
   teardown: |-

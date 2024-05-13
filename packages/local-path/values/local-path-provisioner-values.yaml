@@ -88,7 +88,7 @@ configmap:
 
     set -eu
 
-    mkdir -m 0777 -p "$dir"
+    mkdir -m 0777 -p "$VOL_DIR"
 
   teardown: |-
     #!/bin/sh

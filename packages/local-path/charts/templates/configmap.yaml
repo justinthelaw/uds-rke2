@@ -7,20 +7,7 @@ metadata:
 {{ include "local-path-provisioner.labels" . | indent 4 }}
 data:
   config.json: |-
-    {
-      "nodePathMap": [
-        {{- range $nodePathMap := .Values.nodePathMap }}
-        {
-          "node": "{{ $nodePathMap.node }}",
-          "paths": [
-            {{- range $path := $nodePathMap.paths }}
-            "{{ $path }}"{{ if not $last }},{{ end }}
-            {{- end }}
-          ]
-        }{{ if not $last }},{{ end }}
-        {{- end }}
-      ]
-    }
+    {{ .Values.nodePathMap | toJson | quote | nindent 4 }}
   setup: |-
     {{- .Values.configmap.setup | nindent 4 }}
   teardown: |-

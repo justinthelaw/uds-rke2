@@ -32,6 +32,10 @@ components:
   - name: local-path-provisioner-images
     required: true
     description: "Push Local Path Provisioner images to the Zarf seed registry"
+    files:
+      - source: scripts/mount-check.sh
+        target: /root/uds-rke2-artifacts/local-path/mount-check.sh
+        executable: true
     # TODO: renovate setup
     images:
       - docker.io/rancher/local-path-provisioner:v0.0.26
@@ -40,10 +44,6 @@ components:
   - name: local-path-provisioner
     required: true
     description: "Deploy Local Path Provisioner"
-    files:
-      - source: scripts/mount-check.sh
-        target: /root/uds-rke2-artifacts/local-path/mount-check.sh
-        executable: true
     charts:
       - name: local-path-provisioner
         namespace: local-path-storage

@@ -7,8 +7,8 @@ imagePullPolicy: IfNotPresent
 localPathProvisioner:
   image: ###ZARF_REGISTRY###/rancher/local-path-provisioner:v0.0.26
 
- # TODO: renovate setup
-helperPod: 
+  # TODO: renovate setup
+helperPod:
   image: ###ZARF_REGISTRY###/chainguard/busybox:latest
 
 imagePullSecrets:
@@ -116,8 +116,8 @@ configmap:
     }
 
     # Check if mount points were provided as an argument
-    if [ -z "$VOL_DIRS" ]; then
-        echo "Usage: VOL_DIRS=\"/opt/ /dev/\" $0"
+    if [ -z "$VOL_DIR" ]; then
+        echo "VOL_DIR was not specified"
         exit 1
     fi
 

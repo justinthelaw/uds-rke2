@@ -33,7 +33,7 @@ storageClass:
   reclaimPolicy: Retain
 
   ## volumeBindingMode field controls when volume binding and dynamic provisioning should occur, can be  "Immediate" or "WaitForFirstConsumer"
-  volumeBindingMode: Immediate
+  volumeBindingMode: WaitForFirstConsumer
 
 podAnnotations: {}
 

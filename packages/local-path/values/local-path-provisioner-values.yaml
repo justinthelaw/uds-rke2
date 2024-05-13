@@ -88,64 +88,7 @@ configmap:
 
     set -eu
 
-    # Function to get the highest-level parent directory
-    get_highest_parent() {
-        local dir="$1"
-        local parentdir="$(dirname "$dir")"
-
-        # Base case: If the parent directory is the same as the current directory,
-        # we've reached the highest-level parent
-        if [ "$parentdir" = "$dir" ]; then
-            echo "$dir"
-        else
-            # Recursive call to get the parent of the current directory
-            get_highest_parent "$parentdir"
-        fi
-    }
-
-    # Function to check mount point and print remaining space
-    check_mount() {
-        local dir="$1"
-        if [ -d "$dir" ]; then
-            # Get permissions and owner information
-            permissions=$(ls -ld "$dir" | awk '{print $1}')
-            owner=$(ls -ld "$dir" | awk '{print $3":"$4}')
-            echo "Mount Point: $dir"
-            echo "Permissions: $permissions"
-            echo "Owner/Group: $owner"
-
-            # Check if the owner is the current user
-            current_user=$(whoami)
-            if [ "$owner" != "$current_user:$current_user" ]; then
-                # Attempt to modify permissions using sudo chown
-                chown "$current_user:$current_user" "$dir"
-                echo "Permissions modified using sudo chown"
-            else
-                echo "Directory is already owned by $current_user"
-            fi
-
-            # Recursively check parent directories
-            parent_dir=$(dirname "$dir")
-            if [ "$parent_dir" != "$dir" ]; then
-                check_mount "$parent_dir"
-            fi
-        else
-            echo "Mount Point $dir does not exist"
-            echo "Creating Volume Directory in $dir..."
-            mkdir -m 0777 -p "$dir"
-            check_mount "$dir"
-        fi
-    }
-
-    # Check if mount point was provided as an argument
-    if [ -z "$VOL_DIR" ]; then
-        echo "VOL_DIR was not specified"
-        exit 1
-    else
-        # Get the highest-level parent directory
-        highest_parent="$(get_highest_parent "$VOL_DIR")"
-        check_mount "$highest_parent"
-    fi
+    mkdir -m 0777 -p "$dir"
 
   teardown: |-
     #!/bin/sh

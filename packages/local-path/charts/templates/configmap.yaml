@@ -31,3 +31,5 @@ data:
         - name: helper-pod
           image: {{ .Values.helperPod.image }}
           imagePullPolicy: {{ .Values.imagePullPolicy }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}

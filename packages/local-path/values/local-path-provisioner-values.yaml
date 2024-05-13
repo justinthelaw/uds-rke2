@@ -37,8 +37,8 @@ storageClass:
 
 podAnnotations: {}
 
-podSecurityContext:
-  runAsNonRoot: true
+podSecurityContext: {}
+  # runAsNonRoot: true
 
 securityContext: {}
   # allowPrivilegeEscalation: false

@@ -9,6 +9,11 @@ variables:
     # x-release-please-end
 
 tasks:
+  - name: tls-cert
+    description: "Generate self-signed TLS certs for testing"
+    actions:
+      - cmd: openssl req -x509 -newkey rsa:4096 -keyout tls.key -out tls.cert -days 365 -nodes -config tls-cert.conf
+    
   - name: all
     description: "Builds all Zarf packages in the repository"
     actions:
@@ -19,8 +24,7 @@ tasks:
       # - task: longhorn
       # - task: longhorn-init
       - task: rook-ceph
-      - task: rook-ceph-init-multi-node
-      # - task: rook-ceph-init-single-node
+      - task: rook-ceph-init
       - task: uds-rke2-exemptions
       - task: minio
 
@@ -75,8 +79,8 @@ tasks:
     actions:
       - task: create
         with:
-          path: packages/uds-rke2/
-          outputPath: build/packages/
+          path: packages/uds-rke2
+          outputPath: build/packages
           zarfConfig: packages/uds-rke2/zarf-config.yaml
 
   - name: local-path
@@ -84,8 +88,8 @@ tasks:
     actions:
       - task: create
         with:
-          path: packages/local-path/
-          outputPath: build/packages/local-path/
+          path: packages/local-path
+          outputPath: build/packages/local-path
           zarfConfig: packages/local-path/zarf-config.yaml
 
   - name: local-path-init
@@ -101,8 +105,8 @@ tasks:
     actions:
       - task: create
         with:
-          path: packages/longhorn/
-          outputPath: build/packages/longhorn/
+          path: packages/longhorn
+          outputPath: build/packages/longhorn
           zarfConfig: packages/longhorn/zarf-config.yaml
 
   - name: longhorn-init
@@ -118,25 +122,25 @@ tasks:
     actions:
       - task: create
         with:
-          path: packages/rook-ceph/
+          path: packages/rook-ceph
           outputPath: build/packages/rook-ceph
           zarfConfig: packages/rook-ceph/zarf-config.yaml
 
-  - name: rook-ceph-init-multi-node
+  - name: rook-ceph-init
     description: "Build the Rook-Ceph Zarf Init package"
     actions:
       - task: init
         with:
           flavor: rook-ceph
-          outputPath: build/packages/rook-ceph/multi-node
+          outputPath: build/packages/rook-ceph
 
   - name: uds-rke2-exemptions
     description: "Build the UDS RKE2 service Pepr policy exemptions package"
     actions:
       - task: create
         with:
-          path: packages/exemptions/
-          outputPath: build/packages/
+          path: packages/exemptions
+          outputPath: build/packages
           zarfConfig: packages/exemptions/zarf-config.yaml
 
   - name: minio
@@ -144,6 +148,6 @@ tasks:
     actions:
       - task: create
         with:
-          path: packages/minio/
-          outputPath: build/packages/
+          path: packages/minio
+          outputPath: build/packages
           zarfConfig: packages/minio/zarf-config.yaml

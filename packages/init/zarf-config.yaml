@@ -3,6 +3,14 @@ package:
     max_package_size: "1000000000"
     # These values are sourced from and updated with https://github.com/defenseunicorns/zarf/blob/main/zarf-config.toml
     set:
+      # x-release-please-start-version
+      version: "0.2.0"
+      # x-release-please-end
+
+      ###########
+      # ZARF INIT
+      ###########
+
       agent_image_domain: "ghcr.io/"
       agent_image: "defenseunicorns/zarf/agent"
 
@@ -16,7 +24,14 @@ package:
 
       gitea_image: "gitea/gitea:1.21.2-rootless"
 
+      ########################
+      # LOCAL PATH PROVISIONER
+      ########################
+
+      node_path_map_values_file: values/node-path-map-values.yaml
+
+      ###########
+      # ROOK-CEPH
+      ###########
+
       cluster_configuration: "multi-node"
-      # x-release-please-start-version
-      version: "0.2.0"
-      # x-release-please-end

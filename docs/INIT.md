@@ -22,13 +22,6 @@ A properly configured host node (`Ubuntu 20.04`) is bootstrapped with an RKE2 cl
 The below is used to manually create the custom Zarf init package, which is usually done with [UDS tasks](../tasks.yaml) or the [UDS bundles](https://github.com/justinthelaw/uds-rke2/tree/main/bundles) in this repository.
 
 ```bash
-# Login to registry1
-set +o history
-export REGISTRY1_USERNAME="YOUR-USERNAME-HERE"
-export REGISTRY1_PASSWORD="YOUR-PASSWORD-HERE"
-echo $REGISTRY1_PASSWORD | zarf tools registry login registry1.dso.mil --username $REGISTRY1_USERNAME --password-stdin
-set -o history
-
 # Create the zarf init package
-zarf package create --architecture amd64 --confirm --set AGENT_IMAGE_TAG=$(zarf version)
+uds zarf package create --architecture amd64 --confirm --set AGENT_IMAGE_TAG=$(zarf version)
 ```

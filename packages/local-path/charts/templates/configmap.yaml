@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.configmap.name }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+{{ include "local-path-provisioner.labels" . | indent 4 }}
+data:
+  config.json: |-
+    {{ .Values.nodePathMapJson | toJson | nindent 4 }}
+  setup: |-
+    {{- .Values.configmap.setup | nindent 4 }}
+  teardown: |-
+    {{- .Values.configmap.teardown | nindent 4 }}
+  helperPod.yaml: |-
+    apiVersion: v1
+    kind: Pod
+    metadata:
+      name: helper-pod
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      priorityClassName: system-node-critical
+      tolerations:
+        - key: node.kubernetes.io/disk-pressure
+          operator: Exists
+          effect: NoSchedule
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: helper-pod
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: {{ .Values.helperPod.image }}
+          imagePullPolicy: {{ .Values.imagePullPolicy }}

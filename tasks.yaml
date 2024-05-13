@@ -22,8 +22,6 @@ tasks:
   - name: local-path-bootstrap
     description: "Bootstrap an RKE2 cluster, with Local Path Provisioner Zarf Init, MinIO, and UDS Core packages"
     actions:
-      - task: setup:temp-build-folder
-
       - task: create:uds-rke2
       - task: deploy:uds-rke2-bootstrap
         with:
@@ -40,8 +38,6 @@ tasks:
   - name: longhorn-bootstrap
     description: "Bootstrap an RKE2 cluster, with Longhorn Zarf Init, MinIO, and UDS Core packages"
     actions:
-      - task: setup:temp-build-folder
-
       - task: create:uds-rke2
       - task: deploy:uds-rke2-bootstrap
         with:
@@ -58,8 +54,6 @@ tasks:
   - name: rook-ceph-bootstrap
     description: "Bootstrap an RKE2 cluster, with Rook-Ceph Zarf Init and UDS Core packages"
     actions:
-      - task: setup:temp-build-folder
-
       - task: create:uds-rke2
       - task: deploy:uds-rke2-bootstrap
         with:

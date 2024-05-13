@@ -1,0 +1,107 @@
+replicaCount: 1
+commonLabels: {}
+
+imagePullPolicy: IfNotPresent
+
+# TODO: renovate setup
+localPathProvisioner:
+  image: ###ZARF_REGISTRY###/rancher/local-path-provisioner:v0.0.26
+
+  # TODO: renovate setup
+helperPod:
+  image: ###ZARF_REGISTRY###/chainguard/busybox:latest
+
+imagePullSecrets:
+  - name: private-registry
+
+## For creating the StorageClass automatically:
+storageClass:
+  create: true
+
+  ## Set StorageClass as the default StorageClass
+  ## Ignored if storageClass.create is false
+  defaultClass: ###ZARF_VAR_IS_DEFAULT_STORAGECLASS###
+
+  ## The default volume type this storage class creates, can be "local" or "hostPath"
+  defaultVolumeType: ###ZARF_VAR_VOLUME_TYPE###
+
+  ## Set a StorageClass name
+  ## Ignored if storageClass.create is false
+  name: local-path
+
+  ## ReclaimPolicy field of the class, which can be either Delete or Retain
+  reclaimPolicy: Retain
+
+  ## volumeBindingMode field controls when volume binding and dynamic provisioning should occur, can be  "Immediate" or "WaitForFirstConsumer"
+  volumeBindingMode: WaitForFirstConsumer
+
+podAnnotations: {}
+
+podSecurityContext:
+  runAsNonRoot: true
+
+securityContext:
+  allowPrivilegeEscalation: false
+  seccompProfile:
+    type: RuntimeDefault
+  capabilities:
+    drop: ["ALL"]
+  runAsUser: 65534
+  runAsGroup: 65534
+  readOnlyRootFilesystem: true
+
+resources:
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  limits:
+    cpu: 100m
+    memory: 128Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+
+rbac:
+  # Specifies whether RBAC resources should be created
+  create: true
+
+serviceAccount:
+  # Specifies whether a ServiceAccount should be created
+  create: true
+  # The name of the ServiceAccount to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name:
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+configmap:
+  # specify the config map name
+  name: local-path-config
+  # specify the custom script for setup and teardown
+  setup: |-
+    #!/bin/sh
+
+    set -eu
+
+    mkdir -m 0777 -p "$VOL_DIR"
+
+  teardown: |-
+    #!/bin/sh
+
+    set -eu
+
+    sudo rm -rf "$VOL_DIR"
+
+# Number of provisioner worker threads to call provision/delete simultaneously.
+# workerThreads: 4
+
+# Number of retries of failed volume provisioning. 0 means retry indefinitely.
+# provisioningRetryCount: 15
+
+# Number of retries of failed volume deletion. 0 means retry indefinitely.
+# deletionRetryCount: 15

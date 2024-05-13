@@ -14,6 +14,8 @@ Ensure that the local volume mount points are accessible to the cluster. For exa
 mount ubuntu/vg/extra /opt/uds
 ```
 
+Issues with the mount or filesystem in general will be recorded in a `local-path-storage` helper pod within the cluster during PV provisioning.
+
 ### Zarf Package
 
 The UDS bundle and custom Zarf Init for each flavor of the UDS RKE2 bootstrap automatically instantiates the StorageClass, Persistent Volumes, and configurations automatically. Configuration is controlled by exposed Zarf variables that modify the custom Local Path Provisioner charts.

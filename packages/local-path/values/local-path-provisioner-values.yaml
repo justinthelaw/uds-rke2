@@ -88,6 +88,21 @@ configmap:
 
     set -eu
 
+    # Function to get the highest-level parent directory
+    get_highest_parent() {
+        local dir="$1"
+        local parentdir="$(dirname "$dir")"
+
+        # Base case: If the parent directory is the same as the current directory,
+        # we've reached the highest-level parent
+        if [ "$parentdir" = "$dir" ]; then
+            echo "$dir"
+        else
+            # Recursive call to get the parent of the current directory
+            get_highest_parent "$parentdir"
+        fi
+    }
+
     # Function to check mount point and print remaining space
     check_mount() {
         local dir="$1"
@@ -127,7 +142,9 @@ configmap:
         echo "VOL_DIR was not specified"
         exit 1
     else
-        check_mount "$VOL_DIR"
+        # Get the highest-level parent directory
+        highest_parent="$(get_highest_parent "$VOL_DIR")"
+        check_mount "$highest_parent"
     fi
 
   teardown: |-

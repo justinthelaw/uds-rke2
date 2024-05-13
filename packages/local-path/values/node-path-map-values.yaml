@@ -9,7 +9,8 @@
 #   2. Root directory (/) is prohibited.
 #   3. No duplicate paths allowed for one node.
 #   4. No duplicate node allowed.
-nodePathMap:
-  - node: DEFAULT_PATH_FOR_NON_LISTED_NODES
-    paths:
-      -  "/opt/uds"
+nodePathMapJson:
+  nodePathMap:
+    - node: DEFAULT_PATH_FOR_NON_LISTED_NODES
+      paths:
+        -  "/opt/uds"

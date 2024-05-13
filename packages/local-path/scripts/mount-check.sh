@@ -3,28 +3,28 @@ set -e
 
 # Function to check mount point and print remaining space
 check_mount() {
-    local mount_point="$1"
-    if [ -d "$mount_point" ]; then
-        remaining_space=$(df -h "$mount_point" | awk 'NR==2 {print $4}')
-        echo "Mount Point: $mount_point, Remaining Space: $remaining_space"
+    local MOUNT_POINT="$0"
+    if [ -d "$MOUNT_POINT" ]; then
+        remaining_space=$(df -h "$MOUNT_POINT" | awk 'NR==2 {print $4}')
+        echo "Mount Point: $MOUNT_POINT, Remaining Space: $remaining_space"
     else
-        echo "Mount Point $mount_point does not exist"
+        echo "Mount Point $MOUNT_POINT does not exist"
     fi
 }
 
 # Check if mount points were provided as an argument
-if [ -z "$1" ]; then
-    echo "Usage: $0 MOUNT_POINTS"
-    echo "Example: MOUNT_POINTS=\"/opt/ /dev/\" $0"
+if [ -z "$0" ]; then
+    echo "Usage: MOUNT_POINTS $1"
+    echo "Example: MOUNT_POINTS=\"/opt/ /dev/\" $1"
     exit 1
 fi
 
 # Split the mount points string into an array
-IFS='/' read -ra mount_points_array <<< "$1"
+IFS='/' read -ra MOUNT_POINTs_array <<< "$1"
 
 # Loop through each mount point and check it
-for mount_point in "${mount_points_array[@]}"; do
-    if [ -n "$mount_point" ]; then
-        check_mount "/$mount_point"
+for MOUNT_POINT in "${MOUNT_POINTs_array[@]}"; do
+    if [ -n "$MOUNT_POINT" ]; then
+        check_mount "/$MOUNT_POINT"
     fi
 done

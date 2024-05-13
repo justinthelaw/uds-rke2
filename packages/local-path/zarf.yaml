@@ -32,10 +32,6 @@ components:
   - name: local-path-provisioner-images
     required: true
     description: "Push Local Path Provisioner images to the Zarf seed registry"
-    files:
-      - source: scripts/mount-check.sh
-        target: /root/uds-rke2-artifacts/local-path/mount-check.sh
-        executable: true
     # TODO: renovate setup
     images:
       - docker.io/rancher/local-path-provisioner:v0.0.26
@@ -55,9 +51,6 @@ components:
           - "###ZARF_PKG_TMPL_NODE_PATH_MAP_VALUES_FILE###"
     actions:
       onDeploy:
-        before:
-          - cmd: MOUNT_POINTS="###ZARF_PKG_TMPL_MOUNT_LOCATIONS_TO_CHECK###" /root/uds-rke2-artifacts/local-path/mount-check.sh
-            description: "Check the default mount location: ###ZARF_PKG_TMPL_MOUNT_LOCATIONS_TO_CHECK###"
         after:
           - wait:
               cluster:

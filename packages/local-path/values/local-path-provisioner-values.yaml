@@ -85,12 +85,58 @@ configmap:
   # specify the custom script for setup and teardown
   setup: |-
     #!/bin/sh
+
     set -eu
-    mkdir -m 0777 -p "$VOL_DIR"
+
+    # Function to check mount point and print remaining space
+    check_mount() {
+        if [ -d "$VOL_DIR" ]; then
+            # Get permissions and owner information
+            permissions=$(ls -ld "$VOL_DIR" | awk '{print $1}')
+            owner=$(ls -ld "$VOL_DIR" | awk '{print $3":"$4}')
+            echo "Mount Point: $VOL_DIR"
+            echo "Permissions: $permissions"
+            echo "Owner/Group: $owner"
+
+            # Check if the owner is the current user
+            current_user=$(whoami)
+            if [ "$owner" != "$current_user:$current_user" ]; then
+                # Attempt to modify permissions using sudo chown
+                sudo chown "$current_user:$current_user" "$VOL_DIR"
+                echo "Permissions modified using sudo chown"
+            else
+                echo "Directory is already owned by $current_user"
+            fi
+        else
+            echo "Mount Point $VOL_DIR does not exist"
+            echo "Creating Volume Directory in $VOL_DIR..."
+            mkdir -m 0777 -p "$VOL_DIR"
+            check_mount "$VOL_DIR"
+        fi
+    }
+
+    # Check if mount points were provided as an argument
+    if [ -z "$VOL_DIRS" ]; then
+        echo "Usage: VOL_DIRS=\"/opt/ /dev/\" $0"
+        exit 1
+    fi
+
+    # Split the mount points string into an array
+    IFS=' ' read -ra VOL_DIRS_ARRAY <<<"$VOL_DIRS"
+
+    # Loop through each mount point and check it
+    for VOL_DIR in "${VOL_DIRS_ARRAY[@]}"; do
+        if [ -n "$VOL_DIR" ]; then
+            check_mount "$VOL_DIR"
+        fi
+    done
+
   teardown: |-
     #!/bin/sh
+
     set -eu
-    rm -rf "$VOL_DIR"
+
+    sudo rm -rf "$VOL_DIR"
 
 # Number of provisioner worker threads to call provision/delete simultaneously.
 # workerThreads: 4

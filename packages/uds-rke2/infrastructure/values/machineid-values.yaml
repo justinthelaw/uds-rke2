@@ -8,4 +8,4 @@ machineid:
 
   wolfi:
     # TODO: renovate setup
-    image: registry1.dso.mil/chainguard/wolfi-base:latest
+    image: cgr.dev/chainguard/wolfi-base:latest

@@ -24,9 +24,12 @@ components:
             description: "Restart CoreDNS to pick up internal DNS override for uds.prod"
     # TODO: renovate setup
     images:
+      # MetalLB
       - registry1.dso.mil/ironbank/opensource/metallb/controller:v0.13.11
       - registry1.dso.mil/ironbank/opensource/metallb/speaker:v0.13.11
+      # Nginx
       - registry1.dso.mil/ironbank/opensource/nginx/nginx-alpine:1.25.3
+      # MachineID 
       - registry1.dso.mil/ironbank/opensource/pause/pause:3.9
       - cgr.dev/chainguard/wolfi-base:latest
     charts:

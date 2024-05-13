@@ -29,6 +29,7 @@ package:
       ########################
 
       node_path_map_values_file: values/node-path-map-values.yaml
+      mount_locations_to_check: "/opt /dev"
 
       ###########
       # ROOK-CEPH

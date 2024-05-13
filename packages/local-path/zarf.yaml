@@ -12,6 +12,9 @@ constants:
   - name: NODE_PATH_MAP_VALUES_FILE
     description: "The Node Path Map values to be used for defining volume locations per node"
     value: "###ZARF_PKG_TMPL_NODE_PATH_MAP_VALUES_FILE###"
+  - name: MOUNT_LOCATIONS_TO_CHECK
+    description: "The local volume mount locations to check before a deployment"
+    value: "###ZARF_PKG_TMPL_MOUNT_LOCATIONS_TO_CHECK###"
 
 variables:
   - name: IS_DEFAULT_STORAGECLASS
@@ -37,6 +40,10 @@ components:
   - name: local-path-provisioner
     required: true
     description: "Deploy Local Path Provisioner"
+    files:
+      - source: scripts/mount-check.sh
+        target: /root/uds-rke2-artifacts/local-path/mount-check.sh
+        executable: true
     charts:
       - name: local-path-provisioner
         namespace: local-path-storage
@@ -48,6 +55,9 @@ components:
           - "###ZARF_PKG_TMPL_NODE_PATH_MAP_VALUES_FILE###"
     actions:
       onDeploy:
+        before:
+          - cmd: MOUNT_POINTS="###ZARF_PKG_TMPL_MOUNT_LOCATIONS_TO_CHECK###" /root/uds-rke2-artifacts/local-path/mount-check.sh
+            description: "Check the default mount location: ###ZARF_PKG_TMPL_MOUNT_LOCATIONS_TO_CHECK###"
         after:
           - wait:
               cluster:

@@ -118,7 +118,7 @@ configmap:
             current_user=$(whoami)
             if [ "$owner" != "$current_user:$current_user" ]; then
                 # Attempt to modify permissions using sudo chown
-                sudo chown "$current_user:$current_user" "$dir"
+                chown "$current_user:$current_user" "$dir"
                 echo "Permissions modified using sudo chown"
             else
                 echo "Directory is already owned by $current_user"

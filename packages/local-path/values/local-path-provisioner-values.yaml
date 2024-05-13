@@ -40,15 +40,15 @@ podAnnotations: {}
 podSecurityContext:
   runAsNonRoot: true
 
-securityContext:
-  allowPrivilegeEscalation: false
-  seccompProfile:
-    type: RuntimeDefault
-  capabilities:
-    drop: ["ALL"]
-  runAsUser: 65534
-  runAsGroup: 65534
-  readOnlyRootFilesystem: true
+securityContext: {}
+  # allowPrivilegeEscalation: false
+  # seccompProfile:
+  #   type: RuntimeDefault
+  # capabilities:
+  #   drop: ["ALL"]
+  # runAsUser: 65534
+  # runAsGroup: 65534
+  # readOnlyRootFilesystem: true
 
 resources:
   # We usually recommend not to specify default resources and to leave this as a conscious

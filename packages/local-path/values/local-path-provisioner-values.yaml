@@ -111,7 +111,7 @@ configmap:
             echo "Mount Point $VOL_DIR does not exist"
             echo "Creating Volume Directory in $VOL_DIR..."
             mkdir -m 0777 -p "$VOL_DIR"
-            check_mount "$VOL_DIR"
+            check_mount
         fi
     }
 
@@ -119,17 +119,9 @@ configmap:
     if [ -z "$VOL_DIR" ]; then
         echo "VOL_DIR was not specified"
         exit 1
+    else
+        check_mount
     fi
-
-    # Split the mount points string into an array
-    IFS=' ' read -ra VOL_DIRS_ARRAY <<<"$VOL_DIRS"
-
-    # Loop through each mount point and check it
-    for VOL_DIR in "${VOL_DIRS_ARRAY[@]}"; do
-        if [ -n "$VOL_DIR" ]; then
-            check_mount "$VOL_DIR"
-        fi
-    done
 
   teardown: |-
     #!/bin/sh

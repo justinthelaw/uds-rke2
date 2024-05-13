@@ -38,21 +38,17 @@ storageClass:
 podAnnotations: {}
 
 podSecurityContext:
-  allowPrivilegeEscalation: true  # Allow privilege escalation for writing files
   runAsNonRoot: true
-  runAsUser: 65534
-  runAsGroup: 65534
 
 securityContext:
-  allowPrivilegeEscalation: true  # Allow privilege escalation for writing files
-  # seccompProfile:
-  #   type: RuntimeDefault
-  # capabilities:
-  #   drop: ["ALL"]
-  runAsNonRoot: true
+  allowPrivilegeEscalation: false
+  seccompProfile:
+    type: RuntimeDefault
+  capabilities:
+    drop: ["ALL"]
   runAsUser: 65534
   runAsGroup: 65534
-  # readOnlyRootFilesystem: true
+  readOnlyRootFilesystem: true
 
 resources:
   # We usually recommend not to specify default resources and to leave this as a conscious

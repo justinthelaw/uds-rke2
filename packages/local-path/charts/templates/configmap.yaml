@@ -27,7 +27,11 @@ data:
         - key: node.kubernetes.io/disk-pressure
           operator: Exists
           effect: NoSchedule
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
         - name: helper-pod
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
           image: {{ .Values.helperPod.image }}
           imagePullPolicy: {{ .Values.imagePullPolicy }}

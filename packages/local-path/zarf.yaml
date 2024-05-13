@@ -12,9 +12,6 @@ constants:
   - name: NODE_PATH_MAP_VALUES_FILE
     description: "The Node Path Map values to be used for defining volume locations per node"
     value: "###ZARF_PKG_TMPL_NODE_PATH_MAP_VALUES_FILE###"
-  - name: MOUNT_LOCATIONS_TO_CHECK
-    description: "The local volume mount locations to check before a deployment"
-    value: "###ZARF_PKG_TMPL_MOUNT_LOCATIONS_TO_CHECK###"
 
 variables:
   - name: IS_DEFAULT_STORAGECLASS

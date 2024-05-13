@@ -38,6 +38,7 @@ storageClass:
 podAnnotations: {}
 
 podSecurityContext:
+  allowPrivilegeEscalation: true  # Allow privilege escalation for writing files
   runAsNonRoot: true
   runAsUser: 65534
   runAsGroup: 65534
@@ -48,6 +49,7 @@ securityContext:
   #   type: RuntimeDefault
   # capabilities:
   #   drop: ["ALL"]
+  runAsNonRoot: true
   runAsUser: 65534
   runAsGroup: 65534
   # readOnlyRootFilesystem: true

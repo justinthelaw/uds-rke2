@@ -39,9 +39,11 @@ podAnnotations: {}
 
 podSecurityContext:
   runAsNonRoot: true
+  runAsUser: 65534
+  runAsGroup: 65534
 
 securityContext:
-  allowPrivilegeEscalation: false
+  allowPrivilegeEscalation: true  # Allow privilege escalation for writing files
   seccompProfile:
     type: RuntimeDefault
   capabilities:

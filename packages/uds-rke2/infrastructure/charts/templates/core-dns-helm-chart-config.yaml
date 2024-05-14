@@ -7,7 +7,7 @@ spec:
   valuesContent: |-
     extraConfig:
       import:
-        parameters: /etc/coredns/custom/*.server
+        parameters: /etc/coredns/custom/*
     extraVolumes:
       - name: config-volume-custom
         configMap:

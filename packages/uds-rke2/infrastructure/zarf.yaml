@@ -83,3 +83,4 @@ components:
         valuesFiles:
           - values/nginx-values.yaml
           - values/machineid-values.yaml
+          - values/metallb-values.yaml

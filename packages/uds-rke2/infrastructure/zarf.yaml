@@ -57,17 +57,25 @@ components:
 
   - name: infrastructure
     required: true
-    description: "Setup MetalLB L2 advertisement, Nginx redirects and MachineID + Pause on the bootstrapping node"
+    description: "Setup MetalLB L2 advertisement, Nginx redirects and MachineID + Pause"
     actions:
       onDeploy:
         before:
           - cmd: uds zarf tools kubectl get nodes -o=jsonpath='{.items[0].status.addresses[?(@.type=="InternalIP")].address}' | cut -d'.' -f1-3
-            description: "Load network IP base for MetalLB"
+            description: "Load network IP base for MetalLB L2 Advertisement"
             setVariables:
               - name: BASE_IP
         after:
           - cmd: uds zarf tools kubectl rollout restart deployment rke2-coredns -n kube-system
             description: "Restart CoreDNS to pick up internal DNS override for uds.prod"
+          - description: "Validate Nginx is up"
+            wait:
+              cluster:
+                kind: Pod
+                name: name=nginx
+                namespace: uds-rke2-infrastructure
+                condition: "'{.status.phase}'=Running"
+            maxTotalSeconds: 120
     images:
       # TODO: renovate setup
       # Nginx
@@ -83,4 +91,4 @@ components:
         valuesFiles:
           - values/nginx-values.yaml
           - values/machineid-values.yaml
-          - values/metallb-values.yaml
+          - values/metallb-l2-values.yaml

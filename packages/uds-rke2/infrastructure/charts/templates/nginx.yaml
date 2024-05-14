@@ -89,4 +89,3 @@ spec:
           configMap:
             name: nginx-config
         - name: pid
-          emptyDir: {}

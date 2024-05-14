@@ -5,7 +5,7 @@ speaker:
   image:
     repository: registry1.dso.mil/ironbank/opensource/metallb/speaker
     # TODO: renovate setup
-    tag: v18.2.2
+    tag: v0.13.11
     pullPolicy: IfNotPresent
   frr:
     enabled: false

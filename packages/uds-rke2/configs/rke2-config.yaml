@@ -30,3 +30,5 @@ kubelet-arg:
 kube-proxy-arg: # for MetalLB
   - proxy-mode=ipvs
   - ipvs-strict-arp=true
+kube-proxy-extra-mount:
+- "/lib/modules:/lib/modules:ro"

@@ -141,7 +141,7 @@ components:
               echo ${extra_join_node_args}
             setVariables:
               - name: RKE2_JOIN_ARGS
-            description: "Add delivery-engineer defined UDS RKE2 arguments to startup scripts"
+            description: "Add additional UDS RKE2 arguments to startup scripts"
 
   - name: start-rke2-node
     required: true

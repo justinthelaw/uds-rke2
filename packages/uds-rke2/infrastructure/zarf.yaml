@@ -10,7 +10,7 @@ metadata:
 
 variables:
   - name: INTERFACE
-    description: "The network interface name on which to perform L2 advertisement"
+    description: "The network interface name on which to perform MetalLB L2 advertisement"
     default: "enp1s0"
     prompt: true
 

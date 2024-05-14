@@ -20,6 +20,6 @@ controller:
 frrK8s:
   enabled: false
 
-ipAddressPool: "###ZARF_VAR_BASE_IP###.200-###ZARF_VAR_BASE_IP###.215"
-
-interface: ###ZARF_VAR_INTERFACE###
+l2advertisement:
+  ipAddressPool: "###ZARF_VAR_BASE_IP###.200-###ZARF_VAR_BASE_IP###.215"
+  interface: "###ZARF_VAR_INTERFACE###"

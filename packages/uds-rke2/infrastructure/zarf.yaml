@@ -13,6 +13,9 @@ variables:
     description: "The network interface name on which to perform MetalLB L2 advertisement"
     default: "enp1s0"
     prompt: true
+  - name: BASE_IP
+    description: "The host node's base IP"
+    prompt: false
 
 components:
   - name: metallb
@@ -51,7 +54,6 @@ components:
         version: 0.14.5
         valuesFiles:
           - values/metallb-values.yaml
-      
 
   - name: infrastructure
     required: true

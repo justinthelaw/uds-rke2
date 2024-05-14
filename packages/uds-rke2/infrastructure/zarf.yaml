@@ -26,7 +26,7 @@ components:
     images:
       # MetalLB
       - registry1.dso.mil/ironbank/opensource/metallb/controller:v0.13.11
-      - registry1.dso.mil/ironbank/opensource/metallb/speaker:v0.13.11
+      - registry1.dso.mil/ironbank/opensource/metallb/speaker:v18.2.2
       # Nginx
       - registry1.dso.mil/ironbank/opensource/nginx/nginx-alpine:1.25.3
       # MachineID 

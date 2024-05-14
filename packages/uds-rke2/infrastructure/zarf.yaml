@@ -17,12 +17,11 @@ variables:
 components:
   - name: metallb
     required: true
-    description: "Install MetalLB for"
+    description: "Install MetalLB controller and speaker"
     images:
       # TODO: renovate setup
       - registry1.dso.mil/ironbank/opensource/metallb/controller:v0.13.11
       - registry1.dso.mil/ironbank/opensource/metallb/speaker:v0.13.11
-      - quay.io/frrouting/frr:9.0.2
     actions:
       onDeploy:
         after:
@@ -39,7 +38,7 @@ components:
 
   - name: infrastructure
     required: true
-    description: "Install MetalLB L2 advertisements, Nginx redirects and ensure MachineID on the bootstrapping node"
+    description: "Setup MetalLB L2 advertisement, Nginx redirects and MachineID + Pause on the bootstrapping node"
     actions:
       onDeploy:
         before:

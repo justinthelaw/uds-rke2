@@ -7,6 +7,8 @@ speaker:
     # TODO: renovate setup
     tag: v0.14.5
     pullPolicy: IfNotPresent
+  frr:
+    enabled: false
 
 controller:
   image:
@@ -14,6 +16,9 @@ controller:
     # TODO: renovate setup
     tag: v0.14.5
     pullPolicy: IfNotPresent
+
+frrK8s:
+  enabled: false
 
 ipAddressPool: "###ZARF_VAR_BASE_IP###.200-###ZARF_VAR_BASE_IP###.215"
 

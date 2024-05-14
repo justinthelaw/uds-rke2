@@ -36,7 +36,7 @@ components:
                 kind: Pod
                 name: app.kubernetes.io/component=controller,app.kubernetes.io/name=metallb
                 namespace: uds-rke2-infrastructure
-                condition: "'{.status.phase}'=Running"
+                condition: "'{.status.conditions[2].status}'=True"
             maxTotalSeconds: 120
           - description: "Validate MetalLB Speaker is up"
             wait:
@@ -82,7 +82,7 @@ components:
                 kind: Pod
                 name: app.kubernetes.io/name=rke2-coredns
                 namespace: kube-system
-                condition: "'{.status.phase}'=Running"
+                condition: "'{.status.conditions[2].status}'=True"
             maxTotalSeconds: 300
     images:
       # TODO: renovate setup

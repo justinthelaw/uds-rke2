@@ -11,7 +11,7 @@ apiVersion: metallb.io/v1beta1
 kind: L2Advertisement
 metadata:
   name: advertisement
-  namespace: metallb-system
+  namespace: {{ .Release.Namespace }}
 spec:
   interfaces:
     - {{ .Values.l2advertisement.interface }}

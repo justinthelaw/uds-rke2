@@ -7,6 +7,8 @@ speaker:
     # TODO: renovate setup
     tag: v0.13.11
     pullPolicy: IfNotPresent
+  frr:
+    enabled: false
 
 controller:
   image:
@@ -14,3 +16,6 @@ controller:
     # TODO: renovate setup
     tag: v0.13.11
     pullPolicy: IfNotPresent
+
+frrK8s:
+  enabled: false

@@ -1,6 +1,9 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
+  annotations:
+    objectset.rio.cattle.io/owner-name: coredns
+    objectset.rio.cattle.io/owner-namespace: kube-system
   name: coredns-custom
   namespace: kube-system
 data:

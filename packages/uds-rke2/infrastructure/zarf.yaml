@@ -27,22 +27,22 @@ components:
         after:
           - cmd: "uds zarf tools kubectl get daemonset metallb-speaker -n uds-rke2-infrastructure -o yaml | sed '/configMap:/,/name: metallb-excludel2/s/defaultMode: 256/defaultMode: 292/' | kubectl replace -f -"
             description: "Workaround for MetalLB speaker not having permissions to read the network exclusion configuration"
-          # - description: "Validate MetalLB Controller is up"
-          #   wait:
-          #     cluster:
-          #       kind: Pod
-          #       name: app.kubernetes.io/name=metallb-controller
-          #       namespace: uds-rke2-infrastructure
-          #       condition: "'{.status.phase}'=Running"
-          #   maxTotalSeconds: 300
-          # - description: "Validate MetalLB Speaker is up"
-          #   wait:
-          #     cluster:
-          #       kind: Pod
-          #       name: app.kubernetes.io/name=metallb-speaker
-          #       namespace: uds-rke2-infrastructure
-          #       condition: "'{.status.phase}'=Running"
-          #   maxTotalSeconds: 300
+          - description: "Validate MetalLB Controller is up"
+            wait:
+              cluster:
+                kind: Pod
+                name: app.kubernetes.io/component=controller,app.kubernetes.io/name=metallb
+                namespace: uds-rke2-infrastructure
+                condition: "'{.status.phase}'=Running"
+            maxTotalSeconds: 120
+          - description: "Validate MetalLB Speaker is up"
+            wait:
+              cluster:
+                kind: Pod
+                name: app.kubernetes.io/component=controller,app.kubernetes.io/name=metallb
+                namespace: uds-rke2-infrastructure
+                condition: "'{.status.phase}'=Running"
+            maxTotalSeconds: 120
     charts:
       - name: metallb
         namespace: uds-rke2-infrastructure

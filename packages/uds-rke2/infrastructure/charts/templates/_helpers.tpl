@@ -35,6 +35,7 @@ Common labels
 */}}
 {{- define "uds-rke2-infrastructure.labels" -}}
 helm.sh/chart: {{ include "uds-rke2-infrastructure.chart" . }}
+sidecar.istio.io/inject: "false"
 {{ include "uds-rke2-infrastructure.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}

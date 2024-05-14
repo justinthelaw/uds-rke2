@@ -8,10 +8,38 @@ metadata:
   architecture: amd64
   version: "###ZARF_PKG_TMPL_VERSION###"
 
+variables:
+  - name: INTERFACE
+    description: "The network interface name on which to perform L2 advertisement"
+    default: "enp1s0"
+    prompt: true
+
 components:
+  - name: metallb
+    required: true
+    description: "Install MetalLB for"
+    images:
+      # TODO: renovate setup
+      - registry1.dso.mil/ironbank/opensource/metallb/controller:v0.13.11
+      - registry1.dso.mil/ironbank/opensource/metallb/speaker:v0.13.11
+      - quay.io/frrouting/frr:9.0.2
+    actions:
+      onDeploy:
+        after:
+          - cmd: "uds zarf tools kubectl get daemonset metallb-speaker -n uds-rke2-infrastructure -o yaml | sed '/configMap:/,/name: metallb-excludel2/s/defaultMode: 256/defaultMode: 292/' | kubectl replace -f -"
+            description: "Workaround for MetalLB speaker not having permissions to read the network exclusion configuration"
+    charts:
+      - name: metallb
+        namespace: uds-rke2-infrastructure
+        url: https://metallb.github.io/metallb
+        # TODO: renovate setup
+        version: 0.14.5
+        valuesFiles:
+          - values/metallb-values.yaml
+
   - name: infrastructure
     required: true
-    description: "Install MetalLB, Nginx, and ensure MachineID on the bootstrapping node"
+    description: "Install MetalLB L2 advertisements, Nginx redirects and ensure MachineID on the bootstrapping node"
     actions:
       onDeploy:
         before:
@@ -20,27 +48,16 @@ components:
             setVariables:
               - name: BASE_IP
         after:
-          - cmd: uds zarf tools kubectl rollout restart deployment coredns -n kube-system
+          - cmd: uds zarf tools kubectl rollout restart deployment rke2-coredns -n kube-system
             description: "Restart CoreDNS to pick up internal DNS override for uds.prod"
-    # TODO: renovate setup
     images:
-      # MetalLB
-      - registry1.dso.mil/ironbank/opensource/metallb/controller:v0.13.11
-      - registry1.dso.mil/ironbank/opensource/metallb/speaker:v0.13.11
+      # TODO: renovate setup
       # Nginx
       - registry1.dso.mil/ironbank/opensource/nginx/nginx-alpine:1.25.3
-      # MachineID 
+      # MachineID
       - registry1.dso.mil/ironbank/opensource/pause/pause:3.9
       - cgr.dev/chainguard/wolfi-base:latest
     charts:
-      - name: metallb
-        namespace: uds-rke2-infrastructure
-        url: https://metallb.github.io/metallb
-        # TODO: renovate setup
-        version: 0.13.11
-        valuesFiles:
-          - values/metallb-values.yaml
-
       - name: uds-rke2-infrastructure
         namespace: uds-rke2-infrastructure
         localPath: charts

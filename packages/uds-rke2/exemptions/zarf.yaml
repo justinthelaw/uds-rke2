@@ -9,14 +9,14 @@ metadata:
   version: "###ZARF_PKG_TMPL_VERSION###"
 
 components:
-  - name: metallb-exemptions
-    description: "MetalLB UDS Core Pepr policy exemptions"
+  - name: uds-rke2-infrastructure-exemptions
+    description: "UDS RKE2 Infrastructure UDS Core Pepr policy exemptions"
     required: true
     manifests:
-      - name: metallb-exemptions
+      - name: uds-rke2-infrastructure-exemptions
         namespace: uds-policy-exemptions
         files:
-          - charts/metallb-exemptions.yaml
+          - charts/uds-rke2-infrastructure-exemptions.yaml
 
   - name: local-path-exemptions
     description: "MetalLB UDS Core Pepr policy exemptions"

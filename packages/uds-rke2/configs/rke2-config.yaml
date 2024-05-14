@@ -27,3 +27,6 @@ kubelet-arg:
   - anonymous-auth=false
   - streaming-connection-idle-timeout=5m
   - read-only-port=0
+kube-proxy-arg: # for MetalLB
+  - proxy-mode=ipvs
+  - ipvs-strict-arp=true

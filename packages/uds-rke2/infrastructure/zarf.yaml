@@ -76,6 +76,14 @@ components:
                 namespace: uds-rke2-infrastructure
                 condition: "'{.status.phase}'=Running"
             maxTotalSeconds: 120
+          - description: "Validate rke2-coredns is up"
+            wait:
+              cluster:
+                kind: Pod
+                name: app.kubernetes.io/name=rke2-coredns
+                namespace: kube-system
+                condition: "'{.status.phase}'=Running"
+            maxTotalSeconds: 300
     images:
       # TODO: renovate setup
       # Nginx

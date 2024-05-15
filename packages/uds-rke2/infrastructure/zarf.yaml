@@ -75,6 +75,10 @@ components:
               - name: BASE_IP
         after:
           - cmd: |
+              #!/bin/bash
+              
+              set -e
+
               read -r -d '' COREDNS_PATCH << EOM
               data:
                 Corefile: |

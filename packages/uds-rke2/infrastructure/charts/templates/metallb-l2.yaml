@@ -5,7 +5,7 @@ metadata:
   namespace: {{ .Release.Namespace }}
 spec:
   addresses:
-    - {{ .Values.ipAddressPool }}
+    {{- toYaml .Values.ipAddressPool | nindent 4 }}
 ---
 apiVersion: metallb.io/v1beta1
 kind: L2Advertisement
@@ -14,4 +14,4 @@ metadata:
   namespace: {{ .Release.Namespace }}
 spec:
   interfaces:
-    - {{ .Values.interface }}
+    {{- toYaml .Values.interfaces | nindent 4 }}

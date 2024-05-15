@@ -75,12 +75,12 @@ components:
               - name: BASE_IP
         after:
           - cmd: |
-              newCorefile=$(uds zarf tools kubectl -n kube-system get ConfigMap rke2-coredns-rke2-coredns \
+              uds zarf tools kubectl -n kube-system get ConfigMap rke2-coredns-rke2-coredns \
               -o jsonpath='{.data.Corefile}' | sed 's/loadbalance/loadbalance\n\n    rewrite stop \
-              {\n        name regex (.*\\.uds\\.prod) host.rke2.internal answer auto\n      }/g')
+              {\n        name regex (.*\\.uds\\.prod) host.rke2.internal answer auto\n      }/g' > temp_Corefile.txt
 
               uds zarf tools kubectl -n kube-system patch ConfigMap rke2-coredns-rke2-coredns \
-              --patch "$(printf '{"data":{"Corefile":"%s"}}' "$newCorefile")"
+              --patch "$(printf '{"data":{"Corefile":"%s"}}' "$(cat temp_Corefile.txt)")"
             description: "Patch the UDS RKE2 CoreDNS Corefile with rewrite plugin for *.uds.prod"
           - cmd: uds zarf tools kubectl rollout restart deployment rke2-coredns-rke2-coredns -n kube-system
             description: "Restart CoreDNS to pick up internal DNS override for uds.prod"

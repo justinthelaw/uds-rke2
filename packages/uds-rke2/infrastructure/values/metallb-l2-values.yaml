@@ -1,2 +1,5 @@
-ipAddressPool: "###ZARF_VAR_BASE_IP###.200-###ZARF_VAR_BASE_IP###.215"
-interface: "###ZARF_VAR_INTERFACE###"
+ipAddressPool:
+  baseIP: ###ZARF_VAR_BASE_IP###.
+  lowerRange: ###ADDRESS_POOL_LOWER_BOUND###
+  upperRange: ###ADDRESS_POOL_UPPER_BOUND###
+interface: ###ZARF_VAR_INTERFACE###

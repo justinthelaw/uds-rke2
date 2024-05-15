@@ -16,11 +16,11 @@ variables:
   - name: BASE_IP
     description: "The host node's base IP"
     prompt: false
-  - name: LOWER_POOL_RANGE
+  - name: ADDRESS_POOL_LOWER_BOUND
     description: "Lower bound of the IP Address Pool range for L2 advertisement"
     default: "200"
     prompt: false
-  - name: UPPER_POOL_RANGE
+  - name: ADDRESS_POOL_UPPER_BOUND
     description: "Upper bound of the IP Address Pool range for L2 advertisement"
     default: "215"
     prompt: false

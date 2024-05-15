@@ -100,7 +100,7 @@ tasks:
     description: "Deploy the custom Zarf Init Package for RKE2 with Rook-Ceph"
     actions:
       - description: "Deploy the custom Zarf Init package"
-        # File storage is disabled by default, but can be enabled as necessary
+        # File storage is disabled by default, but can be enabled as necessary via UDS overrides or manual Zarf deployment
         cmd: |
           sudo uds zarf package deploy build/packages/rook-ceph/zarf-init-amd64-*.tar.zst \
             --no-progress \

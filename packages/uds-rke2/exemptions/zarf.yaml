@@ -21,7 +21,8 @@ components:
       onDeploy:
         after:
           - cmd: sleep 10
-            description: Upstream UDS Core Pepr exemption issue
+            # See https://github.com/defenseunicorns/uds-core/issues/409
+            description: Workaround for upstream UDS Core Pepr exemption race condition
 
   - name: local-path-exemptions
     description: "MetalLB UDS Core Pepr policy exemptions"
@@ -35,7 +36,8 @@ components:
       onDeploy:
         after:
           - cmd: sleep 10
-            description: Upstream UDS Core Pepr exemption issue
+            # See https://github.com/defenseunicorns/uds-core/issues/409
+            description: Workaround for upstream UDS Core Pepr exemption race condition
 
   - name: longhorn-exemptions
     description: "MetalLB UDS Core Pepr policy exemptions"
@@ -49,7 +51,8 @@ components:
       onDeploy:
         after:
           - cmd: sleep 10
-            description: Upstream UDS Core Pepr exemption issue
+            # See https://github.com/defenseunicorns/uds-core/issues/409
+            description: Workaround for upstream UDS Core Pepr exemption race condition
 
   - name: rook-ceph-exemptions
     description: "MetalLB UDS Core Pepr policy exemptions"
@@ -63,4 +66,5 @@ components:
       onDeploy:
         after:
           - cmd: sleep 10
-            description: Upstream UDS Core Pepr exemption issue
+            # See https://github.com/defenseunicorns/uds-core/issues/409
+            description: Workaround for upstream UDS Core Pepr exemption race condition

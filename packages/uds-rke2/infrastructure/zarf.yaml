@@ -66,12 +66,12 @@ components:
             setVariables:
               - name: BASE_IP
         after:
-          # - cmd: |
-          #     uds zarf tools kubectl -n kube-system get cm coredns \\
-          #       -o jsonpath='{.data.Corefile}' | sed 's/loadbalance/loadbalance\n\n    rewrite stop \
-          #       {\n        name regex (.*\\.uds\\.prod) host.rke2.internal answer auto\n      }/g' \
-          #       | kubectl -n kube-system patch cm coredns --patch "$(printf '{"data":{"Corefile":"%s"}}' "$(cat)")"
-          #   description: "Patch the UDS RKE2 CoreDNS Corefile with rewrite plugin for *.uds.prod"
+          - cmd: |
+              uds zarf tools kubectl -n kube-system get cm coredns \\
+                -o jsonpath='{.data.Corefile}' | sed 's/loadbalance/loadbalance\n\n    rewrite stop \
+                {\n        name regex (.*\\.uds\\.prod) host.rke2.internal answer auto\n      }/g' \
+                | kubectl -n kube-system patch cm coredns --patch "$(printf '{"data":{"Corefile":"%s"}}' "$(cat)")"
+            description: "Patch the UDS RKE2 CoreDNS Corefile with rewrite plugin for *.uds.prod"
           - cmd: uds zarf tools kubectl rollout restart deployment rke2-coredns-rke2-coredns -n kube-system
             description: "Restart CoreDNS to pick up internal DNS override for uds.prod"
           - description: "Validate Nginx is up"

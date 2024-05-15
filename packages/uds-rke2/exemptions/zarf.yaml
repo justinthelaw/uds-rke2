@@ -17,6 +17,11 @@ components:
         namespace: uds-policy-exemptions
         files:
           - charts/uds-rke2-infrastructure-exemptions.yaml
+    actions:
+      onDeploy:
+        after:
+          - cmd: sleep 10
+            description: Upstream UDS Core Pepr exemption issue
 
   - name: local-path-exemptions
     description: "MetalLB UDS Core Pepr policy exemptions"
@@ -26,6 +31,11 @@ components:
         namespace: uds-policy-exemptions
         files:
           - charts/local-path-exemptions.yaml
+    actions:
+      onDeploy:
+        after:
+          - cmd: sleep 10
+            description: Upstream UDS Core Pepr exemption issue
 
   - name: longhorn-exemptions
     description: "MetalLB UDS Core Pepr policy exemptions"
@@ -35,6 +45,11 @@ components:
         namespace: uds-policy-exemptions
         files:
           - charts/longhorn-exemptions.yaml
+    actions:
+      onDeploy:
+        after:
+          - cmd: sleep 10
+            description: Upstream UDS Core Pepr exemption issue
 
   - name: rook-ceph-exemptions
     description: "MetalLB UDS Core Pepr policy exemptions"
@@ -44,3 +59,8 @@ components:
         namespace: uds-policy-exemptions
         files:
           - charts/rook-ceph-exemptions.yaml
+    actions:
+      onDeploy:
+        after:
+          - cmd: sleep 10
+            description: Upstream UDS Core Pepr exemption issue

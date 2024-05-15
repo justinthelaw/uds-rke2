@@ -5,7 +5,7 @@ metadata:
   namespace: kube-system
 data:
   uds.override: |
-    .:53 {
+    . {
       rewrite stop {
         name regex (.*\.uds\.prod) host.rke2.internal answer auto
       }

@@ -73,7 +73,6 @@ tasks:
             --no-progress \
             --no-log-file \
             --log-level warn \
-            --skip-sbom \
             -a amd64 \
             --confirm
 

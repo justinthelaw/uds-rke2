@@ -89,7 +89,7 @@ components:
                 kind: Pod
                 name: name=nginx
                 namespace: uds-rke2-infrastructure
-                condition: "'{.status.phase}'=Running"
+                condition: "'{.status.conditions[2].status}'=True"
             maxTotalSeconds: 120
           - description: "Validate rke2-coredns is up"
             wait:

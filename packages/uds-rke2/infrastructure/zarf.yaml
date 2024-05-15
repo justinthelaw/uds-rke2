@@ -75,10 +75,6 @@ components:
               - name: BASE_IP
         after:
           - cmd: |
-              #!/bin/bash
-              
-              set -e
-
               read -r -d '' COREDNS_PATCH << EOM
               data:
                 Corefile: |
@@ -103,7 +99,10 @@ components:
                       loadbalance
                   }
               EOM
+
               uds zarf tools kubectl patch ConfigMap rke2-coredns-rke2-coredns -n kube-system --type=strategic --patch "$COREDNS_PATCH"
+            shell:
+              linux: bash
             description: "Patch the CoreDNS Corefile for UDS subdomain rewrites"
           - cmd: uds zarf tools kubectl rollout restart deployment rke2-coredns-rke2-coredns -n kube-system
             description: "Restart CoreDNS to pick up internal DNS override for uds.prod"

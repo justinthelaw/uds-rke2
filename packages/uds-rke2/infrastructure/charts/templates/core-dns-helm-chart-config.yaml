@@ -7,7 +7,7 @@ spec:
   valuesContent: |-
     extraConfig:
       import:
-        parameters: /etc/coredns/custom/*
+        parameters: /etc/coredns/custom/uds.override
     extraVolumes:
       - name: config-volume-custom
         configMap:

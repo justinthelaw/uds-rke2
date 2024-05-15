@@ -1,13 +1,12 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  annotations:
-    objectset.rio.cattle.io/owner-name: coredns
-    objectset.rio.cattle.io/owner-namespace: kube-system
   name: coredns-custom
   namespace: kube-system
 data:
   uds.override: |
-    rewrite stop {
-      name regex (.*\.uds\.prod) host.rke2.internal answer auto
+    .:53 {
+      rewrite stop {
+        name regex (.*\.uds\.prod) host.rke2.internal answer auto
+      }
     }

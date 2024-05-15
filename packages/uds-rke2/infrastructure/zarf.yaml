@@ -74,14 +74,33 @@ components:
             setVariables:
               - name: BASE_IP
         after:
-          # - cmd: |
-          #     uds zarf tools kubectl -n kube-system get ConfigMap rke2-coredns-rke2-coredns \
-          #     -o jsonpath='{.data.Corefile}' | sed 's/loadbalance/loadbalance\n\n    rewrite stop \
-          #     {\n        name regex (.*\\.uds\\.prod) host.rke2.internal answer auto\n      }/g' > temp_Corefile.txt
-
-          #     uds zarf tools kubectl -n kube-system patch ConfigMap rke2-coredns-rke2-coredns \
-          #     --patch "$(printf '{"data":{"Corefile":"%s"}}' "$(cat temp_Corefile.txt)")"
-          #   description: "Patch the UDS RKE2 CoreDNS Corefile with rewrite plugin for *.uds.prod"
+          - cmd: |
+              read -r -d '' COREDNS_PATCH << EOM
+              data:
+                Corefile: |
+                  .:53 {
+                      errors
+                      health
+                      ready
+                      rewrite stop {
+                        name regex (.*\.uds\.prod) host.rke2.internal answer auto
+                      }
+                      kubernetes cluster.local in-addr.arpa ip6.arpa {
+                        pods insecure
+                        fallthrough in-addr.arpa ip6.arpa
+                      }
+                      prometheus :9153
+                      forward . "/etc/resolv.conf" {
+                        policy random
+                      }
+                      cache 30
+                      loop
+                      reload
+                      loadbalance
+                  }
+              EOM
+              uds zarf tools kubectl patch ConfigMap rke2-coredns-rke2-coredns -n kube-system --type=strategic --patch "$COREDNS_PATCH"
+            description: "Patch the CoreDNS Corefile for UDS subdomain rewrites"
           - cmd: uds zarf tools kubectl rollout restart deployment rke2-coredns-rke2-coredns -n kube-system
             description: "Restart CoreDNS to pick up internal DNS override for uds.prod"
           - description: "Validate Nginx is up"

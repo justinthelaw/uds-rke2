@@ -149,10 +149,10 @@ Use [virt-manager](https://virt-manager.org/) to setup a VM using a GUI. Virt-ma
 Alternatively, you can modify and use the following CLI method for standing up a VM using [virt-install](https://linux.die.net/man/1/virt-install):
 
 ```bash
-virt-install \
+sudo virt-install \
   --name=uds-rke2 \
   --ram=32768 \
-  --vcpus=16 \
+  --vcpus=24 \
   --disk path=/var/lib/libvirt/images/uds-rke2.qcow2,size=300,format=qcow2,bus=virtio \
   --os-variant=ubuntu20.04 \
   --cdrom=/path/to/ubuntu-20.04.6-live-server-amd64.iso \
@@ -178,20 +178,20 @@ virt-install \
 Check all available VM's in the virsh manager:
 
 ```bash
-virsh list --all
+sudo virsh list --all
 ```
 
 To initially access the VM without SSH access:
 
 ```bash
-virsh console uds-rke2
+sudo virsh console uds-rke2
 ```
 
 Once the VM is accessible via SSH, replacing `default_user` and `vm_ip_address`:
 
 ```bash
-virsh domifaddr uds-rke2
-ssh $default_user@$vm_ip_address
+sudo virsh domifaddr uds-rke2
+sudo ssh $default_user@$vm_ip_address
 ```
 
 ### Setup the VM
@@ -227,3 +227,4 @@ The application of the following configuration repository will **_enhance_** you
   - [Bryan Steiner's GPU Passthrough for Windows and Ubuntu](https://github.com/bryansteiner/gpu-passthrough-tutorial)
   - [Mental Outlaw's GPU Pass-through On Linux/Virt-Manager](https://youtu.be/KVDUs019IB8?si=QI5OqyeiuhkoRVL-)
   - [Yuri Alek's GPU Passthrough Scripts](https://gitlab.com/YuriAlek/vfio)
+  - [Bridged Networking in KVM and Libvirt](https://linuxconfig.org/how-to-use-bridged-networking-with-libvirt-and-kvm)

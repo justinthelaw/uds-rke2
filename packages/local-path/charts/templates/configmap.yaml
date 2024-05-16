@@ -17,6 +17,8 @@ data:
     kind: Pod
     metadata:
       name: helper-pod
+      labels:
+        zarf-agent: patched
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:

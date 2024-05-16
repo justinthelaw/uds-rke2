@@ -33,9 +33,6 @@ tasks:
       - task: create:uds-rke2-infrastructure
       - task: deploy:uds-rke2-infrastructure
 
-      - task: create:minio
-      - task: deploy:minio
-
       - task: deploy:specific-core-package-release
 
       - task: create:uds-rke2-exemptions
@@ -54,9 +51,6 @@ tasks:
 
       - task: create:uds-rke2-infrastructure
       - task: deploy:uds-rke2-infrastructure
-
-      - task: create:minio
-      - task: deploy:minio
 
       - task: deploy:specific-core-package-release
 

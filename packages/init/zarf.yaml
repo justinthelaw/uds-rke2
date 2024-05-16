@@ -8,6 +8,10 @@ metadata:
   architecture: amd64
 
 components:
+  #######
+  # ZARF
+  #######
+
   - name: zarf-injector
     required: true
     description: "Move the Zarf injector and registries binaries"
@@ -30,7 +34,7 @@ components:
     actions:
       onDeploy:
         before:
-          - cmd: ./zarf tools kubectl get pvc zarf-docker-registry -n zarf >/dev/null 2>&1 && echo true || echo false
+          - cmd: uds zarf tools kubectl get pvc zarf-docker-registry -n zarf >/dev/null 2>&1 && echo true || echo false
             description: Set persistence for upgrading the seed registry
             mute: true
             setVariables:
@@ -38,7 +42,7 @@ components:
           - mute: true
             description: Set ENV variables for upgrading the seed registry
             cmd: |
-              ./zarf tools kubectl get pvc zarf-docker-registry -n zarf >/dev/null 2>&1 && \
+              uds zarf tools kubectl get pvc zarf-docker-registry -n zarf >/dev/null 2>&1 && \
               echo "" || \
               echo "- name: REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY
                 value: \"/var/lib/registry\""
@@ -80,6 +84,44 @@ components:
       path: ../local-path
       name: local-path-provisioner
 
+  ########
+  # MINIO
+  ########
+
+  - name: minio-images-initial
+    required: true
+    only:
+      flavor: local-path
+    description: "Push the MinIO images into the seed registry"
+    import:
+      path: ../minio
+      name: minio-images
+
+  - name: minio-images-initial
+    required: true
+    only:
+      flavor: longhorn
+    description: "Push the MinIO images into the seed registry"
+    import:
+      path: ../minio
+      name: minio-images
+
+  - name: minio
+    required: true
+    only:
+      flavor: local-path
+    import:
+      path: ../minio
+      name: minio
+
+  - name: minio
+    required: true
+    only:
+      flavor: longhorn
+    import:
+      path: ../minio
+      name: minio
+
   ###########
   # ROOK-CEPH
   ###########
@@ -108,6 +150,10 @@ components:
     import:
       path: ../rook-ceph
       name: rook-ceph-cluster
+
+  #######
+  # ZARF
+  #######
 
   - name: zarf-registry
     required: true
@@ -141,6 +187,30 @@ components:
     description: "Push the Longhorn images into the permanent registry"
     import:
       path: ../longhorn
+    images:
+      - "###ZARF_PKG_TMPL_REGISTRY_IMAGE_DOMAIN######ZARF_PKG_TMPL_REGISTRY_IMAGE###:###ZARF_PKG_TMPL_REGISTRY_IMAGE_TAG###"
+
+  ########
+  # MINIO
+  ########
+
+  - name: minio-images
+    required: true
+    only:
+      flavor: local-path
+    description: "Push the MinIO images into the permanent registry"
+    import:
+      path: ../minio
+    images:
+      - "###ZARF_PKG_TMPL_REGISTRY_IMAGE_DOMAIN######ZARF_PKG_TMPL_REGISTRY_IMAGE###:###ZARF_PKG_TMPL_REGISTRY_IMAGE_TAG###"
+
+  - name: minio-images
+    required: true
+    only:
+      flavor: longhorn
+    import:
+      path: ../minio
+    description: "Push the MinIO images into the permanent registry"
     images:
       - "###ZARF_PKG_TMPL_REGISTRY_IMAGE_DOMAIN######ZARF_PKG_TMPL_REGISTRY_IMAGE###:###ZARF_PKG_TMPL_REGISTRY_IMAGE_TAG###"
 

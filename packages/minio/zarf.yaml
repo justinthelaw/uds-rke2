@@ -22,7 +22,7 @@ components:
     required: true
     charts:
       - name: minio
-        namespace: minio
+        namespace: uds-rke2-infrastructure
         # TODO: renovate setup
         version: 5.0.14
         url: https://charts.min.io/

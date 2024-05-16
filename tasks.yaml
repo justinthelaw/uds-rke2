@@ -33,10 +33,10 @@ tasks:
       - task: create:uds-rke2-infrastructure
       - task: deploy:uds-rke2-infrastructure
 
+      - task: deploy:specific-core-package-release
+
       - task: create:uds-rke2-exemptions-local-path
       - task: deploy:uds-rke2-exemptions
-
-      - task: deploy:specific-core-package-release
 
 
   - name: longhorn-bootstrap
@@ -53,10 +53,10 @@ tasks:
       - task: create:uds-rke2-infrastructure
       - task: deploy:uds-rke2-infrastructure
 
+      - task: deploy:specific-core-package-release
+
       - task: create:uds-rke2-exemptions-longhorn
       - task: deploy:uds-rke2-exemptions
-
-      - task: deploy:specific-core-package-release
 
 
   - name: rook-ceph-bootstrap
@@ -73,8 +73,8 @@ tasks:
       - task: create:uds-rke2-infrastructure
       - task: deploy:uds-rke2-infrastructure
 
+      - task: deploy:specific-core-package-release
+
       - task: create:uds-rke2-exemptions-rook-ceph
       - task: deploy:uds-rke2-exemptions
-
-      - task: deploy:specific-core-package-release
 

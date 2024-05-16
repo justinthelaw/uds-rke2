@@ -51,7 +51,7 @@ tasks:
           sudo ZARF_CONFIG="${{ .inputs.zarfConfig }}" uds zarf package create "${{ .inputs.path }}" \
             -o "${{ .inputs.outputPath }}" \
             --set VERSION=${VERSION} \
-            --flavor ${{ .input.flavor }}
+            --flavor "${{ .inputs.flavor }}"
             --no-progress \
             --no-log-file \
             --log-level warn \

@@ -74,7 +74,7 @@ tasks:
         cmd: |
           sudo uds zarf package deploy build/packages/zarf-package-exemptions-amd64-*.zst \
             --no-progress \
-            --components local-path,longhorn,rook-ceph \
+            --components  \
             --confirm
 
   - name: local-path-init

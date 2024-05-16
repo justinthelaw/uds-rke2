@@ -41,12 +41,17 @@ tasks:
       zarfConfig:
         description: "Zarf Config of the Zarf package being created"
         required: true
+      flavor:
+        description: "Flavor of the Zarf package being created"
+        default: ""
+        required: false
     actions:
       - description: "Create the Zarf package for the amd64 architectures"
         cmd: |
           sudo ZARF_CONFIG="${{ .inputs.zarfConfig }}" uds zarf package create "${{ .inputs.path }}" \
             -o "${{ .inputs.outputPath }}" \
             --set VERSION=${VERSION} \
+            --flavor ${{ .input.flavor }}
             --no-progress \
             --no-log-file \
             --log-level warn \
@@ -93,7 +98,7 @@ tasks:
           outputPath: build/packages
           zarfConfig: packages/uds-rke2/zarf-config.yaml
 
-  - name: uds-rke2-exemptions
+  - name: uds-rke2-exemptions-local-path
     description: "Build the UDS RKE2 service Pepr policy exemptions package"
     actions:
       - task: create
@@ -101,6 +106,27 @@ tasks:
           path: packages/uds-rke2/exemptions
           outputPath: build/packages
           zarfConfig: packages/uds-rke2/zarf-config.yaml
+          flavor: local-path
+
+  - name: uds-rke2-exemptions-longhorn
+    description: "Build the UDS RKE2 service Pepr policy exemptions package"
+    actions:
+      - task: create
+        with:
+          path: packages/uds-rke2/exemptions
+          outputPath: build/packages
+          zarfConfig: packages/uds-rke2/zarf-config.yaml
+          flavor: longhorn
+
+  - name: uds-rke2-exemptions-rook-ceph
+    description: "Build the UDS RKE2 service Pepr policy exemptions package"
+    actions:
+      - task: create
+        with:
+          path: packages/uds-rke2/exemptions
+          outputPath: build/packages
+          zarfConfig: packages/uds-rke2/zarf-config.yaml
+          flavor: rook-ceph
 
   - name: local-path
     description: "Build the Local Path Provisioner Zarf package"

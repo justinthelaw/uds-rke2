@@ -73,8 +73,8 @@ tasks:
       - description: "Deploy the UDS RKE2 service Pepr policy exemptions package"
         cmd: |
           sudo uds zarf package deploy build/packages/zarf-package-exemptions-amd64-*.zst \
-            --no-progress \
-            --components  \
+            --no-progress\
+            --components \
             --confirm
 
   - name: local-path-init

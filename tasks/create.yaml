@@ -13,7 +13,7 @@ tasks:
     description: "Generate self-signed TLS certs for testing"
     actions:
       - cmd: openssl req -x509 -newkey rsa:4096 -keyout tls.key -out tls.cert -days 365 -nodes -config tls-cert.conf
-    
+
   - name: all
     description: "Builds all Zarf packages in the repository"
     actions:

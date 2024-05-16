@@ -29,6 +29,14 @@ components:
   - name: metallb
     required: true
     description: "Install MetalLB controller and speaker"
+    charts:
+      - name: metallb
+        namespace: uds-rke2-infrastructure
+        url: https://metallb.github.io/metallb
+        # TODO: renovate setup
+        version: 0.14.5
+        valuesFiles:
+          - values/metallb-values.yaml
     images:
       # TODO: renovate setup
       - registry1.dso.mil/ironbank/opensource/metallb/controller:v0.14.5
@@ -54,18 +62,26 @@ components:
                 namespace: uds-rke2-infrastructure
                 condition: "'{.status.conditions[2].status}'=True"
             maxTotalSeconds: 120
-    charts:
-      - name: metallb
-        namespace: uds-rke2-infrastructure
-        url: https://metallb.github.io/metallb
-        # TODO: renovate setup
-        version: 0.14.5
-        valuesFiles:
-          - values/metallb-values.yaml
 
   - name: infrastructure
     required: true
     description: "Setup MetalLB L2 advertisement, Nginx redirects and MachineID + Pause"
+    charts:
+      - name: uds-rke2-infrastructure
+        namespace: uds-rke2-infrastructure
+        localPath: charts
+        version: "###ZARF_PKG_TMPL_VERSION###"
+        valuesFiles:
+          - values/metallb-l2-values.yaml
+          - values/nginx-values.yaml
+          - values/machineid-values.yaml
+    images:
+      # TODO: renovate setup
+      # Nginx
+      - registry1.dso.mil/ironbank/opensource/nginx/nginx-alpine:1.25.3
+      # MachineID
+      - registry1.dso.mil/ironbank/opensource/pause/pause:3.9
+      - cgr.dev/chainguard/wolfi-base:latest
     actions:
       onDeploy:
         before:
@@ -116,19 +132,3 @@ components:
                 namespace: kube-system
                 condition: "'{.status.conditions[2].status}'=True"
             maxTotalSeconds: 300
-    images:
-      # TODO: renovate setup
-      # Nginx
-      - registry1.dso.mil/ironbank/opensource/nginx/nginx-alpine:1.25.3
-      # MachineID
-      - registry1.dso.mil/ironbank/opensource/pause/pause:3.9
-      - cgr.dev/chainguard/wolfi-base:latest
-    charts:
-      - name: uds-rke2-infrastructure
-        namespace: uds-rke2-infrastructure
-        localPath: charts
-        version: "###ZARF_PKG_TMPL_VERSION###"
-        valuesFiles:
-          - values/metallb-l2-values.yaml
-          - values/nginx-values.yaml
-          - values/machineid-values.yaml

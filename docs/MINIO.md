@@ -1,6 +1,6 @@
 # MinIO Configuration
 
-MinIO is an optional package that deploys a MinIO layer, for a full-featured and simplified S3 object storage API and service, on top of the [Local Path Provisioner](./LOCAL-PATH.md) or [Longhorn](./LONGHORN.md) storage solutions. MinIO can be deployed as a component as part of the UDS RKE2 [standard bundle](../bundles/rke2-standard/uds-bundle.yaml), but is not included in the [slim bundle](../bundles/rke2-slim/uds-bundle.yaml).
+MinIO is a package that deploys a full-featured and simplified S3 object storage API and service. This package is only deployed on top of the [Local Path Provisioner](./LOCAL-PATH.md) or [Longhorn](./LONGHORN.md) storage solutions.
 
 ## Usage
 

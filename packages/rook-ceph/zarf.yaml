@@ -142,7 +142,7 @@ components:
       onDeploy:
         after:
           - cmd: |
-              ./zarf tools kubectl patch serviceaccount default -n rook-ceph -p '{"imagePullSecrets": [{"name": "private-registry"}]}'
+              uds zarf tools kubectl patch serviceaccount default -n rook-ceph -p '{"imagePullSecrets": [{"name": "private-registry"}]}'
             description: "Add pull secrets for Rook-Ceph cluster"
 
   - name: rook-ceph-cluster

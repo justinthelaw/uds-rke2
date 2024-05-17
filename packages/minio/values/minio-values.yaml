@@ -24,7 +24,7 @@ resources:
     memory: 256Mi
     cpu: 150m
 persistence:
-  size: 50Gi
+  size: 30Gi
 
 buckets:
   - name: uds

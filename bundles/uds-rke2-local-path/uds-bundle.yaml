@@ -26,6 +26,13 @@ packages:
     optionalComponents:
       - metrics-server
 
+  - name: uds-rke2-infrastructure
+    description: "Deploys the UDS RKE2 base infrastructure Zarf package"
+    repository: ghcr.io/justinthelaw/packages/uds/uds-rke2/infrastructure
+    # x-release-please-start-version
+    ref: "0.2.0"
+    # x-release-please-end
+
   - name: uds-core
     repository: ghcr.io/defenseunicorns/packages/uds/core
     # TODO: renovate setup
@@ -105,8 +112,6 @@ packages:
   - name: uds-rke2-exemptions
     description: "Deploys the UDS Core Pepr policy exemptions"
     repository: ghcr.io/justinthelaw/packages/uds/uds-rke2/exemptions
-    optionalComponents:
-      - local-path-exemptions
     # x-release-please-start-version
-    ref: "0.2.0"
+    ref: "0.2.0-local-path"
     # x-release-please-end

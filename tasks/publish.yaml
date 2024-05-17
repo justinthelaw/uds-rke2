@@ -7,6 +7,9 @@ variables:
     # x-release-please-start-version
     default: "0.2.0"
     # x-release-please-end
+  - name: OPTIONS
+    description: "Extra Zarf package or UDS bundle publishing options"
+    default: "--no-progress --no-log-file --log-level warn -a amd64"
 
 tasks:
   - name: all
@@ -14,7 +17,9 @@ tasks:
     actions:
       - task: uds-rke2
       - task: uds-rke2-infrastructure
-      - task: uds-rke2-exemptions
+      - task: uds-rke2-exemptions-local-path
+      - task: uds-rke2-exemptions-longhorn
+      - task: uds-rke2-exemptions-rook-ceph
       - task: local-path
       - task: local-path-init
       # TODO: add these back in when actually built
@@ -42,10 +47,7 @@ tasks:
           sudo uds zarf package publish \
             "${{ .inputs.path }}/zarf-package-${{ .inputs.name }}-amd64-${VERSION}.tar.zst" \
             "oci://${{ .inputs.targetRepo }}" \
-            --no-progress \
-            --no-log-file \
-            --log-level warn \
-            -a amd64
+            ${OPTIONS}
 
   - name: init
     description: "Publish a Zarf Init package for the amd64 architectures"
@@ -62,10 +64,7 @@ tasks:
           sudo uds zarf package publish \
             "${{ .inputs.path }}/zarf-init-amd64-$(uds zarf version).tar.zst" \
             "oci://${{ .inputs.targetRepo }}" \
-            --no-progress \
-            --no-log-file \
-            --log-level warn \
-            -a amd64
+            ${OPTIONS}
 
   - name: uds-rke2
     description: "Publish the UDS RKE2 Zarf package"
@@ -85,12 +84,30 @@ tasks:
           name: uds-rke2-infrastructure
           targetRepo: ghcr.io/justinthelaw/packages/uds/uds-rke2
 
-  - name: uds-rke2-exemptions
+  - name: uds-rke2-exemptions-local-path
     description: "Publish the UDS RKE2 service Pepr policy exemptions package"
     actions:
       - task: publish
         with:
-          path: build/packages
+          path: build/packages/local-path
+          name: uds-rke2-exemptions
+          targetRepo: ghcr.io/justinthelaw/packages/uds/uds-rke2
+
+  - name: uds-rke2-exemptions-longhorn
+    description: "Publish the UDS RKE2 service Pepr policy exemptions package"
+    actions:
+      - task: publish
+        with:
+          path: build/packages/longhorn
+          name: uds-rke2-exemptions
+          targetRepo: ghcr.io/justinthelaw/packages/uds/uds-rke2
+
+  - name: uds-rke2-exemptions-rook-ceph
+    description: "Publish the UDS RKE2 service Pepr policy exemptions package"
+    actions:
+      - task: publish
+        with:
+          path: build/packages/rook-ceph
           name: uds-rke2-exemptions
           targetRepo: ghcr.io/justinthelaw/packages/uds/uds-rke2
 

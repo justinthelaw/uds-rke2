@@ -7,6 +7,9 @@ variables:
     # x-release-please-start-version
     default: "0.2.0"
     # x-release-please-end
+  - name: OPTIONS
+    description: "Extra Zarf package or UDS bundle creation options"
+    default: "--no-progress --no-log-file --log-level warn -a amd64 --confirm"
 
 tasks:
   - name: tls-cert
@@ -19,7 +22,9 @@ tasks:
     actions:
       - task: uds-rke2
       - task: uds-rke2-infrastructure
-      - task: uds-rke2-exemptions
+      - task: uds-rke2-exemptions-local-path
+      - task: uds-rke2-exemptions-longhorn
+      - task: uds-rke2-exemptions-rook-ceph
       - task: local-path
       - task: local-path-init
       # TODO: add these back in when actually built
@@ -52,11 +57,7 @@ tasks:
             -o "${{ .inputs.outputPath }}" \
             --set VERSION=${VERSION} \
             --flavor "${{ .inputs.flavor }}" \
-            --no-progress \
-            --no-log-file \
-            --log-level warn \
-            -a amd64 \
-            --confirm
+            ${OPTIONS}
 
   - name: init
     description: "Create a custom Zarf Init package for the amd64 architectures"
@@ -74,11 +75,7 @@ tasks:
             -o "${{ .inputs.outputPath }}" \
             --flavor "${{ .inputs.flavor }}" \
             --set AGENT_IMAGE_TAG=$(uds zarf version) \
-            --no-progress \
-            --no-log-file \
-            --log-level warn \
-            -a amd64 \
-            --confirm
+            ${OPTIONS}
 
   - name: uds-rke2
     description: "Build the UDS RKE2 Zarf package"
@@ -104,7 +101,7 @@ tasks:
       - task: create
         with:
           path: packages/uds-rke2/exemptions
-          outputPath: build/packages
+          outputPath: build/packages/local-path
           zarfConfig: packages/uds-rke2/zarf-config.yaml
           flavor: local-path
 
@@ -114,7 +111,7 @@ tasks:
       - task: create
         with:
           path: packages/uds-rke2/exemptions
-          outputPath: build/packages
+          outputPath: build/packages/longhorn
           zarfConfig: packages/uds-rke2/zarf-config.yaml
           flavor: longhorn
 
@@ -124,7 +121,7 @@ tasks:
       - task: create
         with:
           path: packages/uds-rke2/exemptions
-          outputPath: build/packages
+          outputPath: build/packages/rook-ceph
           zarfConfig: packages/uds-rke2/zarf-config.yaml
           flavor: rook-ceph
 

@@ -9,13 +9,13 @@ if ! command -v rke2 &>/dev/null; then
 fi
 
 echo ""
-echo "****************************************************"
-echo "**** WARNING: This will DESTROY your RKE2 node ****"
-echo "****************************************************"
+echo "*********************************************"
+echo "*** WARNING: This DESTROYS your RKE2 node ***"
+echo "*********************************************"
 echo ""
-echo "****************************************************"
-echo "**** WARNING: Press Ctrl-C to cancel operation ****"
-echo "****************************************************"
+echo "*********************************************"
+echo "****** WARNING: Press Ctrl-C to cancel ******"
+echo "*********************************************"
 echo ""
 
 sleep 5

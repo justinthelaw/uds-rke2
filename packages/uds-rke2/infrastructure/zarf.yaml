@@ -90,32 +90,31 @@ components:
             setVariables:
               - name: BASE_IP
         after:
-          - cmd: |
-              COREDNS_PATCH=$(printf '%s\n' \
-              "data:" \
-              "  Corefile: |" \
-              "    .:53 {" \
-              "        errors" \
-              "        health" \
-              "        ready" \
-              "        kubernetes cluster.local in-addr.arpa ip6.arpa {" \
-              "          pods insecure" \
-              "          fallthrough in-addr.arpa ip6.arpa" \
-              "        }" \
-              "        prometheus :9153" \
-              "        forward . \"/etc/resolv.conf\" {" \
-              "          policy random" \
-              "        }" \
-              "        cache 30" \
-              "        loop" \
-              "        reload" \
-              "        loadbalance" \
-              "    }")
-
-              uds zarf tools kubectl patch ConfigMap rke2-coredns-rke2-coredns -n kube-system --type=strategic --patch "$COREDNS_PATCH"
-            description: "Patch the CoreDNS Corefile for UDS subdomain rewrites"
-          - cmd: uds zarf tools kubectl rollout restart deployment rke2-coredns-rke2-coredns -n kube-system
-            description: "Restart CoreDNS to pick up internal DNS override for uds.prod"
+          # - cmd: |
+          #     COREDNS_PATCH=$(printf '%s\n' \
+          #     "data:" \
+          #     "  Corefile: |" \
+          #     "    .:53 {" \
+          #     "        errors" \
+          #     "        health" \
+          #     "        ready" \
+          #     "        kubernetes cluster.local in-addr.arpa ip6.arpa {" \
+          #     "          pods insecure" \
+          #     "          fallthrough in-addr.arpa ip6.arpa" \
+          #     "        }" \
+          #     "        prometheus :9153" \
+          #     "        forward . \"/etc/resolv.conf\" {" \
+          #     "          policy random" \
+          #     "        }" \
+          #     "        cache 30" \
+          #     "        loop" \
+          #     "        reload" \
+          #     "        loadbalance" \
+          #     "    }")
+          #     uds zarf tools kubectl patch ConfigMap rke2-coredns-rke2-coredns -n kube-system --type=strategic --patch "$COREDNS_PATCH"
+          #   description: "Patch the CoreDNS Corefile for UDS subdomain rewrites"
+          # - cmd: uds zarf tools kubectl rollout restart deployment rke2-coredns-rke2-coredns -n kube-system
+          #   description: "Restart CoreDNS to pick up internal DNS override for uds.prod"
           - description: "Validate Nginx is up"
             wait:
               cluster:
@@ -124,11 +123,11 @@ components:
                 namespace: uds-rke2-infrastructure
                 condition: "'{.status.conditions[2].status}'=True"
             maxTotalSeconds: 120
-          - description: "Validate rke2-coredns is up"
-            wait:
-              cluster:
-                kind: Pod
-                name: app.kubernetes.io/name=rke2-coredns
-                namespace: kube-system
-                condition: "'{.status.conditions[2].status}'=True"
-            maxTotalSeconds: 300
+          # - description: "Validate rke2-coredns is up"
+          #   wait:
+          #     cluster:
+          #       kind: Pod
+          #       name: app.kubernetes.io/name=rke2-coredns
+          #       namespace: kube-system
+          #       condition: "'{.status.conditions[2].status}'=True"
+          #   maxTotalSeconds: 300

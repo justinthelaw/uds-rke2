@@ -3,19 +3,34 @@ imagePullSecrets:
 
 speaker:
   image:
-    repository: registry1.dso.mil/ironbank/opensource/metallb/speaker
+    repository: quay.io/metallb/controller
     # TODO: renovate setup
-    tag: v0.14.5
+    tag: v0.14.4
     pullPolicy: IfNotPresent
   frr:
     enabled: false
 
 controller:
   image:
-    repository: registry1.dso.mil/ironbank/opensource/metallb/controller
+    repository: quay.io/metallb/speaker
     # TODO: renovate setup
-    tag: v0.14.5
+    tag: v0.14.4
     pullPolicy: IfNotPresent
+
+# speaker:
+#   image:
+#     repository: registry1.dso.mil/ironbank/opensource/metallb/speaker
+#     # TODO: renovate setup
+#     tag: v0.14.5
+#     pullPolicy: IfNotPresent
+#   frr:
+#     enabled: false
+
+# controller:
+#   image:
+#     repository: registry1.dso.mil/ironbank/opensource/metallb/controller
+#     # TODO: renovate setup
+#     tag: v0.14.5
 
 frrK8s:
   enabled: false

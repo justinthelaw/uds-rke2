@@ -34,18 +34,24 @@ components:
         namespace: uds-rke2-infrastructure
         url: https://metallb.github.io/metallb
         # TODO: renovate setup
-        version: 0.14.5
+        version: 0.14.4
+        # version: 0.14.5
         valuesFiles:
           - values/metallb-values.yaml
     images:
       # TODO: renovate setup
-      - registry1.dso.mil/ironbank/opensource/metallb/controller:v0.14.5
-      - registry1.dso.mil/ironbank/opensource/metallb/speaker:v0.14.5
+      # - registry1.dso.mil/ironbank/opensource/metallb/controller:v0.14.5
+      # - registry1.dso.mil/ironbank/opensource/metallb/speaker:v0.14.5
+      - quay.io/metallb/speaker:v0.14.4
+      - quay.io/metallb/controller:v0.14.4
     actions:
       onDeploy:
         after:
-          - cmd: "uds zarf tools kubectl get daemonset metallb-speaker -n uds-rke2-infrastructure -o yaml | sed '/configMap:/,/name: metallb-excludel2/s/defaultMode: 256/defaultMode: 292/' | kubectl replace -f -"
-            description: "Workaround for MetalLB speaker not having permissions to read the network exclusion configuration"
+          # - cmd: |
+          #     "uds zarf tools kubectl get daemonset metallb-speaker -n uds-rke2-infrastructure -o yaml \
+          #       | sed '/configMap:/,/name: metallb-excludel2/s/defaultMode: 256/defaultMode: 292/' \
+          #       | uds zarf tools kubectl replace -f -"
+          #   description: "Workaround for MetalLB speaker not having permissions to read the network exclusion configuration"
           - description: "Validate MetalLB Controller is up"
             wait:
               cluster:

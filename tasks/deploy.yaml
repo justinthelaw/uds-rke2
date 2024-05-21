@@ -2,19 +2,12 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/defenseunicorns/uds-cli/v0.10.4/tasks.schema.json
 
 variables:
-  - name: CORE_PKG_VERSION
-    description: "The version of UDS Core package to deploy"
-    # TODO: renovate setup
-    default: "0.21.0"
-  - name: CORE_PKG_FLAVOR
-    description: "Flavor of the package to use (`registry1` or `upstream`)."
-    default: "registry1"
   - name: DISK_NAME
     description: "The name of a Ceph-formatted disk (e.g. /dev/ubuntu-vg/ceph) that is to be wiped."
     default: "dm-1"
   - name: OPTIONS
     description: "Extra Zarf package or UDS bundle deployment options"
-    default: "--no-progress --confirm"
+    default: "--no-progress --no-log-file --log-level warn --confirm"
 
 tasks:
   - name: uds-rke2-bootstrap
@@ -105,9 +98,8 @@ tasks:
       - description: "Deploy the custom Zarf Init package"
         cmd: |
           sudo uds zarf package deploy build/packages/longhorn/zarf-init-amd64-*.tar.zst \
-            --no-progress \
             --set LONGHORN_VAR="true" \
-            --confirm
+            ${OPTIONS}
 
   - name: rook-ceph-init
     description: "Deploy the custom Zarf Init Package for RKE2 with Rook-Ceph"
@@ -134,12 +126,11 @@ tasks:
             ${OPTIONS}
 
   - name: uds-core
-    description: "Deploy a specific UDS Core package based on the VERSION variable"
+    description: "Deploy a specific UDS Core package based on the version and flavor variables"
     actions:
       - description: "Deploy the standard UDS Core package"
         cmd: |
-          sudo uds zarf package deploy oci://ghcr.io/defenseunicorns/packages/uds/core:${CORE_PKG_VERSION}-${CORE_PKG_FLAVOR} \
-            -a amd64 \
+          sudo uds zarf package deploy build/packages/longhorn/zarf-package-core-amd64-*.tar.zst \
             --components metrics-server \
             ${OPTIONS}
 

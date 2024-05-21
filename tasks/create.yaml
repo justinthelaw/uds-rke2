@@ -16,7 +16,7 @@ variables:
     default: "registry1"
   - name: OPTIONS
     description: "Extra Zarf package or UDS bundle creation options"
-    default: "--no-progress --no-log-file --log-level warn -a amd64 --confirm"
+    default: "--no-progress --no-log-file --log-level warn -a amd64"
 
 tasks:
   - name: tls-cert
@@ -193,11 +193,10 @@ tasks:
           zarfConfig: packages/minio/zarf-config.yaml
 
   - name: uds-core
-    description: "Pull a specific UDS Core package based on the VERSION variable"
+    description: "Pull a specific UDS Core package based on the version and flavor variables"
     actions:
-      - description: "Deploy the standard UDS Core package"
+      - description: "Pull the standard UDS Core package"
         cmd: |
-          sudo uds zarf package deploy oci://ghcr.io/defenseunicorns/packages/uds/core:${CORE_PKG_VERSION}-${CORE_PKG_FLAVOR} \
-            -a amd64 \
-            --components metrics-server \
+          sudo uds zarf package pull oci://ghcr.io/defenseunicorns/packages/uds/core:${CORE_PKG_VERSION}-${CORE_PKG_FLAVOR} \
+            -o "build/packages" \
             ${OPTIONS}

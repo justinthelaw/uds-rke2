@@ -7,6 +7,13 @@ variables:
     # x-release-please-start-version
     default: "0.2.0"
     # x-release-please-end
+  - name: CORE_PKG_VERSION
+    description: "The version of UDS Core package to deploy"
+    # TODO: renovate setup
+    default: "0.21.0"
+  - name: CORE_PKG_FLAVOR
+    description: "Flavor of the package to use (`registry1` or `upstream`)."
+    default: "registry1"
   - name: OPTIONS
     description: "Extra Zarf package or UDS bundle creation options"
     default: "--no-progress --no-log-file --log-level warn -a amd64 --confirm"
@@ -184,3 +191,13 @@ tasks:
           path: packages/minio
           outputPath: build/packages
           zarfConfig: packages/minio/zarf-config.yaml
+
+  - name: uds-core
+    description: "Pull a specific UDS Core package based on the VERSION variable"
+    actions:
+      - description: "Deploy the standard UDS Core package"
+        cmd: |
+          sudo uds zarf package deploy oci://ghcr.io/defenseunicorns/packages/uds/core:${CORE_PKG_VERSION}-${CORE_PKG_FLAVOR} \
+            -a amd64 \
+            --components metrics-server \
+            ${OPTIONS}

@@ -4,7 +4,7 @@
 kind: UDSBundle
 metadata:
   name: uds-rke2-bootstrap
-  description: "A UDS bundle for bootstrapping an RKE2 cluster and installing the standard UDS Core package in the cluster"
+  description: "A UDS bundle for bootstrapping an RKE2 cluster and installing UDS Core services"
   # x-release-please-start-version
   version: "0.2.0"
   # x-release-please-end

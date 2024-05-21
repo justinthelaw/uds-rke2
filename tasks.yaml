@@ -33,7 +33,7 @@ tasks:
       - task: create:uds-rke2-infrastructure
       - task: deploy:uds-rke2-infrastructure
 
-      - task: deploy:specific-core-package-release
+      - task: deploy:uds-core
 
       - task: create:uds-rke2-exemptions-local-path
       - task: deploy:uds-rke2-exemptions-local-path
@@ -52,7 +52,7 @@ tasks:
       - task: create:uds-rke2-infrastructure
       - task: deploy:uds-rke2-infrastructure
 
-      - task: deploy:specific-core-package-release
+      - task: deploy:uds-core
 
       - task: create:uds-rke2-exemptions-longhorn
       - task: deploy:uds-rke2-exemptions-longhorn
@@ -71,7 +71,7 @@ tasks:
       - task: create:uds-rke2-infrastructure
       - task: deploy:uds-rke2-infrastructure
 
-      - task: deploy:specific-core-package-release
+      - task: deploy:uds-core
 
       - task: create:uds-rke2-exemptions-rook-ceph
       - task: deploy:uds-rke2-exemptions-rook-ceph

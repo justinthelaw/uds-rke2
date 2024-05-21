@@ -133,7 +133,7 @@ tasks:
           sudo uds zarf package deploy build/packages/zarf-package-minio-amd64-*.zst \
             ${OPTIONS}
 
-  - name: specific-core-package-release
+  - name: uds-core
     description: "Deploy a specific UDS Core package based on the VERSION variable"
     actions:
       - description: "Deploy the standard UDS Core package"

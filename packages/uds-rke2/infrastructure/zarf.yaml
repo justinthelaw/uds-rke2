@@ -11,7 +11,7 @@ metadata:
 variables:
   - name: INTERFACE
     description: "The network interface name on which to perform MetalLB L2 advertisement"
-    default: "enp1s0"
+    default: "wlp0s20f3"
     prompt: true
   - name: ADDRESS_POOL_LOWER_BOUND
     description: "Lower bound of the IP Address Pool range for L2 advertisement"
@@ -34,24 +34,16 @@ components:
         namespace: uds-rke2-infrastructure
         url: https://metallb.github.io/metallb
         # TODO: renovate setup
-        version: 0.14.4
-        # version: 0.14.5
+        version: 0.14.5
         valuesFiles:
           - values/metallb-values.yaml
     images:
       # TODO: renovate setup
-      # - registry1.dso.mil/ironbank/opensource/metallb/controller:v0.14.5
-      # - registry1.dso.mil/ironbank/opensource/metallb/speaker:v0.14.5
-      - quay.io/metallb/speaker:v0.14.4
-      - quay.io/metallb/controller:v0.14.4
+      - registry1.dso.mil/ironbank/opensource/metallb/controller:v0.14.5
+      - registry1.dso.mil/ironbank/opensource/metallb/speaker:v0.14.5
     actions:
       onDeploy:
         after:
-          # - cmd: |
-          #     "uds zarf tools kubectl get daemonset metallb-speaker -n uds-rke2-infrastructure -o yaml \
-          #       | sed '/configMap:/,/name: metallb-excludel2/s/defaultMode: 256/defaultMode: 292/' \
-          #       | uds zarf tools kubectl replace -f -"
-          #   description: "Workaround for MetalLB speaker not having permissions to read the network exclusion configuration"
           - description: "Validate MetalLB Controller is up"
             wait:
               cluster:
@@ -96,31 +88,6 @@ components:
             setVariables:
               - name: BASE_IP
         after:
-          # - cmd: |
-          #     COREDNS_PATCH=$(printf '%s\n' \
-          #     "data:" \
-          #     "  Corefile: |" \
-          #     "    .:53 {" \
-          #     "        errors" \
-          #     "        health" \
-          #     "        ready" \
-          #     "        kubernetes cluster.local in-addr.arpa ip6.arpa {" \
-          #     "          pods insecure" \
-          #     "          fallthrough in-addr.arpa ip6.arpa" \
-          #     "        }" \
-          #     "        prometheus :9153" \
-          #     "        forward . \"/etc/resolv.conf\" {" \
-          #     "          policy random" \
-          #     "        }" \
-          #     "        cache 30" \
-          #     "        loop" \
-          #     "        reload" \
-          #     "        loadbalance" \
-          #     "    }")
-          #     uds zarf tools kubectl patch ConfigMap rke2-coredns-rke2-coredns -n kube-system --type=strategic --patch "$COREDNS_PATCH"
-          #   description: "Patch the CoreDNS Corefile for UDS subdomain rewrites"
-          # - cmd: uds zarf tools kubectl rollout restart deployment rke2-coredns-rke2-coredns -n kube-system
-          #   description: "Restart CoreDNS to pick up internal DNS override for uds.prod"
           - description: "Validate Nginx is up"
             wait:
               cluster:
@@ -129,11 +96,3 @@ components:
                 namespace: uds-rke2-infrastructure
                 condition: "'{.status.conditions[2].status}'=True"
             maxTotalSeconds: 120
-          # - description: "Validate rke2-coredns is up"
-          #   wait:
-          #     cluster:
-          #       kind: Pod
-          #       name: app.kubernetes.io/name=rke2-coredns
-          #       namespace: kube-system
-          #       condition: "'{.status.conditions[2].status}'=True"
-          #   maxTotalSeconds: 300

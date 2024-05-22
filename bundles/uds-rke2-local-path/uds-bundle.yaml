@@ -54,15 +54,19 @@ packages:
             - name: LOKI_CHUNKS_BUCKET
               description: "The object storage bucket for Loki chunks"
               path: loki.storage.bucketNames.chunks
+              default: uds
             - name: LOKI_RULER_BUCKET
               description: "The object storage bucket for Loki ruler"
               path: loki.storage.bucketNames.ruler
+              default: uds
             - name: LOKI_ADMIN_BUCKET
               description: "The object storage bucket for Loki admin"
               path: loki.storage.bucketNames.admin
+              default: uds
             - name: LOKI_S3_REGION
               description: "The S3 region"
               path: loki.storage.s3.region
+              default: us-east-1
             - name: LOKI_IRSA_ROLE_ARN
               description: "The irsa role annotation"
               path: serviceAccount.annotations.irsa/role-arn

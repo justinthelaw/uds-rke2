@@ -31,8 +31,8 @@ alias udsclean="uds zarf tools clear-cache && rm -rf ~/.uds-cache && rm -rf ~/.z
 For fulfilling `xargs` and `kubectl` binary requirements necessary for running some of the _optional_ deployment helper scripts:
 
 ```bash
-touch /usr/local/bin/kubectl 
-echo -e "#!/bin/bash\nuds zarf tools kubectl \"\$@\"" > /usr/local/bin/kubectl
+touch /usr/local/bin/kubectl
+echo '#!/bin/bash\nuds zarf tools kubectl "$@"' > /usr/local/bin/kubectl
 chmod +x /usr/local/bin/kubectl
 ```
 

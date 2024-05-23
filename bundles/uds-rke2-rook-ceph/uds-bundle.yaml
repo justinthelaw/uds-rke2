@@ -24,10 +24,17 @@ packages:
     # TODO: renovate setup
     ref: "v0.33.0-rook-ceph"
 
+  - name: uds-rke2-infrastructure
+    description: "Deploys the UDS RKE2 base infrastructure Zarf package"
+    repository: ghcr.io/justinthelaw/packages/uds/uds-rke2/infrastructure
+    # x-release-please-start-version
+    ref: "0.2.0"
+    # x-release-please-end
+
   - name: uds-core
     repository: ghcr.io/defenseunicorns/packages/uds/core
     # TODO: renovate setup
-    ref: "0.21.0-registry1"
+    ref: "0.22.0-registry1"
     overrides:
       loki:
         loki:
@@ -45,15 +52,19 @@ packages:
             - name: LOKI_CHUNKS_BUCKET
               description: "The object storage bucket for Loki chunks"
               path: loki.storage.bucketNames.chunks
+              default: "uds"
             - name: LOKI_RULER_BUCKET
               description: "The object storage bucket for Loki ruler"
               path: loki.storage.bucketNames.ruler
+              default: "uds"
             - name: LOKI_ADMIN_BUCKET
               description: "The object storage bucket for Loki admin"
               path: loki.storage.bucketNames.admin
+              default: "uds"
             - name: LOKI_S3_REGION
               description: "The S3 region"
               path: loki.storage.s3.region
+              default: "us-east-1"
             - name: LOKI_IRSA_ROLE_ARN
               description: "The irsa role annotation"
               path: serviceAccount.annotations.irsa/role-arn
@@ -76,9 +87,11 @@ packages:
             - name: VELERO_USE_SECRET
               description: "Toggle use secret off to use IRSA."
               path: credentials.useSecret
+              default: "false"
             - name: VELERO_IRSA_ROLE_ARN
               description: "IRSA role arn for annotation"
               path: serviceAccount.server.annotations.irsa/role-arn
+              default: ""
 
       istio-admin-gateway:
         uds-istio-config:
@@ -103,8 +116,6 @@ packages:
   - name: uds-rke2-exemptions
     description: "Deploys the UDS Core Pepr policy exemptions"
     repository: ghcr.io/justinthelaw/packages/uds/uds-rke2/exemptions
-    optionalComponents:
-      - rook-ceph-exemptions
     # x-release-please-start-version
-    ref: "0.2.0"
+    ref: "0.2.0-rook-ceph"
     # x-release-please-end

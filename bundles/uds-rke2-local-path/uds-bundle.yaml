@@ -23,8 +23,6 @@ packages:
     repository: ghcr.io/justinthelaw/packages/uds/init
     # TODO: renovate setup
     ref: "v0.33.0-local-path"
-    optionalComponents:
-      - metrics-server
 
   - name: uds-rke2-infrastructure
     description: "Deploys the UDS RKE2 base infrastructure Zarf package"

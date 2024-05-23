@@ -131,7 +131,6 @@ tasks:
       - description: "Deploy the standard UDS Core package"
         cmd: |
           sudo uds zarf package deploy build/packages/zarf-package-core-amd64-*.tar.zst \
-            --components metrics-server \
             ${OPTIONS}
 
   - name: rook-ceph-destroy

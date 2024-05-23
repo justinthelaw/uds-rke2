@@ -23,8 +23,6 @@ packages:
     repository: ghcr.io/justinthelaw/packages/uds/init
     # TODO: renovate setup
     ref: "v0.33.0-rook-ceph"
-    optionalComponents:
-      - metrics-server
 
   - name: uds-core
     repository: ghcr.io/defenseunicorns/packages/uds/core

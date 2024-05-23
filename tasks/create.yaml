@@ -10,13 +10,13 @@ variables:
   - name: CORE_PKG_VERSION
     description: "The version of UDS Core package to deploy"
     # TODO: renovate setup
-    default: "0.21.0"
+    default: "0.22.0"
   - name: CORE_PKG_FLAVOR
     description: "Flavor of the package to use (`registry1` or `upstream`)."
     default: "registry1"
   - name: OPTIONS
     description: "Extra Zarf package or UDS bundle creation options"
-    default: "--no-progress --no-log-file --log-level warn -a amd64 --confirm"
+    default: "--no-progress --no-log-file --log-level warn -a amd64"
 
 tasks:
   - name: tls-cert

@@ -76,15 +76,6 @@ tasks:
             "oci://${{ .inputs.targetRepo }}" \
             ${OPTIONS}
 
-  - name: clean
-    description: "Cleans the host system of build artifacts"
-    actions:
-      - description: "Remove the build folder, Docker artifacts, and clear UDS and Zarf caches"
-        cmd: |
-          sudo uds zarf tools clear-cache && sudo rm -rf ~/.uds-cache && sudo rm -rf ~/.zarf-cache
-          sudo docker system prune -a -f && sudo docker volume prune -f
-          sudo rm -rf build/ zarf-sbom/ /tmp/zarf-*
-
   - name: init
     description: "Publish a Zarf Init package for the amd64 architectures"
     inputs:
@@ -101,6 +92,15 @@ tasks:
             "${{ .inputs.path }}/zarf-init-amd64-$(uds zarf version).tar.zst" \
             "oci://${{ .inputs.targetRepo }}" \
             ${OPTIONS}
+
+  - name: clean
+    description: "Cleans the host system of build artifacts"
+    actions:
+      - description: "Remove the build folder, Docker artifacts, and clear UDS and Zarf caches"
+        cmd: |
+          sudo uds zarf tools clear-cache && sudo rm -rf ~/.uds-cache && sudo rm -rf ~/.zarf-cache
+          sudo docker system prune -a -f && sudo docker volume prune -f
+          sudo rm -rf build/ zarf-sbom/ /tmp/zarf-*
 
   - name: uds-rke2
     description: "Publish the UDS RKE2 Zarf package"

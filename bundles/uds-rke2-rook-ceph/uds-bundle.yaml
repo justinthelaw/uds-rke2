@@ -32,6 +32,7 @@ packages:
     # x-release-please-end
 
   - name: uds-core
+    description: "Deploys UDS Core services"
     repository: ghcr.io/defenseunicorns/packages/uds/core
     # TODO: renovate setup
     ref: "0.22.0-registry1"

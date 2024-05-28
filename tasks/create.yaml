@@ -16,7 +16,7 @@ variables:
     default: "registry1"
   - name: OPTIONS
     description: "Extra Zarf package or UDS bundle creation options"
-    default: "--no-progress --no-log-file --log-level warn -a amd64"
+    default: "--no-progress --no-log-file --log-level warn -a amd64 --confirm"
 
 tasks:
   - name: tls-cert

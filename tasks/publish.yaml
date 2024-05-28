@@ -9,7 +9,7 @@ variables:
     # x-release-please-end
   - name: OPTIONS
     description: "Extra Zarf package or UDS bundle publishing options"
-    default: "--no-progress --no-log-file --log-level warn -a amd64"
+    default: "--no-progress --no-log-file --log-level warn -a amd64 --confirm"
 
 tasks:
   - name: all

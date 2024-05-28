@@ -115,7 +115,7 @@ tasks:
             --set CEPH_BLOCK_STORE_AS_DEFAULT="true" \
             --set CEPH_OBJECT_STORE_AS_DEFAULT="false" \
             --set CEPH_FILE_STORE_AS_DEFAULT="false" \
-            --confirm
+            ${OPTIONS}
 
   - name: minio
     description: "Deploy the MinIO package"

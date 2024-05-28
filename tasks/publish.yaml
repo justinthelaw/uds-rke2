@@ -70,7 +70,7 @@ tasks:
         with:
           path: build/packages
           name: uds-rke2
-          targetRepo: ghcr.io/justinthelaw/packages/uds
+          targetRepo: ghcr.io/justinthelaw/packages/uds/
 
   - name: uds-rke2-infrastructure
     description: "Publish the UDS RKE2 Infrastructure Zarf package"
@@ -79,7 +79,7 @@ tasks:
         with:
           path: build/packages
           name: infrastructure
-          targetRepo: ghcr.io/justinthelaw/packages/uds/uds-rke2
+          targetRepo: ghcr.io/justinthelaw/packages/uds/uds-rke2/
 
   - name: uds-rke2-exemptions-local-path
     description: "Publish the UDS RKE2 service Pepr policy exemptions package"
@@ -88,7 +88,7 @@ tasks:
         with:
           path: build/packages/local-path
           name: exemptions
-          targetRepo: ghcr.io/justinthelaw/packages/uds/uds-rke2
+          targetRepo: ghcr.io/justinthelaw/packages/uds/uds-rke2/
 
   - name: uds-rke2-exemptions-longhorn
     description: "Publish the UDS RKE2 service Pepr policy exemptions package"
@@ -97,7 +97,7 @@ tasks:
         with:
           path: build/packages/longhorn
           name: exemptions
-          targetRepo: ghcr.io/justinthelaw/packages/uds/uds-rke2
+          targetRepo: ghcr.io/justinthelaw/packages/uds/uds-rke2/
 
   - name: uds-rke2-exemptions-rook-ceph
     description: "Publish the UDS RKE2 service Pepr policy exemptions package"
@@ -106,7 +106,7 @@ tasks:
         with:
           path: build/packages/rook-ceph
           name: exemptions
-          targetRepo: ghcr.io/justinthelaw/packages/uds/uds-rke2
+          targetRepo: ghcr.io/justinthelaw/packages/uds/uds-rke2/
 
   - name: local-path
     description: "Publish the Local Path Provisioner package"
@@ -115,7 +115,7 @@ tasks:
         with:
           path: build/packages/local-path
           name: local-path
-          targetRepo: ghcr.io/justinthelaw/packages/uds
+          targetRepo: ghcr.io/justinthelaw/packages/uds/uds-rke2/
 
   - name: local-path-init
     description: "Publish the custom Zarf Init package"
@@ -123,7 +123,7 @@ tasks:
       - task: init
         with:
           path: build/packages/local-path
-          targetRepo: ghcr.io/justinthelaw/packages/uds/
+          targetRepo: ghcr.io/justinthelaw/packages/uds/uds-rke2/
 
   - name: longhorn
     description: "Publish the Longhorn package"
@@ -132,7 +132,7 @@ tasks:
         with:
           path: build/packages/longhorn
           name: longhorn
-          targetRepo: ghcr.io/justinthelaw/packages/uds
+          targetRepo: ghcr.io/justinthelaw/packages/uds/uds-rke2/
 
   - name: longhorn-init
     description: "Publish the custom Zarf Init package"
@@ -140,7 +140,7 @@ tasks:
       - task: init
         with:
           path: build/packages/longhorn
-          targetRepo: ghcr.io/justinthelaw/packages/uds/
+          targetRepo: ghcr.io/justinthelaw/packages/uds/uds-rke2/
 
   - name: rook-ceph
     description: "Publish the Rook-Ceph package"
@@ -149,7 +149,7 @@ tasks:
         with:
           path: build/packages/rook-ceph
           name: rook-ceph
-          targetRepo: ghcr.io/justinthelaw/packages/uds
+          targetRepo: ghcr.io/justinthelaw/packages/uds/uds-rke2/
 
   - name: rook-ceph-init
     description: "Publish the custom Zarf Init package"
@@ -157,7 +157,7 @@ tasks:
       - task: init
         with:
           path: build/packages/rook-ceph
-          targetRepo: ghcr.io/justinthelaw/packages/uds
+          targetRepo: ghcr.io/justinthelaw/packages/uds/uds-rke2
 
   - name: minio
     description: "Publish the MinIO package"
@@ -166,4 +166,4 @@ tasks:
         with:
           path: build/packages
           name: minio
-          targetRepo: ghcr.io/justinthelaw/packages/uds
+          targetRepo: ghcr.io/justinthelaw/packages/uds/uds-rke2

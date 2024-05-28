@@ -10,7 +10,7 @@ variables:
     # x-release-please-start-version
     default: "0.2.0"
     # x-release-please-end
-  - name: OPTIONS
+  - name: PUBLISH_OPTIONS
     description: "Extra Zarf package or UDS bundle publishing options"
     default: "--no-progress --no-log-file --log-level warn -a amd64"
 
@@ -74,7 +74,7 @@ tasks:
           sudo uds zarf package publish \
             "${{ .inputs.path }}/zarf-package-${{ .inputs.name }}-amd64-${VERSION}.tar.zst" \
             "oci://${{ .inputs.targetRepo }}" \
-            ${OPTIONS}
+            ${PUBLISH_OPTIONS}
 
   - name: init
     description: "Publish a Zarf Init package for the amd64 architectures"
@@ -91,7 +91,7 @@ tasks:
           sudo uds zarf package publish \
             "${{ .inputs.path }}/zarf-init-amd64-$(uds zarf version).tar.zst" \
             "oci://${{ .inputs.targetRepo }}" \
-            ${OPTIONS}
+            ${PUBLISH_OPTIONS}
 
   - name: clean
     description: "Cleans the host system of build artifacts"

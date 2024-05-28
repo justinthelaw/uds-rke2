@@ -14,7 +14,7 @@ variables:
   - name: CORE_PKG_FLAVOR
     description: "Flavor of the package to use (`registry1` or `upstream`)."
     default: "registry1"
-  - name: OPTIONS
+  - name: CREATE_OPTIONS
     description: "Extra Zarf package or UDS bundle creation options"
     default: "--no-progress --no-log-file --log-level warn -a amd64 --confirm"
 
@@ -64,7 +64,7 @@ tasks:
             -o "${{ .inputs.outputPath }}" \
             --set VERSION=${VERSION} \
             --flavor "${{ .inputs.flavor }}" \
-            ${OPTIONS}
+            ${CREATE_OPTIONS}
 
   - name: init
     description: "Create a custom Zarf Init package for the amd64 architectures"
@@ -82,7 +82,7 @@ tasks:
             -o "${{ .inputs.outputPath }}" \
             --flavor "${{ .inputs.flavor }}" \
             --set AGENT_IMAGE_TAG=$(uds zarf version) \
-            ${OPTIONS}
+            ${CREATE_OPTIONS}
 
   - name: uds-rke2
     description: "Build the UDS RKE2 Zarf package"
@@ -199,4 +199,4 @@ tasks:
         cmd: |
           sudo uds zarf package pull oci://ghcr.io/defenseunicorns/packages/uds/core:${CORE_PKG_VERSION}-${CORE_PKG_FLAVOR} \
             -o "build/packages" \
-            ${OPTIONS}
+            ${CREATE_OPTIONS}

@@ -20,7 +20,7 @@ packages:
 
   - name: local-path-init
     description: "Deploys the custom Zarf Init package"
-    repository: ghcr.io/justinthelaw/packages/uds/init
+    repository: ghcr.io/justinthelaw/packages/uds/uds-rke2/init
     # TODO: renovate setup
     ref: "v0.33.0-local"
 

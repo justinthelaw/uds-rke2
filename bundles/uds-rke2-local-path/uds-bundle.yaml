@@ -6,7 +6,7 @@ metadata:
   name: uds-rke2-bootstrap
   description: "A UDS bundle for bootstrapping an RKE2 cluster and installing UDS Core services"
   # x-release-please-start-version
-  version: "0.2.0"
+  version: "0.3.0"
   # x-release-please-end
   architecture: amd64
 
@@ -15,7 +15,7 @@ packages:
     description: "Deploys the UDS RKE2 Zarf package"
     repository: ghcr.io/justinthelaw/packages/uds/uds-rke2
     # x-release-please-start-version
-    ref: "0.2.0"
+    ref: "0.3.0"
     # x-release-please-end
 
   - name: local-path-init
@@ -28,7 +28,7 @@ packages:
     description: "Deploys the UDS RKE2 base infrastructure Zarf package"
     repository: ghcr.io/justinthelaw/packages/uds/uds-rke2/infrastructure
     # x-release-please-start-version
-    ref: "0.2.0"
+    ref: "0.3.0"
     # x-release-please-end
 
   - name: uds-core
@@ -117,5 +117,5 @@ packages:
     description: "Deploys the UDS Core Pepr policy exemptions"
     repository: ghcr.io/justinthelaw/packages/uds/uds-rke2/exemptions
     # x-release-please-start-version
-    ref: "0.2.0-local"
+    ref: "0.3.0"
     # x-release-please-end

@@ -6,11 +6,15 @@ on:
       - "main"
     paths:
       - "bundles"
+      - "tasks"
+      - "task.yaml"
   pull_request:
     branches:
       - "main"
     paths:
       - "bundles"
+      - "tasks"
+      - "task.yaml"
 
 concurrency:
   group: uds-lint-${{ github.ref }}
@@ -33,16 +37,28 @@ jobs:
         with:
           python-version: 3.11.6
 
+      - name: Install jsonschema
+        run: pip install check-jsonschema==0.28.0
+
       - name: Download UDS Schema
         # TODO: renovate setup
         run: curl -o uds.schema.json https://raw.githubusercontent.com/defenseunicorns/uds-cli/v0.10.4/uds.schema.json
 
-      - name: Install jsonschema
-        run: pip install check-jsonschema==0.28.0
+      - name: Validate uds-bundle.yaml
+        # TODO: add these back in when actually built
+        run: |
+          check-jsonschema bundles/uds-rke2-local-path/uds-bundle.yaml --schemafile uds.schema.json
+          check-jsonschema bundles/uds-rke2-longhorn/uds-bundle.yaml --schemafile uds.schema.json
+          check-jsonschema bundles/uds-rke2-rook-ceph/uds-bundle.yaml --schemafile uds.schema.json
+
+      - name: Download UDS Tasks Schema
+        # TODO: renovate setup
+        run: curl -o uds.schema.json https://raw.githubusercontent.com/defenseunicorns/uds-cli/v0.10.4/tasks.schema.json
 
       - name: Validate uds-bundle.yaml
         # TODO: add these back in when actually built
         run: |
-            check-jsonschema bundles/uds-rke2-local-path/uds-bundle.yaml --schemafile uds.schema.json
-            check-jsonschema bundles/uds-rke2-longhorn/uds-bundle.yaml --schemafile uds.schema.json
-            check-jsonschema bundles/uds-rke2-rook-ceph/uds-bundle.yaml --schemafile uds.schema.json
+          check-jsonschema tasks/create.yaml --schemafile tasks.schema.json
+          check-jsonschema tasks/publish.yaml --schemafile tasks.schema.json
+          check-jsonschema tasks/deploy.yaml --schemafile tasks.schema.json
+          check-jsonschema tasks.yaml --schemafile tasks.schema.json

@@ -1,10 +1,6 @@
 # TODO: renovate setup
 # yaml-language-server: $schema=https://raw.githubusercontent.com/defenseunicorns/uds-cli/v0.10.4/tasks.schema.json
 
-includes:
-  - create: ./create.yaml
-  - setup: ./setup.yaml
-
 variables:
   - name: VERSION
     description: "Explicitly set the version, overriding the official release tag"
@@ -17,38 +13,18 @@ variables:
 
 tasks:
   - name: all
-    description: "Builds and publishes all Zarf packages in the repository"
+    description: "Publishes all Zarf packages in the repository"
     actions:
-      - task: create:uds-rke2
       - task: uds-rke2
-      - task: setup:clean
-      - task: create:uds-rke2-infrastructure
       - task: uds-rke2-infrastructure
-      - task: setup:clean
-      - task: create:uds-rke2-exemptions-local-path
       - task: uds-rke2-exemptions-local-path
-      - task: setup:clean
-      - task: create:uds-rke2-exemptions-longhorn
       - task: uds-rke2-exemptions-longhorn
-      - task: setup:clean
-      - task: create:uds-rke2-exemptions-rook-ceph
       - task: uds-rke2-exemptions-rook-ceph
-      - task: setup:clean
-      - task: create:local-path
       - task: local-path
-      - task: setup:clean
-      - task: create:local-path-init
       - task: local-path-init
-      - task: setup:clean
-      - task: create:rook-ceph
       - task: rook-ceph
-      - task: setup:clean
-      - task: create:rook-ceph-init
       - task: rook-ceph-init
-      - task: setup:clean
-      - task: create:minio
       - task: minio
-      - task: setup:clean
 
   - name: publish
     description: "Publish a Zarf package for the amd64 architectures"

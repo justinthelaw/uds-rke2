@@ -116,6 +116,4 @@ packages:
   - name: uds-rke2-exemptions
     description: "Deploys the UDS Core Pepr policy exemptions"
     repository: ghcr.io/justinthelaw/packages/uds/uds-rke2/exemptions
-    # x-release-please-start-version
-    ref: "0.3.0"
-    # x-release-please-end
+    ref: "0.3.0-local"

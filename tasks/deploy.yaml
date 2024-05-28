@@ -2,9 +2,6 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/defenseunicorns/uds-cli/v0.10.4/tasks.schema.json
 
 variables:
-  - name: DISK_NAME
-    description: "The name of a Ceph-formatted disk (e.g. /dev/ubuntu-vg/ceph) that is to be wiped."
-    default: "dm-1"
   - name: DEPLOY_OPTIONS
     description: "Extra Zarf package or UDS bundle deployment options"
     default: "--no-progress --no-log-file --log-level warn --confirm"
@@ -132,18 +129,3 @@ tasks:
         cmd: |
           sudo uds zarf package deploy build/packages/zarf-package-core-amd64-*.tar.zst \
             ${DEPLOY_OPTIONS}
-
-  - name: rook-ceph-destroy
-    description: "Destroys an existing Rook-Ceph cluster installation and all associated data on the host node"
-    actions:
-      - description: "Run the Rook-Ceph destroy script"
-        cmd: |
-          DISK_NAME=${DISK_NAME} /root/uds-rke2-artifacts/rook-ceph/rook-ceph-destroy.sh
-
-  - name: uds-rke2-destroy
-    description: "Destroys an existing RKE2 cluster installation and all associated artifacts"
-    actions:
-      - description: "Run the RKE2 destroy script"
-        cmd: |
-          /root/uds-rke2-artifacts/rke2-destroy.sh
-          rm -rf /root/uds-rke2-artifacts/

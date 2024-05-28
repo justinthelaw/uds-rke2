@@ -3,6 +3,7 @@
 
 includes:
   - create: ./create.yaml
+  - setup: ./setup.yaml
 
 variables:
   - name: VERSION
@@ -20,34 +21,34 @@ tasks:
     actions:
       - task: create:uds-rke2
       - task: uds-rke2
-      - task: clean
+      - task: setup:clean
       - task: create:uds-rke2-infrastructure
       - task: uds-rke2-infrastructure
-      - task: clean
+      - task: setup:clean
       - task: create:uds-rke2-exemptions-local-path
       - task: uds-rke2-exemptions-local-path
-      - task: clean
+      - task: setup:clean
       - task: create:uds-rke2-exemptions-longhorn
       - task: uds-rke2-exemptions-longhorn
-      - task: clean
+      - task: setup:clean
       - task: create:uds-rke2-exemptions-rook-ceph
       - task: uds-rke2-exemptions-rook-ceph
-      - task: clean
+      - task: setup:clean
       - task: create:local-path
       - task: local-path
-      - task: clean
+      - task: setup:clean
       - task: create:local-path-init
       - task: local-path-init
-      - task: clean
+      - task: setup:clean
       - task: create:rook-ceph
       - task: rook-ceph
-      - task: clean
+      - task: setup:clean
       - task: create:rook-ceph-init
       - task: rook-ceph-init
-      - task: clean
+      - task: setup:clean
       - task: create:minio
       - task: minio
-      - task: clean
+      - task: setup:clean
 
   - name: publish
     description: "Publish a Zarf package for the amd64 architectures"
@@ -86,15 +87,6 @@ tasks:
             "oci://${{ .inputs.targetRepo }}" \
             ${PUBLISH_OPTIONS}
 
-  - name: clean
-    description: "Cleans the host system of build artifacts"
-    actions:
-      - description: "Remove the build folder, Docker artifacts, and clear UDS and Zarf caches"
-        cmd: |
-          sudo uds zarf tools clear-cache && sudo rm -rf ~/.uds-cache && sudo rm -rf ~/.zarf-cache
-          sudo docker system prune -a -f && sudo docker volume prune -f
-          sudo rm -rf build/ zarf-sbom/ /tmp/zarf-*
-
   - name: uds-rke2
     description: "Publish the UDS RKE2 Zarf package"
     actions:
@@ -110,7 +102,7 @@ tasks:
       - task: publish
         with:
           path: build/packages
-          name: uds-rke2-infrastructure
+          name: infrastructure
           targetRepo: ghcr.io/justinthelaw/packages/uds/uds-rke2
 
   - name: uds-rke2-exemptions-local-path
@@ -119,7 +111,7 @@ tasks:
       - task: publish
         with:
           path: build/packages/local-path
-          name: uds-rke2-exemptions
+          name: exemptions
           targetRepo: ghcr.io/justinthelaw/packages/uds/uds-rke2
 
   - name: uds-rke2-exemptions-longhorn
@@ -128,7 +120,7 @@ tasks:
       - task: publish
         with:
           path: build/packages/longhorn
-          name: uds-rke2-exemptions
+          name: exemptions
           targetRepo: ghcr.io/justinthelaw/packages/uds/uds-rke2
 
   - name: uds-rke2-exemptions-rook-ceph
@@ -137,7 +129,7 @@ tasks:
       - task: publish
         with:
           path: build/packages/rook-ceph
-          name: uds-rke2-exemptions
+          name: exemptions
           targetRepo: ghcr.io/justinthelaw/packages/uds/uds-rke2
 
   - name: local-path

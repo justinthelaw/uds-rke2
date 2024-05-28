@@ -5,6 +5,7 @@ includes:
   - create: ./tasks/create.yaml
   - deploy: ./tasks/deploy.yaml
   - publish: ./tasks/publish.yaml
+  - setup: ./tasks/setup.yaml
   - create-core: https://raw.githubusercontent.com/defenseunicorns/uds-core/v0.19.0/tasks/create.yaml
   - deploy-core: https://raw.githubusercontent.com/defenseunicorns/uds-core/v0.19.0/tasks/deploy.yaml
 
@@ -17,7 +18,7 @@ tasks:
         with:
           joinToken: "my-test-token"
 
-      - task: deploy:uds-rke2-destroy
+      - task: setup:uds-rke2-destroy
 
   - name: local-path-bootstrap
     description: "Bootstrap an RKE2 cluster, with Local Path Provisioner Zarf Init, MinIO, and UDS Core packages"

@@ -34,9 +34,6 @@ tasks:
       - task: uds-rke2-exemptions-rook-ceph
       - task: local-path
       - task: local-path-init
-      # TODO: add these back in when actually built
-      # - task: longhorn
-      # - task: longhorn-init
       - task: rook-ceph
       - task: rook-ceph-init
       - task: minio

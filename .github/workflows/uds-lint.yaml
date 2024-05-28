@@ -49,10 +49,8 @@ jobs:
         run: curl -o uds.schema.json https://raw.githubusercontent.com/defenseunicorns/uds-cli/v0.10.4/uds.schema.json
 
       - name: Validate uds-bundle.yaml
-        # TODO: add these back in when actually built
         run: |
           check-jsonschema bundles/uds-rke2-local-path/uds-bundle.yaml --schemafile uds.schema.json
-          check-jsonschema bundles/uds-rke2-longhorn/uds-bundle.yaml --schemafile uds.schema.json
           check-jsonschema bundles/uds-rke2-rook-ceph/uds-bundle.yaml --schemafile uds.schema.json
 
       - name: Download UDS Tasks Schema
@@ -60,7 +58,6 @@ jobs:
         run: curl -o tasks.schema.json https://raw.githubusercontent.com/defenseunicorns/uds-cli/v0.10.4/tasks.schema.json
 
       - name: Validate uds-bundle.yaml
-        # TODO: add these back in when actually built
         run: |
           check-jsonschema tasks/create.yaml --schemafile tasks.schema.json
           check-jsonschema tasks/publish.yaml --schemafile tasks.schema.json

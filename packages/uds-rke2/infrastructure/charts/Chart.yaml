@@ -1,0 +1,7 @@
+apiVersion: v2
+name: uds-rke2-infrastructure
+description: UDS RKE2 infrastructure chart
+type: application
+# x-release-please-start-version
+version: 0.2.0
+# x-release-please-end

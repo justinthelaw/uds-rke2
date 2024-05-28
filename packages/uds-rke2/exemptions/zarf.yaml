@@ -1,0 +1,76 @@
+# TODO: renovate setup
+# yaml-language-server: $schema=https://raw.githubusercontent.com/defenseunicorns/uds-cli/v0.10.4/zarf.schema.json
+
+kind: ZarfPackageConfig
+metadata:
+  name: exemptions
+  description: "UDS RKE2 service Pepr policy exemptions"
+  architecture: amd64
+  version: "###ZARF_PKG_TMPL_VERSION###"
+
+components:
+  - name: uds-rke2-infrastructure-exemptions
+    description: "UDS RKE2 Infrastructure UDS Core Pepr policy exemptions"
+    required: true
+    manifests:
+      - name: uds-rke2-infrastructure-exemptions
+        namespace: uds-policy-exemptions
+        files:
+          - charts/uds-rke2-infrastructure-exemptions.yaml
+    actions:
+      onDeploy:
+        after:
+          - cmd: sleep 10
+            # See https://github.com/defenseunicorns/uds-core/issues/409
+            description: Workaround for upstream UDS Core Pepr exemption race condition
+
+  - name: local-path-exemptions
+    description: "MetalLB UDS Core Pepr policy exemptions"
+    required: true
+    only:
+      flavor: local-path
+    manifests:
+      - name: local-path-exemptions
+        namespace: uds-policy-exemptions
+        files:
+          - charts/local-path-exemptions.yaml
+    actions:
+      onDeploy:
+        after:
+          - cmd: sleep 10
+            # See https://github.com/defenseunicorns/uds-core/issues/409
+            description: Workaround for upstream UDS Core Pepr exemption race condition
+
+  - name: longhorn-exemptions
+    description: "MetalLB UDS Core Pepr policy exemptions"
+    required: true
+    only:
+      flavor: longhorn
+    manifests:
+      - name: longhorn-exemptions
+        namespace: uds-policy-exemptions
+        files:
+          - charts/longhorn-exemptions.yaml
+    actions:
+      onDeploy:
+        after:
+          - cmd: sleep 10
+            # See https://github.com/defenseunicorns/uds-core/issues/409
+            description: Workaround for upstream UDS Core Pepr exemption race condition
+
+  - name: rook-ceph-exemptions
+    description: "MetalLB UDS Core Pepr policy exemptions"
+    required: true
+    only:
+      flavor: rook-ceph
+    manifests:
+      - name: rook-ceph-exemptions
+        namespace: uds-policy-exemptions
+        files:
+          - charts/rook-ceph-exemptions.yaml
+    actions:
+      onDeploy:
+        after:
+          - cmd: sleep 10
+            # See https://github.com/defenseunicorns/uds-core/issues/409
+            description: Workaround for upstream UDS Core Pepr exemption race condition

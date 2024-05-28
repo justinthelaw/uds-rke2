@@ -3,4 +3,4 @@ nginx:
     - name: "private-registry"
 
   # TODO: renovate setup
-  image: ###ZARF_REGISTRY###/ironbank/opensource/nginx/nginx-alpine:1.25.3
+  image: registry1.dso.mil/ironbank/opensource/nginx/nginx-alpine:1.25.3

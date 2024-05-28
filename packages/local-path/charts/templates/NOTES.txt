@@ -1,9 +1,11 @@
-You can create a hostPath-backed persistent volume with a persistent volume claim like this:
+You can create a hostPath or local-backed persistent volume with a persistent volume claim like this:
 
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: uds-local-path-storage
+  name: uds-component
+  labels:
+    some-label-key: some-label-value
 spec:
   accessModes:
     - ReadWriteOnce

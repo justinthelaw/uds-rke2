@@ -82,7 +82,10 @@ spec:
             - name: config-volume
               mountPath: /etc/nginx/nginx.conf
               subPath: nginx.conf
+            - name: pid
+              mountPath: /var/run/
       volumes:
         - name: config-volume
           configMap:
             name: nginx-config
+        - name: pid

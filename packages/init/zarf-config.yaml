@@ -3,10 +3,6 @@ package:
     max_package_size: "1000000000"
     # These values are sourced from and updated with https://github.com/defenseunicorns/zarf/blob/main/zarf-config.toml
     set:
-      # x-release-please-start-version
-      version: "0.2.0"
-      # x-release-please-end
-
       ###########
       # ZARF INIT
       ###########

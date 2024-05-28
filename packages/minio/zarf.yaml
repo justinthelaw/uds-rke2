@@ -28,3 +28,14 @@ components:
         url: https://charts.min.io/
         valuesFiles:
           - "values/minio-values.yaml"
+    actions:
+      onDeploy:
+        after:
+          - wait:
+              cluster:
+                kind: Pod
+                name: app=minio
+                namespace: minio
+                condition: "'{.status.conditions[2].status}'=True"
+            maxTotalSeconds: 120
+            description: Waiting for MinIO to be ready

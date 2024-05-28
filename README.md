@@ -1,5 +1,7 @@
 # UDS RKE2 Environment
 
+**_Unicorn Delivery Service (UDS), Rancher Kubernetes Engine 2 (RKE2)_**
+
 > [!IMPORTANT]
 > This is an unofficial sandbox repository for developing and testing a UDS RKE2 capability. Please go to the [defenseunicorns](https://github.com/defenseunicorns) organization for official UDS capabilities.
 
@@ -31,8 +33,8 @@ alias udsclean="uds zarf tools clear-cache && rm -rf ~/.uds-cache && rm -rf ~/.z
 For fulfilling `xargs` and `kubectl` binary requirements necessary for running some of the _optional_ deployment helper scripts:
 
 ```bash
-touch /usr/local/bin/kubectl 
-echo -e "#!/bin/bash\nuds zarf tools kubectl \"\$@\"" > /usr/local/bin/kubectl
+touch /usr/local/bin/kubectl
+echo '#!/bin/bash\nuds zarf tools kubectl "$@"' > /usr/local/bin/kubectl
 chmod +x /usr/local/bin/kubectl
 ```
 
@@ -126,7 +128,7 @@ Run the following to remove all build artifacts:
 rm -rf build/ **/zarf-sbom/
 ```
 
-Run the following to completely destroy the RKE2 cluster and all of its artifacts from the node's host:
+Run the following to completely destroy the UDS RKE2 node and all of UDS RKE2's artifacts from the node's host:
 
 ```bash
 uds run deploy:uds-rke2-destroy
@@ -142,9 +144,9 @@ Below are resources to explain some of the rationale and inner workings of the R
 
 ### Configuration
 
-- [Operating System Configuration Scripts](docs/OS.md)
-- [RKE2-Specific Configuration Scripts](docs/RKE2.md)
-- [DNS Configuration and Assumptions](docs/DNS.md)
+- [Operating System Configuration](docs/OS.md)
+- [RKE2-Specific Configuration](docs/RKE2.md)
+- [UDS-RKE2 Infrastructure and Exemptions](docs/UDS-RKE2.md)
 - [MinIO Configuration](docs/MINIO.md)
 - [Rook-Ceph Configuration](docs/ROOK-CEPH.md)
 - [Longhorn Configuration](docs/LONGHORN.md)

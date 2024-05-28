@@ -8,6 +8,12 @@ Local Path Provisioner can still be useful if paired with an operator with built
 
 ### Pre-Requisites
 
+#### Node Configuration
+
+Node-level storage configurations are set within the [Node Path Map values file](../packages/local-path/values/node-path-map-values.yaml). The instructions for filling out the values file are within the values file. The default mount for all nodes that do not have a specific configuration is `/opt/uds/`.
+
+#### Storage Configuration
+
 Ensure that the local volume mount points are accessible to the cluster. For example, the default mount point for all nodes is `/opt/uds`, which means your storage devices, logical or physical, must be mounted at point `/opt/uds` on that node. An example of a logical volume mount is as follows:
 
 ```bash
@@ -40,7 +46,7 @@ k apply -f https://raw.githubusercontent.com/rancher/local-path-provisioner/v0.0
 k patch storageclass local-path -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
 
 # Check the status and resources of `local-path-provisioner`
-k -n local-path-storage get pods -l app=local-path-provisioner
+k -n kube-system get pods -l app=local-path-provisioner
 k -n local-path-storage logs -f -l app=local-path-provisioner # get <pod-name>
 k -n local-path-storage get pods <pod-name> -o yaml
 k get storageclass local-path -o yaml

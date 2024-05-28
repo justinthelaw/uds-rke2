@@ -1,0 +1,14 @@
+speaker:
+  image:
+    repository: registry1.dso.mil/ironbank/opensource/metallb/speaker
+  securityContext:
+    runAsUser: 0
+  frr:
+    enabled: false
+
+controller:
+  image:
+    repository: registry1.dso.mil/ironbank/opensource/metallb/controller
+
+frrK8s:
+  enabled: false

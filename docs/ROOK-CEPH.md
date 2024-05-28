@@ -1,5 +1,5 @@
 > [!IMPORTANT]
-> Rook-Ceph is meant for enterprise-grade, multi-node clusters. Rook-Ceph in a single-node configuration is not currently supported in this project; however, the single-node content and documentation will stay in this project in case of future work dedicated to providing a test and development deployment of Rook-Ceph.
+> Rook-Ceph is meant for enterprise-grade, multi-node clusters. Rook-Ceph in a single-node configuration is not currently supported in this project; however, the single-node content and documentation will stay in this project in case of future work dedicated to providing a test and development deployment of Rook-Ceph. Additionally, the Rook-Ceph multi-node configuration within this repository is also experimental. Deploying UDS RKE2 Rook-Ceph may require further configuration and UDS bundle overrides.
 
 # Rook-Ceph Configuration
 

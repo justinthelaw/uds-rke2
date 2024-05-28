@@ -87,11 +87,9 @@ packages:
             - name: VELERO_USE_SECRET
               description: "Toggle use secret off to use IRSA."
               path: credentials.useSecret
-              default: "false"
             - name: VELERO_IRSA_ROLE_ARN
               description: "IRSA role arn for annotation"
               path: serviceAccount.server.annotations.irsa/role-arn
-              default: ""
 
       istio-admin-gateway:
         uds-istio-config:

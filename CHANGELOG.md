@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.3.0](https://github.com/justinthelaw/uds-rke2/compare/v0.2.0...v0.3.0) (2024-05-28)
+
+
+### Features
+
+* local path provisioner init ([#18](https://github.com/justinthelaw/uds-rke2/issues/18)) ([8b53f6a](https://github.com/justinthelaw/uds-rke2/commit/8b53f6a3b044aecf0a3446131ff8ee017ee4befa))
+* uds base infrastructure, improved docs and repo structure ([#21](https://github.com/justinthelaw/uds-rke2/issues/21)) ([9c2c1c2](https://github.com/justinthelaw/uds-rke2/commit/9c2c1c2bf2f346c9b4911705203b44439f7744f3))
+
+
+### Bug Fixes
+
+* prepare build and release for uds bundling ([#24](https://github.com/justinthelaw/uds-rke2/issues/24)) ([c337436](https://github.com/justinthelaw/uds-rke2/commit/c337436a313bc6e05f9f37af8a48c918f8362796))
+
 ## [0.2.0](https://github.com/justinthelaw/uds-rke2/compare/v0.1.0...v0.2.0) (2024-05-08)
 
 

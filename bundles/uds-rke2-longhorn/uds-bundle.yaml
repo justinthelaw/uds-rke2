@@ -1,0 +1,119 @@
+# TODO: renovate setup
+# yaml-language-server: $schema=https://raw.githubusercontent.com/defenseunicorns/uds-cli/v0.10.4/uds.schema.json
+
+kind: UDSBundle
+metadata:
+  name: uds-rke2-bootstrap
+  description: "A UDS bundle for bootstrapping an RKE2 cluster and installing UDS Core services"
+  # x-release-please-start-version
+  version: "0.2.0"
+  # x-release-please-end
+  architecture: amd64
+
+packages:
+  - name: uds-rke2
+    description: "Deploys the UDS RKE2 Zarf package"
+    repository: ghcr.io/justinthelaw/packages/uds/uds-rke2
+    # x-release-please-start-version
+    ref: "0.2.0"
+    # x-release-please-end
+
+  - name: longhorn-init
+    description: "Deploys the custom Zarf Init package"
+    repository: ghcr.io/justinthelaw/packages/uds/init
+    # TODO: renovate setup
+    ref: "v0.33.0-longhorn"
+
+  - name: uds-rke2-infrastructure
+    description: "Deploys the UDS RKE2 base infrastructure Zarf package"
+    repository: ghcr.io/justinthelaw/packages/uds/uds-rke2/infrastructure
+    # x-release-please-start-version
+    ref: "0.2.0"
+    # x-release-please-end
+
+  - name: uds-core
+    repository: ghcr.io/defenseunicorns/packages/uds/core
+    # TODO: renovate setup
+    ref: "0.22.0-registry1"
+    overrides:
+      loki:
+        loki:
+          values:
+            # Override default dns service name for Loki Gateway
+            - path: "global.dnsService"
+              value: "rke2-coredns-rke2-coredns"
+            - path: loki.storage.s3.endpoint
+              value: ""
+            - path: loki.storage.s3.secretAccessKey
+              value: ""
+            - path: loki.storage.s3.accessKeyId
+              value: ""
+          variables:
+            - name: LOKI_CHUNKS_BUCKET
+              description: "The object storage bucket for Loki chunks"
+              path: loki.storage.bucketNames.chunks
+              default: "uds"
+            - name: LOKI_RULER_BUCKET
+              description: "The object storage bucket for Loki ruler"
+              path: loki.storage.bucketNames.ruler
+              default: "uds"
+            - name: LOKI_ADMIN_BUCKET
+              description: "The object storage bucket for Loki admin"
+              path: loki.storage.bucketNames.admin
+              default: "uds"
+            - name: LOKI_S3_REGION
+              description: "The S3 region"
+              path: loki.storage.s3.region
+              default: "us-east-1"
+            - name: LOKI_IRSA_ROLE_ARN
+              description: "The irsa role annotation"
+              path: serviceAccount.annotations.irsa/role-arn
+            - name: LOKI_WRITE_REPLICAS
+              path: write.replicas
+              description: "Loki write replicas"
+              default: "1"
+            - name: LOKI_READ_REPLICAS
+              path: read.replicas
+              description: "Loki read replicas"
+              default: "1"
+            - name: LOKI_BACKEND_REPLICAS
+              path: backend.replicas
+              description: "Loki backend replicas"
+              default: "1"
+
+      velero:
+        velero:
+          variables:
+            - name: VELERO_USE_SECRET
+              description: "Toggle use secret off to use IRSA."
+              path: credentials.useSecret
+            - name: VELERO_IRSA_ROLE_ARN
+              description: "IRSA role arn for annotation"
+              path: serviceAccount.server.annotations.irsa/role-arn
+
+      istio-admin-gateway:
+        uds-istio-config:
+          variables:
+            - name: ADMIN_TLS_CERT
+              description: "The TLS cert for the admin gateway (must be base64 encoded)"
+              path: ../tls.cert
+            - name: ADMIN_TLS_KEY
+              description: "The TLS key for the admin gateway (must be base64 encoded)"
+              path: ../tls.key
+
+      istio-tenant-gateway:
+        uds-istio-config:
+          variables:
+            - name: TENANT_TLS_CERT
+              description: "The TLS cert for the tenant gateway (must be base64 encoded)"
+              path: ../tls.cert
+            - name: TENANT_TLS_KEY
+              description: "The TLS key for the tenant gateway (must be base64 encoded)"
+              path: ../tls.key
+
+  - name: uds-rke2-exemptions
+    description: "Deploys the UDS Core Pepr policy exemptions"
+    repository: ghcr.io/justinthelaw/packages/uds/uds-rke2/exemptions
+    # x-release-please-start-version
+    ref: "0.2.0-longhorn"
+    # x-release-please-end

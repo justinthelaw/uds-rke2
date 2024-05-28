@@ -5,8 +5,16 @@ includes:
   - create: ./tasks/create.yaml
   - deploy: ./tasks/deploy.yaml
   - publish: ./tasks/publish.yaml
+  - setup: ./tasks/setup.yaml
   - create-core: https://raw.githubusercontent.com/defenseunicorns/uds-core/v0.19.0/tasks/create.yaml
   - deploy-core: https://raw.githubusercontent.com/defenseunicorns/uds-core/v0.19.0/tasks/deploy.yaml
+
+variables:
+  - name: VERSION
+    description: "Explicitly set the version, overriding the official release tag"
+    # x-release-please-start-version
+    default: "0.2.0"
+    # x-release-please-end
 
 tasks:
   - name: rke2-bootstrap-test
@@ -17,7 +25,7 @@ tasks:
         with:
           joinToken: "my-test-token"
 
-      - task: deploy:uds-rke2-destroy
+      - task: setup:uds-rke2-destroy
 
   - name: local-path-bootstrap
     description: "Bootstrap an RKE2 cluster, with Local Path Provisioner Zarf Init, MinIO, and UDS Core packages"
@@ -93,3 +101,37 @@ tasks:
 
       - task: create:uds-rke2-exemptions-rook-ceph
       - task: deploy:uds-rke2-exemptions-rook-ceph
+
+  - name: release
+    description: "Builds and publishes all Zarf packages in the repository"
+    actions:
+      - task: create:uds-rke2
+      - task: publish:uds-rke2
+      - task: setup:clean
+      - task: create:uds-rke2-infrastructure
+      - task: publish:uds-rke2-infrastructure
+      - task: setup:clean
+      - task: create:uds-rke2-exemptions-local-path
+      - task: publish:uds-rke2-exemptions-local-path
+      - task: setup:clean
+      - task: create:uds-rke2-exemptions-longhorn
+      - task: publish:uds-rke2-exemptions-longhorn
+      - task: setup:clean
+      - task: create:uds-rke2-exemptions-rook-ceph
+      - task: publish:uds-rke2-exemptions-rook-ceph
+      - task: setup:clean
+      - task: create:local-path
+      - task: publish:local-path
+      - task: setup:clean
+      - task: create:local-path-init
+      - task: publish:local-path-init
+      - task: setup:clean
+      - task: create:rook-ceph
+      - task: publish:rook-ceph
+      - task: setup:clean
+      - task: create:rook-ceph-init
+      - task: publish:rook-ceph-init
+      - task: setup:clean
+      - task: create:minio
+      - task: publish:minio
+      - task: setup:clean

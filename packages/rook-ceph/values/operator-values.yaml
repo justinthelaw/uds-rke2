@@ -13,9 +13,8 @@ csi:
 
   # Number of device storage provisioners per node
   provisionerReplicas: 1
-  
-  # TODO: turn back down to INFO for production
-  logLevel: "DEBUG"
+
+  logLevel: "INFO"
 
   readAffinity:
     enabled: true

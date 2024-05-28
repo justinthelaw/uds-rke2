@@ -18,11 +18,11 @@ packages:
     ref: "0.2.0"
     # x-release-please-end
 
-  - name: rook-ceph-init
+  - name: longhorn-init
     description: "Deploys the custom Zarf Init package"
     repository: ghcr.io/justinthelaw/packages/uds/uds-rke2/init
     # TODO: renovate setup
-    ref: "v0.33.0-rook"
+    ref: "v0.33.0-longhorn"
 
   - name: uds-rke2-infrastructure
     description: "Deploys the UDS RKE2 base infrastructure Zarf package"
@@ -115,5 +115,5 @@ packages:
     description: "Deploys the UDS Core Pepr policy exemptions"
     repository: ghcr.io/justinthelaw/packages/uds/uds-rke2/exemptions
     # x-release-please-start-version
-    ref: "0.2.0-rook"
+    ref: "0.2.0-longhorn"
     # x-release-please-end

@@ -44,10 +44,11 @@ jobs:
 
       - name: Validate zarf.yaml
         run: |
-          check-jsonschema packages/exemptions/zarf.yaml --schemafile zarf.schema.json
+          check-jsonschema packages/uds-rke2/zarf.yaml --schemafile zarf.schema.json
+          check-jsonschema packages/uds-rke2/exemptions/zarf.yaml --schemafile zarf.schema.json
+          check-jsonschema packages/uds-rke2/infrastructure/zarf.yaml --schemafile zarf.schema.json
           check-jsonschema packages/init/zarf.yaml --schemafile zarf.schema.json
           check-jsonschema packages/minio/zarf.yaml --schemafile zarf.schema.json
-          check-jsonschema packages/uds-rke2/zarf.yaml --schemafile zarf.schema.json
           check-jsonschema packages/local-path/zarf.yaml --schemafile zarf.schema.json
           # TODO: add these back in when actually built
           # check-jsonschema packages/longhorn/zarf.yaml --schemafile zarf.schema.json

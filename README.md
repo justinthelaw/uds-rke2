@@ -1,5 +1,7 @@
 # UDS RKE2 Environment
 
+**_Unicorn Delivery Service (UDS), Rancher Kubernetes Engine 2 (RKE2)_**
+
 > [!IMPORTANT]
 > This is an unofficial sandbox repository for developing and testing a UDS RKE2 capability. Please go to the [defenseunicorns](https://github.com/defenseunicorns) organization for official UDS capabilities.
 
@@ -31,8 +33,8 @@ alias udsclean="uds zarf tools clear-cache && rm -rf ~/.uds-cache && rm -rf ~/.z
 For fulfilling `xargs` and `kubectl` binary requirements necessary for running some of the _optional_ deployment helper scripts:
 
 ```bash
-touch /usr/local/bin/kubectl 
-echo -e "#!/bin/bash\nuds zarf tools kubectl \"\$@\"" > /usr/local/bin/kubectl
+touch /usr/local/bin/kubectl
+echo '#!/bin/bash\nuds zarf tools kubectl "$@"' > /usr/local/bin/kubectl
 chmod +x /usr/local/bin/kubectl
 ```
 
@@ -46,9 +48,9 @@ chmod +x /usr/local/bin/kubectl
 ### Virtual Machines
 
 > [!CAUTION]
-> Due to the the disk formatting operations, networking and STIG'ing configurations that are applied to a node's host, it is highly recommended that the contents of this repository are not directly installed on a personal machine.
+> Due to the the disk formatting operations, networking and STIG configurations that are applied to a node's host, it is highly recommended that the contents of this repository are not directly installed on a personal machine.
 
-The best way to test UDS RKE2 is to spin-up 1 or more nodes using virtual machines or networks.
+The best way to test UDS RKE2 is to spin-up one or more nodes using a containerized method, such as virtual machines or networks.
 
 [LeapfrogAI](https://github.com/defenseunicorns/leapfrogai), the main support target of this bundle, requires GPU passthrough to all worker nodes that will have a taint for attracting pods with GPU resource and workload requirements.
 
@@ -69,6 +71,20 @@ See the UDS [`create` tasks](./tasks/create.yaml) file for more details.
 To create all packages and bundles, do the following:
 
 ```bash
+# Login to Registry1
+set +o history
+export REGISTRY1_USERNAME="YOUR-USERNAME-HERE"
+export REGISTRY1_PASSWORD="YOUR-PASSWORD-HERE"
+echo $REGISTRY1_PASSWORD | zarf tools registry login registry1.dso.mil --username $REGISTRY1_USERNAME --password-stdin
+set -o history
+
+# Login to ghcr
+set +o history
+export GHCR_USERNAME="YOUR-USERNAME-HERE"
+export GHCR_PASSWORD="YOUR-PASSWORD-HERE"
+echo $GHCR_PASSWORD | zarf tools registry login ghcr.io --username $GHCR_USERNAME --password-stdin
+set -o history
+
 uds run create:all
 ```
 
@@ -79,6 +95,9 @@ See the UDS [`deploy` tasks](./tasks/deploy.yaml) file for more details.
 To deploy all packages and bundles, do the following:
 
 ```bash
+# create self-signed test certs
+uds run create:tls-cert
+
 uds run deploy:all
 ```
 
@@ -89,6 +108,13 @@ See the UDS [`publish` tasks](./tasks/publish.yaml) file for more details.
 To publish all packages and bundles, do the following:
 
 ```bash
+# Login to GHCR
+set +o history
+export GHCR_USERNAME="YOUR-USERNAME-HERE"
+export GHCR_PASSWORD="YOUR-PASSWORD-HERE"
+echo $GHCR_PASSWORD | zarf tools registry login ghcr.io --username $GHCR_USERNAME --password-stdin
+set -o history
+
 uds run publish:all
 ```
 
@@ -99,7 +125,13 @@ uds run publish:all
 Run the following to remove all build artifacts:
 
 ```bash
-rm -rf build/ zarf-sbom/
+rm -rf build/ **/zarf-sbom/
+```
+
+Run the following to completely destroy the UDS RKE2 node and all of UDS RKE2's artifacts from the node's host:
+
+```bash
+uds run deploy:uds-rke2-destroy
 ```
 
 #### Packages
@@ -112,9 +144,9 @@ Below are resources to explain some of the rationale and inner workings of the R
 
 ### Configuration
 
-- [Operating System Configuration Scripts](docs/OS.md)
-- [RKE2-Specific Configuration Scripts](docs/RKE2.md)
-- [DNS Configuration and Assumptions](docs/DNS.md)
+- [Operating System Configuration](docs/OS.md)
+- [RKE2-Specific Configuration](docs/RKE2.md)
+- [UDS-RKE2 Infrastructure and Exemptions](docs/UDS-RKE2.md)
 - [MinIO Configuration](docs/MINIO.md)
 - [Rook-Ceph Configuration](docs/ROOK-CEPH.md)
 - [Longhorn Configuration](docs/LONGHORN.md)

@@ -22,8 +22,6 @@ tasks:
   - name: local-path-bootstrap
     description: "Bootstrap an RKE2 cluster, with Local Path Provisioner Zarf Init, MinIO, and UDS Core packages"
     actions:
-      - task: setup:temp-build-folder
-
       - task: create:uds-rke2
       - task: deploy:uds-rke2-bootstrap
         with:
@@ -32,16 +30,33 @@ tasks:
       - task: create:local-path-init
       - task: deploy:local-path-init
 
-      - task: create:minio
-      - task: deploy:minio
+      - task: create:uds-rke2-infrastructure
+      - task: deploy:uds-rke2-infrastructure
 
-      - task: deploy:specific-core-package-release
+      - task: create:uds-core
+      - task: deploy:uds-core
+
+      - task: create:uds-rke2-exemptions-local-path
+      - task: deploy:uds-rke2-exemptions-local-path
+
+  - name: local-path-bootstrap-without-create
+    description: "Bootstrap an RKE2 cluster, with Local Path Provisioner Zarf Init, MinIO, and UDS Core packages"
+    actions:
+      - task: deploy:uds-rke2-bootstrap
+        with:
+          joinToken: "my-test-token"
+
+      - task: deploy:local-path-init
+
+      - task: deploy:uds-rke2-infrastructure
+
+      - task: deploy:uds-core
+
+      - task: deploy:uds-rke2-exemptions-local-path
 
   - name: longhorn-bootstrap
     description: "Bootstrap an RKE2 cluster, with Longhorn Zarf Init, MinIO, and UDS Core packages"
     actions:
-      - task: setup:temp-build-folder
-
       - task: create:uds-rke2
       - task: deploy:uds-rke2-bootstrap
         with:
@@ -50,16 +65,18 @@ tasks:
       - task: create:longhorn-init
       - task: deploy:longhorn-init
 
-      - task: create:minio
-      - task: deploy:minio
+      - task: create:uds-rke2-infrastructure
+      - task: deploy:uds-rke2-infrastructure
 
-      - task: deploy:specific-core-package-release
+      - task: create:uds-core
+      - task: deploy:uds-core
+
+      - task: create:uds-rke2-exemptions-longhorn
+      - task: deploy:uds-rke2-exemptions-longhorn
 
   - name: rook-ceph-bootstrap
     description: "Bootstrap an RKE2 cluster, with Rook-Ceph Zarf Init and UDS Core packages"
     actions:
-      - task: setup:temp-build-folder
-
       - task: create:uds-rke2
       - task: deploy:uds-rke2-bootstrap
         with:
@@ -68,4 +85,11 @@ tasks:
       - task: create:rook-ceph-init
       - task: deploy:rook-ceph-init
 
-      - task: deploy:specific-core-package-release
+      - task: create:uds-rke2-infrastructure
+      - task: deploy:uds-rke2-infrastructure
+
+      - task: create:uds-core
+      - task: deploy:uds-core
+
+      - task: create:uds-rke2-exemptions-rook-ceph
+      - task: deploy:uds-rke2-exemptions-rook-ceph

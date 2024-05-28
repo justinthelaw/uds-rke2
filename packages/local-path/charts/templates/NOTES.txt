@@ -1,0 +1,15 @@
+You can create a hostPath or local-backed persistent volume with a persistent volume claim like this:
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: uds-component
+  labels:
+    some-label-key: some-label-value
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: {{ .Values.storageClass.name }}
+  resources:
+    requests:
+      storage: 2Gi

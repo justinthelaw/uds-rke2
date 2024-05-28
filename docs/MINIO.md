@@ -1,6 +1,6 @@
 # MinIO Configuration
 
-MinIO is an optional package that deploys a MinIO layer, for a full-featured and simplified S3 object storage API and service, on top of the [Local Path Provisioner](./LOCAL-PATH.md) or [Longhorn](./LONGHORN.md) storage solutions. MinIO can be deployed as a component as part of the UDS RKE2 [standard bundle](../bundles/rke2-standard/uds-bundle.yaml), but is not included in the [slim bundle](../bundles/rke2-slim/uds-bundle.yaml).
+MinIO is a package that deploys a full-featured and simplified S3 object storage API and service. This package is only deployed on top of the [Local Path Provisioner](./LOCAL-PATH.md) or [Longhorn](./LONGHORN.md) storage solutions.
 
 ## Usage
 
@@ -13,17 +13,17 @@ users:
     policy: readwrite-username-policy
 ```
 
-You can port-forward ```uds zarf tools kubectl port-forward service/minio 9000:9000 -n uds-rke2-stack``` to access the service externally from where you can use any S3-compatible client to configure your buckets or the MinIO (`mc`) cli to handle other configurations, users or policy management. Similar functions could be performed in-cluster as well via a Job or other means.
+You can port-forward ```uds zarf tools kubectl port-forward service/minio 9000:9000 -n minio``` to access the service externally from where you can use any S3-compatible client to configure your buckets or the MinIO (`mc`) cli to handle other configurations, users or policy management. Similar functions could be performed in-cluster as well via a Job or other means.
 
 ## Quickstart
 
 ```bash
 # port-forward the MinIO service
-uds zarf tools kubectl port-forward service/minio 9000:9000 -n uds-rke2-stack
+uds zarf tools kubectl port-forward service/minio 9000:9000 -n minio
 
 # Get the MinIO Admin Credentials
-ROOT_PASSWORD=$(uds zarf tools kubectl get secret "minio" -n "uds-rke2-stack" -o json | jq -r '.data.rootPassword' | base64 --decode)
-ROOT_USER=$(uds zarf tools kubectl get secret "minio" -n "uds-rke2-stack" -o json | jq -r '.data.rootUser' | base64 --decode)
+ROOT_PASSWORD=$(uds zarf tools kubectl get secret "minio" -n "minio" -o json | jq -r '.data.rootPassword' | base64 --decode)
+ROOT_USER=$(uds zarf tools kubectl get secret "minio" -n "minio" -o json | jq -r '.data.rootUser' | base64 --decode)
 ```
 
 ### MinIO CLI
@@ -51,7 +51,7 @@ Please see the [reference](https://min.io/docs/minio/linux/reference/minio-mc-ad
 
 ## Configuring MinIO in This Package
 
-The MinIO config provided in this package cannot be modified at deploy time without building a custom version of the package that overrides the values file defaults in [minio-values.yaml](../packages/init/values/minio-values.yaml).
+The MinIO config provided in this package cannot be modified at deploy time without building a custom version of the package that overrides the values file defaults in [minio-values.yaml](../packages/minio/values/minio-values.yaml).
 
 Example Values File:
 
@@ -89,30 +89,24 @@ This example will override the default users and buckets provisioned in the MinI
 ```yaml
 # uds-bundle.yaml
 
-packages:
-  - name: uds-rke2
-    repository: ghcr.io/justinthelaw/packages/uds/uds-rke2
-    # x-release-please-start-version
-    ref: "0.2.0"
-    # x-release-please-end
+[...]
     overrides:
-      uds-rke2-stack:
-        minio:
-          values:
-          - path: "users"
-            value:
-              - accessKey: console
-                secretKey: "console-secret"
-                policy: consoleAdmin
-              - accessKey: logging
-                secretKey: "logging-secret"
-                policy: readwrite
-          - path: "buckets"
-            value:
-              - name: "loki"  
-              - name: "velero"
-              - name: "myapp"
-              - name: "myotherapp"
+      minio:
+        values:
+        - path: "users"
+          value:
+            - accessKey: console
+              secretKey: "console-secret"
+              policy: consoleAdmin
+            - accessKey: logging
+              secretKey: "logging-secret"
+              policy: readwrite
+        - path: "buckets"
+          value:
+            - name: "loki"  
+            - name: "velero"
+            - name: "myapp"
+            - name: "myotherapp"
 ```
 
 ### Configure Deploy Time MinIO Overrides
@@ -123,27 +117,26 @@ This example will show how to expose the ability to override the default users, 
 # uds-bundle.yaml
 
 packages:
-  - name: uds-rke2
-    repository: ghcr.io/justinthelaw/packages/uds-rke2
+  - name: minio
+    repository: ghcr.io/justinthelaw/packages/minio
     # x-release-please-start-version
     ref: "0.2.0"
     # x-release-please-end
     overrides:
-      uds-rke2-stack:
-        minio:
-          variables:
-            - name: buckets
-              description: "Set MinIO Buckets"
-              path: buckets
-            - name: svcaccts
-              description: "MinIO Service Accounts"
-              path: svcaccts
-            - name: users
-              description: "MinIO Users"
-              path: users
-            - name: policies
-              description: "MinIO policies"
-              path: policies
+      minio:
+        variables:
+          - name: buckets
+            description: "Set MinIO Buckets"
+            path: buckets
+          - name: svcaccts
+            description: "MinIO Service Accounts"
+            path: svcaccts
+          - name: users
+            description: "MinIO Users"
+            path: users
+          - name: policies
+            description: "MinIO policies"
+            path: policies
 ```
 
 Once the bundle has been created the deployer can customize the resources deployed by providing the values to the uds-config.yaml
@@ -152,7 +145,7 @@ Once the bundle has been created the deployer can customize the resources deploy
 bundle:
   deploy:
     zarf-packages:
-      uds-rke2:
+      minio:
         set:
           buckets:
             - name: "my-favorite-bucket"

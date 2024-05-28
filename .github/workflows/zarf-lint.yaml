@@ -3,13 +3,14 @@ name: Zarf Lint
 on:
   push:
     branches:
-      - 'main'
+      - "main"
     paths:
-      - '**/zarf.yaml'
+      - "packages"
   pull_request:
-    branches: [main]
+    branches:
+      - "main"
     paths:
-      - '**/zarf.yaml'
+      - "packages"
 
 concurrency:
   group: zarf-lint-${{ github.ref }}
@@ -40,10 +41,13 @@ jobs:
         run: pip install check-jsonschema==0.28.0
 
       - name: Validate zarf.yaml
+        # TODO: add these back in when actually built
         run: |
-            check-jsonschema packages/init/zarf.yaml --schemafile zarf.schema.json
-            check-jsonschema packages/minio/zarf.yaml --schemafile zarf.schema.json
-            check-jsonschema packages/rook-ceph/zarf.yaml --schemafile zarf.schema.json
-            check-jsonschema packages/uds-rke2/zarf.yaml --schemafile zarf.schema.json
-            # TODO: add this back in when longhorn package is written
-            # check-jsonschema packages/longhorn/zarf.yaml --schemafile zarf.schema.json
+          check-jsonschema packages/exemptions/zarf.yaml --schemafile zarf.schema.json
+          check-jsonschema packages/init/zarf.yaml --schemafile zarf.schema.json
+          check-jsonschema packages/minio/zarf.yaml --schemafile zarf.schema.json
+          check-jsonschema packages/uds-rke2/zarf.yaml --schemafile zarf.schema.json
+          check-jsonschema packages/local-path/zarf.yaml --schemafile zarf.schema.json
+          # check-jsonschema packages/longhorn/zarf.yaml --schemafile zarf.schema.json
+          check-jsonschema packages/rook-ceph/zarf.yaml --schemafile zarf.schema.json
+

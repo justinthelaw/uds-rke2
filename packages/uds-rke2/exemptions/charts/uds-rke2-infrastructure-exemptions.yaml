@@ -1,7 +1,7 @@
 apiVersion: uds.dev/v1alpha1
 kind: Exemption
 metadata:
-  name: metallb
+  name: uds-rke2-infrastructure
   namespace: uds-policy-exemptions
 spec:
   exemptions:
@@ -15,7 +15,7 @@ spec:
         - RestrictCapabilities
         - RestrictHostPorts
       matcher:
-        namespace: "metallb-system"
+        namespace: "uds-rke2-infrastructure"
         name: ".*"
       title: "all pods"
-      description: "Exempt MetalLB from policy enforcement"
+      description: "Exempt UDS RKE2 infrastructure from policy enforcement"

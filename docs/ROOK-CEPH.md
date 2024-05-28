@@ -1,5 +1,5 @@
 > [!IMPORTANT]
-> Rook-Ceph is meant for enterprise-grade, multi-node clusters and thus, Rook-Ceph in single-node configuration is not currently supported; however, the single-node contents of this package may see future work that will soldify single-node support for testing adn development environments where high availability and redundancy are not required.
+> Rook-Ceph is meant for enterprise-grade, multi-node clusters. Rook-Ceph in a single-node configuration is not currently supported in this project; however, the single-node content and documentation will stay in this project in case of future work dedicated to providing a test and development deployment of Rook-Ceph. Additionally, the Rook-Ceph multi-node configuration within this repository is also experimental. Deploying UDS RKE2 Rook-Ceph may require further configuration and UDS bundle overrides.
 
 # Rook-Ceph Configuration
 
@@ -86,12 +86,14 @@ uds zarf destroy --confirm
 ```bash
 # remove persistent rook operator data
 rm -rf /var/lib/rook/
+
 # replace with the name of your actual disk being wiped and zapped
 export DISK="/dev/ubuntu-vg/ceph"
 
+# wiping operations based on the disk type
+# use `blkdiscard $DISK` for direct block storage on SSDs
 wipefs -a -f $DISK
 sgdisk --zap-all $DISK
 dd if=/dev/zero of="$DISK" bs=1M count=100 oflag=direct,dsync
-blkdiscard $DISK
 partprobe $DISK
 ```

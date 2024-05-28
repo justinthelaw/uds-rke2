@@ -6,9 +6,7 @@ One of the core assumptions of the `uds-rke2` package is the use of `uds.prod` a
 
 ### CoreDNS Override
 
-The package includes a CoreDNS configuration override designed to rewrite requests for `*.uds.prod` to `host.rke2.internal`. This rewrite ensures that any DNS resolution request within the cluster targeting a `*.uds.prod` address will be correctly routed to `host.rke2.internal` which is an internal rke2 alias which resolves to the host gateway.
-
-The outcome of this is a pods in the cluster can resolve domains like sso.uds.prod to an address (not 127.0.0.1) that will ultimately get routed correctly.
+<!-- TODO: create configuration documentation -->
 
 ### Nginx Configuration
 

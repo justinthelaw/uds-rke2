@@ -1,0 +1,17 @@
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  name: ip-address-pool
+  namespace: {{ .Release.Namespace }}
+spec:
+  addresses:
+    {{- toYaml .Values.ipAddressPool | nindent 4 }}
+---
+apiVersion: metallb.io/v1beta1
+kind: L2Advertisement
+metadata:
+  name: l2-advertisement
+  namespace: {{ .Release.Namespace }}
+spec:
+  interfaces:
+    {{- toYaml .Values.interfaces | nindent 4 }}

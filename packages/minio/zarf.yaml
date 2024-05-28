@@ -27,4 +27,15 @@ components:
         version: 5.0.14
         url: https://charts.min.io/
         valuesFiles:
-          - "values.yaml"
+          - "values/minio-values.yaml"
+    actions:
+      onDeploy:
+        after:
+          - wait:
+              cluster:
+                kind: Pod
+                name: app=minio
+                namespace: minio
+                condition: "'{.status.conditions[2].status}'=True"
+            maxTotalSeconds: 120
+            description: Waiting for MinIO to be ready

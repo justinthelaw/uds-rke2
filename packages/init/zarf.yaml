@@ -6,9 +6,12 @@ metadata:
   name: init
   description: "Custom Zarf Init Package for RKE2"
   architecture: amd64
-  version: "###ZARF_PKG_TMPL_VERSION###"
 
 components:
+  #######
+  # ZARF
+  #######
+
   - name: zarf-injector
     required: true
     description: "Move the Zarf injector and registries binaries"
@@ -31,7 +34,7 @@ components:
     actions:
       onDeploy:
         before:
-          - cmd: ./zarf tools kubectl get pvc zarf-docker-registry -n zarf >/dev/null 2>&1 && echo true || echo false
+          - cmd: uds zarf tools kubectl get pvc zarf-docker-registry -n zarf >/dev/null 2>&1 && echo true || echo false
             description: Set persistence for upgrading the seed registry
             mute: true
             setVariables:
@@ -39,7 +42,7 @@ components:
           - mute: true
             description: Set ENV variables for upgrading the seed registry
             cmd: |
-              ./zarf tools kubectl get pvc zarf-docker-registry -n zarf >/dev/null 2>&1 && \
+              uds zarf tools kubectl get pvc zarf-docker-registry -n zarf >/dev/null 2>&1 && \
               echo "" || \
               echo "- name: REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY
                 value: \"/var/lib/registry\""
@@ -64,7 +67,60 @@ components:
   # LOCAL PATH PROVISIONER
   ########################
 
-  # TODO: add `local-path` flavor here
+  - name: local-path-provisioner-images-initial
+    required: true
+    only:
+      flavor: local-path
+    description: "Push the Local Path Provisioner images into the seed registry"
+    import:
+      path: ../local-path
+      name: local-path-provisioner-images
+
+  - name: local-path-provisioner
+    required: true
+    only:
+      flavor: local-path
+    import:
+      path: ../local-path
+      name: local-path-provisioner
+
+  ########
+  # MINIO
+  ########
+
+  - name: minio-images-initial
+    required: true
+    only:
+      flavor: local-path
+    description: "Push the MinIO images into the seed registry"
+    import:
+      path: ../minio
+      name: minio-images
+
+  - name: minio-images-initial
+    required: true
+    only:
+      flavor: longhorn
+    description: "Push the MinIO images into the seed registry"
+    import:
+      path: ../minio
+      name: minio-images
+
+  - name: minio
+    required: true
+    only:
+      flavor: local-path
+    import:
+      path: ../minio
+      name: minio
+
+  - name: minio
+    required: true
+    only:
+      flavor: longhorn
+    import:
+      path: ../minio
+      name: minio
 
   ###########
   # ROOK-CEPH
@@ -95,6 +151,10 @@ components:
       path: ../rook-ceph
       name: rook-ceph-cluster
 
+  #######
+  # ZARF
+  #######
+
   - name: zarf-registry
     required: true
     description: "Create the permanent registry"
@@ -106,7 +166,15 @@ components:
   # LOCAL PATH PROVISIONER
   ########################
 
-  # TODO: add `local-path` flavor here
+  - name: local-path-provisioner-images
+    required: true
+    only:
+      flavor: local-path
+    description: "Push the Local Path Provisioner images into the permanent registry"
+    import:
+      path: ../local-path
+    images:
+      - "###ZARF_PKG_TMPL_REGISTRY_IMAGE_DOMAIN######ZARF_PKG_TMPL_REGISTRY_IMAGE###:###ZARF_PKG_TMPL_REGISTRY_IMAGE_TAG###"
 
   ###########
   # LONGHORN
@@ -119,6 +187,30 @@ components:
     description: "Push the Longhorn images into the permanent registry"
     import:
       path: ../longhorn
+    images:
+      - "###ZARF_PKG_TMPL_REGISTRY_IMAGE_DOMAIN######ZARF_PKG_TMPL_REGISTRY_IMAGE###:###ZARF_PKG_TMPL_REGISTRY_IMAGE_TAG###"
+
+  ########
+  # MINIO
+  ########
+
+  - name: minio-images
+    required: true
+    only:
+      flavor: local-path
+    description: "Push the MinIO images into the permanent registry"
+    import:
+      path: ../minio
+    images:
+      - "###ZARF_PKG_TMPL_REGISTRY_IMAGE_DOMAIN######ZARF_PKG_TMPL_REGISTRY_IMAGE###:###ZARF_PKG_TMPL_REGISTRY_IMAGE_TAG###"
+
+  - name: minio-images
+    required: true
+    only:
+      flavor: longhorn
+    import:
+      path: ../minio
+    description: "Push the MinIO images into the permanent registry"
     images:
       - "###ZARF_PKG_TMPL_REGISTRY_IMAGE_DOMAIN######ZARF_PKG_TMPL_REGISTRY_IMAGE###:###ZARF_PKG_TMPL_REGISTRY_IMAGE_TAG###"
 
@@ -142,39 +234,3 @@ components:
     import:
       # TODO: renovate setup
       url: oci://ghcr.io/defenseunicorns/packages/init:v0.33.0
-
-  - name: uds-rke2-stack
-    required: true
-    description: "Install MetalLB, Nginx, and ensure MachineID on the bootstrapping node"
-    actions:
-      onDeploy:
-        before:
-          - cmd: uds zarf tools kubectl get nodes -o=jsonpath='{.items[0].status.addresses[?(@.type=="InternalIP")].address}' | cut -d'.' -f1-3
-            description: "Load network IP base for MetalLB"
-            setVariables:
-              - name: BASE_IP
-        after:
-          - cmd: uds zarf tools kubectl rollout restart deployment coredns -n kube-system
-            description: "Restart CoreDNS to pick up internal DNS override for uds.prod"
-    # TODO: renovate setup
-    images:
-      - registry1.dso.mil/ironbank/opensource/metallb/controller:v0.13.11
-      - registry1.dso.mil/ironbank/opensource/metallb/speaker:v0.13.11
-      - registry1.dso.mil/ironbank/opensource/nginx/nginx-alpine:1.25.3
-      - registry1.dso.mil/ironbank/opensource/pause/pause:3.9
-      - cgr.dev/chainguard/wolfi-base:latest
-    charts:
-      - name: metallb
-        namespace: uds-rke2
-        url: https://metallb.github.io/metallb
-        # TODO: renovate setup
-        version: 0.13.11
-        valuesFiles:
-          - values/metallb-values.yaml
-
-      - name: uds-rke2-stack
-        namespace: uds-rke2-stack
-        localPath: charts
-        # x-release-please-start-version
-        version: "0.1.0"
-        # x-release-please-end

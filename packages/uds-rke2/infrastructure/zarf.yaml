@@ -1,0 +1,98 @@
+# TODO: renovate setup
+# yaml-language-server: $schema=https://raw.githubusercontent.com/defenseunicorns/uds-cli/v0.10.4/zarf.schema.json
+
+kind: ZarfPackageConfig
+metadata:
+  name: infrastructure
+  description: "UDS RKE2 infrastructure stack"
+  architecture: amd64
+  version: "###ZARF_PKG_TMPL_VERSION###"
+
+variables:
+  - name: INTERFACE
+    description: "The network interface name on which to perform MetalLB L2 advertisement"
+    default: "wlp0s20f3"
+    prompt: true
+  - name: ADDRESS_POOL_LOWER_BOUND
+    description: "Lower bound of the IP Address Pool range for L2 advertisement"
+    default: "200"
+    prompt: false
+  - name: ADDRESS_POOL_UPPER_BOUND
+    description: "Upper bound of the IP Address Pool range for L2 advertisement"
+    default: "215"
+    prompt: false
+  - name: BASE_IP
+    description: "The host node's base IP"
+    prompt: false
+
+components:
+  - name: metallb
+    required: true
+    description: "Install MetalLB controller and speaker"
+    charts:
+      - name: metallb
+        namespace: uds-rke2-infrastructure
+        url: https://metallb.github.io/metallb
+        # TODO: renovate setup
+        version: 0.14.5
+        valuesFiles:
+          - values/metallb-values.yaml
+    images:
+      # TODO: renovate setup
+      - registry1.dso.mil/ironbank/opensource/metallb/controller:v0.14.5
+      - registry1.dso.mil/ironbank/opensource/metallb/speaker:v0.14.5
+    actions:
+      onDeploy:
+        after:
+          - description: "Validate MetalLB Controller is up"
+            wait:
+              cluster:
+                kind: Pod
+                name: app.kubernetes.io/component=controller,app.kubernetes.io/name=metallb
+                namespace: uds-rke2-infrastructure
+                condition: "'{.status.conditions[2].status}'=True"
+            maxTotalSeconds: 120
+          - description: "Validate MetalLB Speaker is up"
+            wait:
+              cluster:
+                kind: Pod
+                name: app.kubernetes.io/component=controller,app.kubernetes.io/name=metallb
+                namespace: uds-rke2-infrastructure
+                condition: "'{.status.conditions[2].status}'=True"
+            maxTotalSeconds: 120
+
+  - name: infrastructure
+    required: true
+    description: "Setup MetalLB L2 advertisement, Nginx redirects and MachineID + Pause"
+    charts:
+      - name: uds-rke2-infrastructure
+        namespace: uds-rke2-infrastructure
+        localPath: charts
+        version: "###ZARF_PKG_TMPL_VERSION###"
+        valuesFiles:
+          - values/metallb-l2-values.yaml
+          - values/nginx-values.yaml
+          - values/machineid-values.yaml
+    images:
+      # TODO: renovate setup
+      # Nginx
+      - registry1.dso.mil/ironbank/opensource/nginx/nginx-alpine:1.25.3
+      # MachineID
+      - registry1.dso.mil/ironbank/opensource/pause/pause:3.9
+      - cgr.dev/chainguard/wolfi-base:latest
+    actions:
+      onDeploy:
+        before:
+          - cmd: uds zarf tools kubectl get nodes -o=jsonpath='{.items[0].status.addresses[?(@.type=="InternalIP")].address}' | cut -d'.' -f1-3
+            description: "Load network IP base for MetalLB L2 Advertisement"
+            setVariables:
+              - name: BASE_IP
+        after:
+          - description: "Validate Nginx is up"
+            wait:
+              cluster:
+                kind: Pod
+                name: name=nginx
+                namespace: uds-rke2-infrastructure
+                condition: "'{.status.conditions[2].status}'=True"
+            maxTotalSeconds: 120

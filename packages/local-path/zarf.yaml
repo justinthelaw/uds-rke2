@@ -1,0 +1,64 @@
+# TODO: renovate setup
+# yaml-language-server: $schema=https://raw.githubusercontent.com/defenseunicorns/uds-cli/v0.10.4/zarf.schema.json
+
+kind: ZarfPackageConfig
+metadata:
+  name: local-path-provisioner
+  description: "Rancher's Local Path Provisioner Zarf Package"
+  version: "###ZARF_PKG_TMPL_VERSION###"
+  architecture: amd64
+
+constants:
+  - name: NODE_PATH_MAP_VALUES_FILE
+    description: "The Node Path Map values to be used for defining volume locations per node"
+    value: "###ZARF_PKG_TMPL_NODE_PATH_MAP_VALUES_FILE###"
+
+variables:
+  - name: IS_DEFAULT_STORAGECLASS
+    description: "Make Local Path Provisioner's StorageClass the default for the cluster"
+    default: "true"
+    prompt: false
+    pattern: "^(true|false)$"
+  - name: VOLUME_TYPE
+    description: "The default volume type the StorageClass creates"
+    default: "local"
+    prompt: false
+    pattern: "^(local|hostPath)$"
+
+components:
+  - name: local-path-provisioner-images
+    required: true
+    description: "Push Local Path Provisioner images to the Zarf seed registry"
+    # TODO: renovate setup
+    images:
+      - docker.io/rancher/local-path-provisioner:v0.0.26
+      - cgr.dev/chainguard/busybox:latest
+
+  - name: local-path-provisioner
+    required: true
+    description: "Deploy Local Path Provisioner"
+    charts:
+      - name:
+          local-path-provisioner
+          # Workaround for upstream UDS Core issue, see https://github.com/defenseunicorns/uds-core/issues/272
+          # Actual namespace should be `local-path-storage`
+        namespace: kube-system
+        # TODO: renovate setup
+        version: v0.0.26
+        localPath: charts
+        valuesFiles:
+          - values/local-path-provisioner-values.yaml
+          - "###ZARF_PKG_TMPL_NODE_PATH_MAP_VALUES_FILE###"
+    actions:
+      onDeploy:
+        after:
+          - wait:
+              cluster:
+                kind: Pod
+                name: app.kubernetes.io/name=local-path-provisioner
+                # Workaround for upstream UDS Core issue, see https://github.com/defenseunicorns/uds-core/issues/272
+                # Actual namespace should be `local-path-storage`
+                namespace: kube-system
+                condition: "'{.status.conditions[2].status}'=True"
+            maxTotalSeconds: 300
+            description: Waiting for Local Path Provisioner to be ready

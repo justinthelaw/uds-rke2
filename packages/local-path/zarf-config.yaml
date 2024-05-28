@@ -5,5 +5,4 @@ package:
       version: "0.2.0"
       # x-release-please-end
 
-      # TODO: renovate setup
-      rke2_version: "v1.28.6+rke2r1"
+      node_path_map_values_file: values/node-path-map-values.yaml

@@ -1,7 +1,7 @@
 {{/*
 Expand the name of the chart.
 */}}
-{{- define "uds-rke2.name" -}}
+{{- define "uds-rke2-infrastructure.name" -}}
 {{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
@@ -10,7 +10,7 @@ Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 If release name contains chart name it will be used as a full name.
 */}}
-{{- define "uds-rke2.fullname" -}}
+{{- define "uds-rke2-infrastructure.fullname" -}}
 {{- if .Values.fullnameOverride }}
 {{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" }}
 {{- else }}
@@ -26,16 +26,17 @@ If release name contains chart name it will be used as a full name.
 {{/*
 Create chart name and version as used by the chart label.
 */}}
-{{- define "uds-rke2.chart" -}}
+{{- define "uds-rke2-infrastructure.chart" -}}
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
 Common labels
 */}}
-{{- define "uds-rke2.labels" -}}
-helm.sh/chart: {{ include "uds-rke2.chart" . }}
-{{ include "uds-rke2.selectorLabels" . }}
+{{- define "uds-rke2-infrastructure.labels" -}}
+helm.sh/chart: {{ include "uds-rke2-infrastructure.chart" . }}
+sidecar.istio.io/inject: "false"
+{{ include "uds-rke2-infrastructure.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
@@ -45,17 +46,17 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{/*
 Selector labels
 */}}
-{{- define "uds-rke2.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "uds-rke2.name" . }}
+{{- define "uds-rke2-infrastructure.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "uds-rke2-infrastructure.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
 {{/*
 Create the name of the service account to use
 */}}
-{{- define "uds-rke2.serviceAccountName" -}}
+{{- define "uds-rke2-infrastructure.serviceAccountName" -}}
 {{- if .Values.serviceAccount.create }}
-{{- default (include "uds-rke2.fullname" .) .Values.serviceAccount.name }}
+{{- default (include "uds-rke2-infrastructure.fullname" .) .Values.serviceAccount.name }}
 {{- else }}
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}

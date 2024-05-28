@@ -146,7 +146,7 @@ components:
               echo ${extra_join_node_args}
             setVariables:
               - name: RKE2_JOIN_ARGS
-            description: "Add delivery-engineer defined UDS RKE2 arguments to startup scripts"
+            description: "Add additional UDS RKE2 arguments to startup scripts"
 
   - name: start-rke2-node
     required: true
@@ -164,7 +164,7 @@ components:
                 kind: Pod
                 name: component=kube-apiserver
                 namespace: kube-system
-                condition: "'{.status.phase}'=Running"
+                condition: "'{.status.conditions[2].status}'=True"
             maxTotalSeconds: 300
           - description: "Validate kube-controller-manager is up"
             wait:
@@ -172,7 +172,7 @@ components:
                 kind: Pod
                 name: component=kube-controller-manager
                 namespace: kube-system
-                condition: "'{.status.phase}'=Running"
+                condition: "'{.status.conditions[2].status}'=True"
             maxTotalSeconds: 300
           - description: "Validate kube-proxy is up"
             wait:
@@ -180,7 +180,7 @@ components:
                 kind: Pod
                 name: component=kube-proxy
                 namespace: kube-system
-                condition: "'{.status.phase}'=Running"
+                condition: "'{.status.conditions[2].status}'=True"
             maxTotalSeconds: 300
           - description: "Validate kube-scheduler is up"
             wait:
@@ -188,7 +188,7 @@ components:
                 kind: Pod
                 name: component=kube-scheduler
                 namespace: kube-system
-                condition: "'{.status.phase}'=Running"
+                condition: "'{.status.conditions[2].status}'=True"
             maxTotalSeconds: 300
           - description: "Validate rke2-canal is up"
             wait:
@@ -196,7 +196,7 @@ components:
                 kind: Pod
                 name: k8s-app=canal
                 namespace: kube-system
-                condition: "'{.status.phase}'=Running"
+                condition: "'{.status.conditions[2].status}'=True"
             maxTotalSeconds: 300
           - description: "Validate rke2-coredns is up"
             wait:
@@ -204,7 +204,7 @@ components:
                 kind: Pod
                 name: app.kubernetes.io/name=rke2-coredns
                 namespace: kube-system
-                condition: "'{.status.phase}'=Running"
+                condition: "'{.status.conditions[2].status}'=True"
             maxTotalSeconds: 300
           - description: "Validate rke2-coredns-autoscaler is up"
             wait:
@@ -212,5 +212,5 @@ components:
                 kind: Pod
                 name: app.kubernetes.io/name=rke2-coredns-autoscaler
                 namespace: kube-system
-                condition: "'{.status.phase}'=Running"
+                condition: "'{.status.conditions[2].status}'=True"
             maxTotalSeconds: 300

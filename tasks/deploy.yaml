@@ -2,16 +2,12 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/defenseunicorns/uds-cli/v0.10.4/tasks.schema.json
 
 variables:
-  - name: CORE_PKG_VERSION
-    description: "The version of UDS Core package to deploy"
-    # TODO: renovate setup
-    default: "0.21.0"
-  - name: CORE_PKG_FLAVOR
-    description: "Flavor of the package to use (`registry1` or `upstream`)."
-    default: "registry1"
   - name: DISK_NAME
     description: "The name of a Ceph-formatted disk (e.g. /dev/ubuntu-vg/ceph) that is to be wiped."
     default: "dm-1"
+  - name: OPTIONS
+    description: "Extra Zarf package or UDS bundle deployment options"
+    default: "--no-progress --no-log-file --log-level warn --confirm"
 
 tasks:
   - name: uds-rke2-bootstrap
@@ -26,8 +22,7 @@ tasks:
           sudo uds zarf package deploy build/packages/zarf-package-uds-rke2-amd64-*.tar.zst \
             --set JOIN_TOKEN=${{ .inputs.joinToken }} \
             --components destroy-cluster \
-            --no-progress \
-            --confirm
+            ${OPTIONS}
 
   - name: uds-rke2-join-node
     description: "Deploy the UDS RKE2 Zarf package, as a cluster joining node"
@@ -55,38 +50,64 @@ tasks:
             --set JOIN_TOKEN=${{ .inputs.joinToken }} \
             --set DNS_ADDRESS=${{ .inputs.dnsAddress }} \
             --set AGENT_FLAG=${{ .inputs.agentFlag }} \
-            --no-progress \
-            --confirm
+            ${OPTIONS}
 
-  - name: uds-rke2-exemptions
+  - name: uds-rke2-infrastructure
+    description: "Deploy the UDS RKE2 Infrastructure package"
+    actions:
+      - description: "Deploy the UDS RKE2 Infrastructure package"
+        cmd: |
+          sudo uds zarf package deploy build/packages/zarf-package-infrastructure-amd64-*.zst \
+            ${OPTIONS}
+
+  - name: uds-rke2-exemptions-local-path
     description: "Deploy the UDS RKE2 service Pepr policy exemptions package"
     actions:
       - description: "Deploy the UDS RKE2 service Pepr policy exemptions package"
         cmd: |
-          sudo uds zarf package deploy build/packages/zarf-package-uds-rke2-exemptions-amd64-*.zst \
-            --no-progress \
-            --components local-path,longhorn,rook-ceph \
-            --confirm
+          sudo uds zarf package deploy build/packages/local-path/zarf-package-exemptions-amd64-*.zst \
+            ${OPTIONS}
 
-  # TODO: local-path init
+  - name: uds-rke2-exemptions-longhorn
+    description: "Deploy the UDS RKE2 service Pepr policy exemptions package"
+    actions:
+      - description: "Deploy the UDS RKE2 service Pepr policy exemptions package"
+        cmd: |
+          sudo uds zarf package deploy build/packages/longhorn/zarf-package-exemptions-amd64-*.zst \
+            ${OPTIONS}
+
+  - name: uds-rke2-exemptions-rook-ceph
+    description: "Deploy the UDS RKE2 service Pepr policy exemptions package"
+    actions:
+      - description: "Deploy the UDS RKE2 service Pepr policy exemptions package"
+        cmd: |
+          sudo uds zarf package deploy build/packages/rook-ceph/zarf-package-exemptions-amd64-*.zst \
+            ${OPTIONS}
+
+  - name: local-path-init
+    description: "Deploy the custom Zarf Init Package for RKE2 with Longhorn"
+    actions:
+      - description: "Deploy the custom Zarf Init package"
+        cmd: |
+          sudo uds zarf package deploy build/packages/local-path/zarf-init-amd64-*.tar.zst \
+            ${OPTIONS}
 
   - name: longhorn-init
     description: "Deploy the custom Zarf Init Package for RKE2 with Longhorn"
     actions:
       - description: "Deploy the custom Zarf Init package"
         cmd: |
-          sudo uds zarf package deploy build/packages/zarf-init-amd64-*.tar.zst \
-            --no-progress \
+          sudo uds zarf package deploy build/packages/longhorn/zarf-init-amd64-*.tar.zst \
             --set LONGHORN_VAR="true" \
-            --confirm
+            ${OPTIONS}
 
   - name: rook-ceph-init
     description: "Deploy the custom Zarf Init Package for RKE2 with Rook-Ceph"
     actions:
       - description: "Deploy the custom Zarf Init package"
-        # File storage is disabled by default, but can be enabled as necessary
+        # File storage is disabled by default, but can be enabled as necessary via UDS overrides or manual Zarf deployment
         cmd: |
-          sudo uds zarf package deploy build/packages/rook-ceph-init/zarf-init-amd64-*.tar.zst \
+          sudo uds zarf package deploy build/packages/rook-ceph/zarf-init-amd64-*.tar.zst \
             --no-progress \
             --set ENABLE_CEPH_BLOCK_STORE="true" \
             --set ENABLE_CEPH_OBJECT_STORE="true" \
@@ -102,19 +123,15 @@ tasks:
       - description: "Deploy the MinIO package"
         cmd: |
           sudo uds zarf package deploy build/packages/zarf-package-minio-amd64-*.zst \
-            --no-progress \
-            --confirm
+            ${OPTIONS}
 
-  - name: specific-core-package-release
-    description: "Deploy a specific UDS Core package based on the VERSION variable"
+  - name: uds-core
+    description: "Deploy a specific UDS Core package based on the version and flavor variables"
     actions:
       - description: "Deploy the standard UDS Core package"
         cmd: |
-          sudo uds zarf package deploy oci://ghcr.io/defenseunicorns/packages/uds/core:${CORE_PKG_VERSION}-${CORE_PKG_FLAVOR} \
-            -a amd64 \
-            --components metrics-server \
-            --no-progress \
-            --confirm
+          sudo uds zarf package deploy build/packages/zarf-package-core-amd64-*.tar.zst \
+            ${OPTIONS}
 
   - name: rook-ceph-destroy
     description: "Destroys an existing Rook-Ceph cluster installation and all associated data on the host node"

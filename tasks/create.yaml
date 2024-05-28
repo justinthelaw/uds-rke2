@@ -7,21 +7,38 @@ variables:
     # x-release-please-start-version
     default: "0.2.0"
     # x-release-please-end
+  - name: CORE_PKG_VERSION
+    description: "The version of UDS Core package to deploy"
+    # TODO: renovate setup
+    default: "0.22.0"
+  - name: CORE_PKG_FLAVOR
+    description: "Flavor of the package to use (`registry1` or `upstream`)."
+    default: "registry1"
+  - name: OPTIONS
+    description: "Extra Zarf package or UDS bundle creation options"
+    default: "--no-progress --no-log-file --log-level warn -a amd64"
 
 tasks:
+  - name: tls-cert
+    description: "Generate self-signed TLS certs for testing"
+    actions:
+      - cmd: openssl req -x509 -newkey rsa:4096 -keyout tls.key -out tls.cert -days 365 -nodes -config tls-cert.conf
+
   - name: all
     description: "Builds all Zarf packages in the repository"
     actions:
       - task: uds-rke2
+      - task: uds-rke2-infrastructure
+      - task: uds-rke2-exemptions-local-path
+      - task: uds-rke2-exemptions-longhorn
+      - task: uds-rke2-exemptions-rook-ceph
+      - task: local-path
+      - task: local-path-init
       # TODO: add these back in when actually built
-      # - task: local-path
-      # - task: local-path-init
       # - task: longhorn
       # - task: longhorn-init
       - task: rook-ceph
-      - task: rook-ceph-init-multi-node
-      # - task: rook-ceph-init-single-node
-      - task: uds-rke2-exemptions
+      - task: rook-ceph-init
       - task: minio
 
   - name: create
@@ -36,17 +53,18 @@ tasks:
       zarfConfig:
         description: "Zarf Config of the Zarf package being created"
         required: true
+      flavor:
+        description: "Flavor of the Zarf package being created"
+        default: ""
+        required: false
     actions:
       - description: "Create the Zarf package for the amd64 architectures"
         cmd: |
           sudo ZARF_CONFIG="${{ .inputs.zarfConfig }}" uds zarf package create "${{ .inputs.path }}" \
             -o "${{ .inputs.outputPath }}" \
             --set VERSION=${VERSION} \
-            --no-progress \
-            --no-log-file \
-            --log-level warn \
-            -a amd64 \
-            --confirm
+            --flavor "${{ .inputs.flavor }}" \
+            ${OPTIONS}
 
   - name: init
     description: "Create a custom Zarf Init package for the amd64 architectures"
@@ -64,28 +82,63 @@ tasks:
             -o "${{ .inputs.outputPath }}" \
             --flavor "${{ .inputs.flavor }}" \
             --set AGENT_IMAGE_TAG=$(uds zarf version) \
-            --no-progress \
-            --no-log-file \
-            --log-level warn \
-            -a amd64 \
-            --confirm
+            ${OPTIONS}
 
   - name: uds-rke2
     description: "Build the UDS RKE2 Zarf package"
     actions:
       - task: create
         with:
-          path: packages/uds-rke2/
-          outputPath: build/packages/
+          path: packages/uds-rke2
+          outputPath: build/packages
           zarfConfig: packages/uds-rke2/zarf-config.yaml
+
+  - name: uds-rke2-infrastructure
+    description: "Build the UDS RKE2 Infrastructure Zarf package"
+    actions:
+      - task: create
+        with:
+          path: packages/uds-rke2/infrastructure
+          outputPath: build/packages
+          zarfConfig: packages/uds-rke2/zarf-config.yaml
+
+  - name: uds-rke2-exemptions-local-path
+    description: "Build the UDS RKE2 service Pepr policy exemptions package"
+    actions:
+      - task: create
+        with:
+          path: packages/uds-rke2/exemptions
+          outputPath: build/packages/local-path
+          zarfConfig: packages/uds-rke2/zarf-config.yaml
+          flavor: local-path
+
+  - name: uds-rke2-exemptions-longhorn
+    description: "Build the UDS RKE2 service Pepr policy exemptions package"
+    actions:
+      - task: create
+        with:
+          path: packages/uds-rke2/exemptions
+          outputPath: build/packages/longhorn
+          zarfConfig: packages/uds-rke2/zarf-config.yaml
+          flavor: longhorn
+
+  - name: uds-rke2-exemptions-rook-ceph
+    description: "Build the UDS RKE2 service Pepr policy exemptions package"
+    actions:
+      - task: create
+        with:
+          path: packages/uds-rke2/exemptions
+          outputPath: build/packages/rook-ceph
+          zarfConfig: packages/uds-rke2/zarf-config.yaml
+          flavor: rook-ceph
 
   - name: local-path
     description: "Build the Local Path Provisioner Zarf package"
     actions:
       - task: create
         with:
-          path: packages/local-path/
-          outputPath: build/packages/local-path/
+          path: packages/local-path
+          outputPath: build/packages/local-path
           zarfConfig: packages/local-path/zarf-config.yaml
 
   - name: local-path-init
@@ -101,8 +154,8 @@ tasks:
     actions:
       - task: create
         with:
-          path: packages/longhorn/
-          outputPath: build/packages/longhorn/
+          path: packages/longhorn
+          outputPath: build/packages/longhorn
           zarfConfig: packages/longhorn/zarf-config.yaml
 
   - name: longhorn-init
@@ -118,32 +171,32 @@ tasks:
     actions:
       - task: create
         with:
-          path: packages/rook-ceph/
+          path: packages/rook-ceph
           outputPath: build/packages/rook-ceph
           zarfConfig: packages/rook-ceph/zarf-config.yaml
 
-  - name: rook-ceph-init-multi-node
+  - name: rook-ceph-init
     description: "Build the Rook-Ceph Zarf Init package"
     actions:
       - task: init
         with:
           flavor: rook-ceph
-          outputPath: build/packages/rook-ceph/multi-node
-
-  - name: uds-rke2-exemptions
-    description: "Build the UDS RKE2 service Pepr policy exemptions package"
-    actions:
-      - task: create
-        with:
-          path: packages/exemptions/
-          outputPath: build/packages/
-          zarfConfig: packages/exemptions/zarf-config.yaml
+          outputPath: build/packages/rook-ceph
 
   - name: minio
     description: "Build the MinIO package"
     actions:
       - task: create
         with:
-          path: packages/minio/
-          outputPath: build/packages/
+          path: packages/minio
+          outputPath: build/packages
           zarfConfig: packages/minio/zarf-config.yaml
+
+  - name: uds-core
+    description: "Pull a specific UDS Core package based on the version and flavor variables"
+    actions:
+      - description: "Pull the standard UDS Core package"
+        cmd: |
+          sudo uds zarf package pull oci://ghcr.io/defenseunicorns/packages/uds/core:${CORE_PKG_VERSION}-${CORE_PKG_FLAVOR} \
+            -o "build/packages" \
+            ${OPTIONS}

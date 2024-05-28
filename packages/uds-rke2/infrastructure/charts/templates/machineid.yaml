@@ -6,6 +6,10 @@ metadata:
   labels:
     app: ensure-machine-id
 spec:
+  {{- with .Values.imagePullSecrets }}
+  imagePullSecrets:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
   selector:
     matchLabels:
       name: ensure-machine-id
@@ -16,8 +20,7 @@ spec:
     spec:
       initContainers:
         - name: generate-machine-id
-          # TODO: renovate setup
-          image: ###ZARF_REGISTRY###/chainguard/wolfi-base:latest
+          image: {{ .Values.machineid.wolfi.image }}
           command: ["/bin/sh", "-c"]
           args:
             - echo "B0D07F1F43F246409516ADBDCCC86FCE" > /mnt/host/etc/machine-id;
@@ -30,8 +33,7 @@ spec:
             runAsUser: 0
       containers:
         - name: pause
-          # TODO: renovate setup
-          image: ###ZARF_REGISTRY###/ironbank/opensource/pause/pause:3.9
+          image: {{ .Values.machineid.pause.image }}
           resources:
             limits:
               cpu: "0.1"
@@ -40,5 +42,4 @@ spec:
         - name: machine-id
           hostPath:
             path: /etc
-
       hostPID: true

@@ -86,7 +86,7 @@ tasks:
     actions:
       - task: create
         with:
-          path: packages/uds-rke2
+          path: packages/uds-rke2/
           outputPath: build/packages
           zarfConfig: packages/uds-rke2/zarf-config.yaml
 
@@ -95,7 +95,7 @@ tasks:
     actions:
       - task: create
         with:
-          path: packages/uds-rke2/
+          path: packages/uds-rke2/infrastructure
           outputPath: build/packages
           zarfConfig: packages/uds-rke2/zarf-config.yaml
 
@@ -104,7 +104,7 @@ tasks:
     actions:
       - task: create
         with:
-          path: packages/uds-rke2/exemptions
+          path: packages/local-path
           outputPath: build/packages/local-path
           zarfConfig: packages/uds-rke2/zarf-config.yaml
           flavor: local
@@ -114,7 +114,7 @@ tasks:
     actions:
       - task: create
         with:
-          path: packages/uds-rke2/exemptions
+          path: packages/longhorn
           outputPath: build/packages/longhorn
           zarfConfig: packages/uds-rke2/zarf-config.yaml
           flavor: longhorn
@@ -124,7 +124,7 @@ tasks:
     actions:
       - task: create
         with:
-          path: packages/uds-rke2/exemptions
+          path: packages/rook-ceph
           outputPath: build/packages/rook-ceph
           zarfConfig: packages/uds-rke2/zarf-config.yaml
           flavor: rook

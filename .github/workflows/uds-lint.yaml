@@ -44,6 +44,5 @@ jobs:
         # TODO: add these back in when actually built
         run: |
             check-jsonschema bundles/uds-rke2-local-path/uds-bundle.yaml --schemafile uds.schema.json
-            # check-jsonschema bundles/uds-rke2-longhorn/uds-bundle.yaml --schemafile uds.schema.json
+            check-jsonschema bundles/uds-rke2-longhorn/uds-bundle.yaml --schemafile uds.schema.json
             check-jsonschema bundles/uds-rke2-rook-ceph/uds-bundle.yaml --schemafile uds.schema.json
-

@@ -98,7 +98,7 @@ tasks:
     actions:
       - task: create
         with:
-          path: packages/uds-rke2/infrastructure
+          path: packages/uds-rke2/
           outputPath: build/packages
           zarfConfig: packages/uds-rke2/zarf-config.yaml
 

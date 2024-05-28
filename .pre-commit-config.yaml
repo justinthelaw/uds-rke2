@@ -118,6 +118,21 @@ repos:
         files: "tasks.yaml"
         types: [yaml]
         args: ["--schemafile", "tasks.schema.json"]
+      - id: check-jsonschema
+        name: "Validate UDS Tasks Against Schema"
+        files: "create.yaml"
+        types: [yaml]
+        args: ["--schemafile", "tasks.schema.json"]
+      - id: check-jsonschema
+        name: "Validate UDS Tasks Against Schema"
+        files: "publish.yaml"
+        types: [yaml]
+        args: ["--schemafile", "tasks.schema.json"]
+      - id: check-jsonschema
+        name: "Validate UDS Tasks Against Schema"
+        files: "create.yaml"
+        types: [yaml]
+        args: ["--schemafile", "tasks.schema.json"]
   - repo: local
     hooks:
       - id: delete-schema

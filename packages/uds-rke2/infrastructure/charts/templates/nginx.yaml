@@ -12,10 +12,10 @@ data:
     stream {
         map $ssl_preread_server_name $selected_upstream {
             hostnames;
-            *.admin.uds.prod backend_admin;
-            keycloak.uds.prod backend_passthrough;
-            login.uds.prod backend_passthrough;
-            *.uds.prod backend_tenant;
+            *.admin.uds.dev backend_admin;
+            keycloak.uds.dev backend_passthrough;
+            login.uds.dev backend_passthrough;
+            *.uds.dev backend_tenant;
         }
 
         upstream backend_admin {

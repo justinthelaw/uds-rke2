@@ -2,7 +2,7 @@
 
 ## Domain Assumptions
 
-One of the core assumptions of the `uds-rke2` package is the use of `uds.prod` as the base domain for your production environment. This assumption is integral to the DNS and network configuration provided by the package. It is based on an existing DNS entry for `*.uds.prod` that resolves to `127.0.0.1`.
+One of the core assumptions of the `uds-rke2` package is the use of `uds.prod` as the base domain for your production environment. This assumption is integral to the DNS and network configuration provided by the package. It is based on an existing DNS entry for `*.uds.dev` that resolves to `127.0.0.1`.
 
 ### CoreDNS Override
 

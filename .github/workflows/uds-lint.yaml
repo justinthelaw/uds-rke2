@@ -57,7 +57,7 @@ jobs:
 
       - name: Download UDS Tasks Schema
         # TODO: renovate setup
-        run: curl -o uds.schema.json https://raw.githubusercontent.com/defenseunicorns/uds-cli/v0.10.4/tasks.schema.json
+        run: curl -o tasks.schema.json https://raw.githubusercontent.com/defenseunicorns/uds-cli/v0.10.4/tasks.schema.json
 
       - name: Validate uds-bundle.yaml
         # TODO: add these back in when actually built

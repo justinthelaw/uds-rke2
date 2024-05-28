@@ -1,6 +1,9 @@
 # TODO: renovate setup
 # yaml-language-server: $schema=https://raw.githubusercontent.com/defenseunicorns/uds-cli/v0.10.4/tasks.schema.json
 
+includes:
+  - create: ./create.yaml
+
 variables:
   - name: VERSION
     description: "Explicitly set the version, overriding the official release tag"
@@ -13,21 +16,45 @@ variables:
 
 tasks:
   - name: all
-    description: "Builds all Zarf packages in the repository"
+    description: "Builds and publishes all Zarf packages in the repository"
     actions:
+      - task: create:uds-rke2
       - task: uds-rke2
+      - task: clean
+      - task: create:uds-rke2-infrastructure
       - task: uds-rke2-infrastructure
+      - task: clean
+      - task: create:uds-rke2-exemptions-local-path
       - task: uds-rke2-exemptions-local-path
+      - task: clean
+      - task: create:uds-rke2-exemptions-longhorn
       - task: uds-rke2-exemptions-longhorn
+      - task: clean
+      - task: create:uds-rke2-exemptions-rook-ceph
       - task: uds-rke2-exemptions-rook-ceph
+      - task: clean
+      - task: create:local-path
       - task: local-path
+      - task: clean
+      - task: create:local-path-init
       - task: local-path-init
+      - task: clean
       # TODO: add these back in when actually built
+      # - task: create:longhorn
       # - task: longhorn
+      # - task: clean
+      # - task: create:longhorn-init
       # - task: longhorn-init
+      # - task: clean
+      - task: create:rook-ceph
       - task: rook-ceph
+      - task: clean
+      - task: create:rook-ceph-init
       - task: rook-ceph-init
+      - task: clean
+      - task: create:minio
       - task: minio
+      - task: clean
 
   - name: publish
     description: "Publish a Zarf package for the amd64 architectures"
@@ -48,6 +75,15 @@ tasks:
             "${{ .inputs.path }}/zarf-package-${{ .inputs.name }}-amd64-${VERSION}.tar.zst" \
             "oci://${{ .inputs.targetRepo }}" \
             ${OPTIONS}
+
+  - name: clean
+    description: "Cleans the host system of build artifacts"
+    actions:
+      - description: "Remove the build folder, Docker artifacts, and clear UDS and Zarf caches"
+        cmd: |
+          sudo uds zarf tools clear-cache && sudo rm -rf ~/.uds-cache && sudo rm -rf ~/.zarf-cache
+          sudo docker system prune -a -f && sudo docker volume prune -f
+          sudo rm -rf build/ zarf-sbom/ /tmp/zarf-*
 
   - name: init
     description: "Publish a Zarf Init package for the amd64 architectures"

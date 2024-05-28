@@ -110,7 +110,7 @@ tasks:
           path: packages/uds-rke2/exemptions
           outputPath: build/packages/local-path
           zarfConfig: packages/uds-rke2/zarf-config.yaml
-          flavor: local-path
+          flavor: local
 
   - name: uds-rke2-exemptions-longhorn
     description: "Build the UDS RKE2 service Pepr policy exemptions package"
@@ -130,7 +130,7 @@ tasks:
           path: packages/uds-rke2/exemptions
           outputPath: build/packages/rook-ceph
           zarfConfig: packages/uds-rke2/zarf-config.yaml
-          flavor: rook-ceph
+          flavor: rook
 
   - name: local-path
     description: "Build the Local Path Provisioner Zarf package"
@@ -146,7 +146,7 @@ tasks:
     actions:
       - task: init
         with:
-          flavor: local-path
+          flavor: local
           outputPath: build/packages/local-path
 
   - name: longhorn
@@ -180,7 +180,7 @@ tasks:
     actions:
       - task: init
         with:
-          flavor: rook-ceph
+          flavor: rook
           outputPath: build/packages/rook-ceph
 
   - name: minio

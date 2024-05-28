@@ -28,7 +28,7 @@ components:
     description: "MetalLB UDS Core Pepr policy exemptions"
     required: true
     only:
-      flavor: local-path
+      flavor: local
     manifests:
       - name: local-path-exemptions
         namespace: uds-policy-exemptions
@@ -62,7 +62,7 @@ components:
     description: "MetalLB UDS Core Pepr policy exemptions"
     required: true
     only:
-      flavor: rook-ceph
+      flavor: rook
     manifests:
       - name: rook-ceph-exemptions
         namespace: uds-policy-exemptions

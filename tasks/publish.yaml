@@ -157,7 +157,7 @@ tasks:
       - task: init
         with:
           path: build/packages/rook-ceph
-          targetRepo: ghcr.io/justinthelaw/packages/uds/uds-rke2
+          targetRepo: ghcr.io/justinthelaw/packages/uds/uds-rke2/
 
   - name: minio
     description: "Publish the MinIO package"
@@ -166,4 +166,4 @@ tasks:
         with:
           path: build/packages
           name: minio
-          targetRepo: ghcr.io/justinthelaw/packages/uds/uds-rke2
+          targetRepo: ghcr.io/justinthelaw/packages/uds/uds-rke2/

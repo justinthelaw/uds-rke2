@@ -61,8 +61,14 @@ Please see the [VM setup documentation](./docs/VM.md) and VM setup scripts to le
 There are 3 main "flavors" of the UDS RKE2 Core bundle, with 4 distinct flavors in total. Each flavor revolves around the storage and persistence layer of the cluster, and comes with its own documentation on configuration and installation, as linked in the bulleted list below. Please refer to that documentation for more details on each bundle flavor's recommendations and capabilities.
 
 1. [Local Path Provisioner](./docs/LOCAL-PATH.md) + [MinIO](./docs/MINIO.md)
-2. [Longhorn](./docs/LONGHORN.md) + [MinIO](./docs/MINIO.md)
-3. [Rook-Ceph](./docs/ROOK-CEPH.md)
+2. (WIP) [Longhorn](./docs/LONGHORN.md) + [MinIO](./docs/MINIO.md)
+3. (WIP) [Rook-Ceph](./docs/ROOK-CEPH.md)
+
+Each bundle can also be experimented with using the Zarf package creation and deployment commands via the UDS tasks outlined in the sections below. Just run the following to see the available tasks and their descriptions:
+
+```bash
+uds run --list-all
+```
 
 ### Create
 

@@ -7,7 +7,7 @@ imagePullSecrets:
 
 toolbox:
   enabled: true
-  # TODO: setup renovate
+  # TODO: renovate setup
   image: ###ZARF_REGISTRY###/ironbank/opensource/ceph/ceph:v18.2.2
 
 monitoring:
@@ -25,7 +25,7 @@ monitoring:
 
 cephClusterSpec:
   cephVersion:
-    # TODO: setup renovate
+    # TODO: renovate setup
     image: ###ZARF_REGISTRY###/ironbank/opensource/ceph/ceph:v18.2.2
     allowUnsupported: true
 

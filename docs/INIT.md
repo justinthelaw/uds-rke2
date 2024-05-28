@@ -2,9 +2,9 @@
 
 The custom Zarf init package comes with 3 flavors:
 
-1. `local-path`: [Local Path Provisioner](./LOCAL-PATH.md) as the backing StorageClass with MinIO for its S3-compatible API
+1. `local`: [Local Path Provisioner](./LOCAL-PATH.md) as the backing StorageClass with MinIO for its S3-compatible API
 2. `longhorn`: [Longhorn](./LONGHORN.md) as the backing StorageClass with MinIO for its S3-compatible API
-3. `rook-ceph`: [Rook-Ceph](./ROOK-CEPH.md) as a comprehensive block, object, and file StorageClass set with a built-in S3-compatible API
+3. `rook`: [Rook-Ceph](./ROOK-CEPH.md) as a comprehensive block, object, and file StorageClass set with a built-in S3-compatible API
 
 ## Pre-Requisites
 

@@ -3,7 +3,7 @@
 
 kind: ZarfPackageConfig
 metadata:
-  name: local-path-provisioner
+  name: local-path
   description: "Rancher's Local Path Provisioner Zarf Package"
   version: "###ZARF_PKG_TMPL_VERSION###"
   architecture: amd64

@@ -1,9 +1,6 @@
 options:
-  # TODO: set back to info
-  log_level: trace
+  log_level: warn
   architecture: amd64
-  # TODO: set back to false
-  insecure: true
 
 shared:
   domain: uds.prod

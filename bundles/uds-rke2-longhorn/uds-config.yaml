@@ -1,0 +1,25 @@
+options:
+  # TODO: set back to info
+  log_level: trace
+  architecture: amd64
+  # TODO: set back to false
+  insecure: true
+
+shared:
+  domain: uds.prod
+
+variables:
+  local-path-init:
+    # Workaround for SELinux EBS issue - https://github.com/bottlerocket-os/bottlerocket/issues/2417
+    registry_hpa_enable: false
+    registry_pvc_size: 50Gi
+  uds-core:
+    loki_chunks_bucket: $LOKI_S3_BUCKET
+    loki_ruler_bucket: $LOKI_S3_BUCKET
+    loki_admin_bucket: $LOKI_S3_BUCKET
+    loki_s3_region: $LOKI_S3_AWS_REGION
+    loki_irsa_role_arn: $LOKI_S3_ROLE_ARN
+    velero_use_secret: $VELERO_USE_SECRET
+    velero_irsa_role_arn: $VELERO_S3_ROLE_ARN
+    velero_bucket: $VELERO_S3_BUCKET
+    velero_bucket_region: $VELERO_S3_AWS_REGION

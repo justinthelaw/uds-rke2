@@ -70,7 +70,7 @@ components:
   - name: local-path-provisioner-images-initial
     required: true
     only:
-      flavor: local
+      flavor: local-path
     description: "Push the Local Path Provisioner images into the seed registry"
     import:
       path: ../local-path
@@ -79,7 +79,7 @@ components:
   - name: local-path-provisioner
     required: true
     only:
-      flavor: local
+      flavor: local-path
     import:
       path: ../local-path
       name: local-path-provisioner
@@ -91,7 +91,7 @@ components:
   - name: minio-images-initial
     required: true
     only:
-      flavor: local
+      flavor: local-path
     description: "Push the MinIO images into the seed registry"
     import:
       path: ../minio
@@ -109,7 +109,7 @@ components:
   - name: minio
     required: true
     only:
-      flavor: local
+      flavor: local-path
     import:
       path: ../minio
       name: minio
@@ -129,7 +129,7 @@ components:
   - name: rook-ceph-images-initial
     required: true
     only:
-      flavor: rook
+      flavor: rook-ceph
     description: "Push the Rook-Ceph images into the seed registry"
     import:
       path: ../rook-ceph
@@ -138,7 +138,7 @@ components:
   - name: rook-ceph-operator
     required: true
     only:
-      flavor: rook
+      flavor: rook-ceph
     import:
       path: ../rook-ceph
       name: rook-ceph-operator
@@ -146,7 +146,7 @@ components:
   - name: rook-ceph-cluster
     required: true
     only:
-      flavor: rook
+      flavor: rook-ceph
     import:
       path: ../rook-ceph
       name: rook-ceph-cluster
@@ -169,7 +169,7 @@ components:
   - name: local-path-provisioner-images
     required: true
     only:
-      flavor: local
+      flavor: local-path
     description: "Push the Local Path Provisioner images into the permanent registry"
     import:
       path: ../local-path
@@ -197,7 +197,7 @@ components:
   - name: minio-images
     required: true
     only:
-      flavor: local
+      flavor: local-path
     description: "Push the MinIO images into the permanent registry"
     import:
       path: ../minio
@@ -221,7 +221,7 @@ components:
   - name: rook-ceph-images
     required: true
     only:
-      flavor: rook
+      flavor: rook-ceph
     description: "Push the Rook-Ceph images into the permanent registry"
     import:
       path: ../rook-ceph

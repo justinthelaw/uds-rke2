@@ -118,7 +118,7 @@ tasks:
     actions:
       - description: "Deploy the custom Zarf Init package"
         cmd: |
-          sudo uds zarf package deploy build/packages/local-path/zarf-init-amd64-${VERSION}.tar.zst \
+          sudo uds zarf package deploy build/packages/local-path/zarf-init-amd64-*.tar.zst \
             ${DEPLOY_OPTIONS}
 
   - name: longhorn-init
@@ -126,7 +126,7 @@ tasks:
     actions:
       - description: "Deploy the custom Zarf Init package"
         cmd: |
-          sudo uds zarf package deploy build/packages/longhorn/zarf-init-amd64-${VERSION}.tar.zst \
+          sudo uds zarf package deploy build/packages/longhorn/zarf-init-amd64-*.tar.zst \
             --set LONGHORN_VAR="true" \
             ${DEPLOY_OPTIONS}
 
@@ -136,7 +136,7 @@ tasks:
       - description: "Deploy the custom Zarf Init package"
         # File storage is disabled by default, but can be enabled as necessary via UDS overrides or manual Zarf deployment
         cmd: |
-          sudo uds zarf package deploy build/packages/rook-ceph/zarf-init-amd64-${VERSION}.tar.zst \
+          sudo uds zarf package deploy build/packages/rook-ceph/zarf-init-amd64-*.tar.zst \
             --set ENABLE_CEPH_BLOCK_STORE="true" \
             --set ENABLE_CEPH_OBJECT_STORE="true" \
             --set ENABLE_CEPH_FILE_STORE="false" \
@@ -154,9 +154,9 @@ tasks:
             ${DEPLOY_OPTIONS}
 
   - name: uds-core
-    description: "Deploy a specific UDS Core package based on the version and flavor variables"
+    description: "Deploy a pulled UDS Core package"
     actions:
       - description: "Deploy the standard UDS Core package"
         cmd: |
-          sudo uds zarf package deploy build/packages/zarf-package-core-amd64-${VERSION}.tar.zst \
+          sudo uds zarf package deploy build/packages/zarf-package-core-amd64-*.tar.zst \
             ${DEPLOY_OPTIONS}

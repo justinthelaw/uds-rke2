@@ -103,8 +103,9 @@ tasks:
       - task: deploy:uds-rke2-exemptions-rook-ceph
 
   - name: release
-    description: "Builds and publishes all Zarf packages in the repository"
+    description: "Builds and publishes all Zarf packages and UDS bundles in the repository"
     actions:
+      # Zarf packages
       - task: create:uds-rke2
       - task: publish:uds-rke2
       - task: setup:clean
@@ -134,4 +135,9 @@ tasks:
       - task: setup:clean
       - task: create:minio
       - task: publish:minio
+      - task: setup:clean
+
+      # UDS bundles
+      - task: create:uds-rke2-local-path-bundle
+      - task: publish:uds-rke2-local-path-bundle
       - task: setup:clean

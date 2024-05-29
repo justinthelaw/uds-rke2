@@ -3,10 +3,29 @@
 
 variables:
   - name: DEPLOY_OPTIONS
-    description: "Extra Zarf package or UDS bundle deployment options"
+    description: "Extra Zarf package deployment options"
     default: "--no-progress --no-log-file --log-level warn --confirm"
+  - name: DEPLOY_BUNDLE_OPTIONS
+    description: "Extra UDS bundle deployment options"
+    default: "--no-progress --no-tea --no-log-file --log-level warn -a amd64 --confirm"
 
 tasks:
+  - name: bundle
+    description: "Deploy the UDS bundle for the amd64 architectures"
+    actions:
+      - description: "Create the UDS bundle for the amd64 architectures"
+        cmd: |
+          sudo uds deploy "${{ .inputs.path }}" \
+            --set JOIN_TOKEN=my-test-token \
+            ${DEPLOY_BUNDLE_OPTIONS}
+
+  - name: uds-rke2-local-path-bundle
+    description: "Deploy the Local Path Provisioner UDS RKE2 bootstrapping bundle"
+    actions:
+      - task: bundle
+        with:
+          path: "build/bundles/local-path"
+
   - name: uds-rke2-bootstrap
     description: "Deploy the UDS RKE2 Zarf package, as the cluster bootstrapping node"
     inputs:
@@ -105,7 +124,6 @@ tasks:
         # File storage is disabled by default, but can be enabled as necessary via UDS overrides or manual Zarf deployment
         cmd: |
           sudo uds zarf package deploy build/packages/rook-ceph/zarf-init-amd64-*.tar.zst \
-            --no-progress \
             --set ENABLE_CEPH_BLOCK_STORE="true" \
             --set ENABLE_CEPH_OBJECT_STORE="true" \
             --set ENABLE_CEPH_FILE_STORE="false" \

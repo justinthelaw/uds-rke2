@@ -8,8 +8,11 @@ variables:
     default: "0.3.0"
     # x-release-please-end
   - name: PUBLISH_OPTIONS
-    description: "Extra Zarf package or UDS bundle publishing options"
+    description: "Extra Zarf package publishing options"
     default: "--no-progress --no-log-file --log-level warn -a amd64"
+  - name: PUBLISH_BUNDLE_OPTIONS
+    description: "Extra UDS bundle publishing options"
+    default: "--no-progress --no-tea --no-log-file --log-level warn -a amd64 --confirm"
 
 tasks:
   - name: all
@@ -62,6 +65,35 @@ tasks:
             "${{ .inputs.path }}/zarf-init-amd64-$(uds zarf version).tar.zst" \
             "oci://${{ .inputs.targetRepo }}" \
             ${PUBLISH_OPTIONS}
+
+  - name: bundle
+    description: "Publish a UDS bundle for the amd64 architectures"
+    inputs:
+      path:
+        description: "Path to the UDS bundle being published"
+        required: true
+      name:
+        description: "Name of the UDS bundle being published"
+        required: true
+      targetRepo:
+        description: "Repository to publish UDS bundle into"
+        required: true
+    actions:
+      - description: "Publish the UDS bundle for the amd64 architectures"
+        cmd: |
+          sudo uds package publish \
+            "${{ .inputs.path }}/uds-bundle-${{ .inputs.name }}-amd64-${VERSION}.tar.zst" \
+            "oci://${{ .inputs.targetRepo }}" \
+            ${PUBLISH_OPTIONS}
+
+  - name: uds-rke2-local-path-bundle
+    description: "Publish the Local Path Provisioner UDS RKE2 bootstrapping bundle"
+    actions:
+      - task: bundle
+        with:
+          path: build/bundles/local-path
+          name: uds-rke2-bootstrap
+          targetRepo: ghcr.io/justinthelaw/packages/uds/bundles/uds-rke2/bootstrap/local-path/
 
   - name: uds-rke2
     description: "Publish the UDS RKE2 Zarf package"

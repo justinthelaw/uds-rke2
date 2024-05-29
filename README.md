@@ -80,7 +80,7 @@ See the [Configuration section](#configuration) for more details on each specifi
 
 This repository uses [UDS CLI](https://github.com/defenseunicorns/uds-cli)'s built-in [task runner](https://github.com/defenseunicorns/maru-runner) to perform all actions required to run, develop, and publish the UDS RKE2 tech stack.
 
-Run the following to see all the tasks, and their descriptions:
+Run the following to see all the tasks in the main [`tasks.yaml`](./tasks.yaml), and their descriptions:
 
 ```bash
 uds run --list-all
@@ -125,7 +125,7 @@ uds run deploy:all
 
 #### Publish
 
-See the UDS [`publish` tasks](./tasks/publish.yaml) file for more details.
+See the UDS [`publish` tasks](./tasks/publish.yaml) file for more details. Also see the `release` task in the main [`tasks.yaml`](./tasks.yaml).
 
 To publish all packages and bundles, do the following:
 
@@ -137,7 +137,11 @@ export GHCR_PASSWORD="YOUR-PASSWORD-HERE"
 echo $GHCR_PASSWORD | zarf tools registry login ghcr.io --username $GHCR_USERNAME --password-stdin
 set -o history
 
+# if create:all was already run
 uds run publish:all
+
+# if create:all was not already run
+uds run release
 ```
 
 #### Remove

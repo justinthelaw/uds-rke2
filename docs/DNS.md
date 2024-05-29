@@ -2,7 +2,9 @@
 
 ## Domain Assumptions
 
-One of the core assumptions of the `uds-rke2` packages and bundles is the use of `uds.dev` as the base domain for your production environment. This assumption is integral to the DNS and network configuration provided by the package. It is based on an existing DNS entry for `*.uds.dev` that resolves to `127.0.0.1`.
+One of the core assumptions of the original [`uds-k3d`](https://github.com/defenseunicorns/uds-k3d) package is the use of `uds.dev` as the base domain for your production environment. This assumption is integral to the DNS and network configuration provided by the package. It is based on an existing public DNS entry for `*.uds.dev` that resolves to `127.0.0.1` (localhost).
+
+In this repository's `uds-rke2` packages and bundles, this public DNS resolution will not work. UDS RKE2's services are exposed via the host machine's IP, and not via localhost. The following section notes the `/etc/hosts/` modifications required to access virtual services being served by the Istio gateways.
 
 ## Host File Modifications
 
@@ -26,4 +28,4 @@ If any internal services require an `https://` "reach-around" in order to intera
 
 This is not a recommended approach, as all services should be capable of communicating via the secured internal Kubernetes network.
 
-Additionally, the package includes an example Nginx configuration that assumes the use of `uds.dev` as the base domain. This configuration is tailored to support the production environment setup, ensuring that Nginx correctly handles requests and routes them within the cluster, based on the `uds.dev` domain.
+Additionally, an Nginx service and configuration must be installed into the cluster. An example Nginx configuration for K3d can be found in the [uds-k3d repository](https://github.com/defenseunicorns/uds-k3d/blob/main/chart/templates/nginx.yaml). The Nginx configuration assumes the use of `uds.dev` as the base domain. This configuration is tailored to support the production environment setup, ensuring that Nginx correctly handles requests and routes them within the cluster, based on the `uds.dev` domain.

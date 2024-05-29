@@ -86,7 +86,7 @@ tasks:
     actions:
       - description: "Deploy the UDS RKE2 Infrastructure package"
         cmd: |
-          sudo uds zarf package deploy build/packages/zarf-package-infrastructure-amd64-${VERSION}.zst \
+          sudo uds zarf package deploy build/packages/zarf-package-infrastructure-amd64-${VERSION}.tar.zst \
             ${DEPLOY_OPTIONS}
 
   - name: uds-rke2-exemptions-local-path
@@ -94,7 +94,7 @@ tasks:
     actions:
       - description: "Deploy the UDS RKE2 service Pepr policy exemptions package"
         cmd: |
-          sudo uds zarf package deploy build/packages/local-path/zarf-package-exemptions-amd64-${VERSION}.zst \
+          sudo uds zarf package deploy build/packages/local-path/zarf-package-exemptions-amd64-${VERSION}.tar.zst \
             ${DEPLOY_OPTIONS}
 
   - name: uds-rke2-exemptions-longhorn
@@ -102,7 +102,7 @@ tasks:
     actions:
       - description: "Deploy the UDS RKE2 service Pepr policy exemptions package"
         cmd: |
-          sudo uds zarf package deploy build/packages/longhorn/zarf-package-exemptions-amd64-${VERSION}.zst \
+          sudo uds zarf package deploy build/packages/longhorn/zarf-package-exemptions-amd64-${VERSION}.tar.zst \
             ${DEPLOY_OPTIONS}
 
   - name: uds-rke2-exemptions-rook-ceph
@@ -110,7 +110,7 @@ tasks:
     actions:
       - description: "Deploy the UDS RKE2 service Pepr policy exemptions package"
         cmd: |
-          sudo uds zarf package deploy build/packages/rook-ceph/zarf-package-exemptions-amd64-${VERSION}.zst \
+          sudo uds zarf package deploy build/packages/rook-ceph/zarf-package-exemptions-amd64-${VERSION}.tar.zst \
             ${DEPLOY_OPTIONS}
 
   - name: local-path-init
@@ -150,7 +150,7 @@ tasks:
     actions:
       - description: "Deploy the MinIO package"
         cmd: |
-          sudo uds zarf package deploy build/packages/zarf-package-minio-amd64-${VERSION}.zst \
+          sudo uds zarf package deploy build/packages/zarf-package-minio-amd64-${VERSION}.tar.zst \
             ${DEPLOY_OPTIONS}
 
   - name: uds-core

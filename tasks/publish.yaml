@@ -49,6 +49,14 @@ tasks:
             "oci://${{ .inputs.targetRepo }}" \
             ${PUBLISH_OPTIONS}
 
+  - name: remote-dev
+    description: "Publish a `dev` tag to the remote repository"
+    actions:
+      - description: "Re-create the `dev` Git tag to trigger the `tag-and-release` workflow"
+        cmd: |
+          git tag --delete dev && git push --delete origin dev
+          git tag dev && git push origin dev
+
   - name: init
     description: "Publish a Zarf Init package for the amd64 architectures"
     inputs:

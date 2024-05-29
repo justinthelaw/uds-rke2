@@ -34,15 +34,19 @@ tasks:
       - task: deploy:uds-rke2-bootstrap
         with:
           joinToken: "my-test-token"
+      - task: setup:clean
 
       - task: create:local-path-init
       - task: deploy:local-path-init
+      - task: setup:clean
 
       - task: create:uds-rke2-infrastructure
       - task: deploy:uds-rke2-infrastructure
+      - task: setup:clean
 
       - task: create:uds-core
       - task: deploy:uds-core
+      - task: setup:clean
 
       - task: create:uds-rke2-exemptions-local-path
       - task: deploy:uds-rke2-exemptions-local-path
@@ -85,4 +89,3 @@ tasks:
       # UDS bundles
       - task: create:uds-rke2-local-path-bundle
       - task: publish:uds-rke2-local-path-bundle
-      - task: setup:clean

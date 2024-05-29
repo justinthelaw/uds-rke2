@@ -56,6 +56,8 @@ The best way to test UDS RKE2 is to spin-up one or more nodes using a containeri
 
 Please see the [VM setup documentation](./docs/VM.md) and VM setup scripts to learn more about manually creating development VM.
 
+VM setup may not be necessary if using Longhorn or Local Path Provisioner, but it is highly recommended when using Rook-Ceph.
+
 ### Bundles
 
 There are 3 main "flavors" of the UDS RKE2 Core bundle, with 4 distinct flavors in total. Each flavor revolves around the storage and persistence layer of the cluster, and comes with its own documentation on configuration and installation, as linked in the bulleted list below. Please refer to that documentation for more details on each bundle flavor's recommendations and capabilities.
@@ -70,7 +72,21 @@ Each bundle can also be experimented with using the Zarf package creation and de
 uds run --list-all
 ```
 
-### Create
+### Packages
+
+See the [Configuration section](#configuration) for more details on each specific package in each of the bundle flavors.
+
+### UDS Tasks
+
+This repository uses [UDS CLI](https://github.com/defenseunicorns/uds-cli)'s built-in [task runner](https://github.com/defenseunicorns/maru-runner) to perform all actions required to run, develop, and publish the UDS RKE2 tech stack.
+
+Run the following to see all the tasks, and their descriptions:
+
+```bash
+uds run --list-all
+```
+
+#### Create
 
 See the UDS [`create` tasks](./tasks/create.yaml) file for more details.
 
@@ -94,7 +110,7 @@ set -o history
 uds run create:all
 ```
 
-### Deploy
+#### Deploy
 
 See the UDS [`deploy` tasks](./tasks/deploy.yaml) file for more details.
 
@@ -107,7 +123,7 @@ uds run create:tls-cert
 uds run deploy:all
 ```
 
-### Publish
+#### Publish
 
 See the UDS [`publish` tasks](./tasks/publish.yaml) file for more details.
 
@@ -124,14 +140,12 @@ set -o history
 uds run publish:all
 ```
 
-### Remove
+#### Remove
 
-#### Artifacts
-
-Run the following to remove all build artifacts:
+Run the following to remove all Docker, Zarf and UDS artifacts from the host:
 
 ```bash
-rm -rf build/ **/zarf-sbom/
+uds run setup:clean
 ```
 
 Run the following to completely destroy the UDS RKE2 node and all of UDS RKE2's artifacts from the node's host:
@@ -139,10 +153,6 @@ Run the following to completely destroy the UDS RKE2 node and all of UDS RKE2's 
 ```bash
 uds run deploy:uds-rke2-destroy
 ```
-
-#### Packages
-
-See the [Configuration section](#configuration) for more details on each specific package in each of the bundle flavors.
 
 ## Additional Info
 

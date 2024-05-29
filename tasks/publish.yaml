@@ -81,7 +81,7 @@ tasks:
     actions:
       - description: "Publish the UDS bundle for the amd64 architectures"
         cmd: |
-          sudo uds package publish \
+          sudo uds publish \
             "${{ .inputs.path }}/uds-bundle-${{ .inputs.name }}-amd64-${VERSION}.tar.zst" \
             "oci://${{ .inputs.targetRepo }}" \
             ${PUBLISH_OPTIONS}

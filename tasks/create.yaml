@@ -86,6 +86,13 @@ tasks:
 
   - name: bundle
     description: "Create the UDS bundle for the amd64 architectures"
+    inputs:
+      path:
+        description: "Path to the UDS bundle being created"
+        required: true
+      outputPath:
+        description: "Output path to the UDS bundle being created"
+        required: true
     actions:
       - description: "Create the UDS bundle for the amd64 architectures"
         cmd: |

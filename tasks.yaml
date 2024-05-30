@@ -87,7 +87,6 @@ tasks:
       - task: publish:minio
       - task: setup:clean
       - task: create:leapfrogai-workarounds
-      - task: deploy:leapfrogai-workarounds
       - task: setup:clean
 
       # UDS bundles

@@ -40,5 +40,5 @@ jobs:
           registry1Password: ${{secrets.IRON_BANK_ROBOT_PASSWORD}}
           ghToken: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Test the UDS RKE2 Local Path Provisioner Bootstrap
+      - name: Test the UDS RKE2 Bootstrap
         run: sudo uds run uds-rke2 --no-progress --log-level warn -a amd64

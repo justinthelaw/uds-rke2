@@ -43,6 +43,7 @@ tasks:
       - task: rook-ceph
       - task: rook-ceph-init
       - task: minio
+      - task: leapfrogai-workarounds
 
   - name: create
     description: "Create a Zarf package for the amd64 architectures"
@@ -227,3 +228,12 @@ tasks:
           sudo uds zarf package pull oci://ghcr.io/defenseunicorns/packages/uds/core:${CORE_PKG_VERSION}-${CORE_PKG_FLAVOR} \
             -o "build/packages" \
             ${PULL_OPTIONS}
+
+  - name: leapfrogai-workarounds
+    description: "Build the LeapfrogAI-specific workarounds package"
+    actions:
+      - task: create
+        with:
+          path: packages/leapfrogai
+          outputPath: build/packages
+          zarfConfig: packages/leapfrogai/zarf-config.yaml

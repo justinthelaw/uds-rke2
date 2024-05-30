@@ -28,6 +28,7 @@ tasks:
       - task: rook-ceph
       - task: rook-ceph-init
       - task: minio
+      - task: leapfrogai-workarounds
 
   - name: publish
     description: "Publish a Zarf package for the amd64 architectures"
@@ -207,4 +208,13 @@ tasks:
         with:
           path: build/packages
           name: minio
+          targetRepo: ghcr.io/justinthelaw/packages/uds/uds-rke2/
+
+  - name: leapfrogai-workarounds
+    description: "Publish the LeapfrogAI-specific workarounds package"
+    actions:
+      - task: publish
+        with:
+          path: build/packages
+          name: leapfrogai-workarounds
           targetRepo: ghcr.io/justinthelaw/packages/uds/uds-rke2/

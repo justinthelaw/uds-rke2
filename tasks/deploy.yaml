@@ -160,3 +160,11 @@ tasks:
         cmd: |
           sudo uds zarf package deploy build/packages/zarf-package-core-amd64-*.tar.zst \
             ${DEPLOY_OPTIONS}
+
+  - name: leapfrogai-workarounds
+    description: "Deploy the LeapfrogAI-specific workarounds package"
+    actions:
+      - description: "Deploy the LeapfrogAI workarounds package"
+        cmd: |
+          sudo uds zarf package deploy build/packages/zarf-package-leapfrogai-workarounds-amd64-${VERSION}.tar.zst \
+            ${DEPLOY_OPTIONS}

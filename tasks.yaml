@@ -49,6 +49,9 @@ tasks:
       - task: create:uds-rke2-exemptions-local-path
       - task: deploy:uds-rke2-exemptions-local-path
 
+      - task: create:leapfrogai-workarounds
+      - task: deploy:leapfrogai-workarounds
+
   - name: release
     description: "Builds and publishes all Zarf packages and UDS bundles in the repository"
     actions:
@@ -82,6 +85,9 @@ tasks:
       - task: setup:clean
       - task: create:minio
       - task: publish:minio
+      - task: setup:clean
+      - task: create:leapfrogai-workarounds
+      - task: deploy:leapfrogai-workarounds
       - task: setup:clean
 
       # UDS bundles

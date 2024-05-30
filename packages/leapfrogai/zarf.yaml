@@ -1,0 +1,67 @@
+# TODO: renovate setup
+# yaml-language-server: $schema=https://raw.githubusercontent.com/defenseunicorns/uds-cli/v0.10.4/zarf.schema.json
+
+kind: ZarfPackageConfig
+metadata:
+  name: leapfrogai-workarounds
+  description: "LeapfrogAI-specific configuration changes and workarounds"
+  architecture: amd64
+  # Package version is based on the LFAI version, tracked upstream
+  version: "###ZARF_PKG_TMPL_VERSION###"
+
+variables:
+  - name: DOMAIN
+    description: "The base domain used for all UDS core services and UDS deployed applications"
+    default: "uds.dev"
+    prompt: false
+
+components:
+  - name: coredns-corefile-rewrites
+    required: true
+    description: "Setup rewrites for Supabase's authentication callback to the KeycLoak SSO service"
+    actions:
+      onDeploy:
+        after:
+          - cmd: |
+              sudo uds zarf tools kubectl patch configmap rke2-coredns-rke2-coredns -n kube-system --patch "
+              data:
+                Corefile: |
+                  .:53 {
+                      errors
+                      health  {
+                          lameduck 5s
+                      }
+                      ready
+                      kubernetes cluster.local cluster.local in-addr.arpa ip6.arpa {
+                          pods insecure
+                          fallthrough in-addr.arpa ip6.arpa
+                          ttl 30
+                      }
+                      prometheus 0.0.0.0:9153
+                      forward . /etc/resolv.conf
+                      cache 30
+                      loop
+                      reload
+                      loadbalance
+
+                      rewrite name supabase-kong.${ZARF_VAR_DOMAIN} tenant-ingressgateway.istio-tenant-gateway.svc.cluster.local
+                      rewrite name keycloak.admin.${ZARF_VAR_DOMAIN} admin-ingressgateway.istio-admin-gateway.svc.cluster.local
+                  }
+              "
+            description: "Patch the RKE2 CoreDNS Corefile with the tenant and admin gateway rewrites"
+
+  - name: supabase-studio-config
+    required: true
+    description: "Setup rewrites for Supabase's authentication callback to the KeycLoak SSO service"
+    actions:
+      onDeploy:
+        after:
+          - cmd: |
+              sudo uds zarf tools kubectl patch configmap supabase-studio-default -n leapfrogai --patch "
+              data:
+                PORT: \"3000\"
+                STUDIO_PG_META_URL: http://supabase-kong.leapfrogai.svc.cluster.local:80/pg
+                SUPABASE_PUBLIC_URL: https://supabase-kong.${ZARF_VAR_DOMAIN}
+                SUPABASE_URL: http://supabase-kong.leapfrogai.svc.cluster.local:80
+              "
+            description: "Patch the RKE2 CoreDNS Corefile with the tenant and admin gateway rewrites"

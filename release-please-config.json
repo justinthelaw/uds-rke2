@@ -12,6 +12,7 @@
         "packages/rook-ceph/zarf-config.yaml",
         "packages/local-path/zarf-config.yaml",
         "packages/minio/zarf-config.yaml",
+        "packages/leapfrogai/zarf-config.yaml",
         "packages/uds-rke2/infrastructure/charts/Chart.yaml",
         "tasks/publish.yaml",
         "tasks/create.yaml",

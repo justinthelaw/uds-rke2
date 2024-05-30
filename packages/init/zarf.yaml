@@ -4,7 +4,7 @@
 kind: ZarfInitConfig
 metadata:
   name: init
-  description: "Custom Zarf Init Package for RKE2"
+  description: "Custom Zarf Init Package for UDS RKE2"
   architecture: amd64
 
 components:
@@ -14,7 +14,7 @@ components:
 
   - name: zarf-injector
     required: true
-    description: "Move the Zarf injector and registries binaries"
+    description: "Install the Zarf injector and registry binaries"
     import:
       # TODO: renovate setup
       url: oci://ghcr.io/defenseunicorns/packages/init:v0.33.0

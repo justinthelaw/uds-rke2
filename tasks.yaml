@@ -17,15 +17,13 @@ variables:
     # x-release-please-end
 
 tasks:
-  - name: rke2-bootstrap-test
+  - name: uds-rke2
     description: "Complete a stand-up and stand-down of the ONLY the RKE2 cluster"
     actions:
       - task: create:uds-rke2
       - task: deploy:uds-rke2-bootstrap
         with:
           joinToken: "my-test-token"
-
-      - task: setup:uds-rke2-destroy
 
   - name: local-path-bootstrap
     description: "Bootstrap an RKE2 cluster, with Local Path Provisioner Zarf Init, MinIO, and UDS Core packages"

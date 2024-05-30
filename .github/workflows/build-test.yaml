@@ -41,4 +41,4 @@ jobs:
           ghToken: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Test the UDS RKE2 Local Path Provisioner Bootstrap
-        run: sudo uds run local-path-bootstrap --no-progress --log-level warn --no-log-file -a amd64
+        run: sudo uds run uds-rke2 --no-progress --log-level warn -a amd64

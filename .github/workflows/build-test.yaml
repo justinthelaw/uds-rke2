@@ -44,4 +44,4 @@ jobs:
       #   run: sudo uds run uds-rke2 --no-progress --log-level warn -a amd64
 
       - name: Test the UDS RKE2 Local Path Bundle
-        run: sudo uds run local-path-bootstrap -a amd64 --no-tea --set DEPLOY_OPTIONS="--confirm"
+        run: sudo uds run local-path-bootstrap -a amd64 --log-level warn --no-progress --set DEPLOY_OPTIONS="--no-progress --confirm --log-level debug"

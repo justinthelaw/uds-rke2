@@ -39,6 +39,14 @@ tasks:
           name: uds-rke2-bootstrap
           path: build/bundles/local-path
 
+  - name: uds-rke2-rook-ceph-bundle
+    description: "Deploy the Rook-Ceph UDS RKE2 bootstrapping bundle"
+    actions:
+      - task: bundle
+        with:
+          name: uds-rke2-bootstrap
+          path: build/bundles/rook-ceph
+
   - name: uds-rke2-bootstrap
     description: "Deploy the UDS RKE2 Zarf package, as the cluster bootstrapping node"
     inputs:

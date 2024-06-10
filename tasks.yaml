@@ -92,3 +92,4 @@ tasks:
       # UDS bundles
       - task: create:uds-rke2-local-path-bundle
       - task: publish:uds-rke2-local-path-bundle
+      # TODO: add rook-ceph bundle

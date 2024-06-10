@@ -112,6 +112,14 @@ tasks:
           path: "bundles/uds-rke2-local-path"
           outputPath: "build/bundles/local-path"
 
+  - name: uds-rke2-rook-ceph-bundle
+    description: "Build the Rook-Ceph UDS RKE2 bootstrapping bundle"
+    actions:
+      - task: bundle
+        with:
+          path: "bundles/uds-rke2-rook-ceph"
+          outputPath: "build/bundles/rook-ceph"
+
   - name: uds-rke2
     description: "Build the UDS RKE2 Zarf package"
     actions:

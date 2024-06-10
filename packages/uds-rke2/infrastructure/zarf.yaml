@@ -63,7 +63,7 @@ components:
 
   - name: infrastructure
     required: true
-    description: "Setup MetalLB L2 advertisement, Nginx redirects and MachineID + Pause"
+    description: "Setup MetalLB L2 advertisement and MachineID + Pause"
     charts:
       - name: uds-rke2-infrastructure
         namespace: uds-rke2-infrastructure
@@ -71,12 +71,9 @@ components:
         version: "###ZARF_PKG_TMPL_VERSION###"
         valuesFiles:
           - values/metallb-l2-values.yaml
-          - values/nginx-values.yaml
           - values/machineid-values.yaml
     images:
       # TODO: renovate setup
-      # Nginx
-      - registry1.dso.mil/ironbank/opensource/nginx/nginx-alpine:1.25.3
       # MachineID
       - registry1.dso.mil/ironbank/opensource/pause/pause:3.9
       - cgr.dev/chainguard/wolfi-base:latest
@@ -87,12 +84,3 @@ components:
             description: "Load network IP base for MetalLB L2 Advertisement"
             setVariables:
               - name: BASE_IP
-        after:
-          - description: "Validate Nginx is up"
-            wait:
-              cluster:
-                kind: Pod
-                name: name=nginx
-                namespace: uds-rke2-infrastructure
-                condition: "'{.status.conditions[2].status}'=True"
-            maxTotalSeconds: 120

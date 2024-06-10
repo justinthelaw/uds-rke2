@@ -48,12 +48,6 @@ repos:
       - id: hadolint-docker
         name: Dockerfile Lint
 
-  - repo: https://github.com/gruntwork-io/pre-commit
-    rev: v0.1.23
-    hooks:
-      - id: helmlint
-        name: Helm Chart Linting
-
   #############
   # UDS v0.10.4
   #############

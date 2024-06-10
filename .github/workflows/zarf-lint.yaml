@@ -35,7 +35,7 @@ jobs:
         with:
           python-version: 3.11.6
 
-      - name: Download Zarf Schema
+      - name: Download Zarf Package Schema
         # TODO: renovate setup
         run: curl -o zarf.schema.json https://raw.githubusercontent.com/defenseunicorns/uds-cli/v0.10.4/zarf.schema.json
 

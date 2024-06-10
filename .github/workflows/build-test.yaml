@@ -6,14 +6,14 @@ on:
       - "main"
   # TODO: remove the ignore-all later
   pull_request:
-      branches:
-        - "main"
-      paths:
-        - "bundles"
-        - "packages"
-        - "tasks"
-        - ".github/workflows/build-test.yaml"
-        - "tasks.yaml"
+    branches:
+      - "main"
+    paths:
+      - "bundles"
+      - "packages"
+      - "tasks"
+      - ".github/workflows/build-test.yaml"
+      - "tasks.yaml"
 
 permissions:
   id-token: write
@@ -40,8 +40,5 @@ jobs:
           registry1Password: ${{secrets.IRON_BANK_ROBOT_PASSWORD}}
           ghToken: ${{ secrets.GITHUB_TOKEN }}
 
-      # - name: Test the UDS RKE2 Bootstrap
-      #   run: sudo uds run uds-rke2 --no-progress --log-level warn -a amd64
-
-      - name: Test the UDS RKE2 Local Path Bundle
-        run: sudo uds run local-path-bootstrap -a amd64 --log-level warn --no-progress --set DEPLOY_OPTIONS="--no-progress --confirm --log-level debug"
+      - name: Test the UDS RKE2 Bootstrap
+        run: sudo uds run uds-rke2 --no-progress --log-level warn -a amd64

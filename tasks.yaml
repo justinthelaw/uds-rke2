@@ -17,15 +17,13 @@ variables:
     # x-release-please-end
 
 tasks:
-  - name: rke2-bootstrap-test
+  - name: uds-rke2
     description: "Complete a stand-up and stand-down of the ONLY the RKE2 cluster"
     actions:
       - task: create:uds-rke2
       - task: deploy:uds-rke2-bootstrap
         with:
           joinToken: "my-test-token"
-
-      - task: setup:uds-rke2-destroy
 
   - name: local-path-bootstrap
     description: "Bootstrap an RKE2 cluster, with Local Path Provisioner Zarf Init, MinIO, and UDS Core packages"
@@ -34,77 +32,30 @@ tasks:
       - task: deploy:uds-rke2-bootstrap
         with:
           joinToken: "my-test-token"
+      - task: setup:clean
 
       - task: create:local-path-init
       - task: deploy:local-path-init
+      - task: setup:clean
 
       - task: create:uds-rke2-infrastructure
       - task: deploy:uds-rke2-infrastructure
+      - task: setup:clean
 
       - task: create:uds-core
       - task: deploy:uds-core
+      - task: setup:clean
 
       - task: create:uds-rke2-exemptions-local-path
       - task: deploy:uds-rke2-exemptions-local-path
 
-  - name: local-path-bootstrap-without-create
-    description: "Bootstrap an RKE2 cluster, with Local Path Provisioner Zarf Init, MinIO, and UDS Core packages"
-    actions:
-      - task: deploy:uds-rke2-bootstrap
-        with:
-          joinToken: "my-test-token"
-
-      - task: deploy:local-path-init
-
-      - task: deploy:uds-rke2-infrastructure
-
-      - task: deploy:uds-core
-
-      - task: deploy:uds-rke2-exemptions-local-path
-
-  - name: longhorn-bootstrap
-    description: "Bootstrap an RKE2 cluster, with Longhorn Zarf Init, MinIO, and UDS Core packages"
-    actions:
-      - task: create:uds-rke2
-      - task: deploy:uds-rke2-bootstrap
-        with:
-          joinToken: "my-test-token"
-
-      - task: create:longhorn-init
-      - task: deploy:longhorn-init
-
-      - task: create:uds-rke2-infrastructure
-      - task: deploy:uds-rke2-infrastructure
-
-      - task: create:uds-core
-      - task: deploy:uds-core
-
-      - task: create:uds-rke2-exemptions-longhorn
-      - task: deploy:uds-rke2-exemptions-longhorn
-
-  - name: rook-ceph-bootstrap
-    description: "Bootstrap an RKE2 cluster, with Rook-Ceph Zarf Init and UDS Core packages"
-    actions:
-      - task: create:uds-rke2
-      - task: deploy:uds-rke2-bootstrap
-        with:
-          joinToken: "my-test-token"
-
-      - task: create:rook-ceph-init
-      - task: deploy:rook-ceph-init
-
-      - task: create:uds-rke2-infrastructure
-      - task: deploy:uds-rke2-infrastructure
-
-      - task: create:uds-core
-      - task: deploy:uds-core
-
-      - task: create:uds-rke2-exemptions-rook-ceph
-      - task: deploy:uds-rke2-exemptions-rook-ceph
+      - task: create:leapfrogai-workarounds
+      - task: deploy:leapfrogai-workarounds
 
   - name: release
-    description: "Builds and publishes all Zarf packages in the repository"
+    description: "Builds and publishes all Zarf packages and UDS bundles in the repository"
     actions:
+      # Zarf packages
       - task: create:uds-rke2
       - task: publish:uds-rke2
       - task: setup:clean
@@ -135,3 +86,10 @@ tasks:
       - task: create:minio
       - task: publish:minio
       - task: setup:clean
+      - task: create:leapfrogai-workarounds
+      - task: setup:clean
+
+      # UDS bundles
+      - task: create:uds-rke2-local-path-bundle
+      - task: publish:uds-rke2-local-path-bundle
+      # TODO: add Longhorn bundle

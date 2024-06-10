@@ -32,4 +32,5 @@ tasks:
       - description: "Run the RKE2 destroy script"
         cmd: |
           /root/uds-rke2-artifacts/rke2-destroy.sh
-          rm -rf /root/uds-rke2-artifacts/
+          sudo rm -rf /root/uds-rke2-artifacts/
+          sudo rm -rf /opt/uds/pvc-*

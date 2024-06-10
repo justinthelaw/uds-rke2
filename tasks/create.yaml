@@ -15,8 +15,14 @@ variables:
     description: "Flavor of the package to use (`registry1` or `upstream`)."
     default: "registry1"
   - name: CREATE_OPTIONS
-    description: "Extra Zarf package or UDS bundle creation options"
+    description: "Extra Zarf package creation options"
     default: "--no-progress --no-log-file --log-level warn -a amd64 --confirm"
+  - name: PULL_OPTIONS
+    description: "Extra Zarf package pull options"
+    default: "--no-progress --no-log-file --log-level warn -a amd64"
+  - name: CREATE_BUNDLE_OPTIONS
+    description: "Extra UDS bundle creation options"
+    default: "--no-progress --no-tea --no-log-file --log-level warn -a amd64 --confirm"
 
 tasks:
   - name: tls-cert
@@ -37,6 +43,7 @@ tasks:
       - task: rook-ceph
       - task: rook-ceph-init
       - task: minio
+      - task: leapfrogai-workarounds
 
   - name: create
     description: "Create a Zarf package for the amd64 architectures"
@@ -80,6 +87,38 @@ tasks:
             --flavor "${{ .inputs.flavor }}" \
             --set AGENT_IMAGE_TAG=$(uds zarf version) \
             ${CREATE_OPTIONS}
+
+  - name: bundle
+    description: "Create the UDS bundle for the amd64 architectures"
+    inputs:
+      path:
+        description: "Path to the UDS bundle being created"
+        required: true
+      outputPath:
+        description: "Output path to the UDS bundle being created"
+        required: true
+    actions:
+      - description: "Create the UDS bundle for the amd64 architectures"
+        cmd: |
+          sudo uds create "${{ .inputs.path }}" \
+            -o "${{ .inputs.outputPath }}" \
+            ${CREATE_BUNDLE_OPTIONS}
+
+  - name: uds-rke2-local-path-bundle
+    description: "Build the Local Path Provisioner UDS RKE2 bootstrapping bundle"
+    actions:
+      - task: bundle
+        with:
+          path: "bundles/uds-rke2-local-path"
+          outputPath: "build/bundles/local-path"
+
+  - name: uds-rke2-longhorn-bundle
+    description: "Build the Longhorn UDS RKE2 bootstrapping bundle"
+    actions:
+      - task: bundle
+        with:
+          path: "bundles/uds-rke2-longhorn"
+          outputPath: "build/bundles/longhorn"
 
   - name: uds-rke2
     description: "Build the UDS RKE2 Zarf package"
@@ -196,4 +235,13 @@ tasks:
         cmd: |
           sudo uds zarf package pull oci://ghcr.io/defenseunicorns/packages/uds/core:${CORE_PKG_VERSION}-${CORE_PKG_FLAVOR} \
             -o "build/packages" \
-            ${CREATE_OPTIONS}
+            ${PULL_OPTIONS}
+
+  - name: leapfrogai-workarounds
+    description: "Build the LeapfrogAI-specific workarounds package"
+    actions:
+      - task: create
+        with:
+          path: packages/leapfrogai
+          outputPath: build/packages
+          zarfConfig: packages/leapfrogai/zarf-config.yaml

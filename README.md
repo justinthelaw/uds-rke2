@@ -112,6 +112,9 @@ uds run create:all
 
 #### Deploy
 
+> [!NOTE]
+> The pre-deployment setup of the host machine is storage solution-dependent, so be sure to check the documentation for the package flavor you are deploying: [`local-path`](./docs/LOCAL-PATH.md), [`longhorn`](./docs/LONGHORN.md), or [`rook-ceph`](./docs/ROOK-CEPH.md).
+
 See the UDS [`deploy` tasks](./tasks/deploy.yaml) file for more details.
 
 To deploy all packages and bundles, do the following:

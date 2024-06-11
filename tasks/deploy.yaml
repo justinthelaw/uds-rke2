@@ -49,9 +49,9 @@ tasks:
       - description: "Deploy the Zarf Init package for amd64 architectures"
         cmd: |
           sudo uds zarf package deploy "${{ .inputs.path }}/zarf-init-amd64-${VERSION}.tar.zst" \
-          ${{ .input.extraOptions }} \
-          ${REGISTRY_OPTIONS} \
-          ${DEPLOY_OPTIONS}
+            ${{ .inputs.extraOptions }} \
+            ${REGISTRY_OPTIONS} \
+            ${DEPLOY_OPTIONS}
 
   - name: bundle
     description: "Deploy the UDS bundle for the amd64 architectures"
@@ -69,7 +69,8 @@ tasks:
       - description: "Deploy the UDS bundle for the amd64 architectures"
         cmd: |
           sudo uds deploy "${{ .inputs.path }}/uds-bundle-${{ .inputs.name }}-amd64-${VERSION}.tar.zst" \
-            ${{ .input.extraOptions }} \
+            ${{ .inputs.extraOptions }} \
+            ${REGISTRY_OPTIONS} \
             ${DEPLOY_BUNDLE_OPTIONS}
 
   #########

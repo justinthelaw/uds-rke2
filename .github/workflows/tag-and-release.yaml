@@ -71,8 +71,8 @@ jobs:
           if [[ "${{ github.ref }}" == "refs/tags/dev" ]]; then
             uds zarf tools yq -ie '. as $item ireduce ({}; . * $item | (.. | select(tag == "!!str") | select(test("^0\.[0-9]+\.[0-9]+$"))) = "dev")' bundles/uds-rke2-local-path/uds-bundle.yaml
             uds zarf tools yq -ie '(. as $item ireduce ({}; . * $item | (.. | select(tag == "!!str") | select(test("^0\.[0-9]+\.[0-9]+-local-path$"))) = "dev-local-path"))' bundles/uds-rke2-local-path/uds-bundle.yaml
-            sudo uds run release --set VERSION=dev --no-progress
+            sudo uds run release --set VERSION=dev --no-progress --no-log-file --log-level warn
           else
-            sudo uds run release --no-progress
+            sudo uds run release --no-progress --no-log-file --log-level warn
           fi
         shell: bash

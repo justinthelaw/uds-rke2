@@ -17,9 +17,6 @@ variables:
   - name: TARGET_REGISTRY
     description: "Target registry to publish to"
     default: "ghcr.io"
-  - name: REGISTRY_OPTIONS
-    description: "Registry options for local development or private registry support"
-    default: ""
 
 tasks:
   ##########################
@@ -63,7 +60,6 @@ tasks:
           sudo uds zarf package publish \
             "${{ .inputs.path }}/zarf-package-${{ .inputs.name }}-amd64-${VERSION}.tar.zst" \
             "oci://${TARGET_REGISTRY}/${{ .inputs.targetRepo }}" \
-            ${REGISTRY_OPTIONS} \
             ${PUBLISH_OPTIONS}
 
   - name: init
@@ -80,8 +76,7 @@ tasks:
         cmd: |
           sudo uds zarf package publish \
             "${{ .inputs.path }}/zarf-init-amd64-$(uds zarf version).tar.zst" \
-            "oci://${TARGET_REGISTRY/${{ .inputs.targetRepo }}" \
-            ${REGISTRY_OPTIONS} \
+            "oci://${TARGET_REGISTRY}/${{ .inputs.targetRepo }}" \
             ${PUBLISH_OPTIONS}
 
   - name: bundle
@@ -101,8 +96,7 @@ tasks:
         cmd: |
           sudo uds publish \
             "${{ .inputs.path }}/uds-bundle-${{ .inputs.name }}-amd64-${VERSION}.tar.zst" \
-            "oci://${TARGET_REGISTRY/${{ .inputs.targetRepo }}" \
-            ${REGISTRY_OPTIONS} \
+            "oci://${TARGET_REGISTRY}/${{ .inputs.targetRepo }}" \
             ${PUBLISH_OPTIONS}
 
   #########

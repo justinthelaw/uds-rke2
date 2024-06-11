@@ -62,7 +62,7 @@ tasks:
         cmd: |
           sudo uds zarf package publish \
             "${{ .inputs.path }}/zarf-package-${{ .inputs.name }}-amd64-${VERSION}.tar.zst" \
-            "oci://${{ .inputs.targetRegistry}}/${{ .inputs.targetRepo }}" \
+            "oci://${TARGET_REGISTRY}/${{ .inputs.targetRepo }}" \
             ${REGISTRY_OPTIONS} \
             ${PUBLISH_OPTIONS}
 
@@ -80,7 +80,7 @@ tasks:
         cmd: |
           sudo uds zarf package publish \
             "${{ .inputs.path }}/zarf-init-amd64-$(uds zarf version).tar.zst" \
-            "oci://${{ .inputs.targetRegistry}}/${{ .inputs.targetRepo }}" \
+            "oci://${TARGET_REGISTRY/${{ .inputs.targetRepo }}" \
             ${REGISTRY_OPTIONS} \
             ${PUBLISH_OPTIONS}
 
@@ -101,7 +101,7 @@ tasks:
         cmd: |
           sudo uds publish \
             "${{ .inputs.path }}/uds-bundle-${{ .inputs.name }}-amd64-${VERSION}.tar.zst" \
-            "oci://${{ .inputs.targetRegistry}}/${{ .inputs.targetRepo }}" \
+            "oci://${TARGET_REGISTRY/${{ .inputs.targetRepo }}" \
             ${REGISTRY_OPTIONS} \
             ${PUBLISH_OPTIONS}
 

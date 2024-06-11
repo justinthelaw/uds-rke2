@@ -33,7 +33,6 @@ tasks:
       - description: "Deploy the Zarf package for amd64 architectures"
         cmd: |
           sudo uds zarf package deploy "${{ .inputs.path }}/zarf-package-${{ .inputs.name }}-amd64-${VERSION}.tar.zst" \
-          ${REGISTRY_OPTIONS} \
           ${DEPLOY_OPTIONS}
 
   - name: init
@@ -50,7 +49,7 @@ tasks:
         cmd: |
           sudo uds zarf package deploy "${{ .inputs.path }}/zarf-init-amd64-${VERSION}.tar.zst" \
             ${{ .inputs.extraOptions }} \
-            ${REGISTRY_OPTIONS} \
+
             ${DEPLOY_OPTIONS}
 
   - name: bundle
@@ -70,7 +69,6 @@ tasks:
         cmd: |
           sudo uds deploy "${{ .inputs.path }}/uds-bundle-${{ .inputs.name }}-amd64-${VERSION}.tar.zst" \
             ${{ .inputs.extraOptions }} \
-            ${REGISTRY_OPTIONS} \
             ${DEPLOY_BUNDLE_OPTIONS}
 
   #########

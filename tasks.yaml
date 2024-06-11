@@ -32,10 +32,6 @@ tasks:
   - name: uds-rke2-local-path-latest
     description: "Bootstrap a new RKE2 cluster, with Local Path Provisioner Zarf Init, MinIO, and UDS Core packages (LATEST)"
     actions:
-      # Destroy and clean-up any previous installations
-      - task: setup:uds-rke2-destroy
-      - task: setup:full-clean
-
       # UDS bundles
       - task: create:uds-rke2-local-path-bundle
       - task: deploy:uds-rke2-local-path-bundle
@@ -46,10 +42,6 @@ tasks:
   - name: uds-rke2-local-path-dev
     description: "Bootstrap a new RKE2 cluster, with Local Path Provisioner Zarf Init, MinIO, and UDS Core packages (DEV)"
     actions:
-      # Destroy and clean-up any previous installations
-      - task: setup:uds-rke2-destroy
-      - task: setup:full-clean
-
       # Zarf packages
       - task: create:uds-rke2
       - task: publish:uds-rke2
@@ -92,10 +84,6 @@ tasks:
   - name: release
     description: "Builds and publishes all Zarf packages and UDS bundles in the repository"
     actions:
-      # Destroy and clean-up any previous installations
-      - task: setup:uds-rke2-destroy
-      - task: setup:full-clean
-
       # Zarf packages
       - task: create:uds-rke2
       - task: publish:uds-rke2

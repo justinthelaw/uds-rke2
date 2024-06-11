@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - "main"
-  # TODO: remove the ignore-all later
   pull_request:
     branches:
       - "main"
@@ -40,5 +39,5 @@ jobs:
           registry1Password: ${{secrets.IRON_BANK_ROBOT_PASSWORD}}
           ghToken: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Test the UDS RKE2 Bootstrap
-        run: sudo uds run uds-rke2 --no-progress --log-level warn -a amd64
+      - name: Test the UDS RKE2 Local-Path Bootstrap
+        run: sudo VERSION="dev" REGISTRY_OPTIONS="--insecure --registry-override ghcr.io=localhost:5000" uds run uds-rke2-local-path-dev

@@ -42,7 +42,7 @@ tasks:
 
   # The following action must be prepended with REGISTRY_OPTIONS and VERSION variables for it to function as intended:
   # REGISTRY_OPTIONS="--insecure --registry-override ghcr.io=localhost:5000"
-  # VERSION="0.3.0.dev"
+  # VERSION="dev"
   - name: uds-rke2-local-path-dev
     description: "Bootstrap a new RKE2 cluster, with Local Path Provisioner Zarf Init, MinIO, and UDS Core packages (DEV)"
     actions:
@@ -87,7 +87,7 @@ tasks:
 
       # UDS bundles
       - task: create:uds-rke2-local-path-bundle-dev
-      - task: deploy:uds-rke2-local-path-bundle-dev
+      - task: deploy:uds-rke2-local-path-bundle
 
   - name: release
     description: "Builds and publishes all Zarf packages and UDS bundles in the repository"

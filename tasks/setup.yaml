@@ -11,7 +11,7 @@ tasks:
   # UTILITY
   #########
 
-  - name: semi-clean
+  - name: clean-build-artifacts
     description: "Cleans the host of extraneous build artifacts"
     actions:
       - description: "Remove the build folder and clear UDS and Zarf caches"
@@ -19,10 +19,10 @@ tasks:
           sudo uds zarf tools clear-cache && sudo rm -rf ~/.uds-cache && sudo rm -rf ~/.zarf-cache
           sudo rm -rf build/ zarf-sbom/ /tmp/zarf-*
 
-  - name: full-clean
-    description: "Cleans the host system of extraneous build artifacts, to include hanging Docker artifacts"
+  - name: clean
+    description: "Cleans the host system of extraneous build artifacts, as well as hanging Docker artifacts"
     actions:
-      - task: semi-clean
+      - task: clean-build-artifacts
       - description: "Remove the build folder, Docker artifacts, and clear UDS and Zarf caches"
         cmd: sudo docker system prune -a -f && sudo docker volume prune -f
 
@@ -30,7 +30,12 @@ tasks:
     description: "Create a local image registry for development"
     actions:
       - description: "Create a local Docker registry"
-        cmd: docker run -d -p 5000:5000 --restart=always --name registry registry:2
+        cmd: |
+          if [ -z "$(docker ps --format '{{.Names}}:{{.Ports}}' | grep '^registry:.*:6000->')" ]; then
+              docker run -d -p 6000:5000 --restart=always --name registry registry:2
+          else
+              echo "Local registry already exists at port 6000, using the existing registry."
+          fi
 
   - name: rook-ceph-destroy
     description: "Destroys an existing Rook-Ceph cluster installation and all associated data on the host node"

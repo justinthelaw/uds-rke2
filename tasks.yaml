@@ -42,44 +42,46 @@ tasks:
   - name: uds-rke2-local-path-dev
     description: "Bootstrap a new RKE2 cluster, with Local Path Provisioner Zarf Init, MinIO, and UDS Core packages (DEV)"
     actions:
+      - task: setup:local-registry
+
       # Zarf packages
       - task: create:uds-rke2
       - task: publish:uds-rke2
-      - task: setup:semi-clean
+      - task: setup:clean
       - task: create:uds-rke2-infrastructure
       - task: publish:uds-rke2-infrastructure
-      - task: setup:semi-clean
+      - task: setup:clean
       - task: create:uds-rke2-exemptions-local-path
       - task: publish:uds-rke2-exemptions-local-path
-      - task: setup:semi-clean
+      - task: setup:clean
       - task: create:uds-rke2-exemptions-longhorn
       - task: publish:uds-rke2-exemptions-longhorn
-      - task: setup:semi-clean
+      - task: setup:clean
       - task: create:uds-rke2-exemptions-rook-ceph
       - task: publish:uds-rke2-exemptions-rook-ceph
-      - task: setup:semi-clean
+      - task: setup:clean
       - task: create:local-path
       - task: publish:local-path
-      - task: setup:semi-clean
+      - task: setup:clean
       - task: create:local-path-init
       - task: publish:local-path-init
-      - task: setup:semi-clean
+      - task: setup:clean
       - task: create:rook-ceph
       - task: publish:rook-ceph
-      - task: setup:semi-clean
+      - task: setup:clean
       - task: create:rook-ceph-init
       - task: publish:rook-ceph-init
-      - task: setup:semi-clean
+      - task: setup:clean
       - task: create:minio
       - task: publish:minio
-      - task: setup:semi-clean
+      - task: setup:clean
       - task: create:leapfrogai-workarounds
       - task: publish:leapfrogai-workarounds
-      - task: setup:semi-clean
+      - task: setup:clean
 
       # UDS bundles
       - task: create:uds-rke2-local-path-bundle-dev
-      - task: deploy:uds-rke2-local-path-bundle
+      # - task: deploy:uds-rke2-local-path-bundle
 
   - name: release
     description: "Builds and publishes all Zarf packages and UDS bundles in the repository"
@@ -87,37 +89,37 @@ tasks:
       # Zarf packages
       - task: create:uds-rke2
       - task: publish:uds-rke2
-      - task: setup:full-clean
+      - task: setup:clean
       - task: create:uds-rke2-infrastructure
       - task: publish:uds-rke2-infrastructure
-      - task: setup:full-clean
+      - task: setup:clean
       - task: create:uds-rke2-exemptions-local-path
       - task: publish:uds-rke2-exemptions-local-path
-      - task: setup:full-clean
+      - task: setup:clean
       - task: create:uds-rke2-exemptions-longhorn
       - task: publish:uds-rke2-exemptions-longhorn
-      - task: setup:full-clean
+      - task: setup:clean
       - task: create:uds-rke2-exemptions-rook-ceph
       - task: publish:uds-rke2-exemptions-rook-ceph
-      - task: setup:full-clean
+      - task: setup:clean
       - task: create:local-path
       - task: publish:local-path
-      - task: setup:full-clean
+      - task: setup:clean
       - task: create:local-path-init
       - task: publish:local-path-init
-      - task: setup:full-clean
+      - task: setup:clean
       - task: create:rook-ceph
       - task: publish:rook-ceph
-      - task: setup:full-clean
+      - task: setup:clean
       - task: create:rook-ceph-init
       - task: publish:rook-ceph-init
-      - task: setup:full-clean
+      - task: setup:clean
       - task: create:minio
       - task: publish:minio
-      - task: setup:full-clean
+      - task: setup:clean
       - task: create:leapfrogai-workarounds
       - task: publish:leapfrogai-workarounds
-      - task: setup:full-clean
+      - task: setup:clean
 
       # UDS bundles
       - task: create:uds-rke2-local-path-bundle

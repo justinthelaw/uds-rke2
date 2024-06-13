@@ -7,6 +7,8 @@
 
 This Zarf package serves as an air-gapped production environment for deploying [UDS Core](https://github.com/defenseunicorns/uds-core), individual UDS Capabilities, and UDS capabilities aggregated (bundled) via the [UDS CLI](https://github.com/defenseunicorns/uds-cli).
 
+See the [UDS RKE2 Mermaid diagram](docs/DIAGRAM.md) for visual representations of the tech stack's components and order of operations.
+
 ## Pre-Requisites
 
 ### Deployment Target
@@ -175,6 +177,10 @@ Below are resources to explain some of the rationale and inner workings of the R
 - [Longhorn Configuration](docs/LONGHORN.md)
 - [Local Path Provisioner](docs/LOCAL-PATH.md)
 - [Custom Zarf Init](docs/INIT.md)
+
+### Application-Specific
+
+- [LeapfrogAI](docs/LEAPFROGAI.md)
 
 ### Virtual Machine Setup and Testing
 

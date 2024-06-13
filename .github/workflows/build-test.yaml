@@ -41,8 +41,4 @@ jobs:
 
       - name: Test the UDS RKE2 Local-Path Bootstrap
         run: |
-          sudo uds run uds-rke2-local-path-dev \
-            --set VERSION="dev" \
-            --set TARGET_REGISTRY="localhost:6000" \
-            --set REGISTRY_OPTIONS="--insecure --registry-override=ghcr.io=localhost:5000"\
-            --no-progress --no-log-file --log-level warn
+          sudo uds run uds-rke2-local-path --log-level debug -a amd64

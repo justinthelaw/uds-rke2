@@ -31,10 +31,10 @@ tasks:
     actions:
       - description: "Create a local Docker registry"
         cmd: |
-          if [ -z "$(docker ps --format '{{.Names}}:{{.Ports}}' | grep '^registry:.*:6000->')" ]; then
-              docker run -d -p 6000:5000 --restart=always --name registry registry:2
+          if [ -z "$(docker ps --format '{{.Names}}:{{.Ports}}' | grep '^registry:.*:5001->')" ]; then
+              docker run -d -p 5001:5000 --restart=always --name registry registry:2
           else
-              echo "Local registry already exists at port 6000, using the existing registry."
+              echo "Local registry already exists at port 5001, using the existing registry."
           fi
 
   - name: rook-ceph-destroy

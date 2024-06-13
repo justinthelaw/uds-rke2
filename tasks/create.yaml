@@ -17,9 +17,6 @@ variables:
   - name: CREATE_BUNDLE_OPTIONS
     description: "Extra UDS bundle creation options"
     default: "--no-progress --no-tea --no-log-file --log-level warn -a amd64 --confirm"
-  - name: REGISTRY_OPTIONS
-    description: "Registry options for local development or private registry support"
-    default: ""
 
   - name: CORE_PKG_VERSION
     description: "The version of UDS Core package to deploy"
@@ -76,7 +73,6 @@ tasks:
             -o "${{ .inputs.outputPath }}" \
             --set VERSION=${VERSION} \
             --flavor "${{ .inputs.flavor }}" \
-            ${REGISTRY_OPTIONS} \
             ${CREATE_OPTIONS}
 
   - name: init
@@ -95,7 +91,6 @@ tasks:
             -o "${{ .inputs.outputPath }}" \
             --flavor "${{ .inputs.flavor }}" \
             --set AGENT_IMAGE_TAG=$(uds zarf version) \
-            ${REGISTRY_OPTIONS} \
             ${CREATE_OPTIONS}
 
   - name: bundle
@@ -133,14 +128,6 @@ tasks:
       - task: bundle
         with:
           path: "bundles/latest/uds-rke2-local-path"
-          outputPath: "build/bundles/local-path"
-
-  - name: uds-rke2-local-path-bundle-dev
-    description: "Build the Local Path Provisioner UDS RKE2 bootstrapping bundle (LATEST)"
-    actions:
-      - task: bundle
-        with:
-          path: "bundles/dev/uds-rke2-local-path"
           outputPath: "build/bundles/local-path"
 
   ###################

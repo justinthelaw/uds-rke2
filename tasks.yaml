@@ -28,60 +28,34 @@ tasks:
       - task: deploy:uds-rke2-bootstrap
         with:
           joinToken: "my-test-token"
+      - task: setup:clean-build-artifacts
 
-  - name: uds-rke2-local-path-latest
-    description: "Bootstrap a new RKE2 cluster, with Local Path Provisioner Zarf Init, MinIO, and UDS Core packages (LATEST)"
+  - name: uds-rke2-local-path
+    description: "Bootstrap a new RKE2 cluster, with the Local Path Provisioner and MinIO Zarf Init"
+    actions:
+      - task: uds-rke2
+
+      # Zarf packages
+      - task: setup:clean-build-artifacts
+      - task: create:uds-rke2-infrastructure
+      - task: deploy:uds-rke2-infrastructure
+      - task: setup:clean-build-artifacts
+      - task: create:local-path-init
+      - task: deploy:local-path-init
+      - task: setup:clean-build-artifacts
+      - task: create:uds-rke2-exemptions-local-path
+      - task: deploy:uds-rke2-exemptions-local-path
+      - task: setup:clean-build-artifacts
+      - task: create:leapfrogai-workarounds
+      - task: deploy:leapfrogai-workarounds
+      - task: setup:clean-build-artifacts
+
+  - name: uds-rke2-local-path-core
+    description: "Bootstrap a new RKE2 cluster, with the Local Path Provisioner and MinIO Zarf Init and UDS Core packages"
     actions:
       # UDS bundles
       - task: create:uds-rke2-local-path-bundle
       - task: deploy:uds-rke2-local-path-bundle
-
-  # The following action must be prepended with REGISTRY_OPTIONS and VERSION variables for it to function as intended:
-  # REGISTRY_OPTIONS="--insecure --registry-override ghcr.io=localhost:5000"
-  # VERSION="dev"
-  - name: uds-rke2-local-path-dev
-    description: "Bootstrap a new RKE2 cluster, with Local Path Provisioner Zarf Init, MinIO, and UDS Core packages (DEV)"
-    actions:
-      - task: setup:local-registry
-
-      # Zarf packages
-      - task: create:uds-rke2
-      - task: publish:uds-rke2
-      - task: setup:clean
-      - task: create:uds-rke2-infrastructure
-      - task: publish:uds-rke2-infrastructure
-      - task: setup:clean
-      - task: create:uds-rke2-exemptions-local-path
-      - task: publish:uds-rke2-exemptions-local-path
-      - task: setup:clean
-      - task: create:uds-rke2-exemptions-longhorn
-      - task: publish:uds-rke2-exemptions-longhorn
-      - task: setup:clean
-      - task: create:uds-rke2-exemptions-rook-ceph
-      - task: publish:uds-rke2-exemptions-rook-ceph
-      - task: setup:clean
-      - task: create:local-path
-      - task: publish:local-path
-      - task: setup:clean
-      - task: create:local-path-init
-      - task: publish:local-path-init
-      - task: setup:clean
-      - task: create:rook-ceph
-      - task: publish:rook-ceph
-      - task: setup:clean
-      - task: create:rook-ceph-init
-      - task: publish:rook-ceph-init
-      - task: setup:clean
-      - task: create:minio
-      - task: publish:minio
-      - task: setup:clean
-      - task: create:leapfrogai-workarounds
-      - task: publish:leapfrogai-workarounds
-      - task: setup:clean
-
-      # UDS bundles
-      - task: create:uds-rke2-local-path-bundle-dev
-      # - task: deploy:uds-rke2-local-path-bundle
 
   - name: release
     description: "Builds and publishes all Zarf packages and UDS bundles in the repository"

@@ -17,6 +17,7 @@ jobs:
   title-check:
     runs-on: ubuntu-latest
     name: Validate PR Title
+
     permissions:
       pull-requests: read
 

@@ -49,7 +49,7 @@ jobs:
     name: Publish Package
 
     permissions:
-      contents: read
+      contents: write
       packages: write
 
     steps:

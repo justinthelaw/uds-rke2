@@ -36,12 +36,11 @@ tasks:
       - task: uds-rke2
 
       # Zarf packages
+      - task: create:local-path-init
+      - task: deploy:local-path-init
       - task: setup:clean-build-artifacts
       - task: create:uds-rke2-infrastructure
       - task: deploy:uds-rke2-infrastructure
-      - task: setup:clean-build-artifacts
-      - task: create:local-path-init
-      - task: deploy:local-path-init
       - task: setup:clean-build-artifacts
       - task: create:uds-rke2-exemptions-local-path
       - task: deploy:uds-rke2-exemptions-local-path

@@ -180,6 +180,7 @@ Below are resources to explain some of the rationale and inner workings of the R
 
 ### Application-Specific
 
+- [UDS Core](UDS-CORE.md)
 - [LeapfrogAI](docs/LEAPFROGAI.md)
 
 ### Virtual Machine Setup and Testing

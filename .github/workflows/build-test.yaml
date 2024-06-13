@@ -42,5 +42,4 @@ jobs:
 
       - name: Test the UDS RKE2 Local-Path Bootstrap
         run: |
-          sudo systemctl stop docker
           sudo uds run uds-rke2-local-path --no-progress --log-level warn -a amd64

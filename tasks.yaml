@@ -35,13 +35,6 @@ tasks:
       - task: setup:clean
       - task: create:uds-rke2-infrastructure
       - task: deploy:uds-rke2-infrastructure
-      - task: setup:clean
-      - task: create:uds-rke2-exemptions-local-path
-      - task: deploy:uds-rke2-exemptions-local-path
-      - task: setup:clean
-      - task: create:leapfrogai-workarounds
-      - task: deploy:leapfrogai-workarounds
-      - task: setup:clean
 
   - name: uds-rke2-local-path-core
     description: "Bootstrap a new RKE2 cluster, with the Local Path Provisioner and MinIO Zarf Init and UDS Core packages (LATEST)"

@@ -6,9 +6,6 @@ includes:
   - deploy: ./tasks/deploy.yaml
   - publish: ./tasks/publish.yaml
   - setup: ./tasks/setup.yaml
-  # TODO: renovate setup
-  - create-core: https://raw.githubusercontent.com/defenseunicorns/uds-core/v0.22.0/tasks/create.yaml
-  - deploy-core: https://raw.githubusercontent.com/defenseunicorns/uds-core/v0.22.0/tasks/deploy.yaml
 
 variables:
   - name: VERSION

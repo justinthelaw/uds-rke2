@@ -120,8 +120,8 @@ tasks:
     actions:
       - task: bundle
         with:
-          path: build/bundles/local-path
-          name: uds-rke2-bootstrap
+          path: build/bundles/
+          name: local-path-bootstrap
           # the OCI reference for UDS bundle publish does not gracefully handle an ending `/`
           targetRepo: justinthelaw/packages/uds/bundles/uds-rke2
 

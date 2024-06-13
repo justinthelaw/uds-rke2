@@ -25,7 +25,7 @@ tasks:
       - task: setup:clean-build-artifacts
 
   - name: uds-rke2-local-path
-    description: "Bootstrap a new RKE2 cluster, with the Local Path Provisioner and MinIO Zarf Init"
+    description: "Bootstrap a new RKE2 cluster, with the Local Path Provisioner + MinIO Zarf Init"
     actions:
       - task: uds-rke2
 
@@ -37,13 +37,13 @@ tasks:
       - task: deploy:uds-rke2-infrastructure
 
   - name: uds-rke2-local-path-core
-    description: "Bootstrap a new RKE2 cluster, with the Local Path Provisioner and MinIO Zarf Init and UDS Core packages (LATEST)"
+    description: "Bootstrap a new RKE2 cluster, with the Local Path Provisioner + MinIO Zarf Init and UDS Core packages (LATEST)"
     actions:
       - task: create:uds-rke2-local-path-bundle
       - task: deploy:uds-rke2-local-path-bundle
 
   - name: uds-rke2-local-path-core-dev
-    description: "Bootstrap a new RKE2 cluster, with the Local Path Provisioner and MinIO Zarf Init and UDS Core packages (DEV)"
+    description: "Bootstrap a new RKE2 cluster, with the Local Path Provisioner + MinIO Zarf Init and UDS Core packages (DEV)"
     actions:
       - task: release-packages-dev
       - task: release-bundles-dev

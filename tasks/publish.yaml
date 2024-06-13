@@ -108,22 +108,23 @@ tasks:
     actions:
       - description: "Re-create the `dev` Git tag to trigger the `tag-and-release` workflow"
         cmd: |
-          git tag --delete dev && git push --delete origin dev
+          git tag --delete dev
+          git push --delete origin dev
           git tag dev && git push origin dev
 
   #########
   # BUNDLES
   #########
 
-  - name: uds-rke2-local-path-bundle
+  - name: local-path-core-bundle
     description: "Publish the Local Path Provisioner UDS RKE2 bootstrapping bundle"
     actions:
       - task: bundle
         with:
           path: build/bundles/
-          name: local-path-bootstrap
+          name: uds-rke2-local-path-core
           # the OCI reference for UDS bundle publish does not gracefully handle an ending `/`
-          targetRepo: justinthelaw/packages/uds/bundles/uds-rke2
+          targetRepo: justinthelaw/packages/uds/bundles
 
   ###################
   # STANDARD PACKAGES

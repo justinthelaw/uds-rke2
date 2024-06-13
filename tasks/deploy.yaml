@@ -75,13 +75,13 @@ tasks:
   # BUNDLES
   #########
 
-  - name: uds-rke2-local-path-bundle
+  - name: local-path-core-bundle
     description: "Deploy the Local Path Provisioner UDS RKE2 bootstrapping bundle"
     actions:
       - task: bundle
         with:
-          name: uds-rke2-bootstrap
-          path: build/bundles/local-path
+          name: uds-rke2-local-path-core
+          path: build/bundles
           extraOptions: "--set JOIN_TOKEN=my-test-token"
 
   ###################

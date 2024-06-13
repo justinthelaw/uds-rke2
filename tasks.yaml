@@ -28,10 +28,8 @@ tasks:
           joinToken: "my-test-token"
 
       - cmd: |
-          ls /opt/cni/bin
+          df -h
           sudo uds zarf tools kubectl describe node
-          sudo uds zarf tools kubectl logs -l app.kubernetes.io/name=rke2-snapshot-controller  -n kube-system
-          sudo uds zarf tools kubectl logs -l app.kubernetes.io/name=rke2-snapshot-validation-webhook  -n kube-system
           sudo uds zarf tools kubectl get events --all-namespaces
 
   - name: uds-rke2-local-path

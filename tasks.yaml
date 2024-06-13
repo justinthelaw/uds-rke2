@@ -26,7 +26,6 @@ tasks:
       - task: deploy:uds-rke2-bootstrap
         with:
           joinToken: "my-test-token"
-      - task: setup:clean
 
   - name: uds-rke2-local-path
     description: "Bootstrap a new RKE2 cluster, with the Local Path Provisioner + MinIO Zarf Init"
@@ -36,7 +35,6 @@ tasks:
       # Zarf packages
       - task: create:local-path-init
       - task: deploy:local-path-init
-      - task: setup:clean
       - task: create:uds-rke2-infrastructure
       - task: deploy:uds-rke2-infrastructure
 

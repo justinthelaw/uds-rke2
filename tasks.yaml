@@ -27,6 +27,11 @@ tasks:
         with:
           joinToken: "my-test-token"
 
+      - cmd: |
+          sudo uds zarf tools kubectl logs -l app.kubernetes.io/name=rke2-snapshot-controller  -n kube-system
+          sudo uds zarf tools kubectl logs -l app.kubernetes.io/name=rke2-snapshot-validation-webhook  -n kube-system
+          sudo uds zarf tools kubectl get events --all-namespaces
+
   - name: uds-rke2-local-path
     description: "Bootstrap a new RKE2 cluster, with the Local Path Provisioner + MinIO Zarf Init"
     actions:

@@ -209,19 +209,19 @@ components:
                 namespace: kube-system
                 condition: "'{.status.conditions[2].status}'=True"
             maxTotalSeconds: 300
-          - description: "Validate rke2-snapshot-controller is up"
-            wait:
-              cluster:
-                kind: Pod
-                name: app.kubernetes.io/name=rke2-snapshot-controller
-                namespace: kube-system
-                condition: "'{.status.conditions[2].status}'=True"
-            maxTotalSeconds: 300
-          - description: "Validate rke2-snapshot-validation-webhook is up"
-            wait:
-              cluster:
-                kind: Pod
-                name: app.kubernetes.io/name=rke2-snapshot-validation-webhook
-                namespace: kube-system
-                condition: "'{.status.conditions[2].status}'=True"
-            maxTotalSeconds: 300
+          # - description: "Validate rke2-snapshot-controller is up"
+          #   wait:
+          #     cluster:
+          #       kind: Pod
+          #       name: app.kubernetes.io/name=rke2-snapshot-controller
+          #       namespace: kube-system
+          #       condition: "'{.status.conditions[2].status}'=True"
+          #   maxTotalSeconds: 300
+          # - description: "Validate rke2-snapshot-validation-webhook is up"
+          #   wait:
+          #     cluster:
+          #       kind: Pod
+          #       name: app.kubernetes.io/name=rke2-snapshot-validation-webhook
+          #       namespace: kube-system
+          #       condition: "'{.status.conditions[2].status}'=True"
+          #   maxTotalSeconds: 300

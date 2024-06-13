@@ -10,10 +10,10 @@ variables:
 
   - name: PUBLISH_OPTIONS
     description: "Extra Zarf package publishing options"
-    default: "--no-progress --no-log-file --log-level warn -a amd64"
+    default: "--no-progress --no-log-file --log-level debug -a amd64"
   - name: PUBLISH_BUNDLE_OPTIONS
     description: "Extra UDS bundle publishing options"
-    default: "--no-progress --no-tea --no-log-file --log-level warn -a amd64 --confirm"
+    default: "--no-progress --no-tea --no-log-file --log-level debug -a amd64 --confirm"
   - name: TARGET_REGISTRY
     description: "Target registry to publish to"
     default: "ghcr.io"
@@ -23,18 +23,15 @@ tasks:
   # ALL PACKAGES AND BUNDLES
   ##########################
 
+  # TODO: re-enable rook-ceph and longhorn when built
   - name: all
     description: "Publishes all Zarf packages in the repository"
     actions:
       - task: uds-rke2
       - task: uds-rke2-infrastructure
       - task: uds-rke2-exemptions-local-path
-      - task: uds-rke2-exemptions-longhorn
-      - task: uds-rke2-exemptions-rook-ceph
       - task: local-path
       - task: local-path-init
-      - task: rook-ceph
-      - task: rook-ceph-init
       - task: minio
       - task: leapfrogai-workarounds
 
@@ -157,24 +154,6 @@ tasks:
           name: exemptions
           targetRepo: justinthelaw/packages/uds/uds-rke2/
 
-  - name: uds-rke2-exemptions-longhorn
-    description: "Publish the UDS RKE2 service Pepr policy exemptions package"
-    actions:
-      - task: publish
-        with:
-          path: build/packages/longhorn
-          name: exemptions
-          targetRepo: justinthelaw/packages/uds/uds-rke2/
-
-  - name: uds-rke2-exemptions-rook-ceph
-    description: "Publish the UDS RKE2 service Pepr policy exemptions package"
-    actions:
-      - task: publish
-        with:
-          path: build/packages/rook-ceph
-          name: exemptions
-          targetRepo: justinthelaw/packages/uds/uds-rke2/
-
   - name: local-path
     description: "Publish the Local Path Provisioner package"
     actions:
@@ -182,24 +161,6 @@ tasks:
         with:
           path: build/packages/local-path
           name: local-path
-          targetRepo: justinthelaw/packages/uds/uds-rke2/
-
-  - name: longhorn
-    description: "Publish the Longhorn package"
-    actions:
-      - task: publish
-        with:
-          path: build/packages/longhorn
-          name: longhorn
-          targetRepo: justinthelaw/packages/uds/uds-rke2/
-
-  - name: rook-ceph
-    description: "Publish the Rook-Ceph package"
-    actions:
-      - task: publish
-        with:
-          path: build/packages/rook-ceph
-          name: rook-ceph
           targetRepo: justinthelaw/packages/uds/uds-rke2/
 
   - name: minio
@@ -221,22 +182,6 @@ tasks:
       - task: init
         with:
           path: build/packages/local-path
-          targetRepo: justinthelaw/packages/uds/uds-rke2/
-
-  - name: longhorn-init
-    description: "Publish the custom Zarf Init package"
-    actions:
-      - task: init
-        with:
-          path: build/packages/longhorn
-          targetRepo: justinthelaw/packages/uds/uds-rke2/
-
-  - name: rook-ceph-init
-    description: "Publish the custom Zarf Init package"
-    actions:
-      - task: init
-        with:
-          path: build/packages/rook-ceph
           targetRepo: justinthelaw/packages/uds/uds-rke2/
 
   ########################

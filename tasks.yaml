@@ -6,8 +6,9 @@ includes:
   - deploy: ./tasks/deploy.yaml
   - publish: ./tasks/publish.yaml
   - setup: ./tasks/setup.yaml
-  - create-core: https://raw.githubusercontent.com/defenseunicorns/uds-core/v0.19.0/tasks/create.yaml
-  - deploy-core: https://raw.githubusercontent.com/defenseunicorns/uds-core/v0.19.0/tasks/deploy.yaml
+  # TODO: renovate setup
+  - create-core: https://raw.githubusercontent.com/defenseunicorns/uds-core/v0.22.0/tasks/create.yaml
+  - deploy-core: https://raw.githubusercontent.com/defenseunicorns/uds-core/v0.22.0/tasks/deploy.yaml
 
 variables:
   - name: VERSION
@@ -15,10 +16,6 @@ variables:
     # x-release-please-start-version
     default: "0.3.0"
     # x-release-please-end
-
-  - name: REGISTRY_OPTIONS
-    description: "Registry options for local development or private registry support"
-    default: ""
 
 tasks:
   - name: uds-rke2
@@ -38,28 +35,47 @@ tasks:
       # Zarf packages
       - task: create:local-path-init
       - task: deploy:local-path-init
-      - task: setup:clean-build-artifacts
+      - task: setup:clean
       - task: create:uds-rke2-infrastructure
       - task: deploy:uds-rke2-infrastructure
-      - task: setup:clean-build-artifacts
+      - task: setup:clean
       - task: create:uds-rke2-exemptions-local-path
       - task: deploy:uds-rke2-exemptions-local-path
-      - task: setup:clean-build-artifacts
+      - task: setup:clean
       - task: create:leapfrogai-workarounds
       - task: deploy:leapfrogai-workarounds
-      - task: setup:clean-build-artifacts
+      - task: setup:clean
 
   - name: uds-rke2-local-path-core
-    description: "Bootstrap a new RKE2 cluster, with the Local Path Provisioner and MinIO Zarf Init and UDS Core packages"
+    description: "Bootstrap a new RKE2 cluster, with the Local Path Provisioner and MinIO Zarf Init and UDS Core packages (LATEST)"
     actions:
-      # UDS bundles
       - task: create:uds-rke2-local-path-bundle
       - task: deploy:uds-rke2-local-path-bundle
 
-  - name: release
-    description: "Builds and publishes all Zarf packages and UDS bundles in the repository"
+  - name: uds-rke2-local-path-core-dev
+    description: "Bootstrap a new RKE2 cluster, with the Local Path Provisioner and MinIO Zarf Init and UDS Core packages (DEV)"
     actions:
-      # Zarf packages
+      - task: release-packages-dev
+      - task: release-bundles-dev
+
+      - description: "Use the `dev` version to run a deployment"
+        cmd: sudo uds run deploy:uds-rke2-local-path-bundle --set VERSION=dev --no-progress --no-log-file --log-level warn
+
+  - name: release
+    description: "Builds and publishes all Zarf packages and Bundles in the repository (LATEST)"
+    actions:
+      - task: release-packages
+      - task: release-bundles
+
+  - name: release-dev
+    description: "Builds and publishes all Zarf packages and Bundles in the repository (DEV)"
+    actions:
+      - task: release-packages-dev
+      - task: release-bundles-dev
+
+  - name: release-packages
+    description: "Builds and publishes all Zarf packages in the repository (LATEST)"
+    actions:
       - task: create:uds-rke2
       - task: publish:uds-rke2
       - task: setup:clean
@@ -94,6 +110,23 @@ tasks:
       - task: publish:leapfrogai-workarounds
       - task: setup:clean
 
-      # UDS bundles
+  - name: release-packages-dev
+    description: "Builds and publishes all Zarf packages in the repository (DEV)"
+    actions:
+      - description: "Use the `dev` version to run a package release"
+        cmd: sudo uds run release-packages --set VERSION=dev --no-progress --no-log-file --log-level warn
+
+  - name: release-bundles
+    description: "Builds and publishes all UDS bundles in the repository (LATEST)"
+    actions:
       - task: create:uds-rke2-local-path-bundle
       - task: publish:uds-rke2-local-path-bundle
+      - task: setup:clean
+
+  - name: release-bundles-dev
+    description: "Builds and publishes all UDS bundles in the repository (DEV)"
+    actions:
+      - task: create:uds-rke2-local-path-bundle-dev
+
+      - description: "Use the `dev` version to run a bundle release"
+        cmd: sudo uds run publish:uds-rke2-local-path-bundle --set VERSION=dev --no-progress --no-log-file --log-level warn

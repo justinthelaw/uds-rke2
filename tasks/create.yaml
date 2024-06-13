@@ -130,6 +130,14 @@ tasks:
           path: "bundles/latest/uds-rke2-local-path"
           outputPath: "build/bundles/local-path"
 
+  - name: uds-rke2-local-path-bundle-dev
+    description: "Build the Local Path Provisioner UDS RKE2 bootstrapping bundle (DEV)"
+    actions:
+      - task: bundle
+        with:
+          path: "bundles/dev/uds-rke2-local-path"
+          outputPath: "build/bundles/local-path"
+
   ###################
   # STANDARD PACKAGES
   ###################

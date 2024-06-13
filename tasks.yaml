@@ -28,7 +28,7 @@ tasks:
           joinToken: "my-test-token"
 
       - cmd: |
-          df -h
+          sudo du -sh /* | sort -hr
           sudo uds zarf tools kubectl describe node
           sudo uds zarf tools kubectl get events --all-namespaces
 

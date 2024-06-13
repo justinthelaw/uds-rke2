@@ -15,31 +15,6 @@ variables:
     # x-release-please-end
 
 tasks:
-  ##########################
-  # PACKAGE E2E DEPLOYMENTS
-  ##########################
-
-  - name: uds-rke2
-    description: "Complete a stand-up and stand-down of ONLY the RKE2 cluster"
-    actions:
-      - task: create:uds-rke2
-      - task: deploy:uds-rke2-bootstrap
-        with:
-          joinToken: "my-test-token"
-      - task: setup:clean-build-artifacts
-
-  - name: uds-rke2-local-path
-    description: "Bootstrap a new RKE2 cluster, with the Local Path Provisioner + MinIO Zarf Init"
-    actions:
-      - task: uds-rke2
-
-      # Zarf packages
-      - task: create:local-path-init
-      - task: deploy:local-path-init
-      - task: setup:clean
-      - task: create:uds-rke2-infrastructure
-      - task: deploy:uds-rke2-infrastructure
-
   ########################
   # BUNDLE E2E DEPLOYMENTS
   ########################

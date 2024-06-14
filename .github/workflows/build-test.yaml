@@ -30,10 +30,9 @@ jobs:
 
     steps:
       - name: Maximize build space
-        uses: AdityaGarg8/remove-unwanted-software@e2a42bc9a15f8414a9078f38b702de2a2976733d # v3
-        # uses: justinthelaw/maximize-github-runner-space@v0.1.0 # v0.1.0
+        uses: justinthelaw/maximize-github-runner-space@v0.1.1 # v0.1.1
         with:
-          # Package removal actions
+          # Standard package removal actions
           remove-dotnet: "true"
           remove-android: "true"
           remove-haskell: "true"

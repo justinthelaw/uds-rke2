@@ -5,9 +5,7 @@
       "changelog-path": "CHANGELOG.md",
       "versioning": "default",
       "extra-files": [
-        "bundles/uds-rke2-local-path/uds-bundle.yaml",
-        "bundles/uds-rke2-longhorn/uds-bundle.yaml",
-        "bundles/uds-rke2-rook-ceph/uds-bundle.yaml",
+        "bundles/latest/local-path-core/uds-bundle.yaml",
         "packages/uds-rke2/zarf-config.yaml",
         "packages/rook-ceph/zarf-config.yaml",
         "packages/local-path/zarf-config.yaml",

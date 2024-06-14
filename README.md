@@ -160,7 +160,15 @@ uds run setup:clean
 Run the following to completely destroy the UDS RKE2 node and all of UDS RKE2's artifacts from the node's host:
 
 ```bash
-uds run deploy:uds-rke2-destroy
+uds run setup:uds-rke2-destroy
+```
+
+#### Test
+
+Run the following to run the E2E CI test(s):
+
+```bash
+uds run uds-rke2-local-path-test
 ```
 
 ## Additional Info

@@ -29,6 +29,17 @@ jobs:
       packages: write
 
     steps:
+      - name: Maximize Build Space
+        uses: easimon/maximize-build-space@fc881a613ad2a34aca9c9624518214ebc21dfc0c # v10
+        with:
+          remove-android: "true"
+          remove-dotnet: "true"
+          remove-codeql: "true"
+          remove-docker-images: "true"
+          remove-large-packages: "true"
+          remove-cached-tools: "true"
+          remove-swap-file: "true"
+
       - name: Checkout Repo
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
 
@@ -39,17 +50,6 @@ jobs:
           registry1Username: ${{secrets.IRON_BANK_ROBOT_USERNAME}}
           registry1Password: ${{secrets.IRON_BANK_ROBOT_PASSWORD}}
           ghToken: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Maximize Build Space
-        uses: easimon/maximize-build-space@fc881a613ad2a34aca9c9624518214ebc21dfc0c # v10
-        with:
-          remove-android: 'true'
-          remove-dotnet: 'true'
-          remove-codeql: 'true'
-          remove-docker-images: 'true'
-          remove-large-packages: 'true'
-          remove-cached-tools: 'true'
-          remove-swap-file: 'true'
 
       - name: Test the UDS RKE2 Local-Path Bootstrap
         run: |

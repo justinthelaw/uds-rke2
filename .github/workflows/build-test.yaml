@@ -29,8 +29,8 @@ jobs:
       packages: write
 
     steps:
-      - name: Maximize build space
-        uses: justinthelaw/maximize-github-runner-space@v0.1.1 # v0.1.1
+      - name: Maximize GitHub Runner Space
+        uses: justinthelaw/maximize-github-runner-space@f1181577375d1bdbf1897db6295f50ff34fdc94a # v0.1.1
         with:
           # Standard package removal actions
           remove-dotnet: "true"
@@ -59,6 +59,6 @@ jobs:
           sudo mkdir -p /opt/uds
           sudo chown -Rv 65534:65534 /opt/uds
 
-      - name: Test the UDS RKE2 Local-Path Bootstrap
+      - name: Test the UDS RKE2 + Custom Zarf Init Bootstrap (`local-path`)
         run: |
           sudo uds run uds-rke2-local-path-test --no-progress --log-level warn -a amd64

@@ -27,8 +27,6 @@ tasks:
   - name: local-path-minio-init
     description: "Bootstrap a new RKE2 cluster, with the Local Path Provisioner + MinIO Zarf Init"
     actions:
-      - task: uds-rke2
-
       # Zarf packages
       - task: create:local-path-init
       - task: deploy:local-path-init

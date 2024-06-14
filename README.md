@@ -68,11 +68,7 @@ There are 3 main "flavors" of the UDS RKE2 Core bundle, with 4 distinct flavors 
 2. (WIP) [Longhorn](./docs/LONGHORN.md) + [MinIO](./docs/MINIO.md)
 3. (WIP) [Rook-Ceph](./docs/ROOK-CEPH.md)
 
-Each bundle can also be experimented with using the Zarf package creation and deployment commands via the UDS tasks outlined in the sections below. Just run the following to see the available tasks and their descriptions:
-
-```bash
-uds run --list-all
-```
+Each bundle can also be experimented with using the Zarf package creation and deployment commands via the UDS tasks outlined in the sections below.
 
 ### Packages
 
@@ -119,13 +115,14 @@ uds run create:all
 
 See the UDS [`deploy` tasks](./tasks/deploy.yaml) file for more details.
 
-To deploy all packages and bundles, do the following:
+To deploy a bundle (e.g., UDS RKE2 bootstrap with `local-path` flavor), do the following:
 
 ```bash
-# create self-signed test certs
-uds run create:tls-cert
+# LATEST
+uds run uds-rke2-local-path-core
 
-uds run deploy:all
+# DEV
+uds run uds-rke2-local-path-core-dev
 ```
 
 #### Publish

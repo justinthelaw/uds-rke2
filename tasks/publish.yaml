@@ -27,6 +27,7 @@ tasks:
   - name: all
     description: "Publishes all Zarf packages in the repository"
     actions:
+      # Zarf packages
       - task: uds-rke2
       - task: uds-rke2-infrastructure
       - task: uds-rke2-exemptions-local-path
@@ -34,6 +35,9 @@ tasks:
       - task: local-path-init
       - task: minio
       - task: leapfrogai-workarounds
+
+      # UDS bundles
+      - task: local-path-core-bundle
 
   ###########
   # REUSEABLE

@@ -43,6 +43,7 @@ tasks:
       - task: local-path-init
       - task: minio
       - task: leapfrogai-workarounds
+      - task: nvidia-gpu-operator
 
       # UDS bundles
       - task: local-path-core-bundle
@@ -222,3 +223,12 @@ tasks:
           path: packages/leapfrogai
           outputPath: build/packages
           zarfConfig: packages/leapfrogai/zarf-config.yaml
+
+  - name: nvidia-gpu-operator
+    description: "Build the NVIDIA GPU operator package"
+    actions:
+      - task: create
+        with:
+          path: packages/nvidia-gpu-operator
+          outputPath: build/packages
+          zarfConfig: packages/nvidia-gpu-operator/zarf-config.yaml

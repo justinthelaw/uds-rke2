@@ -1,0 +1,32 @@
+# TODO: renovate setup
+# yaml-language-server: $schema=https://raw.githubusercontent.com/defenseunicorns/uds-cli/v0.10.4/zarf.schema.json
+
+kind: ZarfPackageConfig
+metadata:
+  name: nvidia-gpu-operator
+  version: "###ZARF_PKG_TMPL_VERSION###"
+  architecture: amd64
+
+components:
+  - name: nvidia-gpu-operator
+    required: true
+    images:
+      # TODO: add specific supported drivers using Zarf package flavors
+      - nvcr.io/nvidia/gpu-operator:v23.9.2
+      - nvcr.io/nvidia/k8s/dcgm-exporter:3.3.5-3.4.1-ubuntu22.04
+      - nvcr.io/nvidia/k8s/container-toolkit:v1.15.0-ubuntu20.04
+      - nvcr.io/nvidia/k8s-device-plugin:v0.15.0-ubi8
+      - nvcr.io/nvidia/cloud-native/k8s-mig-manager:v0.7.0-ubuntu20.04
+      - nvcr.io/nvidia/cuda:12.4.1-base-ubi8
+      - nvcr.io/nvidia/cloud-native/gpu-operator-validator:v23.9.2-ubi8
+      - nvcr.io/nvidia/cloud-native/vgpu-device-manager:v0.2.6-ubi8
+      - nvcr.io/nvidia/cloud-native/k8s-drive-manager:v0.6.8-ubi8
+      - nvcr.io/nvidia/kubevirt-gpu-device-plugin:v1.2.7
+    charts:
+      - name: gpu-operator
+        url: https://helm.ngc.nvidia.com/nvidia
+        # TODO: renovate setup
+        version: v23.9.2
+        namespace: kube-system
+        valuesFiles:
+          - "values/nvidia-gpu-operator-values.yaml"

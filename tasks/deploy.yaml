@@ -5,7 +5,7 @@ variables:
   - name: VERSION
     description: "Explicitly set the version, overriding the official release tag"
     # x-release-please-start-version
-    default: "0.3.0"
+    default: "0.4.0"
     # x-release-please-end
 
   - name: DEPLOY_OPTIONS

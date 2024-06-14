@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.4.0](https://github.com/justinthelaw/uds-rke2/compare/v0.3.0...v0.4.0) (2024-06-14)
+
+
+### Features
+
+* uds rke2 local path provisioner bundle ([#27](https://github.com/justinthelaw/uds-rke2/issues/27)) ([e79dfaf](https://github.com/justinthelaw/uds-rke2/commit/e79dfafd2a73b51101c0e3d21b642eb2a26144f6))
+
+
+### Bug Fixes
+
+* github workflow and uds tasks ([#34](https://github.com/justinthelaw/uds-rke2/issues/34)) ([771c3dd](https://github.com/justinthelaw/uds-rke2/commit/771c3ddbef2a079f06ffe41cc8c9e473a94a358f))
+
 ## [0.3.0](https://github.com/justinthelaw/uds-rke2/compare/v0.2.0...v0.3.0) (2024-05-28)
 
 

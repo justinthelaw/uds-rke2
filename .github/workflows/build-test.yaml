@@ -52,5 +52,5 @@ jobs:
 
       - name: Test the UDS RKE2 Local-Path Bootstrap
         run: |
-          du -hs / || true
+          sudo du -hs / || true
           sudo uds run uds-rke2-local-path --no-progress --log-level warn -a amd64

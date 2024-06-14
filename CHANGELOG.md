@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.1](https://github.com/justinthelaw/uds-rke2/compare/v0.4.0...v0.4.1) (2024-06-14)
+
+
+### Bug Fixes
+
+* bundle publish actions ([#35](https://github.com/justinthelaw/uds-rke2/issues/35)) ([531955d](https://github.com/justinthelaw/uds-rke2/commit/531955d6f2f0764eb2f445b8f5dd8e48db7ee6de))
+
 ## [0.4.0](https://github.com/justinthelaw/uds-rke2/compare/v0.3.0...v0.4.0) (2024-06-14)
 
 

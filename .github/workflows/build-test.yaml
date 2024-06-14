@@ -40,13 +40,18 @@ jobs:
           registry1Password: ${{secrets.IRON_BANK_ROBOT_PASSWORD}}
           ghToken: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Clean GitHub Runner
-        run: |
-          sudo du -sh / || true
-          sudo apt autoremove && sudo apt autoclean || true
-          sudo apt remove -y adoptium-ca-certificates ant-optional ant apache2-bin apache2-data apache2-utils apache2 aspnetcore-runtime-6.0 aspnetcore-runtime-7.0 aspnetcore-runtime-8.0 aspnetcore-targeting-pack-6.0 aspnetcore-targeting-pack-7.0 aspnetcore-targeting-pack-8.0 azure-cli bolt brotli buildah byobu ca-certificates-mono catatonit chrony cifs-utils clang-13 clang-14 clang-15 clang-format-13 clang-format-14 clang-format-15 clang-tidy-13 clang-tidy-14 clang-tidy-15 clang-tools-13 clang-tools-14 clang-tools-15 conmon containernetworking-plugins crun docker-ce-cli docker-ce dotnet-apphost-pack-6.0 dotnet-apphost-pack-7.0 dotnet-apphost-pack-8.0 dotnet-host dotnet-hostfxr-6.0 dotnet-hostfxr-7.0 dotnet-hostfxr-8.0 dotnet-runtime-6.0 dotnet-runtime-7.0 dotnet-runtime-8.0 dotnet-runtime-deps-6.0 dotnet-runtime-deps-7.0 dotnet-runtime-deps-8.0 dotnet-sdk-6.0 dotnet-sdk-7.0 dotnet-sdk-8.0 dotnet-targeting-pack-6.0 dotnet-targeting-pack-7.0 dotnet-targeting-pack-8.0 firefox firebird3.0-common-doc firebird3.0-common friendly-recovery fuse-overlayfs fuse3 gconf2-common gnupg-wks-client gnupg-wks-server golang-github-containernetworking-plugin-dnsname golang-github-containers-common golang-github-containers-image google-chrome-stable google-cloud-cli-anthoscli google-cloud-cli heroku kubectl landscape-common lshw lto-disabled-list lxd-agent-loader mecab-ipadic-utf8 mecab-ipadic mecab-utils mercurial-common mercurial microsoft-edge-stable msbuild-libhostfxr msbuild-sdkresolver msbuild mssql-tools mysql-client-8.0 mysql-client-core-8.0 mysql-client mysql-common mysql-server-8.0 mysql-server-core-8.0 mysql-server netstandard-targeting-pack-2.1 nginx-common nginx-core nginx nuget nvme-cli open-iscsi open-vm-tools packagekit-tools packagekit parallel pastebinit php8.1-amqp php8.1-apcu php8.1-bcmath php8.1-bz2 php8.1-cgi php8.1-cli php8.1-common php8.1-curl php8.1-dba php8.1-dev php8.1-enchant php8.1-fpm php8.1-gd php8.1-gmp php8.1-igbinary php8.1-imagick php8.1-imap php8.1-interbase php8.1-intl php8.1-ldap php8.1-mbstring php8.1-memcache php8.1-memcached php8.1-mongodb php8.1-msgpack php8.1-mysql php8.1-odbc php8.1-opcache php8.1-pcov php8.1-pgsql php8.1-phpdbg php8.1-pspell php8.1-readline php8.1-redis php8.1-snmp php8.1-soap php8.1-sqlite3 php8.1-sybase php8.1-tidy php8.1-xdebug php8.1-xml php8.1-xsl php8.1-yaml php8.1-zip php8.1-zmq php8.1 podman powershell psmisc publicsuffix r-base-core r-base-dev r-base-html r-base r-cran-boot r-cran-class r-cran-cluster r-cran-codetools r-cran-foreign r-cran-kernsmooth r-cran-lattice r-cran-mass r-cran-matrix r-cran-mgcv r-cran-nlme r-cran-nnet r-cran-rpart r-cran-spatial r-cran-survival r-doc-html r-recommended rake referenceassemblies-pcl ri ruby-full ruby-net-telnet ruby-rubygems ruby-webrick ruby-xmlrpc ruby3.0-dev ruby3.0-doc ruby3.0 rubygems-integration sbsigntool session-manager-plugin session-migration shellcheck skopeo slirp4netns snmp sosreport sphinxsearch squashfs-tools ssh-import-id sshpass swig4.0 swig temurin-11-jdk temurin-17-jdk temurin-21-jdk temurin-8-jdk tmux tnftp tree upx-ucl usb-modeswitch-data usb-modeswitch vim-common vim-runtime vim-tiny vim walinuxagent whiptail xorriso xserver-common xul-ext-ubufox xvfb xxd zerofree || true
-          sudo du -sh / || true
+      - name: Maximize Build Space
+        uses: easimon/maximize-build-space@fc881a613ad2a34aca9c9624518214ebc21dfc0c # v10
+        with:
+          remove-android: 'true'
+          remove-dotnet: 'true'
+          remove-codeql: 'true'
+          remove-docker-images: 'true'
+          remove-large-packages: 'true'
+          remove-cached-tools: 'true'
+          remove-swap-file: 'true'
 
       - name: Test the UDS RKE2 Local-Path Bootstrap
         run: |
+          du -h / || true
           sudo uds run uds-rke2-local-path --no-progress --log-level warn -a amd64

@@ -120,7 +120,7 @@ packages:
   - name: minio
     repository: ghcr.io/justinthelaw/packages/minio
     # x-release-please-start-version
-    ref: "0.3.0"
+    ref: "0.4.0"
     # x-release-please-end
     overrides:
       minio:

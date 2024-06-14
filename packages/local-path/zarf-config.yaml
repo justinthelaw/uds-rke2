@@ -2,7 +2,7 @@ package:
   create:
     set:
       # x-release-please-start-version
-      version: "0.3.0"
+      version: "0.4.0"
       # x-release-please-end
 
       node_path_map_values_file: values/node-path-map-values.yaml

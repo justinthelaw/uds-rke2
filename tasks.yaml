@@ -22,12 +22,6 @@ tasks:
   - name: uds-rke2
     description: "Complete a stand-up and stand-down of ONLY the RKE2 cluster"
     actions:
-      - cmd: |
-          sudo du -sh /
-          sudo apt autoremove && sudo apt autoclean
-          sudo apt list --installed
-          sudo du -sh /
-
       - task: create:uds-rke2
       - task: deploy:uds-rke2-bootstrap
         with:

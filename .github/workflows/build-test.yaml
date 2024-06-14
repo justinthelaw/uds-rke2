@@ -20,7 +20,7 @@ concurrency:
 
 jobs:
   test-clean-install:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     name: Test Build and Install
 
     permissions:
@@ -40,10 +40,13 @@ jobs:
           registry1Password: ${{secrets.IRON_BANK_ROBOT_PASSWORD}}
           ghToken: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Clean GitHub Runner
+        run: |
+          sudo du -sh / || true
+          sudo apt autoremove && sudo apt autoclean || true
+          sudo apt list --installed || true
+          sudo du -sh / || true
+
       - name: Test the UDS RKE2 Local-Path Bootstrap
         run: |
-          sudo du -sh /
-          sudo apt autoremove && sudo apt autoclean
-          sudo apt list --installed
-          sudo du -sh /
           sudo uds run uds-rke2-local-path --no-progress --log-level warn -a amd64

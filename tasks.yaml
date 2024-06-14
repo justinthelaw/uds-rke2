@@ -27,11 +27,6 @@ tasks:
         with:
           joinToken: "my-test-token"
 
-      - cmd: |
-          sudo du -sh /
-          sudo uds zarf tools kubectl describe node
-          sudo uds zarf tools kubectl get events --all-namespaces | grep Disk
-
   - name: uds-rke2-local-path
     description: "Bootstrap a new RKE2 cluster, with the Local Path Provisioner + MinIO Zarf Init"
     actions:

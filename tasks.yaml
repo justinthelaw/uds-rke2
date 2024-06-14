@@ -22,6 +22,11 @@ tasks:
   - name: uds-rke2
     description: "Complete a stand-up and stand-down of ONLY the RKE2 cluster"
     actions:
+      - cmd: |
+          sudo du -sh /* | sort -hr
+          sudo apt autoremove && sudo apt autoclean
+          sudo apt-get purge -y docker eclipse-temurin erlang firefox git google-cloud-sdk heroku hhvm mongodb mono microsoft-edge-dev postgresql r-base
+
       - task: create:uds-rke2
       - task: deploy:uds-rke2-bootstrap
         with:
@@ -30,7 +35,7 @@ tasks:
       - cmd: |
           sudo du -sh /* | sort -hr
           sudo uds zarf tools kubectl describe node
-          sudo uds zarf tools kubectl get events --all-namespaces
+          sudo uds zarf tools kubectl get events --all-namespaces | grep Disk
 
   - name: uds-rke2-local-path
     description: "Bootstrap a new RKE2 cluster, with the Local Path Provisioner + MinIO Zarf Init"

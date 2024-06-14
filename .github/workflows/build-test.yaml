@@ -29,15 +29,17 @@ jobs:
       packages: write
 
     steps:
-      - name: Maximize Build Space
-        uses: easimon/maximize-build-space@fc881a613ad2a34aca9c9624518214ebc21dfc0c # v10
+      - name: Maximize build space
+        uses: AdityaGarg8/remove-unwanted-software@e2a42bc9a15f8414a9078f38b702de2a2976733d # v3
         with:
-          swap-size-mb: 1
           remove-dotnet: "true"
           remove-android: "true"
           remove-haskell: "true"
           remove-codeql: "true"
           remove-docker-images: "true"
+          remove-large-packages: "true"
+          remove-swapfile: "true"
+          remove-cached-tools: "true"
 
       - name: Checkout Repo
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1

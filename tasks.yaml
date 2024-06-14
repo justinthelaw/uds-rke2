@@ -23,9 +23,10 @@ tasks:
     description: "Complete a stand-up and stand-down of ONLY the RKE2 cluster"
     actions:
       - cmd: |
-          sudo du -sh /* | sort -hr
+          sudo du -sh /
           sudo apt autoremove && sudo apt autoclean
-          sudo apt-get purge -y docker eclipse-temurin erlang firefox git google-cloud-sdk heroku hhvm mongodb mono microsoft-edge-dev postgresql r-base
+          sudo apt list --installed
+          sudo du -sh /
 
       - task: create:uds-rke2
       - task: deploy:uds-rke2-bootstrap
@@ -33,7 +34,7 @@ tasks:
           joinToken: "my-test-token"
 
       - cmd: |
-          sudo du -sh /* | sort -hr
+          sudo du -sh /
           sudo uds zarf tools kubectl describe node
           sudo uds zarf tools kubectl get events --all-namespaces | grep Disk
 

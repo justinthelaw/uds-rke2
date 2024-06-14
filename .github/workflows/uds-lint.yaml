@@ -63,4 +63,5 @@ jobs:
           check-jsonschema tasks/publish.yaml --schemafile tasks.schema.json
           check-jsonschema tasks/deploy.yaml --schemafile tasks.schema.json
           check-jsonschema tasks/setup.yaml --schemafile tasks.schema.json
+          check-jsonschema tasks/test.yaml --schemafile tasks.schema.json
           check-jsonschema tasks.yaml --schemafile tasks.schema.json

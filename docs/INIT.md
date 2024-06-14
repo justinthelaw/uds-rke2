@@ -1,5 +1,8 @@
 # Custom Zarf Init
 
+<!-- TODO: renovate setup -->
+**Supported Version**: v0.33.0
+
 The custom Zarf init package comes with 3 flavors:
 
 1. `local`: [Local Path Provisioner](./LOCAL-PATH.md) as the backing StorageClass with [MinIO](./MINIO.md) for its S3-compatible API

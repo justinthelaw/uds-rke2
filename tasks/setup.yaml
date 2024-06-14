@@ -5,19 +5,37 @@ variables:
   - name: DISK_NAME
     description: "The name of a Ceph-formatted disk (e.g. /dev/ubuntu-vg/ceph) that is to be wiped."
     default: "dm-1"
-  - name: DEPLOY_OPTIONS
-    description: "Extra Zarf package or UDS bundle deployment options"
-    default: "--no-progress --no-log-file --log-level warn --confirm"
 
 tasks:
-  - name: clean
-    description: "Cleans the host system of build artifacts"
+  #########
+  # UTILITY
+  #########
+
+  - name: clean-build-artifacts
+    description: "Cleans the host of extraneous build artifacts"
     actions:
-      - description: "Remove the build folder, Docker artifacts, and clear UDS and Zarf caches"
+      - description: "Remove the build folder and clear UDS and Zarf caches"
         cmd: |
           sudo uds zarf tools clear-cache && sudo rm -rf ~/.uds-cache && sudo rm -rf ~/.zarf-cache
-          sudo docker system prune -a -f && sudo docker volume prune -f
           sudo rm -rf build/ zarf-sbom/ /tmp/zarf-*
+
+  - name: clean
+    description: "Cleans the host system of extraneous build artifacts, as well as hanging Docker artifacts"
+    actions:
+      - task: clean-build-artifacts
+      - description: "Remove the build folder, Docker artifacts, and clear UDS and Zarf caches"
+        cmd: sudo docker system prune -a -f && sudo docker volume prune -f
+
+  - name: local-registry
+    description: "Create a local image registry for development"
+    actions:
+      - description: "Create a local Docker registry"
+        cmd: |
+          if [ -z "$(docker ps --format '{{.Names}}:{{.Ports}}' | grep '^registry:.*:5001->')" ]; then
+              docker run -d -p 5001:5000 --restart=always --name registry registry:2
+          else
+              echo "Local registry already exists at port 5001, using the existing registry."
+          fi
 
   - name: rook-ceph-destroy
     description: "Destroys an existing Rook-Ceph cluster installation and all associated data on the host node"

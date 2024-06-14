@@ -1,0 +1,40 @@
+# TODO: renovate setup
+# yaml-language-server: $schema=https://raw.githubusercontent.com/defenseunicorns/uds-cli/v0.10.4/tasks.schema.json
+
+includes:
+  - create: ./create.yaml
+  - deploy: ./deploy.yaml
+  - setup: ./setup.yaml
+
+variables:
+  - name: VERSION
+    description: "Explicitly set the version, overriding the official release tag"
+    # x-release-please-start-version
+    default: "0.3.0"
+    # x-release-please-end
+
+tasks:
+  - name: uds-rke2
+    description: "Complete a stand-up and stand-down of ONLY the RKE2 cluster"
+    actions:
+      - task: create:uds-rke2
+      - task: deploy:uds-rke2-bootstrap
+        with:
+          joinToken: "my-test-token"
+
+      - task: setup:clean
+
+  - name: local-path-minio-init
+    description: "Bootstrap a new RKE2 cluster, with the Local Path Provisioner + MinIO Zarf Init"
+    actions:
+      # Zarf packages
+      - task: create:local-path-init
+      - task: deploy:local-path-init
+        with:
+          # overcome GitHub runner free space constrains
+          extraOptions: "--set BUCKET_PERSISTENCE_SIZE=1Gi --set REGISTRY_PVC_SIZE=10Gi"
+
+      - task: setup:clean
+
+      - task: create:uds-rke2-infrastructure
+      - task: deploy:uds-rke2-infrastructure

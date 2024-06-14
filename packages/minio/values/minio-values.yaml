@@ -24,7 +24,7 @@ resources:
     memory: 256Mi
     cpu: 150m
 persistence:
-  size: 30Gi
+  size: ###ZARF_VAR_BUCKET_PERSISTENCE_SIZE###
 
 buckets:
   - name: uds

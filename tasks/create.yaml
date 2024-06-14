@@ -7,6 +7,17 @@ variables:
     # x-release-please-start-version
     default: "0.3.0"
     # x-release-please-end
+
+  - name: CREATE_OPTIONS
+    description: "Extra Zarf package creation options"
+    default: "--no-progress --no-log-file --log-level debug -a amd64 --confirm"
+  - name: PULL_OPTIONS
+    description: "Extra Zarf package pull options"
+    default: "--no-progress --no-log-file --log-level debug -a amd64"
+  - name: CREATE_BUNDLE_OPTIONS
+    description: "Extra UDS bundle creation options"
+    default: "--no-progress --no-tea --no-log-file --log-level debug -a amd64 --confirm"
+
   - name: CORE_PKG_VERSION
     description: "The version of UDS Core package to deploy"
     # TODO: renovate setup
@@ -14,36 +25,31 @@ variables:
   - name: CORE_PKG_FLAVOR
     description: "Flavor of the package to use (`registry1` or `upstream`)."
     default: "registry1"
-  - name: CREATE_OPTIONS
-    description: "Extra Zarf package creation options"
-    default: "--no-progress --no-log-file --log-level warn -a amd64 --confirm"
-  - name: PULL_OPTIONS
-    description: "Extra Zarf package pull options"
-    default: "--no-progress --no-log-file --log-level warn -a amd64"
-  - name: CREATE_BUNDLE_OPTIONS
-    description: "Extra UDS bundle creation options"
-    default: "--no-progress --no-tea --no-log-file --log-level warn -a amd64 --confirm"
 
 tasks:
-  - name: tls-cert
-    description: "Generate self-signed TLS certs for testing"
-    actions:
-      - cmd: openssl req -x509 -newkey rsa:4096 -keyout tls.key -out tls.cert -days 365 -nodes -config tls-cert.conf
+  ##########################
+  # ALL PACKAGES AND BUNDLES
+  ##########################
 
+  # TODO: re-enable rook-ceph and longhorn when built
   - name: all
     description: "Builds all Zarf packages in the repository"
     actions:
+      # Zarf packages
       - task: uds-rke2
       - task: uds-rke2-infrastructure
       - task: uds-rke2-exemptions-local-path
-      - task: uds-rke2-exemptions-longhorn
-      - task: uds-rke2-exemptions-rook-ceph
       - task: local-path
       - task: local-path-init
-      - task: rook-ceph
-      - task: rook-ceph-init
       - task: minio
       - task: leapfrogai-workarounds
+
+      # UDS bundles
+      - task: local-path-core-bundle
+
+  ###########
+  # REUSEABLE
+  ###########
 
   - name: create
     description: "Create a Zarf package for the amd64 architectures"
@@ -104,13 +110,38 @@ tasks:
             -o "${{ .inputs.outputPath }}" \
             ${CREATE_BUNDLE_OPTIONS}
 
-  - name: uds-rke2-local-path-bundle
-    description: "Build the Local Path Provisioner UDS RKE2 bootstrapping bundle"
+  #########
+  # UTILITY
+  #########
+
+  - name: tls-cert
+    description: "Generate self-signed TLS certs for testing"
+    actions:
+      - cmd: openssl req -x509 -newkey rsa:4096 -keyout tls.key -out tls.cert -days 365 -nodes -config tls-cert.conf
+
+  #########
+  # BUNDLES
+  #########
+
+  - name: local-path-core-bundle
+    description: "Build the Local Path Provisioner UDS RKE2 bootstrapping bundle (LATEST)"
     actions:
       - task: bundle
         with:
-          path: "bundles/uds-rke2-local-path"
-          outputPath: "build/bundles/local-path"
+          path: "bundles/latest/local-path-core"
+          outputPath: "build/bundles"
+
+  - name: local-path-core-bundle-dev
+    description: "Build the Local Path Provisioner UDS RKE2 bootstrapping bundle (DEV)"
+    actions:
+      - task: bundle
+        with:
+          path: "bundles/dev/local-path-core"
+          outputPath: "build/bundles"
+
+  ###################
+  # STANDARD PACKAGES
+  ###################
 
   - name: uds-rke2
     description: "Build the UDS RKE2 Zarf package"
@@ -140,26 +171,6 @@ tasks:
           zarfConfig: packages/uds-rke2/zarf-config.yaml
           flavor: local-path
 
-  - name: uds-rke2-exemptions-longhorn
-    description: "Build the UDS RKE2 service Pepr policy exemptions package"
-    actions:
-      - task: create
-        with:
-          path: packages/uds-rke2/exemptions
-          outputPath: build/packages/longhorn
-          zarfConfig: packages/uds-rke2/zarf-config.yaml
-          flavor: longhorn
-
-  - name: uds-rke2-exemptions-rook-ceph
-    description: "Build the UDS RKE2 service Pepr policy exemptions package"
-    actions:
-      - task: create
-        with:
-          path: packages/uds-rke2/exemptions
-          outputPath: build/packages/rook-ceph
-          zarfConfig: packages/uds-rke2/zarf-config.yaml
-          flavor: rook-ceph
-
   - name: local-path
     description: "Build the Local Path Provisioner Zarf package"
     actions:
@@ -168,48 +179,6 @@ tasks:
           path: packages/local-path
           outputPath: build/packages/local-path
           zarfConfig: packages/local-path/zarf-config.yaml
-
-  - name: local-path-init
-    description: "Build the Local Path Provisioner Zarf Init package"
-    actions:
-      - task: init
-        with:
-          flavor: local-path
-          outputPath: build/packages/local-path
-
-  - name: longhorn
-    description: "Build the Longhorn Zarf package"
-    actions:
-      - task: create
-        with:
-          path: packages/longhorn
-          outputPath: build/packages/longhorn
-          zarfConfig: packages/longhorn/zarf-config.yaml
-
-  - name: longhorn-init
-    description: "Build the Longhorn Zarf Init package"
-    actions:
-      - task: init
-        with:
-          flavor: longhorn
-          outputPath: build/packages/longhorn
-
-  - name: rook-ceph
-    description: "Build the Rook-Ceph Zarf package"
-    actions:
-      - task: create
-        with:
-          path: packages/rook-ceph
-          outputPath: build/packages/rook-ceph
-          zarfConfig: packages/rook-ceph/zarf-config.yaml
-
-  - name: rook-ceph-init
-    description: "Build the Rook-Ceph Zarf Init package"
-    actions:
-      - task: init
-        with:
-          flavor: rook-ceph
-          outputPath: build/packages/rook-ceph
 
   - name: minio
     description: "Build the MinIO package"
@@ -228,6 +197,22 @@ tasks:
           sudo uds zarf package pull oci://ghcr.io/defenseunicorns/packages/uds/core:${CORE_PKG_VERSION}-${CORE_PKG_FLAVOR} \
             -o "build/packages" \
             ${PULL_OPTIONS}
+
+  ###############
+  # INIT PACKAGES
+  ###############
+
+  - name: local-path-init
+    description: "Build the Local Path Provisioner Zarf Init package"
+    actions:
+      - task: init
+        with:
+          flavor: local-path
+          outputPath: build/packages/local-path
+
+  ########################
+  # APP-SPECIFIC PACKAGES
+  ########################
 
   - name: leapfrogai-workarounds
     description: "Build the LeapfrogAI-specific workarounds package"

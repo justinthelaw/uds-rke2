@@ -12,6 +12,8 @@ Leveraging this automation ensures that we stay as close to the source of the ST
 
 The one piece not implemented in the Ansible STIG content is the enabling/installation of FIPS packages, as FIPS on Ubuntu requires a subscription.
 
+You can use the existing scripts to perform [dependency installs](./vm/scripts/install-deps.sh) and the [STIG process](./vm/scripts/os-stig.sh).
+
 ## OS Preparation
 
 The [OS Preparation script](../scripts/os/os-prep.sh) changes a number of things on the base OS to ensure smooth operation of RKE2 and UDS pieces running on top such as [UDS Core](https://github.com/defenseunicorns/uds-core). Requirements were pulled from upstream documentation:

@@ -7,14 +7,34 @@ variables:
     # x-release-please-start-version
     default: "0.3.0"
     # x-release-please-end
+
   - name: DEPLOY_OPTIONS
     description: "Extra Zarf package deployment options"
-    default: "--no-progress --no-log-file --log-level warn --confirm"
+    default: "--no-progress --no-log-file --log-level debug --confirm"
   - name: DEPLOY_BUNDLE_OPTIONS
     description: "Extra UDS bundle deployment options"
-    default: "--no-progress --no-tea --no-log-file --log-level warn -a amd64 --confirm"
+    default: "--no-progress --no-tea --no-log-file --log-level debug -a amd64 --confirm"
 
 tasks:
+  ###########
+  # REUSEABLE
+  ###########
+
+  - name: deploy
+    description: "Deploy the Zarf package for amd64 architectures"
+    inputs:
+      path:
+        description: "Path to the Zarf package being deployed"
+        required: true
+      name:
+        description: "Name of the Zarf package being deployed"
+        required: true
+    actions:
+      - description: "Deploy the Zarf package for amd64 architectures"
+        cmd: |
+          sudo uds zarf package deploy "${{ .inputs.path }}/zarf-package-${{ .inputs.name }}-amd64-${VERSION}.tar.zst" \
+          ${DEPLOY_OPTIONS}
+
   - name: bundle
     description: "Deploy the UDS bundle for the amd64 architectures"
     inputs:
@@ -24,33 +44,49 @@ tasks:
       name:
         description: "Name of the UDS bundle being deployed"
         required: true
+      extraOptions:
+        description: "Extra deployment options specific to the UDS bundle's configuration"
+        required: false
     actions:
-      - description: "Create the UDS bundle for the amd64 architectures"
+      - description: "Deploy the UDS bundle for the amd64 architectures"
         cmd: |
           sudo uds deploy "${{ .inputs.path }}/uds-bundle-${{ .inputs.name }}-amd64-${VERSION}.tar.zst" \
-            --set JOIN_TOKEN=my-test-token \
+            ${{ .inputs.extraOptions }} \
             ${DEPLOY_BUNDLE_OPTIONS}
 
-  - name: uds-rke2-local-path-bundle
+  #########
+  # BUNDLES
+  #########
+
+  - name: local-path-core-bundle
     description: "Deploy the Local Path Provisioner UDS RKE2 bootstrapping bundle"
     actions:
       - task: bundle
         with:
-          name: uds-rke2-bootstrap
-          path: build/bundles/local-path
+          name: uds-rke2-local-path-core
+          path: build/bundles
+          extraOptions: "--set JOIN_TOKEN=my-test-token"
+
+  ###################
+  # STANDARD PACKAGES
+  ###################
 
   - name: uds-rke2-bootstrap
-    description: "Deploy the UDS RKE2 Zarf package, as the cluster bootstrapping node"
+    description: "Deploy the UDS RKE2 Zarf package, as a new cluster bootstrapping node"
     inputs:
       joinToken:
         description: "Cluster joining token"
         required: true
+      optionalComponents:
+        description: "Optional components to deploy"
+        required: false
+        default: "--components destroy-cluster"
     actions:
       - description: "Deploy RKE2 node, with optional components enabled"
         cmd: |
           sudo uds zarf package deploy build/packages/zarf-package-uds-rke2-amd64-${VERSION}.tar.zst \
             --set JOIN_TOKEN=${{ .inputs.joinToken }} \
-            --components destroy-cluster \
+            ${{ .inputs.optionalComponents }} \
             ${DEPLOY_OPTIONS}
 
   - name: uds-rke2-join-node
@@ -84,87 +120,61 @@ tasks:
   - name: uds-rke2-infrastructure
     description: "Deploy the UDS RKE2 Infrastructure package"
     actions:
-      - description: "Deploy the UDS RKE2 Infrastructure package"
-        cmd: |
-          sudo uds zarf package deploy build/packages/zarf-package-infrastructure-amd64-${VERSION}.tar.zst \
-            ${DEPLOY_OPTIONS}
+      - task: deploy
+        with:
+          path: build/packages
+          name: infrastructure
 
   - name: uds-rke2-exemptions-local-path
     description: "Deploy the UDS RKE2 service Pepr policy exemptions package"
     actions:
-      - description: "Deploy the UDS RKE2 service Pepr policy exemptions package"
-        cmd: |
-          sudo uds zarf package deploy build/packages/local-path/zarf-package-exemptions-amd64-${VERSION}.tar.zst \
-            ${DEPLOY_OPTIONS}
-
-  - name: uds-rke2-exemptions-longhorn
-    description: "Deploy the UDS RKE2 service Pepr policy exemptions package"
-    actions:
-      - description: "Deploy the UDS RKE2 service Pepr policy exemptions package"
-        cmd: |
-          sudo uds zarf package deploy build/packages/longhorn/zarf-package-exemptions-amd64-${VERSION}.tar.zst \
-            ${DEPLOY_OPTIONS}
-
-  - name: uds-rke2-exemptions-rook-ceph
-    description: "Deploy the UDS RKE2 service Pepr policy exemptions package"
-    actions:
-      - description: "Deploy the UDS RKE2 service Pepr policy exemptions package"
-        cmd: |
-          sudo uds zarf package deploy build/packages/rook-ceph/zarf-package-exemptions-amd64-${VERSION}.tar.zst \
-            ${DEPLOY_OPTIONS}
-
-  - name: local-path-init
-    description: "Deploy the custom Zarf Init Package for RKE2 with Longhorn"
-    actions:
-      - description: "Deploy the custom Zarf Init package"
-        cmd: |
-          sudo uds zarf package deploy build/packages/local-path/zarf-init-amd64-*.tar.zst \
-            ${DEPLOY_OPTIONS}
-
-  - name: longhorn-init
-    description: "Deploy the custom Zarf Init Package for RKE2 with Longhorn"
-    actions:
-      - description: "Deploy the custom Zarf Init package"
-        cmd: |
-          sudo uds zarf package deploy build/packages/longhorn/zarf-init-amd64-*.tar.zst \
-            --set LONGHORN_VAR="true" \
-            ${DEPLOY_OPTIONS}
-
-  - name: rook-ceph-init
-    description: "Deploy the custom Zarf Init Package for RKE2 with Rook-Ceph"
-    actions:
-      - description: "Deploy the custom Zarf Init package"
-        # File storage is disabled by default, but can be enabled as necessary via UDS overrides or manual Zarf deployment
-        cmd: |
-          sudo uds zarf package deploy build/packages/rook-ceph/zarf-init-amd64-*.tar.zst \
-            --set ENABLE_CEPH_BLOCK_STORE="true" \
-            --set ENABLE_CEPH_OBJECT_STORE="true" \
-            --set ENABLE_CEPH_FILE_STORE="false" \
-            --set CEPH_BLOCK_STORE_AS_DEFAULT="true" \
-            --set CEPH_OBJECT_STORE_AS_DEFAULT="false" \
-            --set CEPH_FILE_STORE_AS_DEFAULT="false" \
-            ${DEPLOY_OPTIONS}
+      - task: deploy
+        with:
+          path: build/packages/local-path
+          name: exemptions
 
   - name: minio
     description: "Deploy the MinIO package"
     actions:
-      - description: "Deploy the MinIO package"
-        cmd: |
-          sudo uds zarf package deploy build/packages/zarf-package-minio-amd64-${VERSION}.tar.zst \
-            ${DEPLOY_OPTIONS}
+      - task: deploy
+        with:
+          path: build/packages
+          name: minio
 
   - name: uds-core
     description: "Deploy a pulled UDS Core package"
     actions:
-      - description: "Deploy the standard UDS Core package"
+      - task: deploy
+        with:
+          path: build/packages
+          name: core
+
+  ###############
+  # INIT PACKAGES
+  ###############
+
+  - name: local-path-init
+    description: "Deploy the custom Zarf Init Package for RKE2 with Longhorn"
+    inputs:
+      extraOptions:
+        description: "Extra deployment options specific to the Zarf Init package's configuration"
+        required: false
+    actions:
+      - description: "Deploy the Zarf Init package for amd64 architectures"
+        # TODO: renovate setup
         cmd: |
-          sudo uds zarf package deploy build/packages/zarf-package-core-amd64-*.tar.zst \
+          sudo uds zarf package deploy "build/packages/local-path/zarf-init-amd64-v0.33.0.tar.zst" \
+            ${{ .inputs.extraOptions }} \
             ${DEPLOY_OPTIONS}
+
+  ########################
+  # APP-SPECIFIC PACKAGES
+  ########################
 
   - name: leapfrogai-workarounds
     description: "Deploy the LeapfrogAI-specific workarounds package"
     actions:
-      - description: "Deploy the LeapfrogAI workarounds package"
-        cmd: |
-          sudo uds zarf package deploy build/packages/zarf-package-leapfrogai-workarounds-amd64-${VERSION}.tar.zst \
-            ${DEPLOY_OPTIONS}
+      - task: deploy
+        with:
+          path: build/packages
+          name: leapfrogai-workarounds

@@ -50,7 +50,8 @@ jobs:
 
       - name: Validate uds-bundle.yaml
         run: |
-          check-jsonschema bundles/uds-rke2-local-path/uds-bundle.yaml --schemafile uds.schema.json
+          check-jsonschema bundles/dev/local-path-core/uds-bundle.yaml --schemafile uds.schema.json
+          check-jsonschema bundles/latest/local-path-core/uds-bundle.yaml --schemafile uds.schema.json
 
       - name: Download UDS Tasks Schema
         # TODO: renovate setup
@@ -61,4 +62,6 @@ jobs:
           check-jsonschema tasks/create.yaml --schemafile tasks.schema.json
           check-jsonschema tasks/publish.yaml --schemafile tasks.schema.json
           check-jsonschema tasks/deploy.yaml --schemafile tasks.schema.json
+          check-jsonschema tasks/setup.yaml --schemafile tasks.schema.json
+          check-jsonschema tasks/test.yaml --schemafile tasks.schema.json
           check-jsonschema tasks.yaml --schemafile tasks.schema.json

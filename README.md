@@ -7,6 +7,8 @@
 
 This Zarf package serves as an air-gapped production environment for deploying [UDS Core](https://github.com/defenseunicorns/uds-core), individual UDS Capabilities, and UDS capabilities aggregated (bundled) via the [UDS CLI](https://github.com/defenseunicorns/uds-cli).
 
+See the [UDS RKE2 Mermaid diagram](docs/DIAGRAM.md) for visual representations of the tech stack's components and order of operations.
+
 ## Pre-Requisites
 
 ### Deployment Target
@@ -66,11 +68,7 @@ There are 3 main "flavors" of the UDS RKE2 Core bundle, with 4 distinct flavors 
 2. (WIP) [Longhorn](./docs/LONGHORN.md) + [MinIO](./docs/MINIO.md)
 3. (WIP) [Rook-Ceph](./docs/ROOK-CEPH.md)
 
-Each bundle can also be experimented with using the Zarf package creation and deployment commands via the UDS tasks outlined in the sections below. Just run the following to see the available tasks and their descriptions:
-
-```bash
-uds run --list-all
-```
+Each bundle can also be experimented with using the Zarf package creation and deployment commands via the UDS tasks outlined in the sections below.
 
 ### Packages
 
@@ -112,15 +110,19 @@ uds run create:all
 
 #### Deploy
 
+> [!NOTE]
+> The pre-deployment setup of the host machine is storage solution-dependent, so be sure to check the documentation for the package flavor you are deploying: [`local-path`](./docs/LOCAL-PATH.md), [`longhorn`](./docs/LONGHORN.md), or [`rook-ceph`](./docs/ROOK-CEPH.md).
+
 See the UDS [`deploy` tasks](./tasks/deploy.yaml) file for more details.
 
-To deploy all packages and bundles, do the following:
+To deploy a bundle (e.g., UDS RKE2 bootstrap with `local-path` flavor), do the following:
 
 ```bash
-# create self-signed test certs
-uds run create:tls-cert
+# LATEST
+uds run uds-rke2-local-path-core
 
-uds run deploy:all
+# DEV
+uds run uds-rke2-local-path-core-dev
 ```
 
 #### Publish
@@ -155,7 +157,15 @@ uds run setup:clean
 Run the following to completely destroy the UDS RKE2 node and all of UDS RKE2's artifacts from the node's host:
 
 ```bash
-uds run deploy:uds-rke2-destroy
+uds run setup:uds-rke2-destroy
+```
+
+#### Test
+
+Run the following to run the E2E CI test(s):
+
+```bash
+uds run uds-rke2-local-path-test
 ```
 
 ## Additional Info
@@ -172,6 +182,11 @@ Below are resources to explain some of the rationale and inner workings of the R
 - [Longhorn Configuration](docs/LONGHORN.md)
 - [Local Path Provisioner](docs/LOCAL-PATH.md)
 - [Custom Zarf Init](docs/INIT.md)
+
+### Application-Specific
+
+- [UDS Core](UDS-CORE.md)
+- [LeapfrogAI](docs/LEAPFROGAI.md)
 
 ### Virtual Machine Setup and Testing
 

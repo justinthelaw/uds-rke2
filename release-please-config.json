@@ -16,6 +16,8 @@
         "packages/uds-rke2/infrastructure/charts/Chart.yaml",
         "tasks/publish.yaml",
         "tasks/create.yaml",
+        "tasks/test.yaml",
+        "tasks/deploy.yaml",
         "tasks.yaml",
         "docs/MINIO.md"
       ]

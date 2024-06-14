@@ -7,28 +7,41 @@ variables:
     # x-release-please-start-version
     default: "0.3.0"
     # x-release-please-end
+
   - name: PUBLISH_OPTIONS
     description: "Extra Zarf package publishing options"
-    default: "--no-progress --no-log-file --log-level warn -a amd64"
+    default: "--no-progress --no-log-file --log-level debug -a amd64"
   - name: PUBLISH_BUNDLE_OPTIONS
     description: "Extra UDS bundle publishing options"
-    default: "--no-progress --no-tea --no-log-file --log-level warn -a amd64 --confirm"
+    default: "--no-progress --no-tea --no-log-file --log-level debug -a amd64 --confirm"
+  - name: TARGET_REGISTRY
+    description: "Target registry to publish to"
+    default: "ghcr.io"
 
 tasks:
+  ##########################
+  # ALL PACKAGES AND BUNDLES
+  ##########################
+
+  # TODO: re-enable rook-ceph and longhorn when built
   - name: all
     description: "Publishes all Zarf packages in the repository"
     actions:
+      # Zarf packages
       - task: uds-rke2
       - task: uds-rke2-infrastructure
       - task: uds-rke2-exemptions-local-path
-      - task: uds-rke2-exemptions-longhorn
-      - task: uds-rke2-exemptions-rook-ceph
       - task: local-path
       - task: local-path-init
-      - task: rook-ceph
-      - task: rook-ceph-init
       - task: minio
       - task: leapfrogai-workarounds
+
+      # UDS bundles
+      - task: local-path-core-bundle
+
+  ###########
+  # REUSEABLE
+  ###########
 
   - name: publish
     description: "Publish a Zarf package for the amd64 architectures"
@@ -47,16 +60,8 @@ tasks:
         cmd: |
           sudo uds zarf package publish \
             "${{ .inputs.path }}/zarf-package-${{ .inputs.name }}-amd64-${VERSION}.tar.zst" \
-            "oci://${{ .inputs.targetRepo }}" \
+            "oci://${TARGET_REGISTRY}/${{ .inputs.targetRepo }}" \
             ${PUBLISH_OPTIONS}
-
-  - name: remote-dev
-    description: "Publish a `dev` tag to the remote repository"
-    actions:
-      - description: "Re-create the `dev` Git tag to trigger the `tag-and-release` workflow"
-        cmd: |
-          git tag --delete dev && git push --delete origin dev
-          git tag dev && git push origin dev
 
   - name: init
     description: "Publish a Zarf Init package for the amd64 architectures"
@@ -72,7 +77,7 @@ tasks:
         cmd: |
           sudo uds zarf package publish \
             "${{ .inputs.path }}/zarf-init-amd64-$(uds zarf version).tar.zst" \
-            "oci://${{ .inputs.targetRepo }}" \
+            "oci://${TARGET_REGISTRY}/${{ .inputs.targetRepo }}" \
             ${PUBLISH_OPTIONS}
 
   - name: bundle
@@ -92,18 +97,39 @@ tasks:
         cmd: |
           sudo uds publish \
             "${{ .inputs.path }}/uds-bundle-${{ .inputs.name }}-amd64-${VERSION}.tar.zst" \
-            "oci://${{ .inputs.targetRepo }}" \
+            "oci://${TARGET_REGISTRY}/${{ .inputs.targetRepo }}" \
             ${PUBLISH_OPTIONS}
 
-  - name: uds-rke2-local-path-bundle
+  #########
+  # UTILITY
+  #########
+
+  - name: remote-dev
+    description: "Publish a `dev` tag to the remote repository"
+    actions:
+      - description: "Re-create the `dev` Git tag to trigger the `tag-and-release` workflow"
+        cmd: |
+          git tag --delete dev
+          git push --delete origin dev
+          git tag dev && git push origin dev
+
+  #########
+  # BUNDLES
+  #########
+
+  - name: local-path-core-bundle
     description: "Publish the Local Path Provisioner UDS RKE2 bootstrapping bundle"
     actions:
       - task: bundle
         with:
-          path: build/bundles/local-path
-          name: uds-rke2-bootstrap
+          path: build/bundles/
+          name: uds-rke2-local-path-core
           # the OCI reference for UDS bundle publish does not gracefully handle an ending `/`
-          targetRepo: ghcr.io/justinthelaw/packages/uds/bundles/uds-rke2/local-path
+          targetRepo: justinthelaw/packages/uds/bundles
+
+  ###################
+  # STANDARD PACKAGES
+  ###################
 
   - name: uds-rke2
     description: "Publish the UDS RKE2 Zarf package"
@@ -112,7 +138,7 @@ tasks:
         with:
           path: build/packages
           name: uds-rke2
-          targetRepo: ghcr.io/justinthelaw/packages/uds/
+          targetRepo: justinthelaw/packages/uds/
 
   - name: uds-rke2-infrastructure
     description: "Publish the UDS RKE2 Infrastructure Zarf package"
@@ -121,7 +147,7 @@ tasks:
         with:
           path: build/packages
           name: infrastructure
-          targetRepo: ghcr.io/justinthelaw/packages/uds/uds-rke2/
+          targetRepo: justinthelaw/packages/uds/uds-rke2/
 
   - name: uds-rke2-exemptions-local-path
     description: "Publish the UDS RKE2 service Pepr policy exemptions package"
@@ -130,25 +156,7 @@ tasks:
         with:
           path: build/packages/local-path
           name: exemptions
-          targetRepo: ghcr.io/justinthelaw/packages/uds/uds-rke2/
-
-  - name: uds-rke2-exemptions-longhorn
-    description: "Publish the UDS RKE2 service Pepr policy exemptions package"
-    actions:
-      - task: publish
-        with:
-          path: build/packages/longhorn
-          name: exemptions
-          targetRepo: ghcr.io/justinthelaw/packages/uds/uds-rke2/
-
-  - name: uds-rke2-exemptions-rook-ceph
-    description: "Publish the UDS RKE2 service Pepr policy exemptions package"
-    actions:
-      - task: publish
-        with:
-          path: build/packages/rook-ceph
-          name: exemptions
-          targetRepo: ghcr.io/justinthelaw/packages/uds/uds-rke2/
+          targetRepo: justinthelaw/packages/uds/uds-rke2/
 
   - name: local-path
     description: "Publish the Local Path Provisioner package"
@@ -157,49 +165,7 @@ tasks:
         with:
           path: build/packages/local-path
           name: local-path
-          targetRepo: ghcr.io/justinthelaw/packages/uds/uds-rke2/
-
-  - name: local-path-init
-    description: "Publish the custom Zarf Init package"
-    actions:
-      - task: init
-        with:
-          path: build/packages/local-path
-          targetRepo: ghcr.io/justinthelaw/packages/uds/uds-rke2/
-
-  - name: longhorn
-    description: "Publish the Longhorn package"
-    actions:
-      - task: publish
-        with:
-          path: build/packages/longhorn
-          name: longhorn
-          targetRepo: ghcr.io/justinthelaw/packages/uds/uds-rke2/
-
-  - name: longhorn-init
-    description: "Publish the custom Zarf Init package"
-    actions:
-      - task: init
-        with:
-          path: build/packages/longhorn
-          targetRepo: ghcr.io/justinthelaw/packages/uds/uds-rke2/
-
-  - name: rook-ceph
-    description: "Publish the Rook-Ceph package"
-    actions:
-      - task: publish
-        with:
-          path: build/packages/rook-ceph
-          name: rook-ceph
-          targetRepo: ghcr.io/justinthelaw/packages/uds/uds-rke2/
-
-  - name: rook-ceph-init
-    description: "Publish the custom Zarf Init package"
-    actions:
-      - task: init
-        with:
-          path: build/packages/rook-ceph
-          targetRepo: ghcr.io/justinthelaw/packages/uds/uds-rke2/
+          targetRepo: justinthelaw/packages/uds/uds-rke2/
 
   - name: minio
     description: "Publish the MinIO package"
@@ -208,7 +174,23 @@ tasks:
         with:
           path: build/packages
           name: minio
-          targetRepo: ghcr.io/justinthelaw/packages/uds/uds-rke2/
+          targetRepo: justinthelaw/packages/uds/uds-rke2/
+
+  ###############
+  # INIT PACKAGES
+  ###############
+
+  - name: local-path-init
+    description: "Publish the custom Zarf Init package"
+    actions:
+      - task: init
+        with:
+          path: build/packages/local-path
+          targetRepo: justinthelaw/packages/uds/uds-rke2/
+
+  ########################
+  # APP-SPECIFIC PACKAGES
+  ########################
 
   - name: leapfrogai-workarounds
     description: "Publish the LeapfrogAI-specific workarounds package"
@@ -217,4 +199,4 @@ tasks:
         with:
           path: build/packages
           name: leapfrogai-workarounds
-          targetRepo: ghcr.io/justinthelaw/packages/uds/uds-rke2/
+          targetRepo: justinthelaw/packages/uds/uds-rke2/

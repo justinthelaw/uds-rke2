@@ -7,6 +7,12 @@ metadata:
   description: "Custom Zarf Init Package for UDS RKE2"
   architecture: amd64
 
+variables:
+  - name: BUCKET_PERSISTENCE_SIZE
+    description: "Size of the default PVC for MinIO (e.g., 30Gi)"
+    default: "30Gi"
+    prompt: false
+
 components:
   #######
   # ZARF

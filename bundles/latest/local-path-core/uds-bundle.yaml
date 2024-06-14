@@ -3,7 +3,7 @@
 
 kind: UDSBundle
 metadata:
-  name: uds-rke2-bootstrap
+  name: uds-rke2-local-path-core
   description: "A UDS bundle for bootstrapping an RKE2 cluster and installing UDS Core services"
   # x-release-please-start-version
   version: "0.3.0"
@@ -120,4 +120,4 @@ packages:
   - name: uds-rke2-exemptions
     description: "Deploys the UDS Core Pepr policy exemptions"
     repository: ghcr.io/justinthelaw/packages/uds/uds-rke2/exemptions
-    ref: "0.3.0-local-path"
+    ref: "0.4.0-local-path"

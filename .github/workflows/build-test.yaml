@@ -4,20 +4,15 @@ on:
   push:
     branches:
       - "main"
-  # TODO: remove the ignore-all later
   pull_request:
-      branches:
-        - "main"
-      paths:
-        - "bundles"
-        - "packages"
-        - "tasks"
-        - ".github/workflows/build-test.yaml"
-        - "tasks.yaml"
-
-permissions:
-  id-token: write
-  contents: read
+    branches:
+      - "main"
+    paths:
+      - "packages/init"
+      - "packages/uds-rke2"
+      - "tasks"
+      - ".github/workflows/build-test.yaml"
+      - "tasks.yaml"
 
 concurrency:
   group: build-test-${{ github.ref }}
@@ -28,7 +23,26 @@ jobs:
     runs-on: ubuntu-latest
     name: Test Build and Install
 
+    permissions:
+      id-token: write
+      contents: write
+      packages: write
+
     steps:
+      - name: Maximize GitHub Runner Space
+        uses: justinthelaw/maximize-github-runner-space@f1181577375d1bdbf1897db6295f50ff34fdc94a # v0.1.1
+        with:
+          # Standard package removal actions
+          remove-dotnet: "true"
+          remove-android: "true"
+          remove-haskell: "true"
+          remove-codeql: "true"
+          remove-docker-images: "true"
+          # Custom removal actions
+          remove-large-packages: "true"
+          remove-swapfile: "true"
+          remove-cached-tools: "true"
+
       - name: Checkout Repo
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
 
@@ -40,5 +54,11 @@ jobs:
           registry1Password: ${{secrets.IRON_BANK_ROBOT_PASSWORD}}
           ghToken: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Test the UDS RKE2 Bootstrap
-        run: sudo uds run uds-rke2 --no-progress --log-level warn -a amd64
+      - name: Create /opt/uds LVM
+        run: |
+          sudo mkdir -p /opt/uds
+          sudo chown -Rv 65534:65534 /opt/uds
+
+      - name: Test the UDS RKE2 + Custom Zarf Init Bootstrap (`local-path`)
+        run: |
+          sudo uds run uds-rke2-local-path-test --no-progress --log-level warn -a amd64

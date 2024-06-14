@@ -52,7 +52,7 @@ components:
 
   - name: supabase-studio-config
     required: true
-    description: "Setup rewrites for Supabase's authentication callback to the KeycLoak SSO service"
+    description: "Patch the missing Supabase domain"
     actions:
       onDeploy:
         after:
@@ -64,4 +64,4 @@ components:
                 SUPABASE_PUBLIC_URL: https://supabase-kong.${ZARF_VAR_DOMAIN}
                 SUPABASE_URL: http://supabase-kong.leapfrogai.svc.cluster.local:80
               "
-            description: "Patch the RKE2 CoreDNS Corefile with the tenant and admin gateway rewrites"
+            description: "Patch the missing Supabase domain"

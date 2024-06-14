@@ -6,8 +6,7 @@ includes:
   - deploy: ./tasks/deploy.yaml
   - publish: ./tasks/publish.yaml
   - setup: ./tasks/setup.yaml
-  - create-core: https://raw.githubusercontent.com/defenseunicorns/uds-core/v0.19.0/tasks/create.yaml
-  - deploy-core: https://raw.githubusercontent.com/defenseunicorns/uds-core/v0.19.0/tasks/deploy.yaml
+  - test: ./tasks/test.yaml
 
 variables:
   - name: VERSION
@@ -17,45 +16,59 @@ variables:
     # x-release-please-end
 
 tasks:
-  - name: uds-rke2
-    description: "Complete a stand-up and stand-down of the ONLY the RKE2 cluster"
+  ################
+  # E2E CI TESTING
+  ################
+
+  - name: uds-rke2-local-path-test
+    description: "Test the RKE2 cluster, with the Local Path Provisioner + MinIO Zarf Init"
     actions:
-      - task: create:uds-rke2
-      - task: deploy:uds-rke2-bootstrap
-        with:
-          joinToken: "my-test-token"
+      - task: test:uds-rke2
+      - task: test:local-path-minio-init
 
-  - name: local-path-bootstrap
-    description: "Bootstrap an RKE2 cluster, with Local Path Provisioner Zarf Init, MinIO, and UDS Core packages"
+  ####################
+  # BUNDLE DEPLOYMENTS
+  ####################
+
+  - name: uds-rke2-local-path-core
+    description: "Bootstrap a new RKE2 cluster, with the Local Path Provisioner + MinIO Zarf Init and UDS Core packages (LATEST)"
     actions:
-      - task: create:uds-rke2
-      - task: deploy:uds-rke2-bootstrap
-        with:
-          joinToken: "my-test-token"
-      - task: setup:clean
+      - task: create:local-path-core-bundle
+      - task: deploy:local-path-core-bundle
 
-      - task: create:local-path-init
-      - task: deploy:local-path-init
-      - task: setup:clean
+  - name: uds-rke2-local-path-core-dev
+    description: "Bootstrap a new RKE2 cluster, with the Local Path Provisioner + MinIO Zarf Init and UDS Core packages (DEV)"
+    actions:
+      - task: release-packages-dev
+      - task: create:local-path-core-bundle-dev
 
-      - task: create:uds-rke2-infrastructure
-      - task: deploy:uds-rke2-infrastructure
-      - task: setup:clean
+      - description: "Use the `dev` version to run a deployment"
+        cmd: sudo uds run deploy:local-path-core-bundle --set VERSION=dev --no-progress --no-log-file --log-level debug
 
-      - task: create:uds-core
-      - task: deploy:uds-core
-      - task: setup:clean
-
-      - task: create:uds-rke2-exemptions-local-path
-      - task: deploy:uds-rke2-exemptions-local-path
-
-      - task: create:leapfrogai-workarounds
-      - task: deploy:leapfrogai-workarounds
+  ##########################
+  # ALL PACKAGES AND BUNDLES
+  ##########################
 
   - name: release
-    description: "Builds and publishes all Zarf packages and UDS bundles in the repository"
+    description: "Builds and publishes all Zarf packages and Bundles in the repository (LATEST)"
     actions:
-      # Zarf packages
+      - task: release-packages
+      - task: release-bundles
+
+  - name: release-dev
+    description: "Builds and publishes all Zarf packages and Bundles in the repository (DEV)"
+    actions:
+      - task: release-packages-dev
+      - task: release-bundles-dev
+
+  ##############
+  # ALL PACKAGES
+  ##############
+
+  # TODO: re-enable rook-ceph and longhorn when built
+  - name: release-packages
+    description: "Builds and publishes all Zarf packages in the repository (LATEST)"
+    actions:
       - task: create:uds-rke2
       - task: publish:uds-rke2
       - task: setup:clean
@@ -65,30 +78,39 @@ tasks:
       - task: create:uds-rke2-exemptions-local-path
       - task: publish:uds-rke2-exemptions-local-path
       - task: setup:clean
-      - task: create:uds-rke2-exemptions-longhorn
-      - task: publish:uds-rke2-exemptions-longhorn
-      - task: setup:clean
-      - task: create:uds-rke2-exemptions-rook-ceph
-      - task: publish:uds-rke2-exemptions-rook-ceph
-      - task: setup:clean
       - task: create:local-path
       - task: publish:local-path
       - task: setup:clean
       - task: create:local-path-init
       - task: publish:local-path-init
       - task: setup:clean
-      - task: create:rook-ceph
-      - task: publish:rook-ceph
-      - task: setup:clean
-      - task: create:rook-ceph-init
-      - task: publish:rook-ceph-init
-      - task: setup:clean
       - task: create:minio
       - task: publish:minio
       - task: setup:clean
       - task: create:leapfrogai-workarounds
+      - task: publish:leapfrogai-workarounds
       - task: setup:clean
 
-      # UDS bundles
-      - task: create:uds-rke2-local-path-bundle
-      - task: publish:uds-rke2-local-path-bundle
+  - name: release-packages-dev
+    description: "Builds and publishes all Zarf packages in the repository (DEV)"
+    actions:
+      - description: "Use the `dev` version to run a package release"
+        cmd: sudo uds run release-packages --set VERSION=dev --no-progress --no-log-file --log-level debug
+
+  #############
+  # ALL BUNDLES
+  #############
+
+  - name: release-bundles
+    description: "Builds and publishes all UDS bundles in the repository (LATEST)"
+    actions:
+      - task: create:local-path-core-bundle
+      - task: publish:local-path-core-bundle
+
+  - name: release-bundles-dev
+    description: "Builds and publishes all UDS bundles in the repository (DEV)"
+    actions:
+      - task: create:local-path-core-bundle-dev
+
+      - description: "Use the `dev` version to run a bundle release"
+        cmd: sudo uds run publish:local-path-core-bundle --set VERSION=dev --no-progress --no-log-file --log-level debug

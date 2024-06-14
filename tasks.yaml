@@ -35,6 +35,9 @@ tasks:
       # Zarf packages
       - task: create:local-path-init
       - task: deploy:local-path-init
+        with:
+          # overcome GitHub runner free space constrains
+          extraOptions: "--set BUCKET_PERSISTENCE_SIZE=1Gi"
       - task: create:uds-rke2-infrastructure
       - task: deploy:uds-rke2-infrastructure
 

@@ -35,23 +35,6 @@ tasks:
           sudo uds zarf package deploy "${{ .inputs.path }}/zarf-package-${{ .inputs.name }}-amd64-${VERSION}.tar.zst" \
           ${DEPLOY_OPTIONS}
 
-  - name: init
-    description: "Deploy the Zarf Init package for amd64 architectures"
-    inputs:
-      path:
-        description: "Path to the Zarf Init package being deployed"
-        required: true
-      extraOptions:
-        description: "Extra deployment options specific to the Zarf Init package's configuration"
-        required: false
-    actions:
-      - description: "Deploy the Zarf Init package for amd64 architectures"
-        # TODO: renovate setup
-        cmd: |
-          sudo uds zarf package deploy "${{ .inputs.path }}/zarf-init-amd64-v0.33.0.tar.zst" \
-            ${{ .inputs.extraOptions }} \
-            ${DEPLOY_OPTIONS}
-
   - name: bundle
     description: "Deploy the UDS bundle for the amd64 architectures"
     inputs:
@@ -172,10 +155,17 @@ tasks:
 
   - name: local-path-init
     description: "Deploy the custom Zarf Init Package for RKE2 with Longhorn"
+    inputs:
+      extraOptions:
+        description: "Extra deployment options specific to the Zarf Init package's configuration"
+        required: false
     actions:
-      - task: init
-        with:
-          path: build/packages/local-path
+      - description: "Deploy the Zarf Init package for amd64 architectures"
+        # TODO: renovate setup
+        cmd: |
+          sudo uds zarf package deploy "build/packages/local-path/zarf-init-amd64-v0.33.0.tar.zst" \
+            ${{ .inputs.extraOptions }} \
+            ${DEPLOY_OPTIONS}
 
   ########################
   # APP-SPECIFIC PACKAGES

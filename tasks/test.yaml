@@ -39,6 +39,12 @@ tasks:
       - task: create:uds-rke2-infrastructure
       - task: deploy:uds-rke2-infrastructure
 
+  - name: leapfrogai-specific-packages
+    description: "Deploy the LeapfrogAI exemptions, workarounds and NVIDIA GPU operator"
+    actions:
+      - task: create:uds-rke2-exemptions-local-path
+      - task: deploy:uds-rke2-exemptions-local-path
+
       - task: create:leapfrogai-workarounds
       - task: deploy:leapfrogai-workarounds
 

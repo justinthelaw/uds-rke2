@@ -25,6 +25,7 @@ tasks:
     actions:
       - task: test:uds-rke2
       - task: test:local-path-minio-init
+      - task: leapfrogai-specific-packages
 
   ####################
   # BUNDLE DEPLOYMENTS

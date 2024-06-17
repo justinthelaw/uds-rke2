@@ -10,18 +10,18 @@ metadata:
 components:
   - name: nvidia-gpu-operator
     required: true
-    images:
-      # TODO: add drivers container overrides at the UDS bundle level
-      - nvcr.io/nvidia/gpu-operator:v23.9.2
-      - nvcr.io/nvidia/k8s/dcgm-exporter:3.3.5-3.4.1-ubuntu22.04
-      - nvcr.io/nvidia/k8s/container-toolkit:v1.15.0-ubuntu20.04
-      - nvcr.io/nvidia/k8s-device-plugin:v0.15.0-ubi8
-      - nvcr.io/nvidia/cloud-native/k8s-mig-manager:v0.7.0-ubuntu20.04
-      - nvcr.io/nvidia/cuda:12.4.1-base-ubi8
-      - nvcr.io/nvidia/cloud-native/gpu-operator-validator:v23.9.2-ubi8
-      - nvcr.io/nvidia/cloud-native/vgpu-device-manager:v0.2.6-ubi8
-      - nvcr.io/nvidia/cloud-native/k8s-drive-manager:v0.6.8-ubi8
-      - nvcr.io/nvidia/kubevirt-gpu-device-plugin:v1.2.7
+    # images:
+      # # TODO: add drivers container overrides at the UDS bundle level
+      # - nvcr.io/nvidia/gpu-operator:v23.9.2
+      # - nvcr.io/nvidia/k8s/dcgm-exporter:3.3.5-3.4.1-ubuntu22.04
+      # - nvcr.io/nvidia/k8s/container-toolkit:v1.15.0-ubuntu20.04
+      # - nvcr.io/nvidia/k8s-device-plugin:v0.15.0-ubi8
+      # - nvcr.io/nvidia/cloud-native/k8s-mig-manager:v0.7.0-ubuntu20.04
+      # - nvcr.io/nvidia/cuda:12.4.1-base-ubi8
+      # - nvcr.io/nvidia/cloud-native/gpu-operator-validator:v23.9.2-ubi8
+      # - nvcr.io/nvidia/cloud-native/vgpu-device-manager:v0.2.6-ubi8
+      # - nvcr.io/nvidia/cloud-native/k8s-drive-manager:v0.6.8-ubi8
+      # - nvcr.io/nvidia/kubevirt-gpu-device-plugin:v1.2.7
     charts:
       - name: gpu-operator
         url: https://helm.ngc.nvidia.com/nvidia

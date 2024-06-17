@@ -38,11 +38,11 @@ daemonsets:
     maxUnavailable: "1"
 
 validator:
-  repository: nvcr.io/nvidia/cloud-native
-  image: gpu-operator-validator
-  version: ""
+  # repository: nvcr.io/nvidia/cloud-native
+  # image: gpu-operator-validator
+  # version: ""
   imagePullPolicy: IfNotPresent
-  imagePullSecrets: []
+  imagePullSecrets: private-registry
   env: []
   args: []
   resources: {}
@@ -56,11 +56,11 @@ validator:
         value: "true"
 
 operator:
-  repository: nvcr.io/nvidia
-  image: gpu-operator
-  version: v23.9.2
+  # repository: nvcr.io/nvidia
+  # image: gpu-operator
+  # version: v23.9.2
   imagePullPolicy: IfNotPresent
-  imagePullSecrets: []
+  imagePullSecrets: private-registry
   priorityClassName: system-node-critical
   defaultRuntime: docker
   runtimeClass: nvidia
@@ -70,11 +70,11 @@ operator:
   # upgrade CRD on chart upgrade, requires --disable-openapi-validation flag
   # to be passed during helm upgrade.
   upgradeCRD: false
-  initContainer:
-    image: cuda
-    repository: nvcr.io/nvidia
-    version: 12.4.1-base-ubi8
-    imagePullPolicy: IfNotPresent
+  # initContainer:
+  #   image: cuda
+  #   repository: nvcr.io/nvidia
+  #   version: 12.4.1-base-ubi8
+  #   imagePullPolicy: IfNotPresent
   tolerations:
     - key: "node-role.kubernetes.io/master"
       operator: "Equal"
@@ -136,7 +136,7 @@ driver:
   # image: driver
   # version: "550.90.07"
   # imagePullPolicy: IfNotPresent
-  # imagePullSecrets: []
+  # imagePullSecrets: private-registry
   # startupProbe:
   #   initialDelaySeconds: 60
   #   periodSeconds: 10
@@ -220,11 +220,11 @@ driver:
 
 toolkit:
   enabled: true
-  repository: nvcr.io/nvidia/k8s
-  image: container-toolkit
-  version: v1.15.0-ubuntu20.04
+  # repository: nvcr.io/nvidia/k8s
+  # image: container-toolkit
+  # version: v1.15.0-ubuntu20.04
   imagePullPolicy: IfNotPresent
-  imagePullSecrets: []
+  imagePullSecrets: private-registry
   # RKE2 specific configurations
   env:
     - name: CONTAINERD_CONFIG
@@ -240,11 +240,11 @@ toolkit:
 
 devicePlugin:
   enabled: true
-  repository: nvcr.io/nvidia
-  image: k8s-device-plugin
-  version: v0.15.0-ubi8
+  # repository: nvcr.io/nvidia
+  # image: k8s-device-plugin
+  # version: v0.15.0-ubi8
   imagePullPolicy: IfNotPresent
-  imagePullSecrets: []
+  imagePullSecrets: private-registry
   args: []
   env:
     - name: PASS_DEVICE_SPECS
@@ -308,9 +308,9 @@ dcgm:
 
 dcgmExporter:
   enabled: true
-  repository: nvcr.io/nvidia/k8s
-  image: dcgm-exporter
-  version:
+  # repository: nvcr.io/nvidia/k8s
+  # image: dcgm-exporter
+  # version: ""
   imagePullPolicy: IfNotPresent
   env:
     - name: DCGM_EXPORTER_LISTEN
@@ -335,11 +335,11 @@ dcgmExporter:
 
 gfd:
   enabled: true
-  repository: nvcr.io/nvidia
-  image: k8s-device-plugin
-  version: v0.15.0-ubi8
+  # repository: nvcr.io/nvidia
+  # image: k8s-device-plugin
+  # version: v0.15.0-ubi8
   imagePullPolicy: IfNotPresent
-  imagePullSecrets: []
+  imagePullSecrets: private-registry
   env:
     - name: GFD_SLEEP_INTERVAL
       value: 60s
@@ -349,11 +349,11 @@ gfd:
 
 migManager:
   enabled: true
-  repository: nvcr.io/nvidia/cloud-native
-  image: k8s-mig-manager
-  version: v0.7.0-ubuntu20.04
+  # repository: nvcr.io/nvidia/cloud-native
+  # image: k8s-mig-manager
+  # version: v0.7.0-ubuntu20.04
   imagePullPolicy: IfNotPresent
-  imagePullSecrets: []
+  imagePullSecrets: private-registry
   env:
     - name: WITH_REBOOT
       value: "false"
@@ -366,11 +366,11 @@ migManager:
 
 nodeStatusExporter:
   enabled: false
-  repository: nvcr.io/nvidia/cloud-native
-  image: gpu-operator-validator
-  version: v23.9.2-ubi8
+  # repository: nvcr.io/nvidia/cloud-native
+  # image: gpu-operator-validator
+  # version: v23.9.2-ubi8
   imagePullPolicy: IfNotPresent
-  imagePullSecrets: []
+  imagePullSecrets: private-registry
   resources: {}
 
 gds:
@@ -379,7 +379,7 @@ gds:
   # image: nvidia-fs
   # version: "2.17.5"
   # imagePullPolicy: IfNotPresent
-  # imagePullSecrets: []
+  # imagePullSecrets: private-registry
   # env: []
   # args: []
 
@@ -389,7 +389,7 @@ gdrcopy:
   # image: gdrdrv
   # version: "v2.4.1"
   # imagePullPolicy: IfNotPresent
-  # imagePullSecrets: []
+  # imagePullSecrets: private-registry
   # env: []
   # args: []
 
@@ -399,7 +399,7 @@ vgpuManager:
   # image: vgpu-manager
   # version: ""
   # imagePullPolicy: IfNotPresent
-  # imagePullSecrets: []
+  # imagePullSecrets: private-registry
   # env: []
   # resources: {}
   # driverManager:
@@ -417,11 +417,11 @@ vgpuManager:
 
 vgpuDeviceManager:
   enabled: true
-  repository: nvcr.io/nvidia/cloud-native
-  image: vgpu-device-manager
-  version: "v0.2.6"
+  # repository: nvcr.io/nvidia/cloud-native
+  # image: vgpu-device-manager
+  # version: "v0.2.6"
   imagePullPolicy: IfNotPresent
-  imagePullSecrets: []
+  imagePullSecrets: private-registry
   env: []
   config:
     name: ""
@@ -429,19 +429,19 @@ vgpuDeviceManager:
 
 vfioManager:
   enabled: true
-  repository: nvcr.io/nvidia
-  image: cuda
-  version: 12.4.1-base-ubi8
+  # repository: nvcr.io/nvidia
+  # image: cuda
+  # version: 12.4.1-base-ubi8
   imagePullPolicy: IfNotPresent
-  imagePullSecrets: []
+  imagePullSecrets: private-registry
   env: []
   resources: {}
   driverManager:
-    image: k8s-driver-manager
-    repository: nvcr.io/nvidia/cloud-native
-    # When choosing a different version of k8s-driver-manager, DO NOT downgrade to a version lower than v0.6.4
-    # to ensure k8s-driver-manager stays compatible with gpu-operator starting from v24.3.0
-    version: v0.6.8
+    # image: k8s-driver-manager
+    # repository: nvcr.io/nvidia/cloud-native
+    # # When choosing a different version of k8s-driver-manager, DO NOT downgrade to a version lower than v0.6.4
+    # # to ensure k8s-driver-manager stays compatible with gpu-operator starting from v24.3.0
+    # version: v0.6.8
     imagePullPolicy: IfNotPresent
     env:
       - name: ENABLE_GPU_POD_EVICTION
@@ -469,17 +469,17 @@ kataManager:
   # image: k8s-kata-manager
   # version: v0.2.0
   # imagePullPolicy: IfNotPresent
-  # imagePullSecrets: []
+  # imagePullSecrets: private-registry
   # env: []
   # resources: {}
 
 sandboxDevicePlugin:
   enabled: true
-  repository: nvcr.io/nvidia
-  image: kubevirt-gpu-device-plugin
-  version: v1.2.7
+  # repository: nvcr.io/nvidia
+  # image: kubevirt-gpu-device-plugin
+  # version: v1.2.7
   imagePullPolicy: IfNotPresent
-  imagePullSecrets: []
+  imagePullSecrets: private-registry
   args: []
   env: []
   resources: {}
@@ -491,7 +491,7 @@ ccManager:
   # image: k8s-cc-manager
   # version: v0.1.1
   # imagePullPolicy: IfNotPresent
-  # imagePullSecrets: []
+  # imagePullSecrets: private-registry
   # env:
   #   - name: CC_CAPABLE_DEVICE_IDS
   #     value: "0x2339,0x2331,0x2330,0x2324,0x2322,0x233d"

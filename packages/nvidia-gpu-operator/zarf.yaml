@@ -11,7 +11,7 @@ components:
   - name: nvidia-gpu-operator
     required: true
     images:
-      # TODO: add specific supported drivers using Zarf package flavors
+      # TODO: add drivers container overrides at the UDS bundle level
       - nvcr.io/nvidia/gpu-operator:v23.9.2
       - nvcr.io/nvidia/k8s/dcgm-exporter:3.3.5-3.4.1-ubuntu22.04
       - nvcr.io/nvidia/k8s/container-toolkit:v1.15.0-ubuntu20.04

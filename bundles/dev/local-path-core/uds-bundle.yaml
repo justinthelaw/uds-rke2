@@ -35,7 +35,7 @@ packages:
     description: "Deploys UDS Core services"
     repository: ghcr.io/defenseunicorns/packages/uds/core
     # TODO: renovate setup
-    ref: "0.22.0-registry1"
+    ref: "0.22.2-registry1"
     overrides:
       loki:
         loki:

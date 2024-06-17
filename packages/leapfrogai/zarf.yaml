@@ -49,19 +49,3 @@ components:
                   }
               "
             description: "Patch the RKE2 CoreDNS Corefile with the tenant and admin gateway rewrites"
-
-  - name: supabase-studio-config
-    required: true
-    description: "Patch the missing Supabase domain"
-    actions:
-      onDeploy:
-        after:
-          - cmd: |
-              sudo uds zarf tools kubectl patch configmap supabase-studio-default -n leapfrogai --patch "
-              data:
-                PORT: \"3000\"
-                STUDIO_PG_META_URL: http://supabase-kong.leapfrogai.svc.cluster.local:80/pg
-                SUPABASE_PUBLIC_URL: https://supabase-kong.${ZARF_VAR_DOMAIN}
-                SUPABASE_URL: http://supabase-kong.leapfrogai.svc.cluster.local:80
-              "
-            description: "Patch the missing Supabase domain"

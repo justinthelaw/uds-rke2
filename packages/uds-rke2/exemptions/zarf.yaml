@@ -18,6 +18,15 @@ components:
         files:
           - charts/uds-rke2-infrastructure-exemptions.yaml
 
+  - name: nvidia-gpu-operator-exemptions
+    description: "NVIDIA UDS Core Pepr policy exemptions"
+    required: true
+    manifests:
+      - name: nvidia-gpu-operator-exemptions
+        namespace: uds-policy-exemptions
+        files:
+          - charts/nvidia-gpu-operator-exemptions.yaml
+
   - name: local-path-exemptions
     description: "MetalLB UDS Core Pepr policy exemptions"
     required: true

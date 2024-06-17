@@ -225,7 +225,7 @@ tasks:
           zarfConfig: packages/leapfrogai/zarf-config.yaml
 
   - name: nvidia-gpu-operator
-    description: "Build the NVIDIA GPU operator package"
+    description: "Build the NVIDIA GPU Operator package"
     actions:
       - task: create
         with:

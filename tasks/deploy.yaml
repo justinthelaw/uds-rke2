@@ -178,3 +178,11 @@ tasks:
         with:
           path: build/packages
           name: leapfrogai-workarounds
+
+  - name: nvidia-gpu-operator
+    description: "Deploy the NVIDIA GPU Operator package"
+    actions:
+      - task: deploy
+        with:
+          path: build/packages
+          name: nvidia-gpu-operator

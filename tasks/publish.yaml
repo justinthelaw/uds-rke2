@@ -200,3 +200,12 @@ tasks:
           path: build/packages
           name: leapfrogai-workarounds
           targetRepo: justinthelaw/packages/uds/uds-rke2/
+
+  - name: nvidia-gpu-operator
+    description: "Publish the NVIDIA GPU Operator package"
+    actions:
+      - task: publish
+        with:
+          path: build/packages
+          name: nvidia-gpu-operator
+          targetRepo: justinthelaw/packages/uds/uds-rke2/

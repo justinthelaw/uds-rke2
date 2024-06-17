@@ -42,7 +42,8 @@ validator:
   # image: gpu-operator-validator
   # version: ""
   imagePullPolicy: IfNotPresent
-  imagePullSecrets: private-registry
+  imagePullSecrets:
+  - private-registry
   env: []
   args: []
   resources: {}
@@ -60,7 +61,8 @@ operator:
   # image: gpu-operator
   # version: v23.9.2
   imagePullPolicy: IfNotPresent
-  imagePullSecrets: private-registry
+  imagePullSecrets:
+  - private-registry
   priorityClassName: system-node-critical
   defaultRuntime: docker
   runtimeClass: nvidia
@@ -120,103 +122,103 @@ operator:
 mig:
   strategy: single
 
-# TODO: add specific supported drivers using Zarf package flavors
 driver:
-  enabled: false
-  # nvidiaDriverCRD:
-  #   enabled: false
-  #   deployDefaultCR: true
-  #   driverType: gpu
-  #   nodeSelector: {}
-  # useOpenKernelModules: false
-  # # use pre-compiled packages for NVIDIA driver installation.
-  # # only supported for as a tech-preview feature on ubuntu22.04 kernels.
-  # usePrecompiled: false
+  enabled: true
+  nvidiaDriverCRD:
+    enabled: false
+    deployDefaultCR: true
+    driverType: gpu
+    nodeSelector: {}
+  useOpenKernelModules: false
+  # use pre-compiled packages for NVIDIA driver installation.
+  # only supported for as a tech-preview feature on ubuntu22.04 kernels.
+  usePrecompiled: false
   # repository: nvcr.io/nvidia
   # image: driver
-  # version: "550.90.07"
-  # imagePullPolicy: IfNotPresent
-  # imagePullSecrets: private-registry
-  # startupProbe:
-  #   initialDelaySeconds: 60
-  #   periodSeconds: 10
-  #   # nvidia-smi can take longer than 30s in some cases
-  #   # ensure enough timeout is set
-  #   timeoutSeconds: 60
-  #   failureThreshold: 120
-  # rdma:
-  #   enabled: false
-  #   useHostMofed: false
-  # upgradePolicy:
-  #   # global switch for automatic upgrade feature
-  #   # if set to false all other options are ignored
-  #   autoUpgrade: true
-  #   # how many nodes can be upgraded in parallel
-  #   # 0 means no limit, all nodes will be upgraded in parallel
-  #   maxParallelUpgrades: 1
-  #   # maximum number of nodes with the driver installed, that can be unavailable during
-  #   # the upgrade. Value can be an absolute number (ex: 5) or
-  #   # a percentage of total nodes at the start of upgrade (ex:
-  #   # 10%). Absolute number is calculated from percentage by rounding
-  #   # up. By default, a fixed value of 25% is used.'
-  #   maxUnavailable: 25%
-  #   # options for waiting on pod(job) completions
-  #   waitForCompletion:
-  #     timeoutSeconds: 0
-  #     podSelector: ""
-  #   # options for gpu pod deletion
-  #   gpuPodDeletion:
-  #     force: false
-  #     timeoutSeconds: 300
-  #     deleteEmptyDir: false
-  #   # options for node drain (`kubectl drain`) before the driver reload
-  #   # this is required only if default GPU pod deletions done by the operator
-  #   # are not sufficient to re-install the driver
-  #   drain:
-  #     enable: false
-  #     force: false
-  #     podSelector: ""
-  #     # It's recommended to set a timeout to avoid infinite drain in case non-fatal error keeps happening on retries
-  #     timeoutSeconds: 300
-  #     deleteEmptyDir: false
-  # manager:
-  #   image: k8s-driver-manager
-  #   repository: nvcr.io/nvidia/cloud-native
-  #   # When choosing a different version of k8s-driver-manager, DO NOT downgrade to a version lower than v0.6.4
-  #   # to ensure k8s-driver-manager stays compatible with gpu-operator starting from v24.3.0
-  #   version: v0.6.8
-  #   imagePullPolicy: IfNotPresent
-  #   env:
-  #     - name: ENABLE_GPU_POD_EVICTION
-  #       value: "true"
-  #     - name: ENABLE_AUTO_DRAIN
-  #       value: "false"
-  #     - name: DRAIN_USE_FORCE
-  #       value: "false"
-  #     - name: DRAIN_POD_SELECTOR_LABEL
-  #       value: ""
-  #     - name: DRAIN_TIMEOUT_SECONDS
-  #       value: "0s"
-  #     - name: DRAIN_DELETE_EMPTYDIR_DATA
-  #       value: "false"
-  # env: []
-  # resources: {}
-  # # Private mirror repository configuration
-  # repoConfig:
-  #   configMapName: ""
-  # # custom ssl key/certificate configuration
-  # certConfig:
-  #   name: ""
-  # # vGPU licensing configuration
-  # licensingConfig:
-  #   configMapName: ""
-  #   nlsEnabled: true
-  # # vGPU topology daemon configuration
-  # virtualTopology:
-  #   config: ""
-  # # kernel module configuration for NVIDIA driver
-  # kernelModuleConfig:
-  #   name: ""
+  version: "555.42.02"
+  imagePullPolicy: IfNotPresent
+  imagePullSecrets:
+  - private-registry
+  startupProbe:
+    initialDelaySeconds: 60
+    periodSeconds: 10
+    # nvidia-smi can take longer than 30s in some cases
+    # ensure enough timeout is set
+    timeoutSeconds: 60
+    failureThreshold: 120
+  rdma:
+    enabled: false
+    useHostMofed: false
+  upgradePolicy:
+    # global switch for automatic upgrade feature
+    # if set to false all other options are ignored
+    autoUpgrade: true
+    # how many nodes can be upgraded in parallel
+    # 0 means no limit, all nodes will be upgraded in parallel
+    maxParallelUpgrades: 1
+    # maximum number of nodes with the driver installed, that can be unavailable during
+    # the upgrade. Value can be an absolute number (ex: 5) or
+    # a percentage of total nodes at the start of upgrade (ex:
+    # 10%). Absolute number is calculated from percentage by rounding
+    # up. By default, a fixed value of 25% is used.'
+    maxUnavailable: 25%
+    # options for waiting on pod(job) completions
+    waitForCompletion:
+      timeoutSeconds: 0
+      podSelector: ""
+    # options for gpu pod deletion
+    gpuPodDeletion:
+      force: false
+      timeoutSeconds: 300
+      deleteEmptyDir: false
+    # options for node drain (`kubectl drain`) before the driver reload
+    # this is required only if default GPU pod deletions done by the operator
+    # are not sufficient to re-install the driver
+    drain:
+      enable: false
+      force: false
+      podSelector: ""
+      # It's recommended to set a timeout to avoid infinite drain in case non-fatal error keeps happening on retries
+      timeoutSeconds: 300
+      deleteEmptyDir: false
+  manager:
+    image: k8s-driver-manager
+    repository: nvcr.io/nvidia/cloud-native
+    # When choosing a different version of k8s-driver-manager, DO NOT downgrade to a version lower than v0.6.4
+    # to ensure k8s-driver-manager stays compatible with gpu-operator starting from v24.3.0
+    version: v0.6.8
+    imagePullPolicy: IfNotPresent
+    env:
+      - name: ENABLE_GPU_POD_EVICTION
+        value: "true"
+      - name: ENABLE_AUTO_DRAIN
+        value: "false"
+      - name: DRAIN_USE_FORCE
+        value: "false"
+      - name: DRAIN_POD_SELECTOR_LABEL
+        value: ""
+      - name: DRAIN_TIMEOUT_SECONDS
+        value: "0s"
+      - name: DRAIN_DELETE_EMPTYDIR_DATA
+        value: "false"
+  env: []
+  resources: {}
+  # Private mirror repository configuration
+  repoConfig:
+    configMapName: ""
+  # custom ssl key/certificate configuration
+  certConfig:
+    name: ""
+  # vGPU licensing configuration
+  licensingConfig:
+    configMapName: ""
+    nlsEnabled: true
+  # vGPU topology daemon configuration
+  virtualTopology:
+    config: ""
+  # kernel module configuration for NVIDIA driver
+  kernelModuleConfig:
+    name: ""
 
 toolkit:
   enabled: true
@@ -224,7 +226,8 @@ toolkit:
   # image: container-toolkit
   # version: v1.15.0-ubuntu20.04
   imagePullPolicy: IfNotPresent
-  imagePullSecrets: private-registry
+  imagePullSecrets:
+  - private-registry
   # RKE2 specific configurations
   env:
     - name: CONTAINERD_CONFIG
@@ -244,7 +247,8 @@ devicePlugin:
   # image: k8s-device-plugin
   # version: v0.15.0-ubi8
   imagePullPolicy: IfNotPresent
-  imagePullSecrets: private-registry
+  imagePullSecrets:
+  - private-registry
   args: []
   env:
     - name: PASS_DEVICE_SPECS
@@ -339,7 +343,8 @@ gfd:
   # image: k8s-device-plugin
   # version: v0.15.0-ubi8
   imagePullPolicy: IfNotPresent
-  imagePullSecrets: private-registry
+  imagePullSecrets:
+  - private-registry
   env:
     - name: GFD_SLEEP_INTERVAL
       value: 60s
@@ -353,7 +358,8 @@ migManager:
   # image: k8s-mig-manager
   # version: v0.7.0-ubuntu20.04
   imagePullPolicy: IfNotPresent
-  imagePullSecrets: private-registry
+  imagePullSecrets:
+  - private-registry
   env:
     - name: WITH_REBOOT
       value: "false"
@@ -370,7 +376,8 @@ nodeStatusExporter:
   # image: gpu-operator-validator
   # version: v23.9.2-ubi8
   imagePullPolicy: IfNotPresent
-  imagePullSecrets: private-registry
+  imagePullSecrets:
+  - private-registry
   resources: {}
 
 gds:
@@ -379,7 +386,8 @@ gds:
   # image: nvidia-fs
   # version: "2.17.5"
   # imagePullPolicy: IfNotPresent
-  # imagePullSecrets: private-registry
+  # imagePullSecrets:
+  # - private-registry
   # env: []
   # args: []
 
@@ -389,7 +397,8 @@ gdrcopy:
   # image: gdrdrv
   # version: "v2.4.1"
   # imagePullPolicy: IfNotPresent
-  # imagePullSecrets: private-registry
+  # imagePullSecrets:
+  # - private-registry
   # env: []
   # args: []
 
@@ -399,7 +408,8 @@ vgpuManager:
   # image: vgpu-manager
   # version: ""
   # imagePullPolicy: IfNotPresent
-  # imagePullSecrets: private-registry
+  # imagePullSecrets:
+  # - private-registry
   # env: []
   # resources: {}
   # driverManager:
@@ -421,7 +431,8 @@ vgpuDeviceManager:
   # image: vgpu-device-manager
   # version: "v0.2.6"
   imagePullPolicy: IfNotPresent
-  imagePullSecrets: private-registry
+  imagePullSecrets:
+  - private-registry
   env: []
   config:
     name: ""
@@ -433,7 +444,8 @@ vfioManager:
   # image: cuda
   # version: 12.4.1-base-ubi8
   imagePullPolicy: IfNotPresent
-  imagePullSecrets: private-registry
+  imagePullSecrets:
+  - private-registry
   env: []
   resources: {}
   driverManager:
@@ -469,7 +481,8 @@ kataManager:
   # image: k8s-kata-manager
   # version: v0.2.0
   # imagePullPolicy: IfNotPresent
-  # imagePullSecrets: private-registry
+  # imagePullSecrets:
+  # - private-registry
   # env: []
   # resources: {}
 
@@ -479,7 +492,8 @@ sandboxDevicePlugin:
   # image: kubevirt-gpu-device-plugin
   # version: v1.2.7
   imagePullPolicy: IfNotPresent
-  imagePullSecrets: private-registry
+  imagePullSecrets:
+  - private-registry
   args: []
   env: []
   resources: {}
@@ -491,7 +505,8 @@ ccManager:
   # image: k8s-cc-manager
   # version: v0.1.1
   # imagePullPolicy: IfNotPresent
-  # imagePullSecrets: private-registry
+  # imagePullSecrets:
+  # - private-registry
   # env:
   #   - name: CC_CAPABLE_DEVICE_IDS
   #     value: "0x2339,0x2331,0x2330,0x2324,0x2322,0x233d"

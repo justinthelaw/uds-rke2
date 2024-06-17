@@ -90,6 +90,9 @@ tasks:
       - task: create:leapfrogai-workarounds
       - task: publish:leapfrogai-workarounds
       - task: setup:clean
+      - task: create:nvidia-gpu-operator
+      - task: publish:nvidia-gpu-operator
+      - task: setup:clean
 
   - name: release-packages-dev
     description: "Builds and publishes all Zarf packages in the repository (DEV)"

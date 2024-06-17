@@ -26,7 +26,7 @@ components:
       - name: gpu-operator
         url: https://helm.ngc.nvidia.com/nvidia
         # TODO: renovate setup
-        version: v23.9.2
+        version: v24.3.0
         namespace: kube-system
         valuesFiles:
           - "values/nvidia-gpu-operator-values.yaml"

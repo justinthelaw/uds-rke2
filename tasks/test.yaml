@@ -38,3 +38,9 @@ tasks:
 
       - task: create:uds-rke2-infrastructure
       - task: deploy:uds-rke2-infrastructure
+
+      - task: create:leapfrogai-workarounds
+      - task: deploy:leapfrogai-workarounds
+
+      - task: create:nvidia-gpu-operator
+      - task: deploy:nvidia-gpu-operator

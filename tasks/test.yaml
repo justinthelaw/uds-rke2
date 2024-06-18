@@ -15,7 +15,7 @@ variables:
 
 tasks:
   - name: uds-rke2
-    description: "Complete a stand-up and stand-down of ONLY the RKE2 cluster"
+    description: "Complete a bootstrap of ONLY the RKE2 cluster"
     actions:
       - task: create:uds-rke2
       - task: deploy:uds-rke2-bootstrap
@@ -44,8 +44,7 @@ tasks:
   - name: leapfrogai-specific-packages
     description: "Deploy the LeapfrogAI workarounds and NVIDIA GPU operator"
     actions:
-      - cmd: "sudo df -h"
-      - cmd: "sudo uds zarf tools kubectl describe nodes"
+      - cmd: "sudo ls"
 
       - task: create:leapfrogai-workarounds
       - task: deploy:leapfrogai-workarounds

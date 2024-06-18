@@ -107,10 +107,10 @@ operator:
     # Zap time encoding (one of 'epoch', 'millis', 'nano', 'iso8601', 'rfc3339' or 'rfc3339nano')
     timeEncoding: epoch
     # Zap Level to configure the verbosity of logging. Can be one of 'debug', 'info', 'error', or any integer value > 0 which corresponds to custom debug levels of increasing verbosity
-    level: info
+    level: debug
     # Development Mode defaults(encoder=consoleEncoder,logLevel=Debug,stackTraceLevel=Warn)
     # Production Mode defaults(encoder=jsonEncoder,logLevel=Info,stackTraceLevel=Error)
-    develMode: false
+    develMode: true
   resources:
     limits:
       cpu: 500m
@@ -123,102 +123,102 @@ mig:
   strategy: single
 
 driver:
-  enabled: true
-  nvidiaDriverCRD:
-    enabled: false
-    deployDefaultCR: true
-    driverType: gpu
-    nodeSelector: {}
-  useOpenKernelModules: false
-  # use pre-compiled packages for NVIDIA driver installation.
-  # only supported for as a tech-preview feature on ubuntu22.04 kernels.
-  usePrecompiled: false
+  enabled: false
+  # nvidiaDriverCRD:
+  #   enabled: false
+  #   deployDefaultCR: true
+  #   driverType: gpu
+  #   nodeSelector: {}
+  # useOpenKernelModules: false
+  # # use pre-compiled packages for NVIDIA driver installation.
+  # # only supported for as a tech-preview feature on ubuntu22.04 kernels.
+  # usePrecompiled: false
   # repository: nvcr.io/nvidia
   # image: driver
-  version: "555.42.02"
-  imagePullPolicy: IfNotPresent
-  imagePullSecrets:
-  - private-registry
-  startupProbe:
-    initialDelaySeconds: 60
-    periodSeconds: 10
-    # nvidia-smi can take longer than 30s in some cases
-    # ensure enough timeout is set
-    timeoutSeconds: 60
-    failureThreshold: 120
-  rdma:
-    enabled: false
-    useHostMofed: false
-  upgradePolicy:
-    # global switch for automatic upgrade feature
-    # if set to false all other options are ignored
-    autoUpgrade: true
-    # how many nodes can be upgraded in parallel
-    # 0 means no limit, all nodes will be upgraded in parallel
-    maxParallelUpgrades: 1
-    # maximum number of nodes with the driver installed, that can be unavailable during
-    # the upgrade. Value can be an absolute number (ex: 5) or
-    # a percentage of total nodes at the start of upgrade (ex:
-    # 10%). Absolute number is calculated from percentage by rounding
-    # up. By default, a fixed value of 25% is used.'
-    maxUnavailable: 25%
-    # options for waiting on pod(job) completions
-    waitForCompletion:
-      timeoutSeconds: 0
-      podSelector: ""
-    # options for gpu pod deletion
-    gpuPodDeletion:
-      force: false
-      timeoutSeconds: 300
-      deleteEmptyDir: false
-    # options for node drain (`kubectl drain`) before the driver reload
-    # this is required only if default GPU pod deletions done by the operator
-    # are not sufficient to re-install the driver
-    drain:
-      enable: false
-      force: false
-      podSelector: ""
-      # It's recommended to set a timeout to avoid infinite drain in case non-fatal error keeps happening on retries
-      timeoutSeconds: 300
-      deleteEmptyDir: false
-  manager:
-    image: k8s-driver-manager
-    repository: nvcr.io/nvidia/cloud-native
-    # When choosing a different version of k8s-driver-manager, DO NOT downgrade to a version lower than v0.6.4
-    # to ensure k8s-driver-manager stays compatible with gpu-operator starting from v24.3.0
-    version: v0.6.8
-    imagePullPolicy: IfNotPresent
-    env:
-      - name: ENABLE_GPU_POD_EVICTION
-        value: "true"
-      - name: ENABLE_AUTO_DRAIN
-        value: "false"
-      - name: DRAIN_USE_FORCE
-        value: "false"
-      - name: DRAIN_POD_SELECTOR_LABEL
-        value: ""
-      - name: DRAIN_TIMEOUT_SECONDS
-        value: "0s"
-      - name: DRAIN_DELETE_EMPTYDIR_DATA
-        value: "false"
-  env: []
-  resources: {}
-  # Private mirror repository configuration
-  repoConfig:
-    configMapName: ""
-  # custom ssl key/certificate configuration
-  certConfig:
-    name: ""
-  # vGPU licensing configuration
-  licensingConfig:
-    configMapName: ""
-    nlsEnabled: true
-  # vGPU topology daemon configuration
-  virtualTopology:
-    config: ""
-  # kernel module configuration for NVIDIA driver
-  kernelModuleConfig:
-    name: ""
+  # version: "555.42.02"
+  # imagePullPolicy: IfNotPresent
+  # imagePullSecrets:
+  # - private-registry
+  # startupProbe:
+  #   initialDelaySeconds: 60
+  #   periodSeconds: 10
+  #   # nvidia-smi can take longer than 30s in some cases
+  #   # ensure enough timeout is set
+  #   timeoutSeconds: 60
+  #   failureThreshold: 120
+  # rdma:
+  #   enabled: false
+  #   useHostMofed: false
+  # upgradePolicy:
+  #   # global switch for automatic upgrade feature
+  #   # if set to false all other options are ignored
+  #   autoUpgrade: true
+  #   # how many nodes can be upgraded in parallel
+  #   # 0 means no limit, all nodes will be upgraded in parallel
+  #   maxParallelUpgrades: 1
+  #   # maximum number of nodes with the driver installed, that can be unavailable during
+  #   # the upgrade. Value can be an absolute number (ex: 5) or
+  #   # a percentage of total nodes at the start of upgrade (ex:
+  #   # 10%). Absolute number is calculated from percentage by rounding
+  #   # up. By default, a fixed value of 25% is used.'
+  #   maxUnavailable: 25%
+  #   # options for waiting on pod(job) completions
+  #   waitForCompletion:
+  #     timeoutSeconds: 0
+  #     podSelector: ""
+  #   # options for gpu pod deletion
+  #   gpuPodDeletion:
+  #     force: false
+  #     timeoutSeconds: 300
+  #     deleteEmptyDir: false
+  #   # options for node drain (`kubectl drain`) before the driver reload
+  #   # this is required only if default GPU pod deletions done by the operator
+  #   # are not sufficient to re-install the driver
+  #   drain:
+  #     enable: false
+  #     force: false
+  #     podSelector: ""
+  #     # It's recommended to set a timeout to avoid infinite drain in case non-fatal error keeps happening on retries
+  #     timeoutSeconds: 300
+  #     deleteEmptyDir: false
+  # manager:
+  #   image: k8s-driver-manager
+  #   repository: nvcr.io/nvidia/cloud-native
+  #   # When choosing a different version of k8s-driver-manager, DO NOT downgrade to a version lower than v0.6.4
+  #   # to ensure k8s-driver-manager stays compatible with gpu-operator starting from v24.3.0
+  #   version: v0.6.8
+  #   imagePullPolicy: IfNotPresent
+  #   env:
+  #     - name: ENABLE_GPU_POD_EVICTION
+  #       value: "true"
+  #     - name: ENABLE_AUTO_DRAIN
+  #       value: "false"
+  #     - name: DRAIN_USE_FORCE
+  #       value: "false"
+  #     - name: DRAIN_POD_SELECTOR_LABEL
+  #       value: ""
+  #     - name: DRAIN_TIMEOUT_SECONDS
+  #       value: "0s"
+  #     - name: DRAIN_DELETE_EMPTYDIR_DATA
+  #       value: "false"
+  # env: []
+  # resources: {}
+  # # Private mirror repository configuration
+  # repoConfig:
+  #   configMapName: ""
+  # # custom ssl key/certificate configuration
+  # certConfig:
+  #   name: ""
+  # # vGPU licensing configuration
+  # licensingConfig:
+  #   configMapName: ""
+  #   nlsEnabled: true
+  # # vGPU topology daemon configuration
+  # virtualTopology:
+  #   config: ""
+  # # kernel module configuration for NVIDIA driver
+  # kernelModuleConfig:
+  #   name: ""
 
 toolkit:
   enabled: true

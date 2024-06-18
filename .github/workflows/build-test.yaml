@@ -59,6 +59,6 @@ jobs:
           sudo mkdir -p /opt/uds
           sudo chown -Rv 65534:65534 /opt/uds
 
-      - name: Test the UDS RKE2 + Custom Zarf Init Bootstrap (`local-path`)
+      - name: Test UDS RKE2 Bootstrapping Packages
         run: |
           sudo uds run uds-rke2-local-path-test --no-progress --log-level warn -a amd64

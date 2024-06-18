@@ -25,3 +25,18 @@ validator:
     env:
       - name: DISABLE_DEV_CHAR_SYMLINK_CREATION
         value: "true"
+devicePlugin:
+  env:
+    - name: PASS_DEVICE_SPECS
+      value: "true"
+    - name: FAIL_ON_INIT_ERROR
+      value: "true"
+    - name: DEVICE_LIST_STRATEGY
+      value: envvar
+    - name: DEVICE_ID_STRATEGY
+      value: uuid
+    - name: NVIDIA_VISIBLE_DEVICES
+      value: all
+      # "all" causes the display capability to also be considered; however, not all host systems have or allow that
+    - name: NVIDIA_DRIVER_CAPABILITIES
+      value: compute,utility

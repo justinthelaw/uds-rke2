@@ -16,17 +16,6 @@ variables:
     # x-release-please-end
 
 tasks:
-  ################
-  # E2E CI TESTING
-  ################
-
-  - name: uds-rke2-local-path-test
-    description: "Test the RKE2 cluster, with the Local Path Provisioner + MinIO Zarf Init"
-    actions:
-      - task: test:uds-rke2
-      - task: test:local-path-minio-init
-      - task: test:leapfrogai-specific-packages
-
   ####################
   # BUNDLE DEPLOYMENTS
   ####################

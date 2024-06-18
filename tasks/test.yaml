@@ -15,7 +15,7 @@ variables:
 
 tasks:
   - name: uds-rke2
-    description: "Complete a bootstrap of ONLY the RKE2 cluster"
+    description: "Deploy a new RKE2 cluster"
     actions:
       - task: setup:clean
 
@@ -24,12 +24,11 @@ tasks:
         with:
           joinToken: "my-test-token"
 
+  - name: local-path-minio-init
+    description: "Deploy the Local Path Provisioner + MinIO Zarf Init"
+    actions:
       - task: setup:clean
 
-  - name: local-path-minio-init
-    description: "Bootstrap a new RKE2 cluster, with the Local Path Provisioner + MinIO Zarf Init"
-    actions:
-      # Zarf packages
       - task: create:local-path-init
       - task: deploy:local-path-init
         with:
@@ -53,5 +52,3 @@ tasks:
 
       - task: create:nvidia-gpu-operator
       - task: deploy:nvidia-gpu-operator
-
-      - task: setup:clean

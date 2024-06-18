@@ -61,4 +61,4 @@ jobs:
 
       - name: Test UDS RKE2 Bootstrapping Packages
         run: |
-          sudo uds run uds-rke2-local-path-test --no-progress --log-level warn -a amd64
+          sudo uds run uds-rke2-local-path-test --set VERSION=dev --no-progress --log-level warn -a amd64

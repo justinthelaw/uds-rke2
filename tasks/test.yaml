@@ -17,6 +17,8 @@ tasks:
   - name: uds-rke2
     description: "Complete a bootstrap of ONLY the RKE2 cluster"
     actions:
+      - task: setup:clean
+
       - task: create:uds-rke2
       - task: deploy:uds-rke2-bootstrap
         with:
@@ -39,12 +41,10 @@ tasks:
       - task: create:uds-rke2-infrastructure
       - task: deploy:uds-rke2-infrastructure
 
-      - task: setup:clean
-
   - name: leapfrogai-specific-packages
     description: "Deploy the LeapfrogAI workarounds and NVIDIA GPU operator"
     actions:
-      - cmd: "sudo ls"
+      - task: setup:clean
 
       - task: create:leapfrogai-workarounds
       - task: deploy:leapfrogai-workarounds

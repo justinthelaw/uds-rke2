@@ -42,8 +42,11 @@ tasks:
       - task: setup:clean
 
   - name: leapfrogai-specific-packages
-    description: "Deploy the LeapfrogAI exemptions, workarounds and NVIDIA GPU operator"
+    description: "Deploy the LeapfrogAI workarounds and NVIDIA GPU operator"
     actions:
+      - cmd: "sudo df -h"
+      - cmd: "sudo uds zarf tools kubectl describe nodes"
+
       - task: create:leapfrogai-workarounds
       - task: deploy:leapfrogai-workarounds
 

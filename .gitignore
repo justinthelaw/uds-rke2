@@ -13,6 +13,8 @@ uds-bundle-*.tar.zst
 # Secrets
 **/*.cert
 **/*.key
+certs/
+cert/
 
 # Builds
 build/

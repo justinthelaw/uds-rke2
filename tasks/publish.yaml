@@ -35,6 +35,7 @@ tasks:
       - task: local-path-init
       - task: minio
       - task: leapfrogai-workarounds
+      - task: nvidia-gpu-operator
 
       # UDS bundles
       - task: local-path-core-bundle

@@ -59,11 +59,11 @@ jobs:
           sudo mkdir -p /opt/uds
           sudo chown -Rv 65534:65534 /opt/uds
 
-      - name: Test UDS RKE2 Bootstrapping
+      - name: Test UDS RKE2 Cluster Bootstrapping
         run: |
           sudo uds run test:uds-rke2 --set VERSION=dev --no-progress --log-level warn -a amd64
 
-      - name: Test `local-path` Flavor Zarf Init Package
+      - name: Test `local-path` Flavor Zarf Init
         run: |
           sudo uds run test:local-path-minio-init --set VERSION=dev --no-progress --log-level warn -a amd64
 

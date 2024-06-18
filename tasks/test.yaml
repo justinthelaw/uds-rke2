@@ -45,6 +45,7 @@ tasks:
     actions:
       - task: setup:clean
 
+      - cmd: "sleep 10"
       - task: create:leapfrogai-workarounds
       - task: deploy:leapfrogai-workarounds
 

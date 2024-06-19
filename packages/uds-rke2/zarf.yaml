@@ -5,7 +5,7 @@ kind: ZarfPackageConfig
 metadata:
   name: uds-rke2
   description: "UDS RKE2 cluster setup for servers and agents. WARNING: This capability requires root access for deployment."
-  url: https://github.com/justinthelaw/uds-rke2-sandbox
+  url: https://github.com/justinthelaw/uds-rke2
   architecture: amd64
   version: "###ZARF_PKG_TMPL_VERSION###"
 

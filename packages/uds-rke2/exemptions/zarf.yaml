@@ -20,7 +20,7 @@ components:
 
   - name: nvidia-gpu-operator-exemptions
     description: "NVIDIA UDS Core Pepr policy exemptions"
-    required: true
+    required: false
     manifests:
       - name: nvidia-gpu-operator-exemptions
         namespace: uds-policy-exemptions

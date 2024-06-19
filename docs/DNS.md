@@ -29,3 +29,8 @@ If any internal services require an `https://` "reach-around" in order to intera
 This is not a recommended approach, as all services should be capable of communicating via the secured internal Kubernetes network.
 
 Additionally, an Nginx service and configuration must be installed into the cluster. An example Nginx configuration for K3d can be found in the [uds-k3d repository](https://github.com/defenseunicorns/uds-k3d/blob/main/chart/templates/nginx.yaml). The Nginx configuration assumes the use of `uds.dev` as the base domain. This configuration is tailored to support the production environment setup, ensuring that Nginx correctly handles requests and routes them within the cluster, based on the `uds.dev` domain.
+
+## Additional Info
+
+- [CoreDNS K8s Documentation](https://kubernetes.io/docs/tasks/administer-cluster/coredns/)
+- [RKE2 CoreDNS Customization](https://www.suse.com/support/kb/doc/?id=000021179)

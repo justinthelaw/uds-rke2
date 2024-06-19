@@ -172,3 +172,8 @@ bundle:
                     - "s3:ListBucket"
                     - "s3:ListBucketMultipartUploads"
 ```
+
+## Additional Info
+
+- [MinIO Repository](https://github.com/minio/minio)
+- [MinIO Documentation Website](https://min.io/docs/minio/kubernetes/upstream/)

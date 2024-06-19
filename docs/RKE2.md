@@ -52,7 +52,9 @@ An example setup is provided below:
 ## Additional Info
 
 - [RKE2 Releases](https://github.com/rancher/rke2/releases)
-- [Air-Gap Install](https://docs.rke2.io/install/airgap#tarball-method)
-- [RKE2 Installation options](https://docs.rke2.io/install/methods)
-- [RKE2 Configuration file](https://docs.rke2.io/install/configuration)
-- [RKE2 High-availability](https://ranchermanager.docs.rancher.com/how-to-guides/new-user-guides/kubernetes-cluster-setup/rke2-for-rancher)
+- [RKE2 Air-Gap Install](https://docs.rke2.io/install/airgap#tarball-method)
+- [RKE2 Installation Options](https://docs.rke2.io/install/methods)
+- [RKE2 Configuration File](https://docs.rke2.io/install/configuration)
+- [RKE2 High-Availability](https://ranchermanager.docs.rancher.com/how-to-guides/new-user-guides/kubernetes-cluster-setup/rke2-for-rancher)
+- [RKE2 Repository](https://github.com/rancher/rke2)
+- [RKE2 Documentation Website](https://docs.rke2.io/install/quickstart)

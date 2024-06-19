@@ -228,8 +228,10 @@ tasks:
   - name: nvidia-gpu-operator
     description: "Build the NVIDIA GPU Operator package"
     actions:
-      - task: create
-        with:
-          path: packages/nvidia-gpu-operator
-          outputPath: build/packages
-          zarfConfig: packages/nvidia-gpu-operator/zarf-config.yaml
+      - description: "Create the Zarf package for the amd64 architectures"
+        cmd: |
+          sudo ZARF_CONFIG="build/packages" uds zarf package create "packages/nvidia-gpu-operator" \
+            --registry-override=nvcr.io=localhost:5001 --insecure \
+            -o "build/packages" \
+            --set VERSION=${VERSION} \
+            ${CREATE_OPTIONS}

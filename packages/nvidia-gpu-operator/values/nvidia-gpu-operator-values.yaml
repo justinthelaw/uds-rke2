@@ -1,9 +1,16 @@
+# Install K8s NFD separately
+nfd:
+  enabled: false
+
 operator:
   repository: registry1.dso.mil/ironbank/opensource/nvidia
   image: gpu-operator
   version: v24.3.0
 
 validator:
+  repository: registry1.dso.mil/ironbank/opensource/nvidia
+  image: gpu-operator-validator
+  version: v24.3.0
   driver:
     # RKE2-specific configurations
     env:
@@ -26,17 +33,6 @@ toolkit:
       value: nvidia
     - name: CONTAINERD_SET_AS_DEFAULT
       value: "true"
-
-node-feature-discovery:
-  # RKE2-specific configurations
-  worker:
-    securityContext:
-      privileged: true
-      allowPrivilegeEscalation: true
-  master:
-    securityContext:
-      privileged: true
-      allowPrivilegeEscalation: true
 
 devicePlugin:
   env:

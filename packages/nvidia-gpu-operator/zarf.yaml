@@ -9,12 +9,25 @@ metadata:
   architecture: amd64
 
 components:
+  - name: node-feature-discovery
+    required: true
+    images:
+      # gpu-operator pre-requisite via https://github.com/NVIDIA/gpu-operator/blob/main/deployments/gpu-operator/Chart.yaml
+      - registry1.dso.mil/ironbank/opensource/nfd/node-feature-discovery:v0.15.4
+    charts:
+      - name: node-feature-discovery
+        namespace: nvidia-gpu-operator
+        url: https://kubernetes-sigs.github.io/node-feature-discovery/charts
+        version: v0.15.4
+        valuesFiles:
+          - values/node-feature-discovery-values.yaml
+
   - name: nvidia-gpu-operator
     required: true
     images:
       - registry1.dso.mil/ironbank/opensource/nvidia/gpu-operator:v24.3.0
-      # gpu-operator pre-requisite via https://github.com/NVIDIA/gpu-operator/blob/release-24.3/deployments/gpu-operator/Chart.yaml
-      - registry1.dso.mil/ironbank/opensource/nfd/node-feature-discovery:v0.15.4
+      - registry1.dso.mil/ironbank/opensource/nvidia/gpu-operator-validator:v24.3.0
+      - nvcr.io/nvidia/cloud-native/gpu-operator-validator:v24.3.0
     charts:
       - name: gpu-operator
         url: https://helm.ngc.nvidia.com/nvidia
@@ -23,3 +36,21 @@ components:
         namespace: nvidia-gpu-operator
         valuesFiles:
           - "values/nvidia-gpu-operator-values.yaml"
+    actions:
+      onCreate:
+        before:
+          # Workaround for the NVIDIA Container Toolkit's hardcoded validator image
+          # See the following for more details: https://github.com/NVIDIA/gpu-operator/blob/release-24.3/bundle/v23.9.1/manifests/gpu-operator-certified.clusterserviceversion.yaml#L213
+          - description: "Create a local Docker registry"
+            cmd: |
+              if [ -z "$(docker ps --format '{{.Names}}:{{.Ports}}' | grep '^registry:.*:5001->')" ]; then
+                  docker run -d -p 5001:5000 --restart=always --name registry registry:2
+              else
+                  echo "Local registry already exists at port 5001, using the existing registry."
+              fi
+          - description: Re-tag the GPU Operator Validator Image
+            cmd: |
+              sudo docker pull registry1.dso.mil/ironbank/opensource/nvidia/gpu-operator-validator:v24.3.0
+              sudo docker tag registry1.dso.mil/ironbank/opensource/nvidia/gpu-operator-validator:v24.3.0 \
+                localhost:5001/nvidia/cloud-native/gpu-operator-validator:v24.3.0
+              sudo docker push localhost:5001/nvidia/cloud-native/gpu-operator-validator:v24.3.0

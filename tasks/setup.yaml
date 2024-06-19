@@ -26,17 +26,6 @@ tasks:
       - description: "Remove the build folder, Docker artifacts, and clear UDS and Zarf caches"
         cmd: sudo docker system prune -a -f && sudo docker volume prune -f
 
-  - name: local-registry
-    description: "Create a local image registry for development"
-    actions:
-      - description: "Create a local Docker registry"
-        cmd: |
-          if [ -z "$(docker ps --format '{{.Names}}:{{.Ports}}' | grep '^registry:.*:5001->')" ]; then
-              docker run -d -p 5001:5000 --restart=always --name registry registry:2
-          else
-              echo "Local registry already exists at port 5001, using the existing registry."
-          fi
-
   - name: rook-ceph-destroy
     description: "Destroys an existing Rook-Ceph cluster installation and all associated data on the host node"
     actions:

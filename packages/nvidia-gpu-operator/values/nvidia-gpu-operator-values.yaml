@@ -1,3 +1,15 @@
+operator:
+  repository: registry1.dso.mil/ironbank/opensource/nvidia
+  image: gpu-operator
+  version: v24.3.0
+
+validator:
+  driver:
+    # RKE2-specific configurations
+    env:
+      - name: DISABLE_DEV_CHAR_SYMLINK_CREATION
+        value: "true"
+
 driver:
   # Assumes that the NVIDIA GPU drivers are pre-installed on the host
   enabled: false
@@ -25,13 +37,6 @@ node-feature-discovery:
     securityContext:
       privileged: true
       allowPrivilegeEscalation: true
-
-validator:
-  driver:
-    # RKE2-specific configurations
-    env:
-      - name: DISABLE_DEV_CHAR_SYMLINK_CREATION
-        value: "true"
 
 devicePlugin:
   env:

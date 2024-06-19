@@ -12,8 +12,9 @@ components:
   - name: nvidia-gpu-operator
     required: true
     images:
-      - nvcr.io/nvidia/gpu-operator:v24.3.0
-      - nvcr.io/nvidia/nfd/node-feature-discovery:v0.15.4
+      - registry1.dso.mil/ironbank/opensource/nvidia/gpu-operator:v24.3.0
+      # gpu-operator pre-requisite via https://github.com/NVIDIA/gpu-operator/blob/release-24.3/deployments/gpu-operator/Chart.yaml
+      - registry1.dso.mil/ironbank/opensource/nfd/node-feature-discovery:v0.15.4
     charts:
       - name: gpu-operator
         url: https://helm.ngc.nvidia.com/nvidia

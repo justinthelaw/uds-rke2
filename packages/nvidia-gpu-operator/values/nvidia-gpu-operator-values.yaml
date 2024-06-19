@@ -1,7 +1,10 @@
 driver:
+  # Assumes that the NVIDIA GPU drivers are pre-installed on the host
   enabled: false
+
 toolkit:
   enabled: true
+  # RKE2-specific configurations
   env:
     - name: CONTAINERD_CONFIG
       value: /var/lib/rancher/rke2/agent/etc/containerd/config.toml.tmpl
@@ -11,7 +14,9 @@ toolkit:
       value: nvidia
     - name: CONTAINERD_SET_AS_DEFAULT
       value: "true"
+
 node-feature-discovery:
+  # RKE2-specific configurations
   worker:
     securityContext:
       privileged: true
@@ -20,11 +25,14 @@ node-feature-discovery:
     securityContext:
       privileged: true
       allowPrivilegeEscalation: true
+
 validator:
   driver:
+    # RKE2-specific configurations
     env:
       - name: DISABLE_DEV_CHAR_SYMLINK_CREATION
         value: "true"
+
 devicePlugin:
   env:
     - name: PASS_DEVICE_SPECS
@@ -37,6 +45,7 @@ devicePlugin:
       value: uuid
     - name: NVIDIA_VISIBLE_DEVICES
       value: all
-      # "all" causes the display capability to also be considered; however, not all host systems have or allow that
+      # Default value of "all" causes the "display" capability to also be considered;
+      # however, not all hosts have or allow that capability, causing the daemonset to fail
     - name: NVIDIA_DRIVER_CAPABILITIES
       value: compute,utility

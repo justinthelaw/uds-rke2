@@ -59,14 +59,14 @@ jobs:
           sudo mkdir -p /opt/uds
           sudo chown -Rv 65534:65534 /opt/uds
 
-      - name: Test UDS RKE2 Cluster Bootstrapping
+      - name: Deploy the UDS RKE2 Cluster and Infrastructure
         run: |
           sudo uds run test:uds-rke2 --set VERSION=dev --no-progress --log-level warn -a amd64
 
-      - name: Test `local-path` Flavor Zarf Init
+      - name: Deploy the `local-path` Flavor Custom Zarf Init
         run: |
           sudo uds run test:local-path-minio-init --set VERSION=dev --no-progress --log-level warn -a amd64
 
-      - name: Test LeapfrogAI-specific Packages
+      - name: Deploy the LeapfrogAI-specific Packages
         run: |
           sudo uds run test:leapfrogai-specific-packages --set VERSION=dev --no-progress --log-level warn -a amd64

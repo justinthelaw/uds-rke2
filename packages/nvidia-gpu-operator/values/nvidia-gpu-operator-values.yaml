@@ -14,14 +14,22 @@ validator:
   driver:
     # RKE2-specific configurations
     env:
-      - name: DISABLE_DEV_CHAR_SYMLINK_CREATION
+      - name: disable_dev_char_symlink_creation
         value: "true"
+
+nodeStatusExporter:
+  repository: registry1.dso.mil/ironbank/opensource/nvidia
+  image: gpu-operator-validator
+  version: v24.3.0
 
 driver:
   # Assumes that the NVIDIA GPU drivers are pre-installed on the host
   enabled: false
 
+# Disabled by default due to lack of IronBank images
+# Expectation is that NVIDIA Container Toolkit is pre-installed and pre-configured on the host
 toolkit:
+  # Must be set to true if using the NVIDIA container Toolkit daemonset
   enabled: true
   # RKE2-specific configurations
   env:

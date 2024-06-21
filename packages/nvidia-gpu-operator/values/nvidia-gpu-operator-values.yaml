@@ -17,11 +17,6 @@ validator:
       - name: disable_dev_char_symlink_creation
         value: "true"
 
-nodeStatusExporter:
-  repository: registry1.dso.mil/ironbank/opensource/nvidia
-  image: gpu-operator-validator
-  version: v24.3.0
-
 driver:
   # Assumes that the NVIDIA GPU drivers are pre-installed on the host
   enabled: false

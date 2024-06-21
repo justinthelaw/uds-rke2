@@ -1,6 +1,6 @@
 # NVIDIA GPU Operator
 
-`sudo rm -rf /run/nvidia/validations/host-driver-ready`
+`sudo rm -rf /run/nvidia`
 
 ## Additional Info
 

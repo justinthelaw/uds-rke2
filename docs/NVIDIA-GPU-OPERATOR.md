@@ -1,5 +1,7 @@
 # NVIDIA GPU Operator
 
+`sudo rm -rf /run/nvidia/validations/host-driver-ready`
+
 ## Additional Info
 
 - [LeapfrogAI Repository](https://github.com/NVIDIA/gpu-operator)

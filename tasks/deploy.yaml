@@ -29,10 +29,15 @@ tasks:
       name:
         description: "Name of the Zarf package being deployed"
         required: true
+      optionalComponents:
+        description: "Optional components to deploy"
+        required: false
+        default: ""
     actions:
       - description: "Deploy the Zarf package for amd64 architectures"
         cmd: |
           sudo uds zarf package deploy "${{ .inputs.path }}/zarf-package-${{ .inputs.name }}-amd64-${VERSION}.tar.zst" \
+          ${{ .inputs.optionalComponents }} \
           ${DEPLOY_OPTIONS}
 
   - name: bundle
@@ -132,6 +137,15 @@ tasks:
         with:
           path: build/packages/local-path
           name: exemptions
+
+  - name: uds-rke2-exemptions-local-path-nvidia
+    description: "Deploy the UDS RKE2 service Pepr policy exemptions package"
+    actions:
+      - task: deploy
+        with:
+          path: build/packages/local-path
+          name: exemptions
+          optionalComponents: "--components nvidia-gpu-operator-exemptions"
 
   - name: minio
     description: "Deploy the MinIO package"

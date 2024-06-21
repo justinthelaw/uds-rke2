@@ -121,3 +121,5 @@ packages:
     description: "Deploys the UDS Core Pepr policy exemptions"
     repository: ghcr.io/justinthelaw/packages/uds/uds-rke2/exemptions
     ref: "0.4.2-local-path"
+    optionalComponents:
+      - nvidia-gpu-operator-exemptions

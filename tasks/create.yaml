@@ -230,7 +230,7 @@ tasks:
     actions:
       - description: "Create the Zarf package for the amd64 architectures"
         cmd: |
-          sudo ZARF_CONFIG="build/packages" uds zarf package create "packages/nvidia-gpu-operator" \
+          sudo ZARF_CONFIG="packages/nvidia-gpu-operator/zarf-config.yaml" uds zarf package create "packages/nvidia-gpu-operator" \
             --registry-override=nvcr.io=localhost:5001 --insecure \
             -o "build/packages" \
             --set VERSION=${VERSION} \

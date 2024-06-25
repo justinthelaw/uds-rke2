@@ -52,8 +52,10 @@ driver:
 toolkit:
   # Must be set to true if using the NVIDIA container Toolkit daemonset
   enabled: true
-  # RKE2-specific configurations
   env:
+    - name: disable_dev_char_symlink_creation
+      value: "true"
+    # RKE2-specific configurations
     - name: CONTAINERD_CONFIG
       value: /var/lib/rancher/rke2/agent/etc/containerd/config.toml.tmpl
     - name: CONTAINERD_SOCKET

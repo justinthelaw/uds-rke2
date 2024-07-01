@@ -9,9 +9,9 @@ metadata:
   architecture: amd64
 
 constants:
-  - name: NODE_PATH_MAP_VALUES_FILE
+  - name: STORAGE_CONFIGURATION_VALUES_FILE
     description: "The Node Path Map values to be used for defining volume locations per node"
-    value: "###ZARF_PKG_TMPL_NODE_PATH_MAP_VALUES_FILE###"
+    value: "###ZARF_PKG_TMPL_STORAGE_CONFIGURATION_VALUES_FILE###"
 
 variables:
   - name: IS_DEFAULT_STORAGECLASS
@@ -48,7 +48,7 @@ components:
         localPath: charts
         valuesFiles:
           - values/local-path-provisioner-values.yaml
-          - "###ZARF_PKG_TMPL_NODE_PATH_MAP_VALUES_FILE###"
+          - "###ZARF_PKG_TMPL_STORAGE_CONFIGURATION_VALUES_FILE###"
     actions:
       onDeploy:
         after:

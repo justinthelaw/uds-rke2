@@ -10,7 +10,29 @@ Local Path Provisioner can still be useful if paired with an operator with built
 
 #### Node Configuration
 
-Node-level storage configurations are set within the [Node Path Map values file](../packages/local-path/values/node-path-map-values.yaml). The instructions for filling out the values file are within the values file. The default mount for all nodes that do not have a specific configuration is `/opt/uds/`.
+Node-level storage configurations are set within the [storage configuration values file](../packages/local-path/values/storage-configuration-values.yaml). The instructions for filling out the values file are within the values file. The default Zarf package expects a mounted location of `/opt/uds/` on all nodes, allowing for `ReadWriteMany` and `ReadOnlyMany` across all nodes.
+
+When modifying or supplying a storage-configuration-values.yaml, please note that `nodePathMap` and `sharedFileSystemPath` are mutually exclusive. If `sharedFileSystemPath` is used, then `nodePathMap` must be set to `[]`.
+
+The following are the general node-level configuration rules and information for each type of storage configuration:
+
+1. **`nodePathMap`**: the place user can customize where to store the data on each node
+    - If one node is not listed on the nodePathMap, and Kubernetes wants to create volume on it, the paths specified in
+    DEFAULT_PATH_FOR_NON_LISTED_NODES will be used for provisioning.
+    - If one node is listed on the nodePathMap, the specified paths will be used for provisioning.
+        1. If one node is listed but with paths set to [], the provisioner will refuse to provision on this node.
+        2. If more than one path was specified, the path would be chosen randomly when provisioning.
+    - The configuration must obey following rules:
+        1. A path must start with /, a.k.a an absolute path.
+        2. Root directory (/) is prohibited.
+        3. No duplicate paths allowed for one node.
+        4. No duplicate node allowed.
+        5. The path must not already be owned by a different system user
+
+2. **`sharedFileSystemPath`**: allows the provisioner to use a filesystem that is mounted on all
+    - nodes at the same time. In this case all access modes are supported: `ReadWriteOnce`,
+    - `ReadOnlyMany` and `ReadWriteMany` for storage claims. In addition
+    - `volumeBindingMode: Immediate` can be used in  StorageClass definition.
 
 #### Storage Configuration
 

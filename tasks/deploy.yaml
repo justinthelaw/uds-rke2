@@ -52,10 +52,17 @@ tasks:
       extraOptions:
         description: "Extra deployment options specific to the UDS bundle's configuration"
         required: false
+      udsConfig:
+        description: "UDS configuration manifest for deployment"
+        required: true
+      version:
+        description: "UDS bundle version to be deployed"
+        required: true
+        default: ${VERSION}
     actions:
       - description: "Deploy the UDS bundle for the amd64 architectures"
         cmd: |
-          sudo uds deploy "${{ .inputs.path }}/uds-bundle-${{ .inputs.name }}-amd64-${VERSION}.tar.zst" \
+          sudo UDS_CONFIG=${{ .inputs.udsConfig }} uds deploy "${{ .inputs.path }}/uds-bundle-${{ .inputs.name }}-amd64-${{ .inputs.version }}.tar.zst" \
             ${{ .inputs.extraOptions }} \
             ${DEPLOY_BUNDLE_OPTIONS}
 
@@ -71,6 +78,19 @@ tasks:
           name: uds-rke2-local-path-core
           path: build/bundles
           extraOptions: "--set JOIN_TOKEN=my-test-token"
+          udsConfig: "bundles/latest/local-path-core/uds-config.yaml"
+          version: ${VERSION}
+
+  - name: local-path-core-bundle-dev
+    description: "Deploy the Local Path Provisioner UDS RKE2 bootstrapping bundle"
+    actions:
+      - task: bundle
+        with:
+          name: uds-rke2-local-path-core
+          path: build/bundles
+          extraOptions: "--set JOIN_TOKEN=my-test-token"
+          udsConfig: "bundles/dev/local-path-core/uds-config.yaml"
+          version: dev
 
   ###################
   # STANDARD PACKAGES

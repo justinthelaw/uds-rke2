@@ -31,9 +31,9 @@ tasks:
     actions:
       - task: release-packages-dev
       - task: create:local-path-core-bundle-dev
-
-      - description: "Use the `dev` version to run a deployment"
-        cmd: sudo uds run deploy:local-path-core-bundle --set VERSION=dev --no-progress --no-log-file --log-level debug
+        with:
+          domain: "local.uds.dev"
+      - task: deploy:local-path-core-bundle-dev
 
   ##########################
   # ALL PACKAGES AND BUNDLES

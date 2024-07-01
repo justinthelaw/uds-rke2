@@ -13,6 +13,15 @@ variables:
     registry_hpa_enable: false
     registry_pvc_size: 100Gi
     registry_pvc_access_mode: ReadWriteMany
+    # Add for Local Path Provisioner PVC
+    registry_affinity_custom: |
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: kubernetes.io/hostname
+                operator: Exists
     storage_configuration_values_file: values/storage-configuration-values.yaml
   uds-core:
     loki_chunks_bucket: $LOKI_S3_BUCKET

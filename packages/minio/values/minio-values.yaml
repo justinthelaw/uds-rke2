@@ -26,6 +26,23 @@ resources:
 persistence:
   size: ###ZARF_VAR_BUCKET_PERSISTENCE_SIZE###
 
+## Node labels for pod assignment
+## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+##
+nodeSelector: {}
+tolerations: []
+
+# Add for Local Path Provisioner PVC
+affinity:
+  nodeAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: Exists
+
+topologySpreadConstraints: []
+
 buckets:
   - name: uds
 

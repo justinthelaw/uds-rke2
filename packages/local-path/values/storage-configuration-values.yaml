@@ -18,12 +18,13 @@
 # Please note that `nodePathMap` and `sharedFileSystemPath` are mutually exclusive.
 # If `sharedFileSystemPath` is used, then `nodePathMap` must be set to `[]`.
 
-# Multi-node configuration, for multi-node filesystem definition
-# Still adheres to taints and tolerations provided by each Node and the LPP StorageClass
-sharedFileSystemPath: "/opt/uds"
+nodePathMapJson:
+
+  # Multi-node configuration, for multi-node filesystem definition
+  # Still adheres to taints and tolerations provided by each Node and the LPP StorageClass
+  sharedFileSystemPath: "/opt/uds"
 
 # # Node-level configuration, for per-node filesystem control
-# nodePathMapJson:
 #   nodePathMap:
 #     - node: DEFAULT_PATH_FOR_NON_LISTED_NODES
 #       paths:

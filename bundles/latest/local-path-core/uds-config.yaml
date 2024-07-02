@@ -3,7 +3,7 @@ options:
   architecture: amd64
 
 shared:
-  domain: uds.dev
+  domain: $DOMAIN
 
 variables:
   uds-rke2:

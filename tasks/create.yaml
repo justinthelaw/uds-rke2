@@ -116,9 +116,8 @@ tasks:
     actions:
       - description: "Create the UDS bundle for the amd64 architectures"
         cmd: |
-          sudo UDS_CONFIG=${{ .inputs.path }}/uds-config.yaml uds create "${{ .inputs.path }}" \
+          sudo UDS_CONFIG=${{ .inputs.path }}/uds-config.yaml DOMAIN=${{ .inputs.domain }} uds create "${{ .inputs.path }}" \
             -o "${{ .inputs.outputPath }}" \
-            --set DOMAIN=${{ .inputs.domain }} \
             ${CREATE_BUNDLE_OPTIONS}
 
   #########
@@ -126,9 +125,14 @@ tasks:
   #########
 
   - name: tls-cert
-    description: "Generate self-signed TLS certs for testing"
+    description: "Generate self-signed TLS certs for testing (LATEST)"
     actions:
       - cmd: openssl req -x509 -newkey rsa:4096 -keyout tls.key -out tls.cert -days 365 -nodes -config tls-cert.conf
+
+  - name: tls-cert-dev
+    description: "Generate self-signed TLS certs for testing (DEV)"
+    actions:
+      - cmd: openssl req -x509 -newkey rsa:4096 -keyout tls-dev.key -out tls-dev.cert -days 365 -nodes -config tls-cert-dev.conf
 
   #########
   # BUNDLES

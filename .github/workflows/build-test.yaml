@@ -56,7 +56,11 @@ jobs:
 
       - name: Create Default LVM for LPP
         run: |
-          sudo uds run create-lvm
+          sudo uds run setup:create-lvm
+
+      - name: Create Default TLS Cert
+        run: |
+          sudo uds run create:tls-cert-dev
 
       - name: Deploy the UDS RKE2 Cluster and Infrastructure
         run: |

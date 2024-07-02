@@ -31,16 +31,20 @@ tasks:
   - name: uds-rke2-local-path-core
     description: "Bootstrap a new RKE2 cluster, with the Local Path Provisioner + MinIO Zarf Init and UDS Core packages (LATEST)"
     actions:
-      - task: create:local-path-core-bundle
       - task: setup:create-lvm
+      - task: create:tls-cert
+
+      - task: create:local-path-core-bundle
       - task: deploy:local-path-core-bundle
 
   - name: uds-rke2-local-path-core-dev
     description: "Bootstrap a new RKE2 cluster, with the Local Path Provisioner + MinIO Zarf Init and UDS Core packages (DEV)"
     actions:
+      - task: setup:create-lvm
+      - task: create:tls-cert-dev
+
       - task: release-packages-dev
       - task: create:local-path-core-bundle-dev
-      - task: setup:create-lvm
       - task: deploy:local-path-core-bundle-dev
 
   ##########################
@@ -67,6 +71,9 @@ tasks:
   - name: release-packages
     description: "Builds and publishes all Zarf packages in the repository (LATEST)"
     actions:
+      - task: create:tls-cert
+      - task: create:tls-cert-dev
+
       # Standard uds-rke2-local-path-core Zarf packages
       - task: create:uds-rke2
       - task: publish:uds-rke2
@@ -108,14 +115,16 @@ tasks:
   - name: release-bundles
     description: "Builds and publishes all UDS bundles in the repository (LATEST)"
     actions:
+      - task: create:tls-cert
+
       - task: create:local-path-core-bundle
       - task: publish:local-path-core-bundle
 
   - name: release-bundles-dev
     description: "Builds and publishes all UDS bundles in the repository (DEV)"
     actions:
+      - task: create:tls-cert-dev
+
       - task: create:local-path-core-bundle-dev
-
-
       - description: "Use the `dev` version to run a bundle release"
         cmd: sudo uds run publish:local-path-core-bundle --set VERSION=dev --no-progress --no-log-file --log-level debug

@@ -7,16 +7,42 @@
 
 This Zarf package serves as an air-gapped production environment for deploying [UDS Core](https://github.com/defenseunicorns/uds-core), individual UDS Capabilities, and UDS capabilities aggregated (bundled) via the [UDS CLI](https://github.com/defenseunicorns/uds-cli).
 
+## Table of Contents
+
+1. [Pre-Requisites](#pre-requisites)
+    - [Deployment](#deployment)
+    - [Local Development](#local-development)
+2. [Usage](#usage)
+    - [UDS CLI Aliasing](#uds-cli-aliasing)
+    - [Virtual Machines](#virtual-machines)
+    - [Bundles](#bundles)
+    - [Packages](#packages)
+    - [UDS Tasks](#uds-tasks)
+3. [Additional Info](#additional-info)
+    - [Configuration](#configuration)
+    - [Credits and Resources](#credits-and-resources)
+
 See the [UDS RKE2 Mermaid diagram](docs/DIAGRAM.md) for visual representations of the tech stack's components and order of operations.
 
 ## Pre-Requisites
 
-### Deployment Target
+### Deployment
+
+The following are requirements for an environment where a user is deploying UDS RKE2 and its custom components and applications.
 
 - A base installation of [Ubuntu Server 20.04+](https://ubuntu.com/download/server) on the node's host system
 - [UDS CLI](https://github.com/defenseunicorns/uds-cli/blob/main/README.md#install) using the versions specified in the [UDS Common repository](https://github.com/defenseunicorns/uds-common/blob/main/README.md#supported-tool-versions)
 - See the RKE2 documentation for host system [pre-requisites](https://docs.rke2.io/install/requirements)
-- See the Rook-Ceph documentation for the host system [pre-requisites](https://rook.io/docs/rook/latest-release/Getting-Started/Prerequisites/prerequisites/) based on the node's role and the cluster's configurations
+- See the [Application-Specific](#application-specific) and [Infrastructure Flavor-Specific](#infrastructure-flavor-specific) configuration sections for instruction on setup based on what is deployed atop UDS RKE2
+
+### Local Development
+
+The following are requirements for building images locally for development and testing.
+
+- All pre-requisites listed in [Deployment](#deployment)
+- [Docker](https://docs.docker.com/get-docker/) or [Podman](https://podman.io/getting-started/installation) for running, building, and pulling images
+
+## Usage
 
 ### UDS CLI Aliasing
 
@@ -39,13 +65,6 @@ touch /usr/local/bin/kubectl
 echo '#!/bin/bash\nuds zarf tools kubectl "$@"' > /usr/local/bin/kubectl
 chmod +x /usr/local/bin/kubectl
 ```
-
-### Local Development
-
-- All pre-requisites listed in [Deployment Target](#deployment-target)
-- [Docker](https://docs.docker.com/get-docker/) or [Podman](https://podman.io/getting-started/installation) for running, building, and pulling images
-
-## Usage
 
 ### Virtual Machines
 
@@ -91,14 +110,14 @@ See the UDS [`create` tasks](./tasks/create.yaml) file for more details.
 To create all packages and bundles, do the following:
 
 ```bash
-# Login to Registry1 (bash)
+# Login to Registry1
 set +o history
 export REGISTRY1_USERNAME="YOUR-USERNAME-HERE"
 export REGISTRY1_PASSWORD="YOUR-PASSWORD-HERE"
 echo $REGISTRY1_PASSWORD | uds zarf tools registry login registry1.dso.mil --username $REGISTRY1_USERNAME --password-stdin
 set -o history
 
-# Login to ghcr (bash)
+# Login to GHCR
 set +o history
 export GHCR_USERNAME="YOUR-USERNAME-HERE"
 export GHCR_PASSWORD="YOUR-PASSWORD-HERE"
@@ -189,17 +208,21 @@ Below are resources to explain some of the rationale and inner workings of the R
 - [RKE2-Specific Configuration](docs/RKE2.md)
 - [UDS-RKE2 Infrastructure and Exemptions](docs/UDS-RKE2.md)
 - [MinIO Configuration](docs/MINIO.md)
+
+#### Infrastructure Flavor-Specific
+
 - [Rook-Ceph Configuration](docs/ROOK-CEPH.md)
 - [Longhorn Configuration](docs/LONGHORN.md)
 - [Local Path Provisioner](docs/LOCAL-PATH.md)
 - [Custom Zarf Init](docs/INIT.md)
 
-### Application-Specific
+#### Application-Specific
 
 - [UDS Core](UDS-CORE.md)
 - [LeapfrogAI](docs/LEAPFROGAI.md)
+- [NVIDIA GPU Operator](docs/NVIDIA-GPU-OPERATOR.md)
 
-### Virtual Machine Setup and Testing
+#### Virtual Machine Setup and Testing
 
 - [Ubuntu VM with NVIDIA GPU Passthrough](docs/VM.md)
 

@@ -19,6 +19,8 @@ The RKE2 CoreDNS service needs to proxy requests to the external Supabase's HTTP
 
 In the "LATEST" bundles and package published to GHCR domain used for the CoreDNS reroute is, by default, `uds.dev`; whereas the "DEV" bundles are `local.uds.dev` by default. Please see the UDS [create](../tasks/create.yaml) and [deploy](../tasks/deploy.yaml) tasks for details on how to change this to a domain of your choice.
 
+See the [DNS docs](./DNS.md) for some more detail on DNS settings and rationale.
+
 ## Additional Info
 
 - [LeapfrogAI Repository](https://github.com/defenseunicorns/leapfrogai)

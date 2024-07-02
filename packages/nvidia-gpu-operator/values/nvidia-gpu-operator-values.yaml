@@ -51,7 +51,7 @@ driver:
 # Expectation is that NVIDIA Container Toolkit is pre-installed and pre-configured on the host
 toolkit:
   # Must be set to true if using the NVIDIA container Toolkit daemonset
-  enabled: true
+  enabled: false
   env:
     - name: disable_dev_char_symlink_creation
       value: "true"

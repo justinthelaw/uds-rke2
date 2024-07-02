@@ -95,10 +95,10 @@ packages:
           variables:
             - name: ADMIN_TLS_CERT
               description: "The TLS cert for the admin gateway (must be base64 encoded)"
-              path: ../tls.cert
+              path: ../tls-dev.cert
             - name: ADMIN_TLS_KEY
               description: "The TLS key for the admin gateway (must be base64 encoded)"
-              path: ../tls.key
+              path: ../tls-dev.key
 
       istio-tenant-gateway:
         # Access to UDS application services (e.g., *.uds.dev, ai.uds.dev)
@@ -106,10 +106,10 @@ packages:
           variables:
             - name: TENANT_TLS_CERT
               description: "The TLS cert for the tenant gateway (must be base64 encoded)"
-              path: ../tls.cert
+              path: ../tls-dev.cert
             - name: TENANT_TLS_KEY
               description: "The TLS key for the tenant gateway (must be base64 encoded)"
-              path: ../tls.key
+              path: ../tls-dev.key
 
   - name: uds-rke2-exemptions
     description: "Deploys the UDS Core Pepr policy exemptions"

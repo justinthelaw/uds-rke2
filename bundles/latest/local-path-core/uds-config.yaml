@@ -12,16 +12,9 @@ variables:
     # Workaround for SELinux EBS issue - https://github.com/bottlerocket-os/bottlerocket/issues/2417
     registry_hpa_enable: false
     registry_pvc_size: 100Gi
-    registry_pvc_access_mode: ReadWriteMany
-    # Add for Local Path Provisioner PVC
-    registry_affinity_custom: |
-      affinity:
-        nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-            - matchExpressions:
-              - key: kubernetes.io/hostname
-                operator: Exists
+    # Set this to ReadWriteMany for multi-node, HA situations
+    # See documentation on the StorageClass Zarf Init flavors for more details
+    registry_pvc_access_mode: ReadWriteOnce
     storage_configuration_values_file: values/storage-configuration-values.yaml
   uds-core:
     loki_chunks_bucket: $LOKI_S3_BUCKET

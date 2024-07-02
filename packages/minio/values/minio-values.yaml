@@ -28,25 +28,16 @@ persistence:
 
 ## Node labels for pod assignment
 ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
-##
 nodeSelector: {}
 tolerations: []
-
-# Add for Local Path Provisioner PVC
-affinity:
-  nodeAffinity:
-    requiredDuringSchedulingIgnoredDuringExecution:
-      nodeSelectorTerms:
-      - matchExpressions:
-        - key: kubernetes.io/hostname
-          operator: Exists
+affinity: {}
 
 topologySpreadConstraints: []
 
 buckets:
   - name: uds
 
-# uds test user
+# UDS default test user
 users:
   - accessKey: uds
     secretKey: uds-secret

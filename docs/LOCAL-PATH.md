@@ -10,7 +10,7 @@ Local Path Provisioner can still be useful if paired with an operator with built
 
 #### Node Configuration
 
-Node-level storage configurations are set within the [storage configuration values file](../packages/local-path/values/storage-configuration-values.yaml). The instructions for filling out the values file are within the values file. The default Zarf package expects a mounted location of `/opt/uds/` on all nodes, allowing for `ReadWriteMany` and `ReadOnlyMany` across all nodes.
+Node-level storage configurations are set within the [storage configuration values file](../packages/local-path/values/storage-configuration-values.yaml). The instructions for filling out the values file are within the values file. The default Zarf package expects a mounted location of `/opt/uds/` on a single node, which **DOES NOT** allow for `ReadWriteMany` and `ReadOnlyMany` access modes for PVCs.
 
 When modifying or supplying a storage-configuration-values.yaml, please note that `nodePathMap` and `sharedFileSystemPath` are mutually exclusive. If `sharedFileSystemPath` is used, then `nodePathMap` must be set to `[]`.
 
@@ -42,7 +42,12 @@ Ensure that the local volume mount points are accessible to the cluster. For exa
 # mount the device to an existing filepath
 sudo mount ubuntu/vg/extra /opt/uds
 
-# change permissions to the nonroot or nobody user for local storage volume creation
+## OR ##
+
+# create a directory at an existing root filesystem
+sudo mkdir -p /opt/uds
+
+# change permissions to the nonroot user for local storage volume access (RWX)
 sudo chown -Rv 65534:65534 /opt/uds
 ```
 

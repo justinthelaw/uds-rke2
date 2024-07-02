@@ -1,31 +1,13 @@
-# nodePathMap is the place user can customize where to store the data on each node.
-# 1. If one node is not listed on the nodePathMap, and Kubernetes wants to create volume on it, the paths specified in
-#    DEFAULT_PATH_FOR_NON_LISTED_NODES will be used for provisioning.
-# 2. If one node is listed on the nodePathMap, the specified paths will be used for provisioning.
-#     1. If one node is listed but with paths set to [], the provisioner will refuse to provision on this node.
-#     2. If more than one path was specified, the path would be chosen randomly when provisioning.
-# 3. The configuration must obey following rules:
-#   1. A path must start with /, a.k.a an absolute path.
-#   2. Root directory (/) is prohibited.
-#   3. No duplicate paths allowed for one node.
-#   4. No duplicate node allowed.
-#   5. The path must not already be owned by a different system user
-
-# `sharedFileSystemPath` allows the provisioner to use a filesystem that is mounted on all
-# nodes at the same time. In this case all access modes are supported: `ReadWriteOnce`,
-# `ReadOnlyMany` and `ReadWriteMany` for storage claims. In addition
-# `volumeBindingMode: Immediate` can be used in  StorageClass definition.
-# Please note that `nodePathMap` and `sharedFileSystemPath` are mutually exclusive.
-# If `sharedFileSystemPath` is used, then `nodePathMap` must be set to `[]`.
+# See the UDS RKE2 repository's documentation, `docs/LOCAL-PATH.md` for more details on values overrides
 
 nodePathMapJson:
 
-  # Multi-node configuration, for multi-node filesystem definition
-  # Still adheres to taints and tolerations provided by each Node and the LPP StorageClass
-  sharedFileSystemPath: "/opt/uds"
+  # # Multi-node configuration, for multi-node filesystem definition
+  # # Adheres to nodeAffinity and accessMode provided by a deployment's PVC
+  # sharedFileSystemPath: "/opt/uds"
 
-# # Node-level configuration, for per-node filesystem control
-#   nodePathMap:
-#     - node: DEFAULT_PATH_FOR_NON_LISTED_NODES
-#       paths:
-#         -  "/opt/uds"
+# Node-level configuration, for per-node filesystem control
+  nodePathMap:
+    - node: DEFAULT_PATH_FOR_NON_LISTED_NODES
+      paths:
+        -  "/opt/uds"

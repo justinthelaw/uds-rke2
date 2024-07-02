@@ -10,10 +10,7 @@ variables:
     join_token: $JOIN_TOKEN
 
   uds-rke2-infrastructure:
-    interface: $INTERFACE
-    address_pool_lower_bound: $ADDRESS_POOL_LOWER_BOUND
-    address_pool_upper_bound: $ADDRESS_POOL_UPPER_BOUND
-    base_ip: $BASE_IP
+    network_interface: $NETWORK_INTERFACE
 
   local-path-init:
     # Workaround for SELinux EBS issue - https://github.com/bottlerocket-os/bottlerocket/issues/2417

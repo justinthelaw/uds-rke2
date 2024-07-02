@@ -10,10 +10,7 @@ variables:
     join_token: $JOIN_TOKEN
 
   uds-rke2-infrastructure:
-    interface: $INTERFACE
-    address_pool_lower_bound: $ADDRESS_POOL_LOWER_BOUND
-    address_pool_upper_bound: $ADDRESS_POOL_UPPER_BOUND
-    base_ip: $BASE_IP
+    network_interface: $NETWORK_INTERFACE
 
   local-path-init:
     # Workaround for SELinux EBS issue - https://github.com/bottlerocket-os/bottlerocket/issues/2417
@@ -24,7 +21,8 @@ variables:
     registry_pvc_access_mode: ReadWriteOnce
     storage_configuration_values_file: values/storage-configuration-values.yaml
 
-    bucket_persistence_size: $BUCKET_PERSISTENCE_SIZE
+    # MinIO bucket persistence volume size
+    bucket_persistence_size: 50Gi
 
   uds-core:
     loki_s3_endpoint: http://minio.minio.svc.cluster.local:9000

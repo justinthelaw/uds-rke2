@@ -11,6 +11,9 @@ variables:
   - name: JOIN_TOKEN
     description: "Cluster join token for nodes, set by the master"
     default: "my-test-token"
+  - name: NETWORK_INTERFACE
+    description: "Interface on which to perform L2 advertisement"
+    default: "wlp0s20f3"
 
   - name: DEPLOY_OPTIONS
     description: "Extra Zarf package deployment options"
@@ -37,11 +40,15 @@ tasks:
         description: "Optional components to deploy"
         required: false
         default: ""
+      extraOptions:
+        description: "Extra deployment options specific to the Zarf Init package's configuration"
+        required: false
     actions:
       - description: "Deploy the Zarf package for amd64 architectures"
         cmd: |
           sudo uds zarf package deploy "${{ .inputs.path }}/zarf-package-${{ .inputs.name }}-amd64-${VERSION}.tar.zst" \
           ${{ .inputs.optionalComponents }} \
+          ${{ .inputs.extraOptions }} \
           ${DEPLOY_OPTIONS}
 
   - name: bundle
@@ -59,16 +66,18 @@ tasks:
       version:
         description: "UDS bundle version to be deployed"
         required: true
-        default: ${VERSION}
       joinToken:
         description: "Cluster join token for nodes, set by the master"
         required: true
-        default: ${JOIN_TOKEN}
+      networkInterface:
+        description: "Interface on which to perform L2 advertisement"
+        required: true
     actions:
       - description: "Deploy the UDS bundle for the amd64 architectures"
         cmd: |
           sudo UDS_CONFIG=${{ .inputs.udsConfig }} uds deploy "${{ .inputs.path }}/uds-bundle-${{ .inputs.name }}-amd64-${{ .inputs.version }}.tar.zst" \
             --set JOIN_TOKEN=${{ .inputs.joinToken }} \
+            --set NETWORK_INTERFACE=${{ .inputs.networkInterface }} \
             ${DEPLOY_BUNDLE_OPTIONS}
 
   #########
@@ -85,6 +94,7 @@ tasks:
           udsConfig: "bundles/latest/local-path-core/uds-config.yaml"
           version: ${VERSION}
           joinToken: ${JOIN_TOKEN}
+          networkInterface: ${NETWORK_INTERFACE}
 
   - name: local-path-core-bundle-dev
     description: "Deploy the Local Path Provisioner UDS RKE2 bootstrapping bundle"
@@ -96,6 +106,7 @@ tasks:
           udsConfig: "bundles/dev/local-path-core/uds-config.yaml"
           version: dev
           joinToken: ${JOIN_TOKEN}
+          networkInterface: ${NETWORK_INTERFACE}
 
   ###################
   # STANDARD PACKAGES
@@ -154,6 +165,8 @@ tasks:
         with:
           path: build/packages
           name: infrastructure
+          # Interface on which to perform L2 advertisement
+          extraOptions: "--set NETWORK_INTERFACE=${NETWORK_INTERFACE}"
 
   - name: uds-rke2-exemptions-local-path
     description: "Deploy the UDS RKE2 service Pepr policy exemptions package"

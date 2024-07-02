@@ -26,7 +26,6 @@ packages:
             - name: BUCKET_PERSISTENCE_SIZE
               description: "Size of the default PVC for MinIO (e.g., 30Gi)"
               path: persistence.size
-              default: "30Gi"
 
   - name: uds-rke2-infrastructure
     description: "Deploys the UDS RKE2 base infrastructure Zarf package"
@@ -43,8 +42,8 @@ packages:
         loki:
           values:
             # Set DNS service name for Loki Gateway
-            - path: "global.dnsService"
-              value: "rke2-coredns-rke2-coredns"
+            - path: global.dnsService
+              value: rke2-coredns-rke2-coredns
             # Ensure we don't hit query limits
             - path: loki.limits_config.split_queries_by_interval
               value: "30m"

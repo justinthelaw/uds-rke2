@@ -1,5 +1,5 @@
-ipAddressPool: 
+ipAddressPool:
   - ###ZARF_VAR_BASE_IP###.###ZARF_VAR_ADDRESS_POOL_LOWER_BOUND###-###ZARF_VAR_BASE_IP###.###ZARF_VAR_ADDRESS_POOL_UPPER_BOUND###
 
-interface: 
-  - ###ZARF_VAR_INTERFACE###
+interface:
+  - ###ZARF_VAR_NETWORK_INTERFACE###

@@ -11,6 +11,7 @@ metadata:
 variables:
   - name: NETWORK_INTERFACE
     description: "The network interface name on which to perform MetalLB L2 advertisement"
+    default: ""
     prompt: true
   - name: ADDRESS_POOL_LOWER_BOUND
     description: "Lower bound of the IP Address Pool range for L2 advertisement"

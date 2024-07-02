@@ -7,10 +7,6 @@
 
 Supporting packages are specific to the LeapfrogAI version outlined within this document, as well as the pre-requisites and caveats surrounding the deployment of UDS RKE2 on a host environment.
 
-### NVIDIA GPU Operator
-
-<!-- TODO: docs for NVIDIA GPU Operator -->
-
 ### LeapfrogAI Workarounds
 
 The following are workarounds for LeapfrogAI that must be implemented within the cluster after LeapfrogAI has been deployed.
@@ -20,6 +16,8 @@ The following are workarounds for LeapfrogAI that must be implemented within the
 Patch the RKE2 CoreDNS Corefile with the tenant and admin gateway rewrites for Supabase and KeyCloak hand-offs
 
 The RKE2 CoreDNS service needs to proxy requests to the external Supabase's HTTPS endpoint to the internal cluster service instead, and also for the KeyCloak admin service as well. This is because the Supabase authentication handoff requires interaction with a third-party, SSO service that is served from an HTTPS endpoint. This CoreDNS workaround allows us to properly resolve the Supabase and KeyCloak HTTPS endpoints internally without leaving the cluster.
+
+In the "LATEST" bundles and package published to GHCR domain used for the CoreDNS reroute is, by default, `uds.dev`; whereas the "DEV" bundles are `local.uds.dev` by default. Please see the UDS [create](../tasks/create.yaml) and [deploy](../tasks/deploy.yaml) tasks for details on how to change this to a domain of your choice.
 
 ## Additional Info
 

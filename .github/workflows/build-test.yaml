@@ -54,10 +54,9 @@ jobs:
           registry1Password: ${{secrets.IRON_BANK_ROBOT_PASSWORD}}
           ghToken: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Create /opt/uds LVM
+      - name: Create Default LVM for LPP
         run: |
-          sudo mkdir -p /opt/uds
-          sudo chown -Rv 65534:65534 /opt/uds
+          sudo uds run create-lvm
 
       - name: Deploy the UDS RKE2 Cluster and Infrastructure
         run: |

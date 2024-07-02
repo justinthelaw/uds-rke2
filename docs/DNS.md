@@ -6,6 +6,23 @@ One of the core assumptions of the original [`uds-k3d`](https://github.com/defen
 
 In this repository's `uds-rke2` packages and bundles, this public DNS resolution will not work. UDS RKE2's services are exposed via the host machine's IP, and not via localhost. The following section notes the `/etc/hosts/` modifications required to access virtual services being served by the Istio gateways.
 
+## Modifying Domain
+
+In the UDS create and deploy actions, there is a `DOMAIN` variable that can be set to affect how the underlying packages are built and deployed. The `DOMAIN` is required for both stages as each package requires the setting of the domain at different steps (create or deploy-time).
+
+Example of setting `DOMAIN` in a UDS Task:
+
+```bash
+uds run uds-rke2-local-path-core-dev --set DOMAIN="local.uds.dev"
+```
+
+The `DOMAIN` in the UDS configuration file (DEV):
+
+```yaml
+shared:
+  domain: local.uds.dev
+```
+
 ## Host File Modifications
 
 The default Istio Ingress gateways deployed with the UDS RKE2 bundle are assigned the following MetalLB allocated IPs, where `BASE_IP` is the IP of the host machine as identified within the MetalLB component of UDS RKE2 INfrastructure Zarf package:
@@ -16,10 +33,13 @@ The default Istio Ingress gateways deployed with the UDS RKE2 bundle are assigne
 
 If an `/etc/hosts` file needs to be modified for access via a host's browser, then modify the `/etc/hosts/` accordingly. Below is an example entry:
 
-```text
+```toml
 127.0.0.1       localhost
-184.223.9.200   grafana.admin.uds.dev neuvector.admin.uds.dev
-184.223.9.201   sso.admin.uds.dev
+127.0.1.1       device-name
+
+# UDS and LeapfrogAI subdomains
+192.168.0.200   keycloak.admin.uds.dev grafana.admin.uds.dev neuvector.admin.uds.dev
+192.168.0.201   leapfrogai-api.uds.dev sso.uds.dev leapfrogai.uds.dev leapfrogai-rag.uds.dev ai.uds.dev supabase-kong.uds.dev
 ```
 
 ## CoreDNS Override

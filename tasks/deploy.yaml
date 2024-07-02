@@ -8,6 +8,13 @@ variables:
     default: "0.4.2"
     # x-release-please-end
 
+  - name: DOMAIN
+    description: "Set the domain for all virtual services served via an Istio gateway"
+    default: "uds.dev"
+  - name: JOIN_TOKEN
+    description: "Cluster join token for nodes, set by the master"
+    default: "my-test-token"
+
   - name: DEPLOY_OPTIONS
     description: "Extra Zarf package deployment options"
     default: "--no-progress --no-log-file --log-level debug --confirm"
@@ -49,9 +56,6 @@ tasks:
       name:
         description: "Name of the UDS bundle being deployed"
         required: true
-      extraOptions:
-        description: "Extra deployment options specific to the UDS bundle's configuration"
-        required: false
       udsConfig:
         description: "UDS configuration manifest for deployment"
         required: true
@@ -59,11 +63,20 @@ tasks:
         description: "UDS bundle version to be deployed"
         required: true
         default: ${VERSION}
+      domain:
+        description: "Domain for all virtual services served via an Istio gateway"
+        required: true
+        default: ${DOMAIN}
+      joinToken:
+        description: "Cluster join token for nodes, set by the master"
+        required: true
+        default: ${JOIN_TOKEN}
     actions:
       - description: "Deploy the UDS bundle for the amd64 architectures"
         cmd: |
           sudo UDS_CONFIG=${{ .inputs.udsConfig }} uds deploy "${{ .inputs.path }}/uds-bundle-${{ .inputs.name }}-amd64-${{ .inputs.version }}.tar.zst" \
-            ${{ .inputs.extraOptions }} \
+            --set JOIN_TOKEN=${{ .inputs.joinToken }} \
+            --set DOMAIN=${{ .inputs.domain }} \
             ${DEPLOY_BUNDLE_OPTIONS}
 
   #########
@@ -77,9 +90,10 @@ tasks:
         with:
           name: uds-rke2-local-path-core
           path: build/bundles
-          extraOptions: "--set JOIN_TOKEN=my-test-token"
           udsConfig: "bundles/latest/local-path-core/uds-config.yaml"
           version: ${VERSION}
+          domain: ${DOMAIN}
+          joinToken: ${JOIN_TOKEN}
 
   - name: local-path-core-bundle-dev
     description: "Deploy the Local Path Provisioner UDS RKE2 bootstrapping bundle"
@@ -88,9 +102,10 @@ tasks:
         with:
           name: uds-rke2-local-path-core
           path: build/bundles
-          extraOptions: "--set JOIN_TOKEN=my-test-token"
           udsConfig: "bundles/dev/local-path-core/uds-config.yaml"
           version: dev
+          domain: ${DOMAIN}
+          joinToken: ${JOIN_TOKEN}
 
   ###################
   # STANDARD PACKAGES
@@ -100,7 +115,7 @@ tasks:
     description: "Deploy the UDS RKE2 Zarf package, as a new cluster bootstrapping node"
     inputs:
       joinToken:
-        description: "Cluster joining token"
+        description: "Cluster join token for nodes, set by the master"
         required: true
       optionalComponents:
         description: "Optional components to deploy"
@@ -118,7 +133,7 @@ tasks:
     description: "Deploy the UDS RKE2 Zarf package, as a cluster joining node"
     inputs:
       joinToken:
-        description: "Cluster joining token"
+        description: "Cluster join token for nodes, set by the master"
         required: true
       joinAddress:
         description: "IP address at which to join the node when an existing cluster exists at a different IP address"

@@ -15,6 +15,14 @@ variables:
     default: "0.4.2"
     # x-release-please-end
 
+  # Explicitly set these environment variables to change the defaults
+  - name: DOMAIN
+    description: "Set the domain for all virtual services served via an Istio gateway"
+    default: "uds.dev"
+  - name: JOIN_TOKEN
+    description: "Cluster join token for nodes, set by the master"
+    default: "my-test-token"
+
 tasks:
   ####################
   # BUNDLE DEPLOYMENTS
@@ -24,6 +32,7 @@ tasks:
     description: "Bootstrap a new RKE2 cluster, with the Local Path Provisioner + MinIO Zarf Init and UDS Core packages (LATEST)"
     actions:
       - task: create:local-path-core-bundle
+      - task: setup:create-lvm
       - task: deploy:local-path-core-bundle
 
   - name: uds-rke2-local-path-core-dev
@@ -31,8 +40,7 @@ tasks:
     actions:
       - task: release-packages-dev
       - task: create:local-path-core-bundle-dev
-        with:
-          domain: "local.uds.dev"
+      - task: setup:create-lvm
       - task: deploy:local-path-core-bundle-dev
 
   ##########################
@@ -107,6 +115,7 @@ tasks:
     description: "Builds and publishes all UDS bundles in the repository (DEV)"
     actions:
       - task: create:local-path-core-bundle-dev
+
 
       - description: "Use the `dev` version to run a bundle release"
         cmd: sudo uds run publish:local-path-core-bundle --set VERSION=dev --no-progress --no-log-file --log-level debug

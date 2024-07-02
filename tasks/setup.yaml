@@ -26,6 +26,7 @@ tasks:
         cmd: |
           sudo uds zarf tools clear-cache && sudo rm -rf ~/.uds-cache && sudo rm -rf ~/.zarf-cache
           sudo rm -rf build/ zarf-sbom/ /tmp/zarf-*
+          sudo rm -rf ./tls*.cert ./tls*.key
 
   - name: clean
     description: "Cleans the host system of extraneous build artifacts, as well as hanging Docker artifacts"

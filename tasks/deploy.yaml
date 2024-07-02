@@ -8,9 +8,6 @@ variables:
     default: "0.4.2"
     # x-release-please-end
 
-  - name: DOMAIN
-    description: "Set the domain for all virtual services served via an Istio gateway"
-    default: "uds.dev"
   - name: JOIN_TOKEN
     description: "Cluster join token for nodes, set by the master"
     default: "my-test-token"
@@ -63,10 +60,6 @@ tasks:
         description: "UDS bundle version to be deployed"
         required: true
         default: ${VERSION}
-      domain:
-        description: "Domain for all virtual services served via an Istio gateway"
-        required: true
-        default: ${DOMAIN}
       joinToken:
         description: "Cluster join token for nodes, set by the master"
         required: true
@@ -76,7 +69,6 @@ tasks:
         cmd: |
           sudo UDS_CONFIG=${{ .inputs.udsConfig }} uds deploy "${{ .inputs.path }}/uds-bundle-${{ .inputs.name }}-amd64-${{ .inputs.version }}.tar.zst" \
             --set JOIN_TOKEN=${{ .inputs.joinToken }} \
-            --set DOMAIN=${{ .inputs.domain }} \
             ${DEPLOY_BUNDLE_OPTIONS}
 
   #########
@@ -92,7 +84,6 @@ tasks:
           path: build/bundles
           udsConfig: "bundles/latest/local-path-core/uds-config.yaml"
           version: ${VERSION}
-          domain: ${DOMAIN}
           joinToken: ${JOIN_TOKEN}
 
   - name: local-path-core-bundle-dev
@@ -104,7 +95,6 @@ tasks:
           path: build/bundles
           udsConfig: "bundles/dev/local-path-core/uds-config.yaml"
           version: dev
-          domain: ${DOMAIN}
           joinToken: ${JOIN_TOKEN}
 
   ###################

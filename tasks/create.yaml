@@ -8,10 +8,6 @@ variables:
     default: "0.4.2"
     # x-release-please-end
 
-  - name: DOMAIN
-    description: "Set the domain for all virtual services served via an Istio gateway"
-    default: "uds.dev"
-
   - name: CREATE_OPTIONS
     description: "Extra Zarf package creation options"
     default: "--no-progress --no-log-file --log-level debug -a amd64 --confirm"
@@ -109,14 +105,10 @@ tasks:
       outputPath:
         description: "Output path to the UDS bundle being created"
         required: true
-      domain:
-        description: "Domain for all virtual services served via an Istio gateway"
-        required: true
-        default: ${DOMAIN}
     actions:
       - description: "Create the UDS bundle for the amd64 architectures"
         cmd: |
-          sudo UDS_CONFIG=${{ .inputs.path }}/uds-config.yaml DOMAIN=${{ .inputs.domain }} uds create "${{ .inputs.path }}" \
+          sudo UDS_CONFIG=${{ .inputs.path }}/uds-config.yaml uds create "${{ .inputs.path }}" \
             -o "${{ .inputs.outputPath }}" \
             ${CREATE_BUNDLE_OPTIONS}
 
@@ -132,7 +124,7 @@ tasks:
   - name: tls-cert-dev
     description: "Generate self-signed TLS certs for testing (DEV)"
     actions:
-      - cmd: openssl req -x509 -newkey rsa:4096 -keyout tls-dev.key -out tls-dev.cert -days 365 -nodes -config tls-cert-dev.conf
+      - cmd: openssl req -x509 -newkey rsa:4096 -keyout tls.dev.key -out tls.dev.cert -days 365 -nodes -config tls-cert.dev.conf
 
   #########
   # BUNDLES
@@ -145,7 +137,6 @@ tasks:
         with:
           path: "bundles/latest/local-path-core"
           outputPath: "build/bundles"
-          domain: "uds.dev"
 
   - name: local-path-core-bundle-dev
     description: "Build the Local Path Provisioner UDS RKE2 bootstrapping bundle (DEV)"
@@ -154,7 +145,6 @@ tasks:
         with:
           path: "bundles/dev/local-path-core"
           outputPath: "build/bundles"
-          domain: "local.uds.dev"
 
   ###################
   # STANDARD PACKAGES

@@ -16,14 +16,14 @@ In the UDS create and deploy actions, there is a `DOMAIN` variable that can be s
 Example of setting `DOMAIN` in a UDS Task:
 
 ```bash
-uds run uds-rke2-local-path-core-dev --set DOMAIN="local.uds.dev"
+uds run uds-rke2-local-path-core-dev --set DOMAIN="uds.local"
 ```
 
 The `DOMAIN` in the UDS configuration file (DEV):
 
 ```yaml
 shared:
-  domain: local.uds.dev
+  domain: uds.local
 ```
 
 ## Host File Modifications

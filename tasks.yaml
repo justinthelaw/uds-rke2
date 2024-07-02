@@ -16,9 +16,6 @@ variables:
     # x-release-please-end
 
   # Explicitly set these environment variables to change the defaults
-  - name: DOMAIN
-    description: "Set the domain for all virtual services served via an Istio gateway"
-    default: "uds.dev"
   - name: JOIN_TOKEN
     description: "Cluster join token for nodes, set by the master"
     default: "my-test-token"

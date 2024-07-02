@@ -15,10 +15,6 @@ constants:
     value: "###ZARF_PKG_TMPL_RKE2_VERSION###"
 
 variables:
-  - name: CLUSTER_NAME
-    description: "Name of the cluster"
-    default: "uds-prod"
-    prompt: true
   - name: JOIN_TOKEN
     description: "Cluster joining token"
     prompt: true

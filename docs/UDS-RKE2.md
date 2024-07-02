@@ -6,6 +6,8 @@ This is an extension of the [RKE2 configuration documentation](./RKE2.md), and p
 
 This package deploys MetalLB and MachineID + Pause integration for L2 advertisement and pod/namespace integrity.
 
+The L2 advertisement requires the network interface and IP address pool. These are supplied via variables seen in the [Zarf package deployment](../packages/uds-rke2/infrastructure/zarf.yaml) or UDS bundle deployment ([`local-path-core` bundle configuration example](../bundles/dev/local-path-core/uds-config.yaml)) manifests.
+
 ## Exemptions
 
 This package contains exemptions from UDS Pepr policies that enforce prohibitive restrictions on storage layer and cluster-level functionality. Below are optional components that can be deployed with the `--components` flag. These are based on the storage layer flavor chosen for the custom Zarf Init.

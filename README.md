@@ -194,9 +194,9 @@ To run this test locally, you can run the following:
 uds run uds-rke2-local-path-core-dev
 ```
 
-Then, modify your `/etc/hosts` according to your base IP on the Istio Tenant gateway, with a redirect for `sso.local.uds.dev`.
+Then, modify your `/etc/hosts` according to your base IP on the Istio Tenant gateway, with a redirect for `sso.uds.local`.
 
-Finally, go to `sso.local.uds.dev` to see if the KeyCloak SSO panel is accessible via your browser.
+Finally, go to `sso.uds.local` to see if the KeyCloak SSO panel is accessible via your browser.
 
 ## Additional Info
 

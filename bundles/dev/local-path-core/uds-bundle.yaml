@@ -19,6 +19,14 @@ packages:
     repository: ghcr.io/justinthelaw/packages/uds/uds-rke2/init
     # TODO: renovate setup
     ref: "v0.33.0-local-path"
+    overrides:
+      minio:
+        minio:
+          variables:
+            - name: BUCKET_PERSISTENCE_SIZE
+              description: "Size of the default PVC for MinIO (e.g., 30Gi)"
+              path: persistence.size
+              default: "30Gi"
 
   - name: uds-rke2-infrastructure
     description: "Deploys the UDS RKE2 base infrastructure Zarf package"
@@ -34,48 +42,48 @@ packages:
       loki:
         loki:
           values:
-            # Override default DNS service name for Loki Gateway
+            # Set DNS service name for Loki Gateway
             - path: "global.dnsService"
               value: "rke2-coredns-rke2-coredns"
-            # If S3 API is external to the cluster
-            - path: loki.storage.s3.endpoint
-              value: ""
-            - path: loki.storage.s3.secretAccessKey
-              value: ""
-            - path: loki.storage.s3.accessKeyId
-              value: ""
+            # Ensure we don't hit query limits
+            - path: loki.limits_config.split_queries_by_interval
+              value: "30m"
+            - path: loki.query_scheduler.max_outstanding_requests_per_tenant
+              value: 32000 # This is the new default in Loki 3.0
           variables:
             - name: LOKI_CHUNKS_BUCKET
               description: "The object storage bucket for Loki chunks"
               path: loki.storage.bucketNames.chunks
-              default: "uds"
             - name: LOKI_RULER_BUCKET
               description: "The object storage bucket for Loki ruler"
               path: loki.storage.bucketNames.ruler
-              default: "uds"
             - name: LOKI_ADMIN_BUCKET
               description: "The object storage bucket for Loki admin"
               path: loki.storage.bucketNames.admin
-              default: "uds"
+            - name: LOKI_S3_ENDPOINT
+              description: "The S3 endpoint"
+              path: loki.storage.s3.endpoint
             - name: LOKI_S3_REGION
               description: "The S3 region"
               path: loki.storage.s3.region
-              default: "us-east-1"
+            - name: LOKI_S3_ACCESS_KEY_ID
+              description: "The S3 Access Key ID"
+              path: loki.storage.s3.accessKeyId
+            - name: LOKI_S3_SECRET_ACCESS_KEY
+              path: loki.storage.s3.secretAccessKey
+              description: "The S3 Secret Access Key"
             - name: LOKI_IRSA_ROLE_ARN
               description: "The irsa role annotation"
               path: serviceAccount.annotations.irsa/role-arn
             - name: LOKI_WRITE_REPLICAS
               path: write.replicas
               description: "Loki write replicas"
-              default: "1"
             - name: LOKI_READ_REPLICAS
               path: read.replicas
               description: "Loki read replicas"
-              default: "1"
             - name: LOKI_BACKEND_REPLICAS
               path: backend.replicas
               description: "Loki backend replicas"
-              default: "1"
 
       velero:
         velero:
@@ -83,11 +91,17 @@ packages:
             - name: VELERO_USE_SECRET
               description: "Toggle use secret off to use IRSA."
               path: credentials.useSecret
-              default: "false"
             - name: VELERO_IRSA_ROLE_ARN
               description: "IRSA role arn for annotation"
               path: serviceAccount.server.annotations.irsa/role-arn
-              default: ""
+
+      keycloak:
+        keycloak:
+          values:
+            - path: devMode
+              value: false
+            - path: fips
+              value: true
 
       istio-admin-gateway:
         uds-istio-config:
@@ -95,10 +109,10 @@ packages:
           variables:
             - name: ADMIN_TLS_CERT
               description: "The TLS cert for the admin gateway (must be base64 encoded)"
-              path: ../tls-dev.cert
+              path: ../tls.dev.cert
             - name: ADMIN_TLS_KEY
               description: "The TLS key for the admin gateway (must be base64 encoded)"
-              path: ../tls-dev.key
+              path: ../tls.dev.key
 
       istio-tenant-gateway:
         # Access to UDS application services (e.g., *.uds.dev, ai.uds.dev)
@@ -106,10 +120,10 @@ packages:
           variables:
             - name: TENANT_TLS_CERT
               description: "The TLS cert for the tenant gateway (must be base64 encoded)"
-              path: ../tls-dev.cert
+              path: ../tls.dev.cert
             - name: TENANT_TLS_KEY
               description: "The TLS key for the tenant gateway (must be base64 encoded)"
-              path: ../tls-dev.key
+              path: ../tls.dev.key
 
   - name: uds-rke2-exemptions
     description: "Deploys the UDS Core Pepr policy exemptions"

@@ -38,6 +38,12 @@ packages:
     # x-release-please-start-version
     ref: "0.4.2"
     # x-release-please-end
+    overrides:
+      infrastructure:
+        uds-rke2-infrastructure:
+          variables:
+            - name: INTERFACE
+              path: interface
 
   - name: uds-core
     description: "Deploys UDS Core services"

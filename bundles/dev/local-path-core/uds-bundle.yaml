@@ -31,6 +31,12 @@ packages:
     description: "Deploys the UDS RKE2 base infrastructure Zarf package"
     repository: ghcr.io/justinthelaw/packages/uds/uds-rke2/infrastructure
     ref: "dev"
+    overrides:
+      infrastructure:
+        uds-rke2-infrastructure:
+          variables:
+            - name: INTERFACE
+              path: interface
 
   - name: uds-core
     description: "Deploys UDS Core services"

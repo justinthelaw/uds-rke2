@@ -13,13 +13,7 @@ In this repository's `uds-rke2` packages and bundles, this public DNS resolution
 
 In the UDS create and deploy actions, there is a `DOMAIN` variable that can be set to affect how the underlying packages are built and deployed. The `DOMAIN` is required for both stages as each package requires the setting of the domain at different steps (create or deploy-time).
 
-Example of setting `DOMAIN` in a UDS Task:
-
-```bash
-uds run uds-rke2-local-path-core-dev --set DOMAIN="uds.local"
-```
-
-The `DOMAIN` in the UDS configuration file (DEV):
+An example of the shared `DOMAIN` variable in a UDS configuration file (DEV):
 
 ```yaml
 shared:

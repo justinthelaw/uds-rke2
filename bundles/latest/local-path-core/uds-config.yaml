@@ -9,7 +9,7 @@ variables:
   uds-rke2:
     join_token: $JOIN_TOKEN
 
-  uds-rke2-infrastructure:
+  infrastructure:
     network_interface: $NETWORK_INTERFACE
 
   local-path-init:
@@ -21,6 +21,7 @@ variables:
     registry_pvc_access_mode: ReadWriteOnce
     storage_configuration_values_file: values/storage-configuration-values.yaml
 
+    # MinIO bucket persistence volume size
     bucket_persistence_size: $BUCKET_PERSISTENCE_SIZE
 
   uds-core:

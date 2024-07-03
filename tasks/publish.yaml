@@ -10,10 +10,10 @@ variables:
 
   - name: PUBLISH_OPTIONS
     description: "Extra Zarf package publishing options"
-    default: "--no-progress --no-log-file --log-level debug -a amd64"
+    default: "--no-progress --no-log-file --log-level warn -a amd64"
   - name: PUBLISH_BUNDLE_OPTIONS
     description: "Extra UDS bundle publishing options"
-    default: "--no-progress --no-tea --no-log-file --log-level debug -a amd64 --confirm"
+    default: "--no-progress --no-tea --no-log-file --log-level warn -a amd64 --confirm"
   - name: TARGET_REGISTRY
     description: "Target registry to publish to"
     default: "ghcr.io"

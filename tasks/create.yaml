@@ -124,7 +124,7 @@ tasks:
   - name: tls-cert-dev
     description: "Generate self-signed TLS certs for testing (DEV)"
     actions:
-      - cmd: openssl req -x509 -newkey rsa:4096 -keyout tls.dev.key -out tls.dev.cert -days 365 -nodes -config tls-cert.dev.conf
+      - cmd: openssl req -x509 -newkey rsa:4096 -keyout bundles/tls.key -out tls.cert -days 365 -nodes -config tls-cert.dev.conf
 
   #########
   # BUNDLES

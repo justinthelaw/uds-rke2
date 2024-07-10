@@ -27,28 +27,6 @@ variables:
     default: "registry1"
 
 tasks:
-  ##########################
-  # ALL PACKAGES AND BUNDLES
-  ##########################
-
-  # TODO: re-enable rook-ceph and longhorn when built
-  - name: all
-    description: "Builds all Zarf packages in the repository"
-    actions:
-      # Zarf packages
-      - task: uds-rke2
-      - task: uds-rke2-infrastructure
-      - task: uds-rke2-exemptions-local-path
-      - task: local-path
-      - task: local-path-init
-      - task: minio
-      - task: leapfrogai-workarounds
-      - task: nvidia-gpu-operator
-      - task: uds-core
-
-      # UDS bundles
-      - task: local-path-core-bundle
-
   ###########
   # REUSEABLE
   ###########

@@ -107,7 +107,7 @@ uds run --list-all
 
 See the UDS [`create` tasks](./tasks/create.yaml) file for more details.
 
-To create all packages and bundles, do the following:
+To create a packages and bundles, reference the following example for NVIDIA GPU Operator:
 
 ```bash
 # Login to Registry1
@@ -124,7 +124,7 @@ export GHCR_PASSWORD="YOUR-PASSWORD-HERE"
 echo $GHCR_PASSWORD | uds zarf tools registry login ghcr.io --username $GHCR_USERNAME --password-stdin
 set -o history
 
-uds run create:all
+uds run create:nvidia-gpu-operator
 ```
 
 #### Deploy

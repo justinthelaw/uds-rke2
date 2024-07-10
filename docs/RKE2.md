@@ -51,9 +51,7 @@ An example setup is provided below:
 
 ### Script `containerd` Configuration
 
-The `containerd` configuration is within the startup script. This configuration enables the creations of an NVIDIA Container Runtime enabled cluster, and also provides workarounds for certain hardening aspects required for running Kubernetes clusters in a more secure fashion with RKE2.
-
-An example injection of the configuration is shown below:
+The `containerd` configuration template is within the startup script. This configuration template adds options to the host's `containerd` configuration, as seen in the example below:
 
 ```yaml
 # /var/lib/rancher/rke2/agent/etc/containerd/config.toml.tmpl
@@ -79,24 +77,6 @@ version = 2
 
 [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc.options]
   SystemdCgroup = true
-
-[plugins."io.containerd.grpc.v1.cri".containerd.runtimes.nvidia]
- privileged_without_host_devices = false
- runtime_engine = ""
- runtime_root = ""
- runtime_type = "io.containerd.runc.v2"
-
-[plugins."io.containerd.grpc.v1.cri".containerd.runtimes.nvidia.options]
- BinaryName = "/usr/local/nvidia/toolkit/nvidia-container-runtime"
-
-[plugins."io.containerd.grpc.v1.cri".containerd.runtimes.nvidia-experimental]
- privileged_without_host_devices = false
- runtime_engine = ""
- runtime_root = ""
- runtime_type = "io.containerd.runc.v2"
-
-[plugins."io.containerd.grpc.v1.cri".containerd.runtimes.nvidia-experimental.options]
- BinaryName = "/usr/local/nvidia/toolkit/nvidia-container-runtime-experimental"
 ```
 
 ## Additional Info

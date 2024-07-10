@@ -97,24 +97,6 @@ version = 2
 
 [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc.options]
   SystemdCgroup = true
-
-[plugins."io.containerd.grpc.v1.cri".containerd.runtimes.nvidia]
-	privileged_without_host_devices = false
-	runtime_engine = ""
-	runtime_root = ""
-	runtime_type = "io.containerd.runc.v2"
-
-[plugins."io.containerd.grpc.v1.cri".containerd.runtimes.nvidia.options]
-	BinaryName = "/usr/local/nvidia/toolkit/nvidia-container-runtime"
-
-[plugins."io.containerd.grpc.v1.cri".containerd.runtimes.nvidia-experimental]
-	privileged_without_host_devices = false
-	runtime_engine = ""
-	runtime_root = ""
-	runtime_type = "io.containerd.runc.v2"
-
-[plugins."io.containerd.grpc.v1.cri".containerd.runtimes.nvidia-experimental.options]
-	BinaryName = "/usr/local/nvidia/toolkit/nvidia-container-runtime-experimental"
 EOF
 
 # Start RKE2

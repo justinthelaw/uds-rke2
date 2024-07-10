@@ -233,3 +233,4 @@ Below are resources to explain some of the rationale and inner workings of the R
 - [RKE2 Zarf Init](https://github.com/defenseunicorns/zarf-package-rke2-init)
 - [Zarf Longhorn Init](https://github.com/defenseunicorns/zarf-init-longhorn)
 - [UDS Rook-Ceph Capability](https://github.com/defenseunicorns/uds-capability-rook-ceph)
+- [UDS Nutanix SWF Bundle](https://github.com/defenseunicorns/uds-bundle-software-factory-nutanix/tree/main)

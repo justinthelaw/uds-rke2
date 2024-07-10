@@ -27,6 +27,9 @@ components:
     images:
       - registry1.dso.mil/ironbank/opensource/nvidia/gpu-operator:v24.3.0
       - registry1.dso.mil/ironbank/opensource/nvidia/gpu-operator-validator:v24.3.0
+      - registry1.dso.mil/ironbank/opensource/nvidia/k8s-device-plugin:v0.15.1-ubi8
+      - registry1.dso.mil/ironbank/opensource/nvidia/dcgm-exporter:3.3.6-3.4.2
+      - registry1.dso.mil/ironbank/opensource/nvidia/cuda:12.4
     charts:
       - name: gpu-operator
         url: https://helm.ngc.nvidia.com/nvidia

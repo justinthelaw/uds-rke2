@@ -7,6 +7,8 @@
 
 This Zarf package serves as an air-gapped production environment for deploying [UDS Core](https://github.com/defenseunicorns/uds-core), individual UDS Capabilities, and UDS capabilities aggregated (bundled) via the [UDS CLI](https://github.com/defenseunicorns/uds-cli).
 
+See the [UDS RKE2 Mermaid diagram](docs/DIAGRAM.md) for visual representations of the tech stack's components and order of operations.
+
 ## Table of Contents
 
 1. [Pre-Requisites](#pre-requisites)
@@ -21,8 +23,6 @@ This Zarf package serves as an air-gapped production environment for deploying [
 3. [Additional Info](#additional-info)
     - [Configuration](#configuration)
     - [Credits and Resources](#credits-and-resources)
-
-See the [UDS RKE2 Mermaid diagram](docs/DIAGRAM.md) for visual representations of the tech stack's components and order of operations.
 
 ## Pre-Requisites
 

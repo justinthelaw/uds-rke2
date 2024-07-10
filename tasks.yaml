@@ -22,6 +22,9 @@ variables:
   - name: NETWORK_INTERFACE
     description: "Interface on which to perform L2 advertisement"
     default: "wlp0s20f3"
+  - name: DOMAIN
+    description: "The default domain to use for gateway and CoreDNS"
+    default: "uds.local"
 
 tasks:
   ####################

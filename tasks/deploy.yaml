@@ -14,6 +14,9 @@ variables:
   - name: NETWORK_INTERFACE
     description: "Interface on which to perform L2 advertisement"
     default: "wlp0s20f3"
+  - name: DOMAIN
+    description: "The default domain to use for gateway and CoreDNS"
+    default: "uds.local"
 
   - name: DEPLOY_OPTIONS
     description: "Extra Zarf package deployment options"
@@ -230,6 +233,7 @@ tasks:
         with:
           path: build/packages
           name: leapfrogai-workarounds
+          extraOptions: "--set DOMAIN=${DOMAIN}"
 
   - name: nvidia-gpu-operator
     description: "Deploy the NVIDIA GPU Operator package"

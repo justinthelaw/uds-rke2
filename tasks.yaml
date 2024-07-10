@@ -45,7 +45,6 @@ tasks:
       - task: create:logical-volume
       - task: create:tls-cert-dev
 
-      - task: create:local-path-core-bundle-dev
       - task: deploy:local-path-core-bundle-dev
 
   ##########################

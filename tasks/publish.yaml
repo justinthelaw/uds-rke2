@@ -13,7 +13,7 @@ variables:
     default: "--no-progress --no-log-file --log-level warn"
   - name: PUBLISH_BUNDLE_OPTIONS
     description: "Extra UDS bundle publishing options"
-    default: "--no-progress --no-log-file --log-level warn --confirm"
+    default: "--no-progress --no-log-file --log-level warn"
   - name: TARGET_REGISTRY
     description: "Target registry to publish to"
     default: "ghcr.io"
@@ -78,7 +78,7 @@ tasks:
           sudo uds publish \
             "${{ .inputs.path }}/uds-bundle-${{ .inputs.name }}-amd64-${VERSION}.tar.zst" \
             "oci://${TARGET_REGISTRY}/${{ .inputs.targetRepo }}" \
-            ${PUBLISH_OPTIONS}
+            ${PUBLISH_BUNDLE_OPTIONS}
 
   #########
   # UTILITY

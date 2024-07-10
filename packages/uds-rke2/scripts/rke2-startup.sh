@@ -86,7 +86,7 @@ version = 2
   enable_selinux = false
   enable_unprivileged_ports = true
   enable_unprivileged_icmp = true
-  sandbox_image = "registry1.dso.mil/ironbank/opensource/pause/pause:3.9"
+  sandbox_image = "index.docker.io/rancher/mirrored-pause:3.6"
 
 [plugins."io.containerd.grpc.v1.cri".containerd]
   snapshotter = "overlayfs"

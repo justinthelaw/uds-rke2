@@ -1,7 +1,7 @@
 # Custom Zarf Init
 
 <!-- TODO: renovate setup -->
-**Supported Version**: v0.33.0
+**Supported Version**: v0.35.0
 
 The custom Zarf init package comes with 3 flavors:
 

@@ -215,7 +215,7 @@ tasks:
       - description: "Deploy the Zarf Init package for amd64 architectures"
         # TODO: renovate setup
         cmd: |
-          sudo uds zarf package deploy "build/packages/local-path/zarf-init-amd64-v0.33.0.tar.zst" \
+          sudo uds zarf package deploy "build/packages/local-path/zarf-init-amd64-v0.35.0.tar.zst" \
             ${{ .inputs.extraOptions }} \
             ${DEPLOY_OPTIONS}
 

@@ -109,9 +109,10 @@ packages:
             - path: fips
               value: true
 
+      # Access to UDS cluster administration services (e.g., *admin.uds.dev, grafana.admin.uds.dev)
+      # Access to UDS application services (e.g., *.uds.dev, ai.uds.dev)
       istio-admin-gateway:
         uds-istio-config:
-          # Access to UDS cluster administration services (e.g., *admin.uds.dev, grafana.admin.uds.dev)
           variables:
             - name: ADMIN_TLS_CERT
               description: "The TLS cert for the admin gateway (must be base64 encoded)"
@@ -119,9 +120,7 @@ packages:
             - name: ADMIN_TLS_KEY
               description: "The TLS key for the admin gateway (must be base64 encoded)"
               path: tls.key
-
       istio-tenant-gateway:
-        # Access to UDS application services (e.g., *.uds.dev, ai.uds.dev)
         uds-istio-config:
           variables:
             - name: TENANT_TLS_CERT

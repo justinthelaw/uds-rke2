@@ -39,6 +39,7 @@ variables:
 
     velero_use_secret: false
     velero_irsa_role_arn: ""
+
     # Zarf variables not available via UDS bundle values path overrides
     velero_bucket: uds
     velero_bucket_region: us-east-1
@@ -47,12 +48,12 @@ variables:
     velero_bucket_credential_key: uds-secret
 
     # TLS CERT and KEY values must be base64 encoded
-    # Paste the entire TLS CERT or KEY value into the values below
-    admin_tls_cert: |
+    # Paste the entire TLS CERT or KEY value into the fields below
+    admin_tls_cert: >
       replace-me-cert
-    admin_tls_key: |
+    admin_tls_key: >
       replace-me-key
-    tenant_tls_cert: |
+    tenant_tls_cert: >
       replace-me-cert
-    tenant_tls_key: |
+    tenant_tls_key: >
       replace-me-key

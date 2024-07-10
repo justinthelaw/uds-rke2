@@ -11,14 +11,6 @@ tasks:
   # UTILITY
   #########
 
-  - name: create-lvm
-    description: "Creates the default logical volume location on a node for Local Path Provisioner PVs"
-    actions:
-      - description: "Create directory with parents, if it does not already exist"
-        cmd: |
-          sudo mkdir -p /opt/uds
-          sudo chown -Rv 65534:65534 /opt/uds
-
   - name: clean-build-artifacts
     description: "Cleans the host of extraneous build artifacts"
     actions:
@@ -33,7 +25,9 @@ tasks:
     description: "Cleans hanging Docker artifacts"
     actions:
       - description: "Remove the build folder, Docker artifacts, and clear UDS and Zarf caches"
-        cmd: sudo docker system prune -a -f && sudo docker volume prune -f
+        cmd: |
+          sudo docker system prune -a -f
+          sudo docker volume prune -f
 
   - name: clean
     description: "Cleans the host system of extraneous build artifacts, as well as hanging Docker artifacts"

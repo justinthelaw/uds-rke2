@@ -56,7 +56,7 @@ jobs:
 
       - name: Create Default LVM for LPP
         run: |
-          sudo uds run setup:create-lvm
+          sudo uds run create:logical-volume
 
       - name: Create Default TLS Cert
         run: |

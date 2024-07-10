@@ -39,14 +39,9 @@ variables:
 
     velero_use_secret: false
     velero_irsa_role_arn: ""
+    # Zarf variables not available via UDS bundle values path overrides
     velero_bucket: uds
     velero_bucket_region: us-east-1
     velero_bucket_provider_url: http://minio.minio.svc.cluster.local:9000
     velero_bucket_credential_name: uds
     velero_bucket_credential_key: uds-secret
-
-    admin_tls_cert: ../tls.dev.cert
-    admin_tls_key: ../tls.dev.key
-
-    tenant_tls_cert: ../tls.dev.cert
-    tenant_tls_key: ../tls.dev.cert

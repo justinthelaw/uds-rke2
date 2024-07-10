@@ -63,6 +63,9 @@ packages:
             - path: loki.query_scheduler.max_outstanding_requests_per_tenant
               value: 32000 # This is the new default in Loki 3.0
           variables:
+            - name: LOKI_S3_ENDPOINT
+              description: "The S3 endpoint"
+              path: loki.storage.s3.endpoint
             - name: LOKI_CHUNKS_BUCKET
               description: "The object storage bucket for Loki chunks"
               path: loki.storage.bucketNames.chunks
@@ -72,9 +75,6 @@ packages:
             - name: LOKI_ADMIN_BUCKET
               description: "The object storage bucket for Loki admin"
               path: loki.storage.bucketNames.admin
-            - name: LOKI_S3_ENDPOINT
-              description: "The S3 endpoint"
-              path: loki.storage.s3.endpoint
             - name: LOKI_S3_REGION
               description: "The S3 region"
               path: loki.storage.s3.region
@@ -110,8 +110,9 @@ packages:
       keycloak:
         keycloak:
           values:
+            # TODO: this can only be `false` if a Postgres is integrated and accessible in the cluster
             - path: devMode
-              value: false
+              value: true
             - path: fips
               value: true
 
@@ -121,10 +122,10 @@ packages:
           variables:
             - name: ADMIN_TLS_CERT
               description: "The TLS cert for the admin gateway (must be base64 encoded)"
-              path: ../tls.dev.cert
+              path: ../tls.cert
             - name: ADMIN_TLS_KEY
               description: "The TLS key for the admin gateway (must be base64 encoded)"
-              path: ../tls.dev.key
+              path: ../tls.key
 
       istio-tenant-gateway:
         # Access to UDS application services (e.g., *.uds.dev, ai.uds.dev)
@@ -132,10 +133,10 @@ packages:
           variables:
             - name: TENANT_TLS_CERT
               description: "The TLS cert for the tenant gateway (must be base64 encoded)"
-              path: ../tls.dev.cert
+              path: ../tls.cert
             - name: TENANT_TLS_KEY
               description: "The TLS key for the tenant gateway (must be base64 encoded)"
-              path: ../tls.dev.key
+              path: ../tls.key
 
   - name: uds-rke2-exemptions
     description: "Deploys the UDS Core Pepr policy exemptions"

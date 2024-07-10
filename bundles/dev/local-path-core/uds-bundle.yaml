@@ -56,6 +56,9 @@ packages:
             - path: loki.query_scheduler.max_outstanding_requests_per_tenant
               value: 32000 # This is the new default in Loki 3.0
           variables:
+            - name: LOKI_S3_ENDPOINT
+              description: "The S3 endpoint"
+              path: loki.storage.s3.endpoint
             - name: LOKI_CHUNKS_BUCKET
               description: "The object storage bucket for Loki chunks"
               path: loki.storage.bucketNames.chunks
@@ -65,9 +68,6 @@ packages:
             - name: LOKI_ADMIN_BUCKET
               description: "The object storage bucket for Loki admin"
               path: loki.storage.bucketNames.admin
-            - name: LOKI_S3_ENDPOINT
-              description: "The S3 endpoint"
-              path: loki.storage.s3.endpoint
             - name: LOKI_S3_REGION
               description: "The S3 region"
               path: loki.storage.s3.region
@@ -103,8 +103,9 @@ packages:
       keycloak:
         keycloak:
           values:
+            # TODO: this can only be `false` if a Postgres is integrated and accessible in the cluster
             - path: devMode
-              value: false
+              value: true
             - path: fips
               value: true
 

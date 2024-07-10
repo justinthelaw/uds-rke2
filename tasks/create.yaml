@@ -10,13 +10,13 @@ variables:
 
   - name: CREATE_OPTIONS
     description: "Extra Zarf package creation options"
-    default: "--no-progress --no-log-file --log-level warn -a amd64 --confirm"
+    default: "--no-progress --no-log-file --log-level warn --confirm"
   - name: PULL_OPTIONS
     description: "Extra Zarf package pull options"
-    default: "--no-progress --no-log-file --log-level warn -a amd64"
+    default: "--no-progress --no-log-file --log-level warn"
   - name: CREATE_BUNDLE_OPTIONS
     description: "Extra UDS bundle creation options"
-    default: "--no-progress --no-tea --no-log-file --log-level warn -a amd64 --confirm"
+    default: "--no-progress --no-log-file --log-level warn --confirm"
 
   - name: CORE_PKG_VERSION
     description: "The version of UDS Core package to deploy"

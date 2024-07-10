@@ -20,7 +20,7 @@ variables:
     default: "--no-progress --no-log-file --log-level warn --confirm"
   - name: DEPLOY_BUNDLE_OPTIONS
     description: "Extra UDS bundle deployment options"
-    default: "--no-progress --no-tea --no-log-file --log-level warn -a amd64 --confirm"
+    default: "--no-progress --no-log-file --log-level warn --confirm"
 
 tasks:
   ###########

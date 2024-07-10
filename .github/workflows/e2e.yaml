@@ -64,12 +64,12 @@ jobs:
 
       - name: Deploy the UDS RKE2 Cluster and Infrastructure
         run: |
-          sudo uds run test:uds-rke2 --set VERSION=dev --no-progress --log-level warn -a amd64
+          sudo uds run test:uds-rke2 --set VERSION=dev --no-progress --log-level warn
 
       - name: Deploy the `local-path` Flavor Custom Zarf Init
         run: |
-          sudo uds run test:local-path-minio-init --set VERSION=dev --no-progress --log-level warn -a amd64
+          sudo uds run test:local-path-minio-init --set VERSION=dev --no-progress --log-level warn
 
       - name: Deploy the LeapfrogAI-specific Packages
         run: |
-          sudo uds run test:leapfrogai-specific-packages --set VERSION=dev --no-progress --log-level warn -a amd64
+          sudo uds run test:leapfrogai-specific-packages --set VERSION=dev --no-progress --log-level warn

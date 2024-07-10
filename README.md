@@ -124,7 +124,8 @@ export GHCR_PASSWORD="YOUR-PASSWORD-HERE"
 echo $GHCR_PASSWORD | uds zarf tools registry login ghcr.io --username $GHCR_USERNAME --password-stdin
 set -o history
 
-uds run create:nvidia-gpu-operator
+# Use UDS_ARCHITECTURE to override the default package or bundle architecture
+UDS_ARCHITECTURE=amd64 uds run create:nvidia-gpu-operator
 ```
 
 #### Deploy

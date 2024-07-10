@@ -1,10 +1,6 @@
 # TODO: renovate setup
 # yaml-language-server: $schema=https://raw.githubusercontent.com/defenseunicorns/uds-cli/v0.10.4/tasks.schema.json
 
-includes:
-  - create: create.yaml
-  - setup: setup.yaml
-
 variables:
   - name: VERSION
     description: "Explicitly set the version, overriding the official release tag"
@@ -23,66 +19,6 @@ variables:
     default: "ghcr.io"
 
 tasks:
-  ##########################
-  # ALL PACKAGES AND BUNDLES
-  ##########################
-
-  # TODO: re-enable rook-ceph and longhorn when built
-  - name: packages-without-clean
-    description: "Builds and publishes all Zarf packages in the repository WITHOUT cleaning artifacts (LATEST)"
-    actions:
-      # Standard uds-rke2-local-path-core Zarf packages
-      - task: create:uds-rke2
-      - task: uds-rke2
-      - task: create:uds-rke2-infrastructure
-      - task: uds-rke2-infrastructure
-      - task: create:uds-rke2-exemptions-local-path
-      - task: uds-rke2-exemptions-local-path
-      - task: create:local-path
-      - task: local-path
-      - task: create:local-path-init
-      - task: local-path-init
-      - task: create:minio
-      - task: minio
-
-      # Extra, optional Zarf packages
-      - task: create:leapfrogai-workarounds
-      - task: leapfrogai-workarounds
-      - task: create:nvidia-gpu-operator
-      - task: nvidia-gpu-operator
-
-  # TODO: re-enable rook-ceph and longhorn when built
-  - name: packages-with-clean
-    description: "Builds and publishes all Zarf packages in the repository (LATEST)"
-    actions:
-      # Standard uds-rke2-local-path-core Zarf packages
-      - task: create:uds-rke2
-      - task: uds-rke2
-      - task: setup:clean-build-artifacts
-      - task: create:uds-rke2-infrastructure
-      - task: uds-rke2-infrastructure
-      - task: setup:clean-build-artifacts
-      - task: create:uds-rke2-exemptions-local-path
-      - task: uds-rke2-exemptions-local-path
-      - task: setup:clean-build-artifacts
-      - task: create:local-path
-      - task: local-path
-      - task: setup:clean-build-artifacts
-      - task: create:local-path-init
-      - task: local-path-init
-      - task: setup:clean-build-artifacts
-      - task: create:minio
-      - task: minio
-      - task: setup:clean-build-artifacts
-
-      # Extra, optional Zarf packages
-      - task: create:leapfrogai-workarounds
-      - task: leapfrogai-workarounds
-      - task: setup:clean-build-artifacts
-      - task: create:nvidia-gpu-operator
-      - task: nvidia-gpu-operator
-      - task: setup:clean-build-artifacts
-
   ###########
   # REUSEABLE
   ###########

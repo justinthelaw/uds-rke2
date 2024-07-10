@@ -1,9 +1,6 @@
 # TODO: renovate setup
 # yaml-language-server: $schema=https://raw.githubusercontent.com/defenseunicorns/uds-cli/v0.10.4/tasks.schema.json
 
-includes:
-  - create: create.yaml
-
 variables:
   - name: VERSION
     description: "Explicitly set the version, overriding the official release tag"
@@ -90,9 +87,6 @@ tasks:
   - name: local-path-core-bundle
     description: "Deploy the Local Path Provisioner UDS RKE2 bootstrapping bundle"
     actions:
-      - task: create:logical-volume
-      - task: create:tls-cert
-
       - task: bundle
         with:
           name: uds-rke2-local-path-core
@@ -105,9 +99,6 @@ tasks:
   - name: local-path-core-bundle-dev
     description: "Deploy the Local Path Provisioner UDS RKE2 bootstrapping bundle"
     actions:
-      - task: create:logical-volume
-      - task: create:tls-cert-dev
-
       - task: bundle
         with:
           name: uds-rke2-local-path-core

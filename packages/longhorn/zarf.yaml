@@ -1,5 +1,5 @@
 # TODO: renovate setup
-# yaml-language-server: $schema=https://raw.githubusercontent.com/defenseunicorns/uds-cli/v0.10.4/zarf.schema.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/defenseunicorns/uds-cli/v0.12.0/zarf.schema.json
 
 #### NOTES ####
 #

@@ -21,7 +21,7 @@ variables:
   - name: CORE_PKG_VERSION
     description: "The version of UDS Core package to deploy"
     # TODO: renovate setup
-    default: "0.22.2"
+    default: "0.23.0"
   - name: CORE_PKG_FLAVOR
     description: "Flavor of the package to use (`registry1` or `upstream`)."
     default: "registry1"

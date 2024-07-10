@@ -138,10 +138,8 @@ For example, to deploy the UDS RKE2 bootstrap bundle with `local-path` flavor, d
 
 ```bash
 # create the /opt/uds directory on an existing mounted LVM
-sudo mkdir /opt/uds
-
 # change permissions to the nonroot or nobody user for local storage volume creation
-sudo chown -Rv 65534:65534 /opt/uds
+uds run create:logical-volume
 
 # deploy the local dev version
 uds run uds-rke2-local-path-core-dev
@@ -163,8 +161,8 @@ export GHCR_PASSWORD="YOUR-PASSWORD-HERE"
 echo $GHCR_PASSWORD | zarf tools registry login ghcr.io --username $GHCR_USERNAME --password-stdin
 set -o history
 
-# with-clean or without-clean
-uds run publish:release-without-clean
+# release all packages with a `dev` version
+uds run release-all-packages-dev
 ```
 
 #### Remove

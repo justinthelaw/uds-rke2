@@ -1,5 +1,5 @@
 # TODO: renovate setup
-# yaml-language-server: $schema=https://raw.githubusercontent.com/defenseunicorns/uds-cli/v0.10.4/uds.schema.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/defenseunicorns/uds-cli/v0.12.0/uds.schema.json
 
 kind: UDSBundle
 metadata:
@@ -49,7 +49,7 @@ packages:
     description: "Deploys UDS Core services"
     repository: ghcr.io/defenseunicorns/packages/uds/core
     # TODO: renovate setup
-    ref: "0.22.2-registry1"
+    ref: "0.23.0-registry1"
     overrides:
       loki:
         loki:

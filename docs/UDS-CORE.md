@@ -1,7 +1,7 @@
 # UDS Core
 
 <!-- TODO: renovate setup -->
-**Supported Version**: 0.22.2
+**Supported Version**: 0.23.0
 
 > [!CAUTION]
 > UDS Core will not deploy or function properly unless deployed as part of a UDS bundle with the proper overrides applied.

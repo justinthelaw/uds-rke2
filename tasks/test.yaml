@@ -2,9 +2,9 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/defenseunicorns/uds-cli/v0.10.4/tasks.schema.json
 
 includes:
-  - create: create.yaml
-  - deploy: deploy.yaml
-  - setup: setup.yaml
+  - create: ./create.yaml
+  - deploy: ./deploy.yaml
+  - setup: ./setup.yaml
 
 variables:
   - name: VERSION

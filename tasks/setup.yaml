@@ -29,12 +29,17 @@ tasks:
           sudo rm -rf bundles/dev/tls.cert bundles/dev/tls.key
           sudo rm -rf bundles/latest/tls.cert bundles/latest/tls.key
 
+  - name: clean-docker
+    description: "Cleans hanging Docker artifacts"
+    actions:
+      - description: "Remove the build folder, Docker artifacts, and clear UDS and Zarf caches"
+        cmd: sudo docker system prune -a -f && sudo docker volume prune -f
+
   - name: clean
     description: "Cleans the host system of extraneous build artifacts, as well as hanging Docker artifacts"
     actions:
       - task: clean-build-artifacts
-      - description: "Remove the build folder, Docker artifacts, and clear UDS and Zarf caches"
-        cmd: sudo docker system prune -a -f && sudo docker volume prune -f
+      - task: clean-docker
 
   - name: rook-ceph-destroy
     description: "Destroys an existing Rook-Ceph cluster installation and all associated data on the host node"

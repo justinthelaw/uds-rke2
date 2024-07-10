@@ -15,6 +15,41 @@ The Kubernetes Node Feature Discovery component allows other Kubernetes resource
 
 The NVIDIA Container Toolkit allows containerized applications and services to consume NVIDIA GPUs as resources. This is usually pre-installed on the host node prior to air-gapping or via an internally mirrored package repository or by bringing in the dependencies into the air-gap. The NVIDIA GPU Operator includes a DaemonSet that can be enabled to install the NVIDIA Container Toolkit on the host as a Kubernetes resource, allowing engineers the flexibility of deploying and updating the toolkit in a Kubernetes-native way.
 
+If your NVIDIA Container Toolkit is pre-installed, please ensure that the `containerd` runtime was correctly configured post-toolkit installation. The `/etc/containerd/config.toml` should look something like this:
+
+```toml
+version = 2
+
+[plugins]
+
+  [plugins."io.containerd.grpc.v1.cri"]
+    enable_cdi = true
+    cdi_spec_dirs = ["/etc/cdi", "/var/run/cdi"]
+
+    [plugins."io.containerd.grpc.v1.cri".containerd]
+      default_runtime_name = "nvidia"  
+
+      [plugins."io.containerd.grpc.v1.cri".containerd.runtimes]
+
+        [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.nvidia]
+          privileged_without_host_devices = false
+          runtime_engine = ""
+          runtime_root = ""
+          runtime_type = "io.containerd.runc.v2"
+
+          [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.nvidia.options]
+            BinaryName = "/usr/local/nvidia/toolkit/nvidia-container-runtime"
+
+        [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.nvidia-experimental]
+          privileged_without_host_devices = false
+          runtime_engine = ""
+          runtime_root = ""
+          runtime_type = "io.containerd.runc.v2"
+
+          [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.nvidia-experimental.options]
+            BinaryName = "/usr/local/nvidia/toolkit/nvidia-container-runtime-experimental"
+```
+
 ### NVIDIA GPU Drivers
 
 NVIDIA's Driver GPUs are usually pre-installed on the host node, similar to the NVIDIA Container Toolkit. Upgrading GPU drivers and ensuring they remain up-to-date can be done using the NVIDIA GPU Operator as well. By providing the correct pre-compiled drivers within the [`nvidia-gpu-operator-values.yaml`](../packages/nvidia-gpu-operator/values/nvidia-gpu-operator-values.yaml), and ensuring the host meets minimum requirements for installing these drivers via a Kubernetes pod, engineers can maintain and deploy drivers to host node sin a Kubernetes-native way.

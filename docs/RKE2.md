@@ -53,7 +53,7 @@ An example setup is provided below:
 
 The `containerd` configuration template is within the startup script. This configuration template adds options to the host's `containerd` configuration, as seen in the example below:
 
-```yaml
+```toml
 # /var/lib/rancher/rke2/agent/etc/containerd/config.toml.tmpl
 version = 2
 

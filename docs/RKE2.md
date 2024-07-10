@@ -49,6 +49,56 @@ An example setup is provided below:
 - Node3: `/root/rke2-startup.sh -t <token> -s <rke2_lb_address> -T <rke2_dns_address>`
 - NodeN (agent nodes): `/root/rke2-startup.sh -t <token> -s <rke2_lb_address> -a`
 
+### Script `containerd` Configuration
+
+The `containerd` configuration is within the startup script. This configuration enables the creations of an NVIDIA Container Runtime enabled cluster, and also provides workarounds for certain hardening aspects required for running Kubernetes clusters in a more secure fashion with RKE2.
+
+An example injection of the configuration is shown below:
+
+```yaml
+# /var/lib/rancher/rke2/agent/etc/containerd/config.toml.tmpl
+version = 2
+
+[plugins."io.containerd.internal.v1.opt"]
+  path = "/var/lib/rancher/rke2/agent/containerd"
+
+[plugins."io.containerd.grpc.v1.cri"]
+  stream_server_address = "127.0.0.1"
+  stream_server_port = "10010"
+  enable_selinux = false
+  enable_unprivileged_ports = true
+  enable_unprivileged_icmp = true
+  sandbox_image = "registry1.dso.mil/ironbank/opensource/pause/pause:3.9"
+
+[plugins."io.containerd.grpc.v1.cri".containerd]
+  snapshotter = "overlayfs"
+  disable_snapshot_annotations = true
+
+[plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc]
+  runtime_type = "io.containerd.runc.v2"
+
+[plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc.options]
+  SystemdCgroup = true
+
+[plugins."io.containerd.grpc.v1.cri".containerd.runtimes.nvidia]
+ privileged_without_host_devices = false
+ runtime_engine = ""
+ runtime_root = ""
+ runtime_type = "io.containerd.runc.v2"
+
+[plugins."io.containerd.grpc.v1.cri".containerd.runtimes.nvidia.options]
+ BinaryName = "/usr/local/nvidia/toolkit/nvidia-container-runtime"
+
+[plugins."io.containerd.grpc.v1.cri".containerd.runtimes.nvidia-experimental]
+ privileged_without_host_devices = false
+ runtime_engine = ""
+ runtime_root = ""
+ runtime_type = "io.containerd.runc.v2"
+
+[plugins."io.containerd.grpc.v1.cri".containerd.runtimes.nvidia-experimental.options]
+ BinaryName = "/usr/local/nvidia/toolkit/nvidia-container-runtime-experimental"
+```
+
 ## Additional Info
 
 - [RKE2 Releases](https://github.com/rancher/rke2/releases)

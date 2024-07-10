@@ -86,7 +86,7 @@ version = 2
   enable_selinux = false
   enable_unprivileged_ports = true
   enable_unprivileged_icmp = true
-  sandbox_image = "index.docker.io/rancher/mirrored-pause:3.6"
+  sandbox_image = "registry1.dso.mil/ironbank/opensource/pause/pause:3.9"
 
 [plugins."io.containerd.grpc.v1.cri".containerd]
   snapshotter = "overlayfs"
@@ -97,6 +97,24 @@ version = 2
 
 [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc.options]
   SystemdCgroup = true
+
+[plugins."io.containerd.grpc.v1.cri".containerd.runtimes.nvidia]
+	privileged_without_host_devices = false
+	runtime_engine = ""
+	runtime_root = ""
+	runtime_type = "io.containerd.runc.v2"
+
+[plugins."io.containerd.grpc.v1.cri".containerd.runtimes.nvidia.options]
+	BinaryName = "/usr/local/nvidia/toolkit/nvidia-container-runtime"
+
+[plugins."io.containerd.grpc.v1.cri".containerd.runtimes.nvidia-experimental]
+	privileged_without_host_devices = false
+	runtime_engine = ""
+	runtime_root = ""
+	runtime_type = "io.containerd.runc.v2"
+
+[plugins."io.containerd.grpc.v1.cri".containerd.runtimes.nvidia-experimental.options]
+	BinaryName = "/usr/local/nvidia/toolkit/nvidia-container-runtime-experimental"
 EOF
 
 # Start RKE2

@@ -6,6 +6,7 @@ platform:
   openshift: false
 
 nfd:
+  # usually enabled by default, but choose to use external NFD from IronBank
   enabled: false
   nodefeaturerules: false
 
@@ -248,7 +249,16 @@ toolkit:
   version: v1.16.0-rc.1-ubuntu20.04
   imagePullPolicy: IfNotPresent
   imagePullSecrets: []
-  env: []
+  env:
+  # RKE2-specific configurations
+  - name: CONTAINERD_CONFIG
+    value: /var/lib/rancher/rke2/agent/etc/containerd/config.toml.tmpl
+  - name: CONTAINERD_SOCKET
+    value: /run/k3s/containerd/containerd.sock
+  - name: CONTAINERD_RUNTIME_CLASS
+    value: nvidia
+  - name: CONTAINERD_SET_AS_DEFAULT
+    value: "true"
   resources: {}
   installDir: "/usr/local/nvidia"
 

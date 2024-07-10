@@ -30,7 +30,7 @@ See the [UDS RKE2 Mermaid diagram](docs/DIAGRAM.md) for visual representations o
 
 The following are requirements for an environment where a user is deploying UDS RKE2 and its custom components and applications.
 
-- A base installation of [Ubuntu Server 20.04+](https://ubuntu.com/download/server) on the node's host system
+- A base installation of [Ubuntu 20.04 or 22.04](https://ubuntu.com/download/server) on the node's host system (server or desktop)
 - [UDS CLI](https://github.com/defenseunicorns/uds-cli/blob/main/README.md#install) using the versions specified in the [UDS Common repository](https://github.com/defenseunicorns/uds-common/blob/main/README.md#supported-tool-versions)
 - See the RKE2 documentation for host system [pre-requisites](https://docs.rke2.io/install/requirements)
 - See the [Application-Specific](#application-specific) and [Infrastructure Flavor-Specific](#infrastructure-flavor-specific) configuration sections for instruction on setup based on what is deployed atop UDS RKE2
@@ -163,11 +163,8 @@ export GHCR_PASSWORD="YOUR-PASSWORD-HERE"
 echo $GHCR_PASSWORD | zarf tools registry login ghcr.io --username $GHCR_USERNAME --password-stdin
 set -o history
 
-# if create:all was already run
-uds run publish:all
-
-# if create:all was not already run
-uds run release
+# with-clean or without-clean
+uds run publish:release-without-clean
 ```
 
 #### Remove

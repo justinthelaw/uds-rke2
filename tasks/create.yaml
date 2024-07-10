@@ -119,12 +119,12 @@ tasks:
   - name: tls-cert
     description: "Generate self-signed TLS certs for testing (LATEST)"
     actions:
-      - cmd: openssl req -x509 -newkey rsa:4096 -keyout tls.key -out tls.cert -days 365 -nodes -config tls-cert.conf
+      - cmd: openssl req -x509 -newkey rsa:4096 -keyout bundles/latest/tls.key -out bundles/latest/tls.cert -days 365 -nodes -config bundles/latest/tls-cert.conf
 
   - name: tls-cert-dev
     description: "Generate self-signed TLS certs for testing (DEV)"
     actions:
-      - cmd: openssl req -x509 -newkey rsa:4096 -keyout bundles/tls.key -out tls.cert -days 365 -nodes -config tls-cert.dev.conf
+      - cmd: openssl req -x509 -newkey rsa:4096 -keyout bundles/dev/tls.key -out bundles/dev/tls.cert -days 365 -nodes -config bundles/dev/tls-cert.conf
 
   #########
   # BUNDLES

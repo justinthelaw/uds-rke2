@@ -69,8 +69,8 @@ jobs:
           echo "Publishing for tag: ${{ github.ref }}"
 
           if [[ "${{ github.ref }}" == "refs/tags/dev" ]]; then
-           sudo uds run release-dev --set VERSION=dev --no-progress --no-log-file --log-level warn
+           sudo uds run publish:release-with-clean --set VERSION=dev --no-progress --no-log-file --log-level warn
           else
-            sudo uds run release --no-progress --no-log-file --log-level warn
+            sudo uds run publish:release-with-clean --no-progress --no-log-file --log-level warn
           fi
         shell: bash

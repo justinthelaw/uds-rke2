@@ -139,7 +139,7 @@ chmod 0700 $DIR/pod-manifests
 chmod 0700 $DIR/etc
 
 find /var/lib/rancher/rke2 -maxdepth 1 -type f -name "*.kubeconfig" -exec chmod 0640 {} \;
-find /var/lib/rancher/rke2 -maxdepth 1 -type f -name "*.crt" -exec chmod 0600 {} \;
+find /var/lib/rancher/rke2 -maxdepth 1 -type f -name "*.cert" -exec chmod 0600 {} \;
 find /var/lib/rancher/rke2 -maxdepth 1 -type f -name "*.key" -exec chmod 0600 {} \;
 
 DIR=/var/lib/rancher/rke2/bin

@@ -11,10 +11,10 @@ tmp/
 uds-bundle-*.tar.zst
 
 # Secrets
-**/*.cert
-**/*.key
-certs/
-cert/
+tls/
+cert*/
+**/*.cert*
+**/*.key*
 
 # Builds
 build/

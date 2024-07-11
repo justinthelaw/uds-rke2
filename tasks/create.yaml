@@ -83,10 +83,13 @@ tasks:
       outputPath:
         description: "Output path to the UDS bundle being created"
         required: true
+      udsConfig:
+        description: "UDS configuration manifest for deployment"
+        required: true
     actions:
       - description: "Create the UDS bundle for the amd64 architectures"
         cmd: |
-          sudo UDS_CONFIG=${{ .inputs.path }}/uds-config.yaml uds create "${{ .inputs.path }}" \
+          sudo UDS_CONFIG=${{ .inputs.udsConfig }} uds create "${{ .inputs.path }}" \
             -o "${{ .inputs.outputPath }}" \
             ${CREATE_BUNDLE_OPTIONS}
 
@@ -103,14 +106,37 @@ tasks:
           sudo chown -Rv 65534:65534 /opt/uds
 
   - name: tls
-    description: "Generate self-signed TLS certs for testing (LATEST)"
+    description: "Generate self-signed TLS certs, and encodes them in base64, for build and testing purposes"
+    inputs:
+      flavor:
+        description: "Flavor of the custom Zarf Init package (local-path, rook-ceph, or longhorn)"
+        required: true
+      bundleVersion:
+        description: "Version of the bundle to create (dev or latest)"
+        required: true
+      tlsConfiguration:
+        description: "TLS configuration file to be used for cert and key creation"
+        required: true
     actions:
-      - cmd: openssl req -x509 -newkey rsa:4096 -keyout bundles/latest/tls.key -out bundles/latest/tls.cert -days 365 -nodes -config bundles/latest/tls.conf
+      - cmd: |
+          mkdir -p build/${{ .inputs.flavor }}/tls/
+          touch build/${{ .inputs.flavor }}/uds-config-${{ .inputs.bundleVersion }}.yaml
 
-  - name: tls-dev
-    description: "Generate self-signed TLS certs for testing (DEV)"
-    actions:
-      - cmd: openssl req -x509 -newkey rsa:4096 -keyout bundles/dev/tls.key -out bundles/dev/tls.cert -days 365 -nodes -config bundles/dev/tls.conf
+          openssl req -x509 -newkey rsa:4096 \
+            -keyout build/${{ .inputs.flavor }}/tls/tls.key \
+            -out build/${{ .inputs.flavor }}/tls/tls.cert \
+            -config ${{ .inputs.tlsConfiguration }} \
+            -days 365 -nodes
+
+          base64 -w 0  build/${{ .inputs.flavor }}/tls/tls.cert >  build/${{ .inputs.flavor }}/tls/tls.cert.base64
+          base64 -w 0  build/${{ .inputs.flavor }}/tls/tls.key >  build/${{ .inputs.flavor }}/tls/tls.key.base64
+          uds zarf tools yq eval-all '
+            .variables.uds-core.admin_tls_cert = "'"$(cat build/${{ .inputs.flavor }}/tls/tls.cert.base64)"'" |
+            .variables.uds-core.admin_tls_key = "'"$(cat build/${{ .inputs.flavor }}/tls/tls.key.base64)"'" |
+            .variables.uds-core.tenant_tls_cert = "'"$(cat build/${{ .inputs.flavor }}/tls/tls.cert.base64)"'" |
+            .variables.uds-core.tenant_tls_key = "'"$(cat build/${{ .inputs.flavor }}/tls/tls.key.base64)"'"
+          ' bundles/${{ .inputs.bundleVersion }}/${{ .inputs.flavor }}-core/uds-config.yaml \
+            > build/${{ .inputs.flavor }}/uds-config-${{ .inputs.bundleVersion }}.yaml
 
   #########
   # BUNDLES
@@ -123,6 +149,7 @@ tasks:
         with:
           path: "bundles/latest/local-path-core"
           outputPath: "build/bundles"
+          udsConfig: "build/local-path/uds-config-latest.yaml"
 
   - name: local-path-core-bundle-dev
     description: "Build the Local Path Provisioner UDS RKE2 bootstrapping bundle (DEV)"
@@ -131,6 +158,7 @@ tasks:
         with:
           path: "bundles/dev/local-path-core"
           outputPath: "build/bundles"
+          udsConfig: "build/local-path/uds-config-dev.yaml"
 
   ###################
   # STANDARD PACKAGES

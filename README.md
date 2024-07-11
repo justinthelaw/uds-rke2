@@ -97,10 +97,28 @@ See the [Configuration section](#configuration) for more details on each specifi
 
 This repository uses [UDS CLI](https://github.com/defenseunicorns/uds-cli)'s built-in [task runner](https://github.com/defenseunicorns/maru-runner) to perform all actions required to run, develop, and publish the UDS RKE2 tech stack.
 
-Run the following to see all the tasks in the main [`tasks.yaml`](./tasks.yaml), and their descriptions:
+Run the following to see all the tasks in the "root" [`tasks.yaml`](./tasks.yaml), and their descriptions:
 
 ```bash
 uds run --list-all
+```
+
+Running most create, release or "root" tasks requires logging into GitHub Container Registry (GHCR) and [DoD's Registry1](https://registry1.dso.mil/):
+
+```bash
+# Login to GHCR
+set +o history
+export GHCR_USERNAME="YOUR-USERNAME-HERE"
+export GHCR_PASSWORD="YOUR-PASSWORD-HERE"
+echo $GHCR_PASSWORD | uds zarf tools registry login ghcr.io --username $GHCR_USERNAME --password-stdin
+set -o history
+
+# Login to Registry1
+set +o history
+export REGISTRY1_USERNAME="YOUR-USERNAME-HERE"
+export REGISTRY1_PASSWORD="YOUR-PASSWORD-HERE"
+echo $REGISTRY1_PASSWORD | uds zarf tools registry login registry1.dso.mil --username $REGISTRY1_USERNAME --password-stdin
+set -o history
 ```
 
 #### Create
@@ -110,22 +128,7 @@ See the UDS [`create` tasks](./tasks/create.yaml) file for more details.
 To create a packages and bundles, reference the following example for NVIDIA GPU Operator:
 
 ```bash
-# Login to Registry1
-set +o history
-export REGISTRY1_USERNAME="YOUR-USERNAME-HERE"
-export REGISTRY1_PASSWORD="YOUR-PASSWORD-HERE"
-echo $REGISTRY1_PASSWORD | uds zarf tools registry login registry1.dso.mil --username $REGISTRY1_USERNAME --password-stdin
-set -o history
-
-# Login to GHCR
-set +o history
-export GHCR_USERNAME="YOUR-USERNAME-HERE"
-export GHCR_PASSWORD="YOUR-PASSWORD-HERE"
-echo $GHCR_PASSWORD | uds zarf tools registry login ghcr.io --username $GHCR_USERNAME --password-stdin
-set -o history
-
-# Use UDS_ARCHITECTURE to override the default package or bundle architecture
-UDS_ARCHITECTURE=amd64 uds run create:nvidia-gpu-operator
+uds run create:nvidia-gpu-operator
 ```
 
 #### Deploy
@@ -146,7 +149,17 @@ uds run create:logical-volume
 uds run uds-rke2-local-path-core-dev
 ```
 
-Please note that the above steps vary from the original [`local-path`](./docs/LOCAL-PATH.md) instructions for simplicity sake.
+Please note that the above steps vary slightly from the original [`local-path`](./docs/LOCAL-PATH.md) instructions for simplicity sake.
+
+If you have modified the uds-config.yaml, but none of the bundle components, and want to complete a re-deployment, you will need to run the TLS creation and injection step again:
+
+```bash
+# recreate the dev TLS certs and inject into the modified uds-config.yaml
+uds run create-tls-local-path-dev
+
+# deploy the pre-created UDS bundle with the modified uds-config.yaml
+uds run deploy:local-path-core-bundle-dev
+```
 
 #### Publish
 
@@ -155,15 +168,8 @@ See the UDS [`publish` tasks](./tasks/publish.yaml) file for more details. Also 
 To publish all packages and bundles, do the following:
 
 ```bash
-# Login to GHCR
-set +o history
-export GHCR_USERNAME="YOUR-USERNAME-HERE"
-export GHCR_PASSWORD="YOUR-PASSWORD-HERE"
-echo $GHCR_PASSWORD | zarf tools registry login ghcr.io --username $GHCR_USERNAME --password-stdin
-set -o history
-
 # release all packages with a `dev` version
-uds run release-all-packages-dev
+uds run release-dev
 ```
 
 #### Remove

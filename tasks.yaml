@@ -27,6 +27,28 @@ variables:
     default: "uds.local"
 
 tasks:
+  #########
+  # UTILITY
+  #########
+
+  - name: create-tls-local-path
+    description: "Utility to re-create TLS cert and key, and inject them into the uds-config.yaml"
+    actions:
+      - task: create:tls
+        with:
+          flavor: local-path
+          bundleVersion: latest
+          tlsConfiguration: bundles/latest/tls.conf
+
+  - name: create-tls-local-path-dev
+    description: "Utility to re-create TLS cert and key, and inject them into the uds-config.yaml"
+    actions:
+      - task: create:tls
+        with:
+          flavor: local-path
+          bundleVersion: dev
+          tlsConfiguration: bundles/dev/tls.conf
+
   ####################
   # BUNDLE DEPLOYMENTS
   ####################
@@ -36,6 +58,10 @@ tasks:
     actions:
       - task: create:logical-volume
       - task: create:tls
+        with:
+          flavor: local-path
+          bundleVersion: latest
+          tlsConfiguration: bundles/latest/tls.conf
 
       - task: create:local-path-core-bundle
       - task: deploy:local-path-core-bundle
@@ -46,7 +72,11 @@ tasks:
       - task: release-dev
 
       - task: create:logical-volume
-      - task: create:tls-dev
+      - task: create:tls
+        with:
+          flavor: local-path
+          bundleVersion: dev
+          tlsConfiguration: bundles/dev/tls.conf
 
       - task: deploy:local-path-core-bundle-dev
 

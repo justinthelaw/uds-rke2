@@ -49,11 +49,7 @@ variables:
 
     # TLS CERT and KEY values must be base64 encoded
     # Paste the entire TLS CERT or KEY value into the fields below
-    admin_tls_cert: >
-      replace-me-cert
-    admin_tls_key: >
-      replace-me-key
-    tenant_tls_cert: >
-      replace-me-cert
-    tenant_tls_key: >
-      replace-me-key
+    admin_tls_cert: BASE_64_ENCODED_TLS_CERT
+    admin_tls_key: BASE_64_ENCODED_TLS_KEY
+    tenant_tls_cert: BASE_64_ENCODED_TLS_CERT
+    tenant_tls_key: BASE_64_ENCODED_TLS_KEY

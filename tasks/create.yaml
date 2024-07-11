@@ -119,22 +119,22 @@ tasks:
         required: true
     actions:
       - cmd: |
-          mkdir -p build/${{ .inputs.flavor }}/tls/
+          mkdir -p build/packages/${{ .inputs.flavor }}/tls/
           touch build/${{ .inputs.flavor }}/uds-config-${{ .inputs.bundleVersion }}.yaml
 
           openssl req -x509 -newkey rsa:4096 \
-            -keyout build/${{ .inputs.flavor }}/tls/tls.key \
-            -out build/${{ .inputs.flavor }}/tls/tls.cert \
+            -keyout build/packages/${{ .inputs.flavor }}/tls/tls.key \
+            -out build/packages/${{ .inputs.flavor }}/tls/tls.cert \
             -config ${{ .inputs.tlsConfiguration }} \
             -days 365 -nodes
 
-          base64 -w 0 build/${{ .inputs.flavor }}/tls/tls.cert >  build/${{ .inputs.flavor }}/tls/tls.cert.base64
-          base64 -w 0 build/${{ .inputs.flavor }}/tls/tls.key >  build/${{ .inputs.flavor }}/tls/tls.key.base64
+          base64 -w 0 build/packages/${{ .inputs.flavor }}/tls/tls.cert >  build/packages/${{ .inputs.flavor }}/tls/tls.cert.base64
+          base64 -w 0 build/packages/${{ .inputs.flavor }}/tls/tls.key >  build/packages/${{ .inputs.flavor }}/tls/tls.key.base64
           uds zarf tools yq eval-all '
-            .variables.uds-core.admin_tls_cert = "'"$(cat build/${{ .inputs.flavor }}/tls/tls.cert.base64)"'" |
-            .variables.uds-core.admin_tls_key = "'"$(cat build/${{ .inputs.flavor }}/tls/tls.key.base64)"'" |
-            .variables.uds-core.tenant_tls_cert = "'"$(cat build/${{ .inputs.flavor }}/tls/tls.cert.base64)"'" |
-            .variables.uds-core.tenant_tls_key = "'"$(cat build/${{ .inputs.flavor }}/tls/tls.key.base64)"'"
+            .variables.uds-core.admin_tls_cert = "'"$(cat build/packages/${{ .inputs.flavor }}/tls/tls.cert.base64)"'" |
+            .variables.uds-core.admin_tls_key = "'"$(cat build/packages/${{ .inputs.flavor }}/tls/tls.key.base64)"'" |
+            .variables.uds-core.tenant_tls_cert = "'"$(cat build/packages/${{ .inputs.flavor }}/tls/tls.cert.base64)"'" |
+            .variables.uds-core.tenant_tls_key = "'"$(cat build/packages/${{ .inputs.flavor }}/tls/tls.key.base64)"'"
           ' bundles/${{ .inputs.bundleVersion }}/${{ .inputs.flavor }}-core/uds-config.yaml \
             > build/${{ .inputs.flavor }}/uds-config-${{ .inputs.bundleVersion }}.yaml
 

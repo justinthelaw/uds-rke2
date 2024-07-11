@@ -54,22 +54,22 @@ jobs:
           registry1Password: ${{secrets.IRON_BANK_ROBOT_PASSWORD}}
           ghToken: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Create Default LVM for LPP
+      - name: Test Create Default LVM
         run: |
           sudo uds run create:logical-volume
 
-      - name: Create Default TLS Cert
+      - name: Test Create Default TLS Cert
         run: |
-          sudo uds run create:tls-dev
+          sudo uds run create-tls-local-path-dev
 
-      - name: Deploy the UDS RKE2 Cluster and Infrastructure
+      - name: Test Deploy UDS RKE2
         run: |
           sudo uds run test:uds-rke2 --set VERSION=dev --no-progress --log-level warn
 
-      - name: Deploy the `local-path` Flavor Custom Zarf Init
+      - name: Test Deploy `local-path` Flavor Custom Zarf Init
         run: |
           sudo uds run test:local-path-minio-init --set VERSION=dev --no-progress --log-level warn
 
-      - name: Deploy the LeapfrogAI-specific Packages
+      - name: Test Deploy LeapfrogAI-specific Packages
         run: |
           sudo uds run test:leapfrogai-specific-packages --set VERSION=dev --no-progress --log-level warn

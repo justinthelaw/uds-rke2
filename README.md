@@ -160,7 +160,8 @@ See the UDS [`create` tasks](./tasks/create.yaml) file for more details.
 To create individual packages and bundles, reference the following example for NVIDIA GPU Operator:
 
 ```bash
-uds run create:nvidia-gpu-operator
+# create the local dev version of the Zarf package
+uds run create:nvidia-gpu-operator --set VERSION=dev
 ```
 
 #### Publish

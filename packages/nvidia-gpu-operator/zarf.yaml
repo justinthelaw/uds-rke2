@@ -30,9 +30,6 @@ components:
       - registry1.dso.mil/ironbank/opensource/nvidia/k8s-device-plugin:v0.15.1-ubi8
       - registry1.dso.mil/ironbank/opensource/nvidia/dcgm-exporter:3.3.6-3.4.2
       - registry1.dso.mil/ironbank/opensource/nvidia/cuda:12.4
-      # toolkit
-      # drivers
-      # etc.
     charts:
       - name: gpu-operator
         url: https://helm.ngc.nvidia.com/nvidia

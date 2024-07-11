@@ -9,7 +9,7 @@ In this repository's `uds-rke2` packages and bundles, this public DNS resolution
 ## Modifying Domain
 
 > [!NOTE]
-> Modifying the domain requires the associated TLS certificate and key creation configuration to also be modified. Please see the [`create:tls-cert` and `create:tls-cert-dev` tasks](../tasks/create.yaml) for more details. The final cert and key must be pasted into the uds-config.yaml in a base64 encoded string.
+> Modifying the domain requires the associated TLS certificate and key creation configuration to also be modified. Please see the [`create:tls` and `create:tls-dev` tasks](../tasks/create.yaml) for more details. The final cert and key must be pasted into the uds-config.yaml in a base64 encoded string.
 
 In the UDS create and deploy actions, there is a `DOMAIN` variable that can be set to affect how the underlying packages are built and deployed. The `DOMAIN` is required for both stages as each package requires the setting of the domain at different steps (create or deploy-time).
 

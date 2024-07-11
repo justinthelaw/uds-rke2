@@ -60,7 +60,7 @@ jobs:
 
       - name: Create Default TLS Cert
         run: |
-          sudo uds run create:tls-cert-dev
+          sudo uds run create:tls-dev
 
       - name: Deploy the UDS RKE2 Cluster and Infrastructure
         run: |

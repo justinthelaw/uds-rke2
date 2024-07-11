@@ -35,7 +35,7 @@ tasks:
     description: "Bootstrap a new RKE2 cluster, with the Local Path Provisioner + MinIO Zarf Init and UDS Core packages (LATEST)"
     actions:
       - task: create:logical-volume
-      - task: create:tls-cert
+      - task: create:tls
 
       - task: create:local-path-core-bundle
       - task: deploy:local-path-core-bundle
@@ -46,7 +46,7 @@ tasks:
       - task: release-dev
 
       - task: create:logical-volume
-      - task: create:tls-cert-dev
+      - task: create:tls-dev
 
       - task: deploy:local-path-core-bundle-dev
 

@@ -102,15 +102,15 @@ tasks:
           sudo mkdir -p /opt/uds
           sudo chown -Rv 65534:65534 /opt/uds
 
-  - name: tls-cert
+  - name: tls
     description: "Generate self-signed TLS certs for testing (LATEST)"
     actions:
-      - cmd: openssl req -x509 -newkey rsa:4096 -keyout bundles/latest/tls.key -out bundles/latest/tls.cert -days 365 -nodes -config bundles/latest/tls-cert.conf
+      - cmd: openssl req -x509 -newkey rsa:4096 -keyout bundles/latest/tls.key -out bundles/latest/tls.cert -days 365 -nodes -config bundles/latest/tls.conf
 
-  - name: tls-cert-dev
+  - name: tls-dev
     description: "Generate self-signed TLS certs for testing (DEV)"
     actions:
-      - cmd: openssl req -x509 -newkey rsa:4096 -keyout bundles/dev/tls.key -out bundles/dev/tls.cert -days 365 -nodes -config bundles/dev/tls-cert.conf
+      - cmd: openssl req -x509 -newkey rsa:4096 -keyout bundles/dev/tls.key -out bundles/dev/tls.cert -days 365 -nodes -config bundles/dev/tls.conf
 
   #########
   # BUNDLES

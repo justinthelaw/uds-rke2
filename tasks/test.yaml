@@ -54,5 +54,6 @@ tasks:
 
       - task: setup:clean
 
-      - task: create:nvidia-gpu-operator
-      - task: deploy:nvidia-gpu-operator
+      # TODO: re-integrate once NVIDIA GPU Operator is completed
+      # - task: create:nvidia-gpu-operator
+      # - task: deploy:nvidia-gpu-operator

@@ -17,6 +17,9 @@ variables:
   - name: DOMAIN
     description: "The default domain to use for gateway and CoreDNS"
     default: "uds.local"
+  - name: BUCKET_PERSISTENCE_SIZE
+    description: "The default MinIO bucket size"
+    default: "50Gi"
 
   - name: DEPLOY_OPTIONS
     description: "Extra Zarf package deployment options"
@@ -75,12 +78,16 @@ tasks:
       networkInterface:
         description: "Interface on which to perform L2 advertisement"
         required: true
+      bucketPersistenceSize:
+        description: "The default MinIO bucket size"
+        required: true
     actions:
       - description: "Deploy the UDS bundle for the amd64 architectures"
         cmd: |
           sudo UDS_CONFIG=${{ .inputs.udsConfig }} uds deploy "${{ .inputs.path }}/uds-bundle-${{ .inputs.name }}-amd64-${{ .inputs.version }}.tar.zst" \
             --set JOIN_TOKEN=${{ .inputs.joinToken }} \
             --set NETWORK_INTERFACE=${{ .inputs.networkInterface }} \
+            --set BUCKET_PERSISTENCE_SIZE=${{ .inputs.bucketPersistenceSize }} \
             ${DEPLOY_BUNDLE_OPTIONS}
 
   #########
@@ -98,6 +105,7 @@ tasks:
           version: ${VERSION}
           joinToken: ${JOIN_TOKEN}
           networkInterface: ${NETWORK_INTERFACE}
+          bucketPersistenceSize: ${BUCKET_PERSISTENCE_SIZE}
 
   - name: local-path-core-bundle-dev
     description: "Deploy the Local Path Provisioner UDS RKE2 bootstrapping bundle"
@@ -110,6 +118,7 @@ tasks:
           version: dev
           joinToken: ${JOIN_TOKEN}
           networkInterface: ${NETWORK_INTERFACE}
+          bucketPersistenceSize: ${BUCKET_PERSISTENCE_SIZE}
 
   ###################
   # STANDARD PACKAGES

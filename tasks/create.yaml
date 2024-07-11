@@ -136,7 +136,7 @@ tasks:
             .variables.uds-core.tenant_tls_cert = "'"$(cat build/packages/${{ .inputs.flavor }}/tls/tls.cert.base64)"'" |
             .variables.uds-core.tenant_tls_key = "'"$(cat build/packages/${{ .inputs.flavor }}/tls/tls.key.base64)"'"
           ' bundles/${{ .inputs.bundleVersion }}/${{ .inputs.flavor }}-core/uds-config.yaml \
-            > build/${{ .inputs.flavor }}/uds-config-${{ .inputs.bundleVersion }}.yaml
+            > build/packages/${{ .inputs.flavor }}/uds-config-${{ .inputs.bundleVersion }}.yaml
 
   #########
   # BUNDLES

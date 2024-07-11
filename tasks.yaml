@@ -25,6 +25,9 @@ variables:
   - name: DOMAIN
     description: "The default domain to use for gateway and CoreDNS"
     default: "uds.local"
+  - name: BUCKET_PERSISTENCE_SIZE
+    description: "The default MinIO bucket size"
+    default: "50Gi"
 
 tasks:
   #########

@@ -121,16 +121,6 @@ echo $REGISTRY1_PASSWORD | uds zarf tools registry login registry1.dso.mil --use
 set -o history
 ```
 
-#### Create
-
-See the UDS [`create` tasks](./tasks/create.yaml) file for more details.
-
-To create a packages and bundles, reference the following example for NVIDIA GPU Operator:
-
-```bash
-uds run create:nvidia-gpu-operator
-```
-
 #### Deploy
 
 > [!NOTE]
@@ -141,12 +131,9 @@ See the UDS [`deploy` tasks](./tasks/deploy.yaml) file for more details.
 For example, to deploy the UDS RKE2 bootstrap bundle with `local-path` flavor, do the following:
 
 ```bash
-# create the /opt/uds directory on an existing mounted LVM
-# change permissions to the nonroot or nobody user for local storage volume creation
-uds run create:logical-volume
-
 # deploy the local dev version
-uds run uds-rke2-local-path-core-dev
+# set the network interface to perform L2 advertisement on - see docs/UDS-RKE2.md for more details
+uds run uds-rke2-local-path-core-dev --set NETWORK_INTERFACE=eth0
 ```
 
 Please note that the above steps vary slightly from the original [`local-path`](./docs/LOCAL-PATH.md) instructions for simplicity sake.
@@ -159,6 +146,16 @@ uds run create-tls-local-path-dev
 
 # deploy the pre-created UDS bundle with the modified uds-config.yaml
 uds run deploy:local-path-core-bundle-dev
+```
+
+#### Create
+
+See the UDS [`create` tasks](./tasks/create.yaml) file for more details.
+
+To create individual packages and bundles, reference the following example for NVIDIA GPU Operator:
+
+```bash
+uds run create:nvidia-gpu-operator
 ```
 
 #### Publish

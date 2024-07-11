@@ -4,9 +4,11 @@ This is an extension of the [RKE2 configuration documentation](./RKE2.md), and p
 
 ## Infrastructure
 
-This package deploys MetalLB and MachineID + Pause integration for L2 advertisement and pod/namespace integrity.
+This package deploys MetalLB and MachineID + Pause for L2 advertisement and pod/namespace integrity, respectively.
 
 The L2 advertisement requires the network interface and IP address pool. These are supplied via variables seen in the [Zarf package deployment](../packages/uds-rke2/infrastructure/zarf.yaml) or UDS bundle deployment ([`local-path-core` bundle configuration example](../bundles/dev/local-path-core/uds-config.yaml)) manifests.
+
+To find the interface that you would like to advertise on, use `ifconfig` and identify the local network-facing interface. An example network interface is `eth0`, when advertising to the local network via `192.168.x.x`.
 
 ## Exemptions
 

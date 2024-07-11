@@ -135,6 +135,10 @@ For example, to deploy the UDS RKE2 bootstrap bundle with `local-path` flavor, d
 # the network interface for L2 advertisement on eth0
 # see docs directory and this README.md for more details
 uds run uds-rke2-local-path-core-dev --set NETWORK_INTERFACE=eth0
+
+# below are examples of dev version deployments of optional packages
+uds run deploy:leapfrogai-workarounds --set VERSION=dev
+uds run deploy:nvidia-gpu-operator --set VERSION=dev
 ```
 
 Please note that the above steps vary slightly from the original [`local-path`](./docs/LOCAL-PATH.md) instructions for simplicity sake.

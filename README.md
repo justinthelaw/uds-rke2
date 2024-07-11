@@ -131,8 +131,9 @@ See the UDS [`deploy` tasks](./tasks/deploy.yaml) file for more details.
 For example, to deploy the UDS RKE2 bootstrap bundle with `local-path` flavor, do the following:
 
 ```bash
-# deploy the local dev version
-# set the network interface to perform L2 advertisement on - see docs/UDS-RKE2.md for more details
+# deploy the local dev version, with /opt/uds as the PV mount, and
+# the network interface for L2 advertisement on eth0
+# see docs directory and this README.md for more details
 uds run uds-rke2-local-path-core-dev --set NETWORK_INTERFACE=eth0
 ```
 

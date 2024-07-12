@@ -37,6 +37,8 @@ The following are requirements for an environment where a user is deploying UDS 
 
 ### Local Development
 
+See the [DEVELOPMENT.md](docs/DEVELOPMENT.md) for instructions on how to further develop UDS RKE2.
+
 The following are requirements for building images locally for development and testing.
 
 - All pre-requisites listed in [Deployment](#deployment)

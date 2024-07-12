@@ -16,9 +16,9 @@ runs:
       shell: bash
       # TODO: renovate setup
       run: |
-        sudo wget https://github.com/defenseunicorns/uds-cli/releases/download/v0.12.0/uds-cli_v0.12.0_Linux_amd64
-        sudo chmod +x uds-cli_v0.12.0_Linux_amd64
-        sudo mv uds-cli_v0.12.0_Linux_amd64 /usr/local/bin/uds
+        sudo wget https://github.com/defenseunicorns/uds-cli/releases/download/v0.10.4/uds-cli_v0.10.4_Linux_amd64
+        sudo chmod +x uds-cli_v0.10.4_Linux_amd64
+        sudo mv uds-cli_v0.10.4_Linux_amd64 /usr/local/bin/uds
 
     - name: Iron Bank Login
       if: ${{ inputs.registry1Username != '' }}

@@ -1,5 +1,5 @@
 # TODO: renovate setup
-# yaml-language-server: $schema=https://raw.githubusercontent.com/defenseunicorns/uds-cli/v0.12.0/zarf.schema.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/defenseunicorns/uds-cli/v0.10.4/zarf.schema.json
 
 kind: ZarfInitConfig
 metadata:
@@ -23,7 +23,7 @@ components:
     description: "Install the Zarf injector and registry binaries"
     import:
       # TODO: renovate setup
-      url: oci://ghcr.io/defenseunicorns/packages/init:v0.35.0
+      url: oci://ghcr.io/defenseunicorns/packages/init:v0.33.0
 
   # Creates the temporary seed-registry
   - name: zarf-seed-registry
@@ -31,7 +31,7 @@ components:
     description: "Creates a bootstrapping seed registry and prepares a volume for mounting to the permanent registry"
     import:
       # TODO: renovate setup
-      url: oci://ghcr.io/defenseunicorns/packages/init:v0.35.0
+      url: oci://ghcr.io/defenseunicorns/packages/init:v0.33.0
     charts:
       - name: docker-registry
         namespace: zarf
@@ -166,7 +166,7 @@ components:
     description: "Create the permanent registry"
     import:
       # TODO: renovate setup
-      url: oci://ghcr.io/defenseunicorns/packages/init:v0.35.0
+      url: oci://ghcr.io/defenseunicorns/packages/init:v0.33.0
 
   ########################
   # LOCAL PATH PROVISIONER
@@ -243,4 +243,4 @@ components:
     description: "Deploy the Zarf pod and Git mutating webhook"
     import:
       # TODO: renovate setup
-      url: oci://ghcr.io/defenseunicorns/packages/init:v0.35.0
+      url: oci://ghcr.io/defenseunicorns/packages/init:v0.33.0

@@ -131,7 +131,7 @@ See the UDS [`deploy` tasks](./tasks/deploy.yaml) file for more details.
 For example, to deploy the UDS RKE2 bootstrap bundle with `local-path` flavor, do the following:
 
 ```bash
-# deploy the local dev version, with /opt/uds as the PV mount, and
+# create and deploy the local dev version, with /opt/uds as the PV mount, and
 # the network interface for L2 advertisement on eth0
 # see docs directory and this README.md for more details
 uds run uds-rke2-local-path-core-dev --set NETWORK_INTERFACE=eth0
@@ -143,7 +143,7 @@ uds run deploy:nvidia-gpu-operator --set VERSION=dev
 
 Please note that the above steps vary slightly from the original [`local-path`](./docs/LOCAL-PATH.md) instructions for simplicity sake.
 
-If you have modified the uds-config.yaml, but none of the bundle components, and want to complete a re-deployment, you will need to run the TLS creation and injection step again:
+If you have modified the deploy-time variables in the [uds-config.yaml](bundles/dev/local-path-core/uds-config.yaml), but none of the bundle components, and want to complete a re-deployment, you will need to run the TLS creation and injection step again:
 
 ```bash
 # recreate the dev TLS certs and inject into the modified uds-config.yaml

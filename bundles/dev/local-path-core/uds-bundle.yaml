@@ -11,14 +11,14 @@ metadata:
 packages:
   - name: uds-rke2
     description: "Deploys the UDS RKE2 Zarf package"
-    repository: ghcr.io/justinthelaw/packages/uds/uds-rke2
+    path: ../../../build/packages/
     ref: "dev"
 
-  - name: local-path-init
+  - name: init
     description: "Deploys the custom Zarf Init package"
-    repository: ghcr.io/justinthelaw/packages/uds/uds-rke2/init
+    path: ../../../build/packages/local-path/
     # TODO: renovate setup
-    ref: "v0.35.0-local-path"
+    ref: "v0.33.0"
     overrides:
       minio:
         minio:
@@ -27,9 +27,9 @@ packages:
               description: "Size of the default PVC for MinIO (e.g., 30Gi)"
               path: persistence.size
 
-  - name: uds-rke2-infrastructure
+  - name: infrastructure
     description: "Deploys the UDS RKE2 base infrastructure Zarf package"
-    repository: ghcr.io/justinthelaw/packages/uds/uds-rke2/infrastructure
+    path: ../../../build/packages/
     ref: "dev"
     overrides:
       infrastructure:
@@ -38,11 +38,11 @@ packages:
             - name: INTERFACE
               path: interface
 
-  - name: uds-core
+  - name: core
     description: "Deploys UDS Core services"
-    repository: ghcr.io/defenseunicorns/packages/uds/core
+    path: ../../../build/packages/
     # TODO: renovate setup
-    ref: "0.23.0-registry1"
+    ref: "0.23.0"
     overrides:
       loki:
         loki:
@@ -130,9 +130,9 @@ packages:
               description: "The TLS key for the tenant gateway (must be base64 encoded)"
               path: tls.key
 
-  - name: uds-rke2-exemptions
+  - name: exemptions
     description: "Deploys the UDS Core Pepr policy exemptions"
-    repository: ghcr.io/justinthelaw/packages/uds/uds-rke2/exemptions
-    ref: "dev-local-path"
+    path: ../../../build/packages/local-path/
+    ref: "dev"
     optionalComponents:
       - nvidia-gpu-operator-exemptions

@@ -45,10 +45,6 @@ tasks:
     actions:
       - task: setup:clean
 
-      # Unexplained workaround for GH runner issues during CoreDNS pod validation
-      # TODO: see issue for more details
-      - cmd: sudo uds zarf tools kubectl describe nodes
-
       - task: create:leapfrogai-workarounds
       - task: deploy:leapfrogai-workarounds
 

@@ -52,19 +52,15 @@ tasks:
           bundleVersion: dev
           tlsConfiguration: bundles/dev/tls.conf
 
-  ####################
-  # BUNDLE DEPLOYMENTS
-  ####################
+  ###########################
+  # CREATE AND DEPLOY BUNDLES
+  ###########################
 
   - name: uds-rke2-local-path-core
     description: "Bootstrap a new RKE2 cluster, with the Local Path Provisioner + MinIO Zarf Init and UDS Core packages (LATEST)"
     actions:
       - task: create:logical-volume
-      - task: create:tls
-        with:
-          flavor: local-path
-          bundleVersion: latest
-          tlsConfiguration: bundles/latest/tls.conf
+      - task: create-tls-local-path
 
       - task: create:local-path-core-bundle
       - task: deploy:local-path-core-bundle
@@ -72,26 +68,17 @@ tasks:
   - name: uds-rke2-local-path-core-dev
     description: "Bootstrap a new RKE2 cluster, with the Local Path Provisioner + MinIO Zarf Init and UDS Core packages (DEV)"
     actions:
-      - task: release-dev
+      - task: create:local-path-core-bundle-packages
 
       - task: create:logical-volume
-      - task: create:tls
-        with:
-          flavor: local-path
-          bundleVersion: dev
-          tlsConfiguration: bundles/dev/tls.conf
+      - task: create-tls-local-path-dev
 
+      - task: create:local-path-core-bundle-dev
       - task: deploy:local-path-core-bundle-dev
 
-  ##########################
-  # ALL PACKAGES AND BUNDLES
-  ##########################
-
-  - name: release
-    description: "Builds and publishes all Zarf packages and Bundles in the repository (LATEST)"
-    actions:
-      - task: release-packages
-      - task: release-bundles
+  ##############################
+  # RELEASE PACKAGES AND BUNDLES
+  ##############################
 
   - name: release-dev
     description: "Builds and publishes all Zarf packages and Bundles in the repository (DEV)"
@@ -99,11 +86,29 @@ tasks:
       - task: release-packages-dev
       - task: release-bundles-dev
 
-  ##############
-  # ALL PACKAGES
-  ##############
+  - name: release-packages-dev
+    description: "Builds and publishes all Zarf packages in the repository (DEV)"
+    actions:
+      - description: "Use the `dev` version to run a package release"
+        cmd: sudo uds run release-packages --set VERSION=dev --log-level warn --no-progress -a amd64
 
-  # TODO: re-enable rook-ceph and longhorn when built
+  - name: release-bundles-dev
+    description: "Builds and publishes all UDS bundles in the repository (DEV)"
+    actions:
+      - task: create:local-path-core-bundle-dev
+      - description: "Use the `dev` version to run a bundle release"
+        cmd: sudo uds run publish:local-path-core-bundle --set VERSION=dev --log-level warn --no-progress -a amd64
+
+  ######################################
+  # NOT FOR LOCAL USE, FOR PIPELINE ONLY
+  ######################################
+
+  - name: release
+    description: "Builds and publishes all Zarf packages and Bundles in the repository (LATEST)"
+    actions:
+      - task: release-packages
+      - task: release-bundles
+
   - name: release-packages
     description: "Builds and publishes all Zarf packages in the repository WITHOUT cleaning artifacts (LATEST)"
     actions:
@@ -127,7 +132,6 @@ tasks:
       - task: create:nvidia-gpu-operator
       - task: publish:nvidia-gpu-operator
 
-  # TODO: re-enable rook-ceph and longhorn when built
   - name: release-packages-with-clean
     description: "Builds and publishes all Zarf packages in the repository (LATEST)"
     actions:
@@ -159,25 +163,8 @@ tasks:
       - task: publish:nvidia-gpu-operator
       - task: setup:clean-build-artifacts
 
-  - name: release-packages-dev
-    description: "Builds and publishes all Zarf packages in the repository (DEV)"
-    actions:
-      - description: "Use the `dev` version to run a package release"
-        cmd: sudo uds run release-packages --set VERSION=dev --log-level warn --no-progress -a amd64
-
-  #############
-  # ALL BUNDLES
-  #############
-
   - name: release-bundles
     description: "Builds and publishes all UDS bundles in the repository (LATEST)"
     actions:
       - task: create:local-path-core-bundle
       - task: publish:local-path-core-bundle
-
-  - name: release-bundles-dev
-    description: "Builds and publishes all UDS bundles in the repository (DEV)"
-    actions:
-      - task: create:local-path-core-bundle-dev
-      - description: "Use the `dev` version to run a bundle release"
-        cmd: sudo uds run publish:local-path-core-bundle --set VERSION=dev --log-level warn --no-progress -a amd64

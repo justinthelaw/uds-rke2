@@ -66,7 +66,7 @@ validator:
   driver:
     # RKE2-specific configurations
     env:
-      - name: disable_dev_char_symlink_creation
+      - name: DISABLE_DEV_CHAR_SYMLINK_CREATION
         value: "true"
       - name: NVIDIA_VISIBLE_DEVICES
         value: all

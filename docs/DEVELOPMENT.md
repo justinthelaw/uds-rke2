@@ -31,7 +31,7 @@ For fulfilling `xargs` and `kubectl` binary requirements necessary for running s
 
 ```bash
 touch /usr/local/bin/kubectl
-echo '#!/bin/bash\nuds zarf tools kubectl "$@"' > /usr/local/bin/kubectl
+echo -e '#!/bin/bash\nuds zarf tools kubectl "$@"' > /usr/local/bin/kubectl
 chmod +x /usr/local/bin/kubectl
 ```
 
@@ -137,4 +137,12 @@ For example, this is how you pull and deploy a LATEST version of a package:
 # pull and deploy latest versions
 uds zarf package pull oci://ghcr.io/justinthelaw/packages/uds/uds-rke2/nvidia-gpu-operator:latest -a amd64
 uds run deploy:nvidia-gpu-operator
+```
+
+## Troubleshooting
+
+If your RKE2 cluster is failing to spin up in the first place, you can use `journalctl` to monitor the progress. Please note that it may take up to 10 minutes for the cluster spin-up and move on to the next step of the UDS RKE2 bundle deployment.
+
+```bash
+journalctl -xef -u rke2-server
 ```

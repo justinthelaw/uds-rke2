@@ -97,6 +97,16 @@ version = 2
 
 [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc.options]
   SystemdCgroup = true
+
+[plugins."io.containerd.grpc.v1.cri".containerd.runtimes.nvidia]
+  privileged_without_host_devices = false
+  runtime_engine = ""
+  runtime_root = ""
+  runtime_type = "io.containerd.runc.v2"
+
+[plugins."io.containerd.grpc.v1.cri".containerd.runtimes.nvidia.options]
+  BinaryName = "/usr/bin/nvidia-container-runtime"
+  Runtime = "/usr/bin/nvidia-container-runtime"
 EOF
 
 # Start RKE2

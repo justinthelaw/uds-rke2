@@ -68,7 +68,8 @@ tasks:
   - name: uds-rke2-local-path-core-dev
     description: "Bootstrap a new RKE2 cluster, with the Local Path Provisioner + MinIO Zarf Init and UDS Core packages (DEV)"
     actions:
-      - task: create:local-path-core-bundle-packages
+      - description: "Use the `dev` version to create all bundle packages"
+        cmd: sudo uds run create:local-path-core-bundle-packages --set VERSION=dev --log-level warn --no-progress -a amd64
 
       - task: create:logical-volume
       - task: create-tls-local-path-dev

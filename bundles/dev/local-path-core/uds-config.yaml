@@ -1,5 +1,4 @@
 options:
-  log_level: warn
   architecture: amd64
 
 shared:

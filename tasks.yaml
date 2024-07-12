@@ -163,7 +163,7 @@ tasks:
     description: "Builds and publishes all Zarf packages in the repository (DEV)"
     actions:
       - description: "Use the `dev` version to run a package release"
-        cmd: sudo uds run release-packages --set VERSION=dev --no-progress --log-level debug
+        cmd: sudo uds run release-packages --set VERSION=dev --log-level warn --no-progress -a amd64
 
   #############
   # ALL BUNDLES
@@ -180,4 +180,4 @@ tasks:
     actions:
       - task: create:local-path-core-bundle-dev
       - description: "Use the `dev` version to run a bundle release"
-        cmd: sudo uds run publish:local-path-core-bundle --set VERSION=dev --no-progress --log-level debug
+        cmd: sudo uds run publish:local-path-core-bundle --set VERSION=dev --log-level warn --no-progress -a amd64

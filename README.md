@@ -12,21 +12,13 @@ See the [UDS RKE2 Mermaid diagram](docs/DIAGRAM.md) for visual representations o
 ## Table of Contents
 
 1. [Pre-Requisites](#pre-requisites)
-    - [Deployment](#deployment)
-    - [Local Development](#local-development)
 2. [Usage](#usage)
-    - [UDS CLI Aliasing](#uds-cli-aliasing)
     - [Virtual Machines](#virtual-machines)
     - [Bundles](#bundles)
-    - [Packages](#packages)
-    - [UDS Tasks](#uds-tasks)
+    - [Quick Start](#quick-start)
 3. [Additional Info](#additional-info)
-    - [Configuration](#configuration)
-    - [Credits and Resources](#credits-and-resources)
 
 ## Pre-Requisites
-
-### Deployment
 
 The following are requirements for an environment where a user is deploying UDS RKE2 and its custom components and applications.
 
@@ -35,51 +27,20 @@ The following are requirements for an environment where a user is deploying UDS 
 - See the RKE2 documentation for host system [pre-requisites](https://docs.rke2.io/install/requirements)
 - See the [Application-Specific](#application-specific) and [Infrastructure Flavor-Specific](#infrastructure-flavor-specific) configuration sections for instruction on setup based on what is deployed atop UDS RKE2
 
-### Local Development
-
-See the [DEVELOPMENT.md](docs/DEVELOPMENT.md) for instructions on how to further develop UDS RKE2.
-
-The following are requirements for building images locally for development and testing.
-
-- All pre-requisites listed in [Deployment](#deployment)
-- [Docker](https://docs.docker.com/get-docker/) or [Podman](https://podman.io/getting-started/installation) for running, building, and pulling images
-
 ## Usage
 
-### UDS CLI Aliasing
-
-Below are instructions for adding UDS CLI aliases that are useful for deployments that occur in an air-gap with only the UDS CLI binary available to the delivery engineer.
-
-For general CLI UX, put the following in your shell configuration (e.g., `/root/.bashrc`):
-
-```bash
-alias k="uds zarf tools kubectl"
-alias kubectl="uds zarf tools kubectl"
-alias zarf='uds zarf'
-alias k9s='uds zarf tools monitor'
-alias udsclean="uds zarf tools clear-cache && rm -rf ~/.uds-cache && rm -rf /tmp/zarf-*"
-```
-
-For fulfilling `xargs` and `kubectl` binary requirements necessary for running some of the _optional_ deployment helper scripts:
-
-```bash
-touch /usr/local/bin/kubectl
-echo '#!/bin/bash\nuds zarf tools kubectl "$@"' > /usr/local/bin/kubectl
-chmod +x /usr/local/bin/kubectl
-```
+This section provides minimal context and instructions for quickly deploying the base UDS RKE2 capability. See the [DEVELOPMENT.md](docs/DEVELOPMENT.md) for instructions on how to further develop UDS RKE2.
 
 ### Virtual Machines
 
 > [!CAUTION]
-> Due to the the disk formatting operations, networking and STIG configurations that are applied to a node's host, it is highly recommended that the contents of this repository are not directly installed on a personal machine.
+> Due to the the disk formatting and mount operations, networking and STIG configurations that are applied to a node's host, it is highly recommended that the contents of this repository are not directly installed on a personal machine.
 
 The best way to test UDS RKE2 is to spin-up one or more nodes using a containerized method, such as virtual machines or networks.
 
 [LeapfrogAI](https://github.com/defenseunicorns/leapfrogai), the main support target of this bundle, requires GPU passthrough to all worker nodes that will have a taint for attracting pods with GPU resource and workload requirements.
 
-Please see the [VM setup documentation](./docs/VM.md) and VM setup scripts to learn more about manually creating development VM.
-
-VM setup may not be necessary if using Longhorn or Local Path Provisioner, but it is highly recommended when using Rook-Ceph.
+Please see the [VM setup documentation](./docs/VM.md) and VM setup scripts to learn more about manually creating development VM..
 
 ### Bundles
 
@@ -89,23 +50,11 @@ There are 3 main "flavors" of the UDS RKE2 Core bundle, with 4 distinct flavors 
 2. (WIP) [Longhorn](./docs/LONGHORN.md) + [MinIO](./docs/MINIO.md)
 3. (WIP) [Rook-Ceph](./docs/ROOK-CEPH.md)
 
-Each bundle can also be experimented with using the Zarf package creation and deployment commands via the UDS tasks outlined in the sections below.
+### Quick Start
 
-### Packages
+To build and deploy a local, DEV version of the `local-path` flavored UDS RKE2 bundle, you can run the following:
 
-See the [Configuration section](#configuration) for more details on each specific package in each of the bundle flavors.
-
-### UDS Tasks
-
-This repository uses [UDS CLI](https://github.com/defenseunicorns/uds-cli)'s built-in [task runner](https://github.com/defenseunicorns/maru-runner) to perform all actions required to run, develop, and publish the UDS RKE2 tech stack.
-
-Run the following to see all the tasks in the "root" [`tasks.yaml`](./tasks.yaml), and their descriptions:
-
-```bash
-uds run --list-all
-```
-
-Running most create, release or "root" tasks requires logging into GitHub Container Registry (GHCR) and [DoD's Registry1](https://registry1.dso.mil/):
+1. Login to GitHub Container Registry (GHCR) and [DoD's Registry1](https://registry1.dso.mil/):
 
 ```bash
 # Login to GHCR
@@ -123,113 +72,48 @@ echo $REGISTRY1_PASSWORD | uds zarf tools registry login registry1.dso.mil --use
 set -o history
 ```
 
-#### Deploy
-
-> [!NOTE]
-> The pre-deployment setup of the host machine is storage solution-dependent, so be sure to check the documentation for the package flavor you are deploying: [`local-path`](./docs/LOCAL-PATH.md), [`longhorn`](./docs/LONGHORN.md), or [`rook-ceph`](./docs/ROOK-CEPH.md).
-
-See the UDS [`deploy` tasks](./tasks/deploy.yaml) file for more details.
-
-For example, to deploy the UDS RKE2 bootstrap bundle with `local-path` flavor, do the following:
+2. Build all necessary packages and then create and deploy the bundle
 
 ```bash
-# create and deploy the local dev version, with /opt/uds as the PV mount, and
-# the network interface for L2 advertisement on eth0
-# see docs directory and this README.md for more details
+# use `ifconfig` to identify the network interface for L2 advertisement
 uds run uds-rke2-local-path-core-dev --set NETWORK_INTERFACE=eth0
-
-# below are examples of dev version deployments of optional packages
-uds run deploy:leapfrogai-workarounds --set VERSION=dev
-uds run deploy:nvidia-gpu-operator --set VERSION=dev
 ```
 
-Please note that the above steps vary slightly from the original [`local-path`](./docs/LOCAL-PATH.md) instructions for simplicity sake.
-
-If you have modified the deploy-time variables in the [uds-config.yaml](bundles/dev/local-path-core/uds-config.yaml), but none of the bundle components, and want to complete a re-deployment, you will need to run the TLS creation and injection step again:
+3. Modify your `/etc/hosts` according to your base IP on the Istio Tenant gateway
 
 ```bash
-# recreate the dev TLS certs and inject into the modified uds-config.yaml
-uds run create-tls-local-path-dev
+# /etc/hosts
 
-# deploy the pre-created UDS bundle with the modified uds-config.yaml
-uds run deploy:local-path-core-bundle-dev
+192.168.0.200   keycloak.admin.uds.local grafana.admin.uds.local neuvector.admin.uds.local
+192.168.0.201   sso.uds.local
 ```
-
-#### Create
-
-See the UDS [`create` tasks](./tasks/create.yaml) file for more details.
-
-To create individual packages and bundles, reference the following example for NVIDIA GPU Operator:
-
-```bash
-# create the local dev version of the Zarf package
-uds run create:nvidia-gpu-operator --set VERSION=dev
-```
-
-#### Publish
-
-See the UDS [`publish` tasks](./tasks/publish.yaml) file for more details. Also see the `release` task in the main [`tasks.yaml`](./tasks.yaml).
-
-To publish all packages and bundles, do the following:
-
-```bash
-# release all packages with a `dev` version
-uds run release-dev
-```
-
-#### Remove
-
-Run the following to remove all Docker, Zarf and UDS artifacts from the host:
-
-```bash
-uds run setup:clean
-```
-
-Run the following to completely destroy the UDS RKE2 node and all of UDS RKE2's artifacts from the node's host:
-
-```bash
-uds run setup:uds-rke2-destroy
-```
-
-#### Test
-
-The GitHub CI workflow uses UDS tasks to run deployments of the package components within this repository, but not on the UDS Core components.
-
-To run this test locally, you can run the following:
-
-```bash
-uds run uds-rke2-local-path-core-dev
-```
-
-Then, modify your `/etc/hosts` according to your base IP on the Istio Tenant gateway, with a redirect for `sso.uds.local`.
-
-Finally, go to `sso.uds.local` to see if the KeyCloak SSO panel is accessible via your browser.
 
 ## Additional Info
 
-Below are resources to explain some of the rationale and inner workings of the RKE2 cluster's infrastructure.
+The following sub-sections outlines all of the configuration documentation, which includes additional information and customization options, for each component of UDS RKE2.
 
-### Configuration
+### Base Infrastructure
 
-- [Operating System Configuration](docs/OS.md)
-- [RKE2-Specific Configuration](docs/RKE2.md)
+- [Operating System](docs/OS.md)
+- [RKE2-Specific](docs/RKE2.md)
 - [UDS-RKE2 Infrastructure and Exemptions](docs/UDS-RKE2.md)
-- [MinIO Configuration](docs/MINIO.md)
+- [Hosts, DNS and TLS Configuration](docs/DNS-TLS.md)
 
-#### Infrastructure Flavor-Specific
+### Infrastructure Flavor-Specific
 
-- [Rook-Ceph Configuration](docs/ROOK-CEPH.md)
-- [Longhorn Configuration](docs/LONGHORN.md)
+- [Rook-Ceph](docs/ROOK-CEPH.md)
+- [Longhorn](docs/LONGHORN.md)
 - [Local Path Provisioner](docs/LOCAL-PATH.md)
 - [Custom Zarf Init](docs/INIT.md)
+- [MinIO](docs/MINIO.md)
 
-#### Application-Specific
+### Application-Specific
 
 - [UDS Core](UDS-CORE.md)
 - [LeapfrogAI](docs/LEAPFROGAI.md)
 - [NVIDIA GPU Operator](docs/NVIDIA-GPU-OPERATOR.md)
 
-#### Virtual Machine Setup and Testing
+### Virtual Machine Setup and Testing
 
 - [Ubuntu VM with NVIDIA GPU Passthrough](docs/VM.md)
 

@@ -320,9 +320,9 @@ devicePlugin:
     # MPS root path on the host
     root: "/run/nvidia/mps"
 
-# standalone dcgm hostengine
+# standalone dcgm host engine
 dcgm:
-  # disabled by default to use embedded nv-hostengine by exporter
+  # disabled by default to use embedded nv-host engine by exporter
   enabled: false
   repository: nvcr.io/nvidia/cloud-native
   image: dcgm
@@ -333,7 +333,9 @@ dcgm:
   resources: {}
 
 dcgmExporter:
-  enabled: true
+  # TODO: re-enable and integrate with Prometheus
+  # disabled due to Registry1 image issues
+  enabled: false
   repository: registry1.dso.mil/ironbank/opensource/nvidia
   image: dcgm-exporter
   version: 3.3.6-3.4.2

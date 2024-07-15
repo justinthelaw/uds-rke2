@@ -28,7 +28,6 @@ components:
       - registry1.dso.mil/ironbank/opensource/nvidia/gpu-operator:v24.3.0
       - registry1.dso.mil/ironbank/opensource/nvidia/gpu-operator-validator:v24.3.0
       - registry1.dso.mil/ironbank/opensource/nvidia/k8s-device-plugin:v0.15.1-ubi8
-      - registry1.dso.mil/ironbank/opensource/nvidia/dcgm-exporter:3.3.6-3.4.2
       - registry1.dso.mil/ironbank/opensource/nvidia/cuda:12.4
     charts:
       - name: gpu-operator
@@ -38,3 +37,67 @@ components:
         namespace: nvidia-gpu-operator
         valuesFiles:
           - "values/nvidia-gpu-operator-values.yaml"
+    actions:
+      # The following onDeploy actions are due to an upstream Registry1 issue: https://repo1.dso.mil/dsop/opensource/nvidia/gpu-operator/-/issues
+      onDeploy:
+        after:
+          - cmd: |
+              kubectl patch daemonset nvidia-operator-validator -n nvidia-gpu-operator --type='json' -p='[
+                {"op": "add", "path": "/spec/template/spec/containers/0/securityContext/runAsUser", "value": 0}
+              ]'
+              kubectl patch daemonset nvidia-operator-validator -n nvidia-gpu-operator --type='json' -p='[
+                {"op": "add", "path": "/spec/template/spec/initContainers/0/securityContext/runAsUser", "value": 0}
+              ]'
+              kubectl patch daemonset nvidia-operator-validator -n nvidia-gpu-operator --type='json' -p='[
+                {"op": "add", "path": "/spec/template/spec/initContainers/1/securityContext/runAsUser", "value": 0}
+              ]'
+              kubectl patch daemonset nvidia-operator-validator -n nvidia-gpu-operator --type='json' -p='[
+                {"op": "add", "path": "/spec/template/spec/initContainers/2/securityContext/runAsUser", "value": 0}
+              ]'
+              kubectl patch daemonset nvidia-operator-validator -n nvidia-gpu-operator --type='json' -p='[
+                {"op": "add", "path": "/spec/template/spec/initContainers/3/securityContext/runAsUser", "value": 0}
+              ]'
+            description: "Patch securityContext in the nvidia-operator-validator"
+            maxTotalSeconds: 60
+          - description: "Validate nvidia-operator-validator is up"
+            wait:
+              cluster:
+                kind: Pod
+                name: app=nvidia-operator-validator
+                namespace: nvidia-gpu-operator
+                condition: "'{.status.conditions[2].status}'=True"
+            maxTotalSeconds: 300
+          - cmd: |
+              kubectl patch daemonset gpu-feature-discovery -n nvidia-gpu-operator --type='json' -p='[
+                {"op": "add", "path": "/spec/template/spec/containers/0/securityContext/runAsUser", "value": 0}
+              ]'
+              kubectl patch daemonset gpu-feature-discovery -n nvidia-gpu-operator --type='json' -p='[
+                {"op": "add", "path": "/spec/template/spec/initContainers/0/securityContext/runAsUser", "value": 0}
+              ]'
+            description: "Patch securityContext in the gpu-feature-discovery"
+            maxTotalSeconds: 60
+          - description: "Validate gpu-feature-discovery is up"
+            wait:
+              cluster:
+                kind: Pod
+                name: app=gpu-feature-discovery
+                namespace: nvidia-gpu-operator
+                condition: "'{.status.conditions[2].status}'=True"
+            maxTotalSeconds: 300
+          - cmd: |
+              kubectl patch daemonset nvidia-device-plugin-daemonset -n nvidia-gpu-operator --type='json' -p='[
+                {"op": "add", "path": "/spec/template/spec/containers/0/securityContext/runAsUser", "value": 0}
+              ]'
+              kubectl patch daemonset nvidia-device-plugin-daemonset -n nvidia-gpu-operator --type='json' -p='[
+                {"op": "add", "path": "/spec/template/spec/initContainers/0/securityContext/runAsUser", "value": 0}
+              ]'
+            description: "Patch securityContext in the nvidia-device-plugin-daemonset"
+            maxTotalSeconds: 60
+          - description: "Validate nvidia-device-plugin-daemonset is up"
+            wait:
+              cluster:
+                kind: Pod
+                name: app=nvidia-device-plugin-daemonset
+                namespace: nvidia-gpu-operator
+                condition: "'{.status.conditions[2].status}'=True"
+            maxTotalSeconds: 300

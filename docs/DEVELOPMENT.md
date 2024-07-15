@@ -121,6 +121,17 @@ uds run create-tls-local-path-dev
 uds run deploy:local-path-core-bundle-dev
 ```
 
+If you modified an individual package within the bundle, and want to do an integrated install again, you can just create the modified package again, and re-create the bundle:
+
+```bash
+# recreate the local-path-init package
+uds run create:local-path-init --set VERSION=dev
+
+# recreate the bundle and deploy
+uds run create:local-path-core-bundle-dev
+uds run deploy:local-path-core-bundle-dev
+```
+
 ## Package Development
 
 If you don't want to build an entire bundle, or you want to dev-loop on a single package in an existing, Zarf-init'd cluster, you can do so by performing a `uds zarf package remove [PACKAGE_NAME]` and re-deploying the package into the cluster.
@@ -144,6 +155,10 @@ uds run deploy:nvidia-gpu-operator
 
 ## Airgap Testing
 
+### Pre-Cluster/Node Bootstrapping
+
+This sub-section is mainly for the pre-cluster or node bootstrapping steps, and targets the testing of the air-gapped bootstrapping of UDS RKE2 infrastructure.
+
 You can use the [air-gapping script](./vm/scripts/airgap.sh) in the VM documentation directory to perform an IP tables manipulation to emulate an airgap. Modify the following lines, which allow local area network traffic, in the script based on your LAN configuration:
 
 ```bash
@@ -157,10 +172,24 @@ To reverse this effect, just execute the [airgap reversion script](./vm/scripts/
 > [!CAUTION]
 > Please note that the airgap reversion script flushes ALL existing rules, so modify the script or manually reset your IP table rules if the script does not work for your configuration.
 
+### Post-Cluster/Node Bootstrapping
+
+<!-- TODO: fill this in when Istio, MetalLB and CoreDNS air-gap in-cluster configurations are setup -->
+
 ## Troubleshooting
 
 If your RKE2 cluster is failing to spin up in the first place, you can use `journalctl` to monitor the progress. Please note that it may take up to 10 minutes for the cluster spin-up and move on to the next step of the UDS RKE2 bundle deployment.
 
 ```bash
 journalctl -xef -u rke2-server
+```
+
+Occasionally, a package you are trying to re-deploy, or a namespace you are trying to delete, may hang. To workaround this, be sure to check the events and logs of all resources, to include pods, deployments, daemonsets, clusterpolicies, etc. There may be finalizers, Pepr hooks, and etc. causing the re-deployment or deletion to fail. Use the `k9s` and `kubectl` tools that are vendored with UDS CLI, like in the examples below:
+
+```bash
+# k9s CLI for debugging
+uds zarf tools monitor
+
+# kubectl command for logs
+uds zarf tools kubectl logs DaemonSet/metallb-speaker -n uds-rke2-infrastructure --follow
 ```

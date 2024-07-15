@@ -102,12 +102,21 @@ packages:
 
       keycloak:
         keycloak:
-          values:
+          variables:
             # TODO: this can only be `false` if a Postgres is integrated and accessible in the cluster
-            - path: devMode
-              value: true
-            - path: fips
-              value: true
+            - name: KEYCLOAK_DEV_MODE
+              path: devMode
+              default: true
+            - name: KEYCLOAK_FIPS_MODE
+              path: fips
+              default: true
+            # Turn off MFA and email verification - not generally needed in dev or prototype deployments
+            - name: KEYCLOAK_EMAIL_VERIFICATION_ENABLED
+              path: realmInitEnv.email_verification_enabled
+              default: false
+            - name: KEYCLOAK_OTP_ENABLED
+              path: realmInitEnv.otp_enabled
+              default: false
 
       # Access to UDS cluster administration services (e.g., *admin.uds.dev, grafana.admin.uds.dev)
       # Access to UDS application services (e.g., *.uds.dev, ai.uds.dev)

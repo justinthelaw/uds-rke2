@@ -1,5 +1,8 @@
 # Development
 
+> [!IMPORTANT]
+> This entire repository assumes that you have root access, and all scripts and actions are run as root. Use `sudo su` to activate a root shell.
+
 The purpose of this document is to describe how to run a development loop on the tech stack, using the `local-path` flavored bundle.
 
 ## Contributing
@@ -138,6 +141,19 @@ For example, this is how you pull and deploy a LATEST version of a package:
 uds zarf package pull oci://ghcr.io/justinthelaw/packages/uds/uds-rke2/nvidia-gpu-operator:latest -a amd64
 uds run deploy:nvidia-gpu-operator
 ```
+
+## Airgap Testing
+
+You can use the [air-gapping script](./vm/scripts/airgap.sh) in the VM documentation directory to perform an IP tables manipulation to emulate an airgap. Modify the following line, which allows local area network access, in the script based on your LAN configuration:
+
+```bash
+iptables -A OUTPUT -d 192.168.1.0/24 -j ACCEPT
+```
+
+To reverse this effect, just execute the [airgap reversion script](./vm/scripts/reverse-airgap.sh).
+
+> [!CAUTION]
+> Please note that the airgap reversion script flushes ALL existing rules, so modify the script or manually reset your IP table rules if the script does not work for your configuration.
 
 ## Troubleshooting
 

@@ -29,6 +29,9 @@ The following are requirements for an environment where a user is deploying UDS 
 
 ## Usage
 
+> [!IMPORTANT]
+> This entire repository assumes that you have root access, and all scripts and actions are run as root. Use `sudo su` to activate a root shell.
+
 This section provides minimal context and instructions for quickly deploying the base UDS RKE2 capability. See the [DEVELOPMENT.md](docs/DEVELOPMENT.md) for instructions on how to further develop UDS RKE2.
 
 ### Virtual Machines

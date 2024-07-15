@@ -144,10 +144,12 @@ uds run deploy:nvidia-gpu-operator
 
 ## Airgap Testing
 
-You can use the [air-gapping script](./vm/scripts/airgap.sh) in the VM documentation directory to perform an IP tables manipulation to emulate an airgap. Modify the following line, which allows local area network access, in the script based on your LAN configuration:
+You can use the [air-gapping script](./vm/scripts/airgap.sh) in the VM documentation directory to perform an IP tables manipulation to emulate an airgap. Modify the following lines, which allow local area network traffic, in the script based on your LAN configuration:
 
 ```bash
+# Allow local network traffic - adjust to match your local network
 iptables -A OUTPUT -d 192.168.1.0/24 -j ACCEPT
+iptables -A OUTPUT -d 10.42.0.0/24 -j ACCEPT
 ```
 
 To reverse this effect, just execute the [airgap reversion script](./vm/scripts/reverse-airgap.sh).

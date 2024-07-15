@@ -13,8 +13,9 @@ iptables -A OUTPUT -o lo -j ACCEPT
 # Allow established connections
 iptables -A OUTPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
 
-# Allow local network (adjust to match your local network)
+# Allow local network traffic - adjust to match your local network
 iptables -A OUTPUT -d 192.168.1.0/24 -j ACCEPT
+iptables -A OUTPUT -d 10.42.0.0/24 -j ACCEPT
 
 # Repeat for IPv6
 ip6tables -P INPUT ACCEPT

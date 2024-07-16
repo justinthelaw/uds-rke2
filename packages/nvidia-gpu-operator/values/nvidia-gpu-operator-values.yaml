@@ -82,7 +82,7 @@ operator:
   imagePullPolicy: IfNotPresent
   imagePullSecrets: []
   priorityClassName: system-node-critical
-  # Sets default runtime is containerd, not docker
+  # Explicitly set runtime to containerd, not the default of `docker`
   defaultRuntime: containerd
   runtimeClass: nvidia
   use_ocp_driver_toolkit: false
@@ -93,8 +93,8 @@ operator:
   upgradeCRD: false
   initContainer:
     image: cuda
-    repository: nvcr.io/nvidia
-    version: 12.5.0-base-ubi8
+    repository: registry1.dso.mil/ironbank/opensource/nvidia
+    version: 12.4
     imagePullPolicy: IfNotPresent
   tolerations:
     - key: "node-role.kubernetes.io/master"

@@ -138,9 +138,13 @@ If you don't want to build an entire bundle, or you want to dev-loop on a single
 
 To build a single package, use the tasks located in the `STANDARD PACKAGES`, `INIT PACKAGES`, or `APP-SPECIFIC PACKAGES` sections of the [create.yaml](../create.yaml). Be careful to note the difference between building the LATEST packages and creating + deploying the local DEV versions of the packages.
 
-For example, this is how you build adn deploy a local DEV version of a package:
+For example, this is how you build and deploy a local DEV version of a package:
 
 ```bash
+# if package is already in the cluster, and you are deploying a new one
+uds zarf package remove nvidia-gpu-operator --confirm
+
+# create and deploy the new package
 uds run create:nvidia-gpu-operator --set VERSION=dev
 uds run deploy:nvidia-gpu-operator --set VERSION=dev
 ```
@@ -192,4 +196,34 @@ uds zarf tools monitor
 
 # kubectl command for logs
 uds zarf tools kubectl logs DaemonSet/metallb-speaker -n uds-rke2-infrastructure --follow
+```
+
+To describe node-level data, like resource usage, non-terminated pods, taints, etc. run the following command:
+
+```bash
+uds zarf tools kubectl describe node
+```
+
+To check which pods are sucking up GPUs in particular, you can run the following `yq` command:
+
+```bash
+uds zarf tools kubectl get pods \
+--all-namespaces \
+--output=yaml \
+| uds zarf tools yq eval -o=json '
+  ["Pod", "Namespace", "Container", "GPU"] as $header |
+  [$header] + [
+    .items[] |
+    .metadata as $metadata |
+    .spec.containers[] |
+    select(.resources.requests["nvidia.com/gpu"]) |
+    [
+      $metadata.name,
+      $metadata.namespace,
+      .name,
+      .resources.requests["nvidia.com/gpu"]
+    ]
+  ]' - \
+| jq -r '(.[0] | @tsv), (.[1:][] | @tsv)' \
+| column -t -s $'\t'
 ```

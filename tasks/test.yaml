@@ -9,9 +9,7 @@ includes:
 variables:
   - name: VERSION
     description: "Explicitly set the version, overriding the official release tag"
-    # x-release-please-start-version
-    default: "0.4.2"
-    # x-release-please-end
+    default: "dev"
 
 tasks:
   - name: uds-rke2
@@ -50,6 +48,5 @@ tasks:
 
       - task: setup:clean
 
-      # TODO: re-integrate once NVIDIA GPU Operator is completed
-      # - task: create:nvidia-gpu-operator
-      # - task: deploy:nvidia-gpu-operator
+      - task: create:nvidia-gpu-operator
+      - task: deploy:nvidia-gpu-operator

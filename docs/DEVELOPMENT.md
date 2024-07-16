@@ -227,3 +227,10 @@ uds zarf tools kubectl get pods \
 | jq -r '(.[0] | @tsv), (.[1:][] | @tsv)' \
 | column -t -s $'\t'
 ```
+
+Another debugging step is through the CUDA sample tests, [CUDA Vector Add](../tests/cuda-vector-add.yaml) or [Device Query](../tests/device-query.yaml). These can be deployed by executing the following on an existing cluster with NVIDIA GPU operator installed:
+
+```bash
+uds zarf tools kubectl apply tests/cuda-vector-add.yaml
+uds zarf tools kubectl apply tests/device-query.yaml
+```

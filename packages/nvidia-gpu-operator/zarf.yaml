@@ -24,6 +24,7 @@ components:
 
   - name: nvidia-gpu-operator
     required: true
+    # TODO: renovate setup
     images:
       - registry1.dso.mil/ironbank/opensource/nvidia/gpu-operator:v24.3.0
       - registry1.dso.mil/ironbank/opensource/nvidia/gpu-operator-validator:v24.3.0

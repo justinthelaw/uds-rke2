@@ -101,3 +101,6 @@ components:
                 namespace: nvidia-gpu-operator
                 condition: "'{.status.conditions[2].status}'=True"
             maxTotalSeconds: 300
+        onFailure:
+          - cmd: uds zarf tools kubectl describe nodes
+            description: "Attempt to provide node data for debugging after a failed deployment"

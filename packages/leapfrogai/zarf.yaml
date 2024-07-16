@@ -70,5 +70,3 @@ components:
                 namespace: kube-system
                 condition: "'{.status.conditions[2].status}'=True"
             maxTotalSeconds: 300
-        onFailure:
-          - cmd: uds zarf tools kubectl describe nodes

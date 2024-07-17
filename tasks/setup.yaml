@@ -24,7 +24,7 @@ tasks:
   - name: clean-docker
     description: "Cleans hanging Docker artifacts"
     actions:
-      - description: "Remove the build folder, Docker artifacts, and clear UDS and Zarf caches"
+      - description: "Remove the all Docker artifacts"
         cmd: |
           sudo docker system prune -a -f
           sudo docker volume prune -f

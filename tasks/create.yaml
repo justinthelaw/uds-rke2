@@ -126,6 +126,7 @@ tasks:
             -keyout build/packages/${{ .inputs.flavor }}/tls/tls.key \
             -out build/packages/${{ .inputs.flavor }}/tls/tls.cert \
             -config ${{ .inputs.tlsConfiguration }} \
+            -extensions v3_req \
             -days 365 -nodes
 
           base64 -w 0 build/packages/${{ .inputs.flavor }}/tls/tls.cert >  build/packages/${{ .inputs.flavor }}/tls/tls.cert.base64

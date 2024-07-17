@@ -34,15 +34,6 @@ tasks:
   # UTILITY
   #########
 
-  - name: create-tls-local-path
-    description: "Utility to re-create TLS cert and key, and inject them into the uds-config.yaml"
-    actions:
-      - task: create:tls
-        with:
-          flavor: local-path
-          bundleVersion: latest
-          tlsConfiguration: bundles/latest/tls.conf
-
   - name: create-tls-local-path-dev
     description: "Utility to re-create TLS cert and key, and inject them into the uds-config.yaml"
     actions:
@@ -60,9 +51,14 @@ tasks:
     description: "Bootstrap a new RKE2 cluster, with the Local Path Provisioner + MinIO Zarf Init and UDS Core packages (LATEST)"
     actions:
       - task: create:logical-volume
-      - task: create-tls-local-path
 
       - task: create:local-path-core-bundle
+
+      # TLS certificates are pre-packaged with UDS Core for *.uds.dev, which is the default for LATEST
+      # Please see the UDS task `create:tls` if different DNs and SANs, and therefore TLS certs, are required
+      - cmd: |
+          cp bundles/latest/local-path-core/uds-config.yaml build/packages/local-path/uds-config-latest.yaml
+
       - task: deploy:local-path-core-bundle
 
   - name: uds-rke2-local-path-core-dev

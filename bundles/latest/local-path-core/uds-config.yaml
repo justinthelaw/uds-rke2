@@ -45,10 +45,3 @@ variables:
     velero_bucket_provider_url: http://minio.minio.svc.cluster.local:9000
     velero_bucket_credential_name: uds
     velero_bucket_credential_key: uds-secret
-
-    # TLS CERT and KEY values must be base64 encoded
-    # Paste the entire TLS CERT or KEY value into the fields below
-    admin_tls_cert: BASE_64_ENCODED_TLS_CERT
-    admin_tls_key: BASE_64_ENCODED_TLS_KEY
-    tenant_tls_cert: BASE_64_ENCODED_TLS_CERT
-    tenant_tls_key: BASE_64_ENCODED_TLS_KEY

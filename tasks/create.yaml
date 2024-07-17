@@ -131,10 +131,10 @@ tasks:
           base64 -w 0 build/packages/${{ .inputs.flavor }}/tls/tls.cert >  build/packages/${{ .inputs.flavor }}/tls/tls.cert.base64
           base64 -w 0 build/packages/${{ .inputs.flavor }}/tls/tls.key >  build/packages/${{ .inputs.flavor }}/tls/tls.key.base64
           uds zarf tools yq eval-all '
-            .variables.uds-core.admin_tls_cert = "'"$(cat build/packages/${{ .inputs.flavor }}/tls/tls.cert.base64)"'" |
-            .variables.uds-core.admin_tls_key = "'"$(cat build/packages/${{ .inputs.flavor }}/tls/tls.key.base64)"'" |
-            .variables.uds-core.tenant_tls_cert = "'"$(cat build/packages/${{ .inputs.flavor }}/tls/tls.cert.base64)"'" |
-            .variables.uds-core.tenant_tls_key = "'"$(cat build/packages/${{ .inputs.flavor }}/tls/tls.key.base64)"'"
+            .variables.core.admin_tls_cert = "'"$(cat build/packages/${{ .inputs.flavor }}/tls/tls.cert.base64)"'" |
+            .variables.core.admin_tls_key = "'"$(cat build/packages/${{ .inputs.flavor }}/tls/tls.key.base64)"'" |
+            .variables.core.tenant_tls_cert = "'"$(cat build/packages/${{ .inputs.flavor }}/tls/tls.cert.base64)"'" |
+            .variables.core.tenant_tls_key = "'"$(cat build/packages/${{ .inputs.flavor }}/tls/tls.key.base64)"'"
           ' bundles/${{ .inputs.bundleVersion }}/${{ .inputs.flavor }}-core/uds-config.yaml \
             > build/packages/${{ .inputs.flavor }}/uds-config-${{ .inputs.bundleVersion }}.yaml
 

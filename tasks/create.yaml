@@ -106,7 +106,7 @@ tasks:
           sudo chown -Rv 65534:65534 /opt/uds
 
   - name: tls
-    description: "Generate self-signed TLS certs, and encodes them in base64, for build and testing purposes"
+    description: "Generate and inject CA and self-sign TLS certs for build and testing purposes"
     inputs:
       flavor:
         description: "Flavor of the custom Zarf Init package (local-path, rook-ceph, or longhorn)"
@@ -122,14 +122,19 @@ tasks:
           mkdir -p build/packages/${{ .inputs.flavor }}/tls/
           touch build/packages/${{ .inputs.flavor }}/uds-config-${{ .inputs.bundleVersion }}.yaml
 
-          openssl genrsa -out build/packages/${{ .inputs.flavor }}/tls/ca.key 2048
-          openssl req -x509 -new -nodes -key build/packages/${{ .inputs.flavor }}/tls/ca.key -sha256 -days 1825 -out build/packages/${{ .inputs.flavor }}/tls/ca.pem -subj "/CN=UDS RKE2 Root CA"
-
-          openssl genrsa -out build/packages/${{ .inputs.flavor }}/tls/tls.key 2048
-
-          openssl req -new -key build/packages/${{ .inputs.flavor }}/tls/tls.key -out build/packages/${{ .inputs.flavor }}/tls/tls.csr -config ${{ .inputs.tlsConfiguration }}
-
-          openssl x509 -req -in build/packages/${{ .inputs.flavor }}/tls/tls.csr -CA build/packages/${{ .inputs.flavor }}/tls/ca.pem -CAkey build/packages/${{ .inputs.flavor }}/tls/ca.key -CAcreateserial -out build/packages/${{ .inputs.flavor }}/tls/tls.cert -days 365 -sha256 -extfile ${{ .inputs.tlsConfiguration }} -extensions v3_req
+          openssl genrsa -out build/packages/${{ .inputs.flavor }}/tls/ca.key 4096
+          openssl req -x509 -new -nodes -key build/packages/${{ .inputs.flavor }}/tls/ca.key \
+            -sha256 -days 1825 -out build/packages/${{ .inputs.flavor }}/tls/ca.pem \
+            -subj "/CN=UDS RKE2 Root CA"
+          openssl genrsa -out build/packages/${{ .inputs.flavor }}/tls/tls.key 4096
+          openssl req -new -key build/packages/${{ .inputs.flavor }}/tls/tls.key \
+            -out build/packages/${{ .inputs.flavor }}/tls/tls.csr \
+            -config ${{ .inputs.tlsConfiguration }}
+          openssl x509 -req -in build/packages/${{ .inputs.flavor }}/tls/tls.csr \
+            -CA build/packages/${{ .inputs.flavor }}/tls/ca.pem \
+            -CAkey build/packages/${{ .inputs.flavor }}/tls/ca.key \
+            -CAcreateserial -out build/packages/${{ .inputs.flavor }}/tls/tls.cert \
+            -days 365 -sha256 -extfile ${{ .inputs.tlsConfiguration }} -extensions v3_req
 
           base64 -w 0 build/packages/${{ .inputs.flavor }}/tls/tls.cert > build/packages/${{ .inputs.flavor }}/tls/tls.cert.base64
           base64 -w 0 build/packages/${{ .inputs.flavor }}/tls/tls.key > build/packages/${{ .inputs.flavor }}/tls/tls.key.base64

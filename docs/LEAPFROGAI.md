@@ -1,7 +1,7 @@
 # LeapfrogAI
 
 <!-- TODO: renovate setup -->
-**Supported Version**: 0.8.0
+**Supported Version**: 0.9.1
 
 ## Supporting Packages
 
@@ -20,6 +20,12 @@ The RKE2 CoreDNS service needs to proxy requests to the external Supabase's HTTP
 In the "LATEST" bundles and package published to GHCR domain used for the CoreDNS reroute is, by default, `uds.dev`; whereas the "DEV" bundles are `uds.local` by default. Please see the UDS [create](../tasks/create.yaml) and [deploy](../tasks/deploy.yaml) tasks for details on how to change this to a domain of your choice.
 
 See the [DNS and TLS docs](./DNS-TLS.md) for some more detail on DNS settings and rationale.
+
+#### CA Certificates for Supabase
+
+As mentioned in the previous section, the CA certificate used to sign the TLS certificates in the Istio Gateways (tenant and admin), must be provided to Supabase in order for Supabase to trust the services, namely KeyCloak, connecting to it via HTTPS protocol.
+
+The workarounds package contains a method for supplying these CA certificates to Supabase. Please modify the package, deployment operations and UDS tasks as required to meet the requirements of your deployment environment.
 
 ## Additional Info
 

@@ -9,7 +9,7 @@ In this repository's `uds-rke2` packages and bundles, this public DNS resolution
 ## Modifying Domain
 
 > [!NOTE]
-> Modifying the domain requires the associated TLS certificate and key creation configuration to also be modified. Please see the [`create:tls` and `create:tls-dev` tasks](../tasks/create.yaml) for more details.
+> Modifying the domain requires the associated TLS certificate and key creation configuration to also be modified. Please see the [`create:tls` task](../tasks/create.yaml) for more details.
 
 In the UDS create and deploy actions, there is a `DOMAIN` variable that can be set to affect how the underlying packages are built and deployed. The `DOMAIN` is required for both stages as each package requires the setting of the domain at different steps (create or deploy-time).
 
@@ -19,6 +19,12 @@ An example of the shared `DOMAIN` variable in a UDS configuration file (DEV):
 shared:
   domain: uds.local
 ```
+
+## CA and TLS Certs Management
+
+The CA and TLS certs are all created and injected by the aforementioned `create:tls` UDS task. To modify this behavior to use your own CA and TLS certificates, you will need to copy and paste your TLS key and cert, base64 encoded, into the `uds-config-dev.yaml` or `uds-config-latest.yaml` PRIOR to running the UDS task to deploy the bundle.
+
+The CA certs that result from this process, or the CA certs you used to sign the original TLS certs, must be available to the host machine(s) and cluster so that the HTTPS errors do not show up to the end-users of the web applications and API, and so that services within the cluster (e.g., [Supabase and KeyCloak in LeapfrogAI](./LEAPFROGAI.md) case) that reach out to each other via HTTPS do not error out due to CA trust issues.
 
 ## Host File Modifications
 

@@ -102,6 +102,14 @@ packages:
 
       keycloak:
         keycloak:
+          values:
+            # Turn off verifications for dev or prototype deployments
+            - path: realmInitEnv
+              value:
+                EMAIL_VERIFICATION_ENABLED: false
+                OTP_ENABLED: false
+                TERMS_AND_CONDITIONS_ENABLED: false
+                X509_OCSP_FAIL_OPEN: false
           variables:
             # TODO: this can only be `false` if a Postgres is integrated and accessible in the cluster
             - name: KEYCLOAK_DEV_MODE
@@ -110,13 +118,14 @@ packages:
             - name: KEYCLOAK_FIPS_MODE
               path: fips
               default: true
-            # Turn off MFA and email verification - not generally needed in dev or prototype deployments
-            - name: KEYCLOAK_EMAIL_VERIFICATION_ENABLED
-              path: realmInitEnv.email_verification_enabled
-              default: false
-            - name: KEYCLOAK_OTP_ENABLED
-              path: realmInitEnv.otp_enabled
-              default: false
+            # Enable headless admin account generation, SHOULD BE CHANGED IMMEDIATELY AFTER
+            # Can be found in `keycloak-admin-password` secret in-cluster
+            - name: KEYCLOAK_ENABLE_INSECURE_ADMIN_PASSWORD
+              path: insecureAdminPasswordGeneration.enabled
+              default: true
+            - name: KEYCLOAK_ADMIN_USERNAME
+              path: insecureAdminPasswordGeneration.username
+              default: admin
 
       # Access to UDS cluster administration services (e.g., *admin.uds.dev, grafana.admin.uds.dev)
       # Access to UDS application services (e.g., *.uds.dev, ai.uds.dev)

@@ -26,6 +26,15 @@ The CA and TLS certs are all created and injected by the aforementioned `create:
 
 The CA certs that result from this process, or the CA certs you used to sign the original TLS certs, must be available to the host machine(s) and cluster so that the HTTPS errors do not show up to the end-users of the web applications and API, and so that services within the cluster (e.g., [Supabase and KeyCloak in LeapfrogAI](./LEAPFROGAI.md) case) that reach out to each other via HTTPS do not error out due to CA trust issues.
 
+Once the CA cert has been created as part of the overall `uds-rke2-local-path-core` or `uds-rke2-local-path-core-dev` task, you copy the CA certs into your host machine's trust store. For example, in Ubuntu the following command is used:
+
+```bash
+cp build/packages/local-path/tls/ca.pem /usr/local/share/ca-certificates/ca.crt
+sudo update-ca-certificates
+```
+
+If you are using a browser that does not use the host machine's trust store location, then you will need to upload the CA certificate into the browser's settings related to Trust, Privacy and/or Security. Please refer to your browser's documentation for more details.
+
 ## Host File Modifications
 
 The default Istio Ingress gateways deployed with the UDS RKE2 bundle are assigned the following MetalLB allocated IPs, where `BASE_IP` is the IP of the host machine as identified within the MetalLB component of UDS RKE2 INfrastructure Zarf package:

@@ -55,7 +55,7 @@ tasks:
       - task: create:local-path-core-bundle
 
       # TLS certificates are pre-packaged with UDS Core for *.uds.dev, which is the default for LATEST
-      # Please see the UDS task `create:tls` if different DNs and SANs, and therefore TLS certs, are required
+      # Please see `docs/DNS-TLS.md` if your use case requires different CA, TLS, DNS, etc.
       - cmd: |
           cp bundles/latest/local-path-core/uds-config.yaml build/packages/local-path/uds-config-latest.yaml
 

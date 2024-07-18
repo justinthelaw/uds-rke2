@@ -120,7 +120,7 @@ tasks:
     actions:
       - cmd: |
           mkdir -p build/packages/${{ .inputs.flavor }}/tls/
-          touch build/packages/${{ .inputs.flavor }}/uds-config-${{ .inputs.bundleVersion }}-test.yaml
+          touch build/packages/${{ .inputs.flavor }}/uds-config-${{ .inputs.bundleVersion }}.yaml
 
           openssl genrsa -out build/packages/${{ .inputs.flavor }}/tls/ca.key 2048
           openssl req -x509 -new -nodes -key build/packages/${{ .inputs.flavor }}/tls/ca.key -sha256 -days 1825 -out build/packages/${{ .inputs.flavor }}/tls/ca.pem -subj "/CN=UDS RKE2 Root CA"
@@ -140,7 +140,7 @@ tasks:
             .variables.core.tenant_tls_cert = "'"$(cat build/packages/${{ .inputs.flavor }}/tls/tls.cert.base64)"'" |
             .variables.core.tenant_tls_key = "'"$(cat build/packages/${{ .inputs.flavor }}/tls/tls.key.base64)"'"
           ' bundles/${{ .inputs.bundleVersion }}/${{ .inputs.flavor }}-core/uds-config.yaml \
-            > build/packages/${{ .inputs.flavor }}/uds-config-${{ .inputs.bundleVersion }}-test.yaml
+            > build/packages/${{ .inputs.flavor }}/uds-config-${{ .inputs.bundleVersion }}.yaml
 
   #########
   # BUNDLES

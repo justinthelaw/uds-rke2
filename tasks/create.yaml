@@ -120,24 +120,27 @@ tasks:
     actions:
       - cmd: |
           mkdir -p build/packages/${{ .inputs.flavor }}/tls/
-          touch build/packages/${{ .inputs.flavor }}/uds-config-${{ .inputs.bundleVersion }}.yaml
+          touch build/packages/${{ .inputs.flavor }}/uds-config-${{ .inputs.bundleVersion }}-test.yaml
 
-          openssl req -x509 -newkey rsa:4096 \
-            -keyout build/packages/${{ .inputs.flavor }}/tls/tls.key \
-            -out build/packages/${{ .inputs.flavor }}/tls/tls.cert \
-            -config ${{ .inputs.tlsConfiguration }} \
-            -extensions v3_req \
-            -days 365 -nodes
+          openssl genrsa -out build/packages/${{ .inputs.flavor }}/tls/ca.key 2048
+          openssl req -x509 -new -nodes -key build/packages/${{ .inputs.flavor }}/tls/ca.key -sha256 -days 1825 -out build/packages/${{ .inputs.flavor }}/tls/ca.pem -subj "/CN=UDS RKE2 Root CA"
 
-          base64 -w 0 build/packages/${{ .inputs.flavor }}/tls/tls.cert >  build/packages/${{ .inputs.flavor }}/tls/tls.cert.base64
-          base64 -w 0 build/packages/${{ .inputs.flavor }}/tls/tls.key >  build/packages/${{ .inputs.flavor }}/tls/tls.key.base64
+          openssl genrsa -out build/packages/${{ .inputs.flavor }}/tls/tls.key 2048
+
+          openssl req -new -key build/packages/${{ .inputs.flavor }}/tls/tls.key -out build/packages/${{ .inputs.flavor }}/tls/tls.csr -config ${{ .inputs.tlsConfiguration }}
+
+          openssl x509 -req -in build/packages/${{ .inputs.flavor }}/tls/tls.csr -CA build/packages/${{ .inputs.flavor }}/tls/ca.pem -CAkey build/packages/${{ .inputs.flavor }}/tls/ca.key -CAcreateserial -out build/packages/${{ .inputs.flavor }}/tls/tls.cert -days 365 -sha256 -extfile ${{ .inputs.tlsConfiguration }} -extensions v3_req
+
+          base64 -w 0 build/packages/${{ .inputs.flavor }}/tls/tls.cert > build/packages/${{ .inputs.flavor }}/tls/tls.cert.base64
+          base64 -w 0 build/packages/${{ .inputs.flavor }}/tls/tls.key > build/packages/${{ .inputs.flavor }}/tls/tls.key.base64
+
           uds zarf tools yq eval-all '
             .variables.core.admin_tls_cert = "'"$(cat build/packages/${{ .inputs.flavor }}/tls/tls.cert.base64)"'" |
             .variables.core.admin_tls_key = "'"$(cat build/packages/${{ .inputs.flavor }}/tls/tls.key.base64)"'" |
             .variables.core.tenant_tls_cert = "'"$(cat build/packages/${{ .inputs.flavor }}/tls/tls.cert.base64)"'" |
             .variables.core.tenant_tls_key = "'"$(cat build/packages/${{ .inputs.flavor }}/tls/tls.key.base64)"'"
           ' bundles/${{ .inputs.bundleVersion }}/${{ .inputs.flavor }}-core/uds-config.yaml \
-            > build/packages/${{ .inputs.flavor }}/uds-config-${{ .inputs.bundleVersion }}.yaml
+            > build/packages/${{ .inputs.flavor }}/uds-config-${{ .inputs.bundleVersion }}-test.yaml
 
   #########
   # BUNDLES

@@ -41,7 +41,7 @@ tasks:
         with:
           flavor: local-path
           bundleVersion: dev
-          tlsConfiguration: bundles/dev/tls.conf
+          certConfDir: bundles/dev
 
   ###########################
   # CREATE AND DEPLOY BUNDLES
@@ -54,10 +54,10 @@ tasks:
 
       - task: create:local-path-core-bundle
 
-      # TLS certificates are pre-packaged with UDS Core for *.uds.dev, which is the default for LATEST
-      # Please see `docs/DNS-TLS.md` if your use case requires different CA, TLS, DNS, etc.
+      # TLS certificates are pre-packaged with UDS Core for *.uds.dev, which is the default domain for LATEST
+      # Please see `docs/DNS-TLS.md` if the deployment environment requires different CA, TLS, etc.
       - cmd: |
-          cp bundles/latest/local-path-core/uds-config.yaml build/packages/local-path/uds-config-latest.yaml
+          cp bundles/latest/local-path-core/uds-config.yaml build/packages/local-path/uds-config-${VERSION}.yaml
 
       - task: deploy:local-path-core-bundle
 
@@ -68,6 +68,9 @@ tasks:
         cmd: sudo uds run create:local-path-core-bundle-packages --set VERSION=dev --log-level warn --no-progress -a amd64
 
       - task: create:logical-volume
+
+      # Automatically generated and signed CA and TLS certificates for *.uds.local
+      # Please see `docs/DNS-TLS.md` if the deployment environment requires different CA, TLS, etc.
       - task: create-tls-local-path-dev
 
       - task: create:local-path-core-bundle-dev

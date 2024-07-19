@@ -101,7 +101,7 @@ tasks:
         with:
           name: uds-rke2-local-path-core
           path: build/bundles
-          udsConfig: "build/packages/local-path/uds-config-latest.yaml"
+          udsConfig: build/packages/local-path/uds-config-${VERSION}.yaml
           version: ${VERSION}
           joinToken: ${JOIN_TOKEN}
           networkInterface: ${NETWORK_INTERFACE}
@@ -114,7 +114,7 @@ tasks:
         with:
           name: uds-rke2-local-path-core
           path: build/bundles
-          udsConfig: "build/packages/local-path/uds-config-dev.yaml"
+          udsConfig: build/packages/local-path/uds-config-dev.yaml
           version: dev
           joinToken: ${JOIN_TOKEN}
           networkInterface: ${NETWORK_INTERFACE}

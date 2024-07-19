@@ -23,9 +23,9 @@ See the [DNS and TLS docs](./DNS-TLS.md) for some more detail on rationale, and 
 
 #### CA Certificates for Supabase
 
-As mentioned in the previous section, the CA certificate used to sign the TLS certificates in the Istio Gateways (tenant and admin), must be provided to Supabase in order for Supabase to trust the services, namely KeyCloak, connecting to it via HTTPS protocol.
+As mentioned in the previous section, the CA certificate used to sign the TLS certificates in the Istio Gateways (tenant and admin), must be provided to services that interact with Supabase via HTTPS protocol.
 
-The workarounds package contains a method for supplying these CA certificates to Supabase necessary Supabase containers that communicate over HTTPS to other internal cluster services directly (i.e., `supabase-auth`).
+The workarounds package contains a method for supplying these CA certificates to the containers that communicate over HTTPS to/from Supabase containers (i.e., `keycloak` -> `supabase-auth` -> `leapfrogai-ui`).
 
 ## Additional Info
 

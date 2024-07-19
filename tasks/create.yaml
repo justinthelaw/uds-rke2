@@ -151,10 +151,10 @@ tasks:
 
           # Update the uds-config file
           uds zarf tools yq eval-all '
-            .variables.core.admin_tls_cert = "'"$(cat build/packages/${{ .inputs.flavor }}/tls/tls.cert.base64)"'" |
-            .variables.core.admin_tls_key = "'"$(cat build/packages/${{ .inputs.flavor }}/tls/tls.key.base64)"'" |
-            .variables.core.tenant_tls_cert = "'"$(cat build/packages/${{ .inputs.flavor }}/tls/tls.cert.base64)"'" |
-            .variables.core.tenant_tls_key = "'"$(cat build/packages/${{ .inputs.flavor }}/tls/tls.key.base64)"'"
+            .variables.core.admin_tls_cert = "'"$(cat build/packages/${{ .inputs.flavor }}/certs/tls.cert.base64)"'" |
+            .variables.core.admin_tls_key = "'"$(cat build/packages/${{ .inputs.flavor }}/certs/tls.key.base64)"'" |
+            .variables.core.tenant_tls_cert = "'"$(cat build/packages/${{ .inputs.flavor }}/certs/tls.cert.base64)"'" |
+            .variables.core.tenant_tls_key = "'"$(cat build/packages/${{ .inputs.flavor }}/certs/tls.key.base64)"'"
           ' bundles/${{ .inputs.bundleVersion }}/${{ .inputs.flavor }}-core/uds-config.yaml \
             > build/packages/${{ .inputs.flavor }}/uds-config-${{ .inputs.bundleVersion }}.yaml
 

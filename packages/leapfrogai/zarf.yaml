@@ -124,8 +124,8 @@ components:
                   "path": "/spec/template/spec/containers/0/volumeMounts/-",
                   "value": {
                     "name": "uds-rke2-custom-ca-cert",
-                    "subPath": "cacert"
-                    "mountPath": "/etc/ssl/certs/${ZARF_VAR_CA_TRUST_BUNDLE_NAME}",
+                    "subPath": "cacert",
+                    "mountPath": "/etc/ssl/certs/${ZARF_VAR_CA_TRUST_BUNDLE_NAME}"
                   }
                 }
               ]'
@@ -150,8 +150,8 @@ components:
                   "path": "/spec/template/spec/containers/0/volumeMounts/-",
                   "value": {
                     "name": "uds-rke2-custom-ca-cert",
-                    "subPath": "cacert"
-                    "mountPath": "/etc/ssl/certs/${ZARF_VAR_CA_TRUST_BUNDLE_NAME}",
+                    "subPath": "cacert",
+                    "mountPath": "/etc/ssl/certs/${ZARF_VAR_CA_TRUST_BUNDLE_NAME}"
                   }
                 }
               ]'

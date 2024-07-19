@@ -35,6 +35,10 @@ update-ca-certificates
 
 If you are using a browser that does not use the host machine's trust store location, then you will need to upload the CA certificate into the browser's settings related to Trust, Privacy and/or Security. Please refer to your browser's documentation for more details.
 
+### CA Trust Bundles
+
+UDS Core, which UDS RKE2 is reliant on, has an [outstanding issue for centralized management of CA trust bundles](https://github.com/defenseunicorns/uds-core/issues/464) within the cluster. This is slightly outside the scope of UDS RKE2's base infrastructure and any applications that have CA trust issues due to service mesh incompatibilities or communication must follow the pattern seen in the [`leapfrogAI-workarounds` package](../packages/leapfrogai/zarf.yaml).
+
 ## Host File Modifications
 
 The default Istio Ingress gateways deployed with the UDS RKE2 bundle are assigned the following MetalLB allocated IPs, where `BASE_IP` is the IP of the host machine as identified within the MetalLB component of UDS RKE2 INfrastructure Zarf package:

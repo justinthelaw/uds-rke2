@@ -13,19 +13,19 @@ The following are workarounds for LeapfrogAI that must be implemented within the
 
 #### RKE2 CoreDNS
 
-Patch the RKE2 CoreDNS Corefile with the tenant and admin gateway rewrites for Supabase and KeyCloak hand-offs
+Patch the RKE2 CoreDNS Corefile with the tenant and admin gateway rewrites for Supabase and KeyCloak hand-offs.
 
 The RKE2 CoreDNS service needs to proxy requests to the external Supabase's HTTPS endpoint to the internal cluster service instead, and also for the KeyCloak admin service as well. This is because the Supabase authentication handoff requires interaction with a third-party, SSO service that is served from an HTTPS endpoint. This CoreDNS workaround allows us to properly resolve the Supabase and KeyCloak HTTPS endpoints internally without leaving the cluster.
 
 In the "LATEST" bundles and package published to GHCR domain used for the CoreDNS reroute is, by default, `uds.dev`; whereas the "DEV" bundles are `uds.local` by default. Please see the UDS [create](../tasks/create.yaml) and [deploy](../tasks/deploy.yaml) tasks for details on how to change this to a domain of your choice.
 
-See the [DNS and TLS docs](./DNS-TLS.md) for some more detail on DNS settings and rationale.
+See the [DNS and TLS docs](./DNS-TLS.md) for some more detail on rationale, and the [CA Certificates for Supabase section](#ca-certificates-for-supabase) for some workarounds required when the Domain, CA cert, and/or the TLS cert/key are changed for a particular deployment environment.
 
 #### CA Certificates for Supabase
 
 As mentioned in the previous section, the CA certificate used to sign the TLS certificates in the Istio Gateways (tenant and admin), must be provided to Supabase in order for Supabase to trust the services, namely KeyCloak, connecting to it via HTTPS protocol.
 
-The workarounds package contains a method for supplying these CA certificates to Supabase. Please modify the package, deployment operations and UDS tasks as required to meet the requirements of your deployment environment.
+The workarounds package contains a method for supplying these CA certificates to Supabase necessary Supabase containers that communicate over HTTPS to other internal cluster services directly (i.e., `supabase-auth`).
 
 ## Additional Info
 

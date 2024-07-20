@@ -19,8 +19,8 @@ variables:
     default: "build/packages/local-path/certs"
     prompt: true
   - name: CA_TRUST_BUNDLE_NAME
-    description: "The CA trust bundle name (e.g., uds-rke2-custom-ca-cert.ca-bundle)"
-    default: "uds-rke2-custom-ca-cert.ca-bundle"
+    description: "The CA trust bundle name (e.g., ca.pem)"
+    default: "ca.pem"
     prompt: true
 
 components:
@@ -82,30 +82,20 @@ components:
   - name: inject-ca-trust-bundles
     required: true
     description: "Create and mount the CA trust bundle into the Supabase and LeapfrogAI UI pods"
-    # Volume mount locations in the deployment manifest:
-
-    # spec.template.spec.containers
-    # volumes:
-    # - configMap:
-    #     defaultMode: 0777
-    #     name: uds-rke2-custom-ca-cert
-    #   name: uds-rke2-custom-ca-cert
-
-    # spec.template.spec
-    # volumeMounts:
-    # - mountPath: /etc/ssl/certs/uds-rke2-custom-ca-cert.ca-bundle
-    #   name: uds-rke2-custom-ca-cert
-    #   subPath: cacert
     actions:
       onDeploy:
         before:
           - cmd: |
+              rm -f ${ZARF_VAR_CERTIFICATE_DIRECTORY}/uds-rke2-custom-ca-cert.ca-bundle
+              cp ${ZARF_VAR_CERTIFICATE_DIRECTORY}/${ZARF_VAR_CA_TRUST_BUNDLE_NAME} \
+                ${ZARF_VAR_CERTIFICATE_DIRECTORY}/uds-rke2-custom-ca-cert.ca-bundle
+
               uds zarf tools kubectl create configmap uds-rke2-custom-ca-cert \
-                --from-file=cacert=${ZARF_VAR_CERTIFICATE_DIRECTORY}/${ZARF_VAR_CA_TRUST_BUNDLE_NAME} \
+                --from-file=cacert=${ZARF_VAR_CERTIFICATE_DIRECTORY}/uds-rke2-custom-ca-cert.ca-bundle \
                 -n leapfrogai
             description: "Create the CA trust bundle ConfigMap"
           - cmd: |
-              kubectl patch deployment supabase-auth -n leapfrogai --type=json -p='[
+              uds zarf tools kubectl patch deployment supabase-auth -n leapfrogai --type=json -p='[
                 {
                   "op": "add",
                   "path": "/spec/template/spec/volumes/-",
@@ -116,42 +106,50 @@ components:
                       "defaultMode": 511
                     }
                   }
-                }
-              ]'
-              kubectl patch deployment supabase-auth -n leapfrogai --type=json -p='[
+                },
                 {
                   "op": "add",
                   "path": "/spec/template/spec/containers/0/volumeMounts/-",
                   "value": {
                     "name": "uds-rke2-custom-ca-cert",
                     "subPath": "cacert",
-                    "mountPath": "/etc/ssl/certs/${ZARF_VAR_CA_TRUST_BUNDLE_NAME}"
+                    "mountPath": "/etc/ssl/certs/uds-rke2-custom-ca-cert.ca-bundle"
                   }
                 }
               ]'
             description: "Mount the CA trust bundle ConfigMap to the Supabase Auth container"
           - cmd: |
-              kubectl patch deployment leapfrogai-ui -n leapfrogai --type=json -p='[
+              uds zarf tools kubectl patch deployment leapfrogai-ui -n leapfrogai --type=json -p='[
                 {
                   "op": "add",
-                  "path": "/spec/template/spec/volumes/-",
-                  "value": {
-                    "name": "uds-rke2-custom-ca-cert",
-                    "configMap": {
+                  "path": "/spec/template/spec/volumes",
+                  "value": [
+                    {
                       "name": "uds-rke2-custom-ca-cert",
-                      "defaultMode": 511
+                      "configMap": {
+                        "name": "uds-rke2-custom-ca-cert",
+                        "defaultMode": 511
+                      }
                     }
-                  }
-                }
-              ]'
-              kubectl patch deployment leapfrogai-ui -n leapfrogai --type=json -p='[
+                  ]
+                },
                 {
                   "op": "add",
-                  "path": "/spec/template/spec/containers/0/volumeMounts/-",
+                  "path": "/spec/template/spec/containers/0/volumeMounts",
+                  "value": [
+                    {
+                      "name": "uds-rke2-custom-ca-cert",
+                      "subPath": "cacert",
+                      "mountPath": "/etc/ssl/certs/uds-rke2-custom-ca-cert.ca-bundle"
+                    }
+                  ]
+                },
+                {
+                  "op": "add",
+                  "path": "/spec/template/spec/containers/0/env/-",
                   "value": {
-                    "name": "uds-rke2-custom-ca-cert",
-                    "subPath": "cacert",
-                    "mountPath": "/etc/ssl/certs/${ZARF_VAR_CA_TRUST_BUNDLE_NAME}"
+                    "name": "NODE_EXTRA_CA_CERTS",
+                    "value": "/etc/ssl/certs/uds-rke2-custom-ca-cert.ca-bundle"
                   }
                 }
               ]'

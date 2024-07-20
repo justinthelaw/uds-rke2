@@ -53,6 +53,20 @@ jobs:
       packages: write
 
     steps:
+      - name: Maximize GitHub Runner Space
+        uses: justinthelaw/maximize-github-runner-space@f1181577375d1bdbf1897db6295f50ff34fdc94a # v0.1.1
+        with:
+          # Standard package removal actions
+          remove-dotnet: "true"
+          remove-android: "true"
+          remove-haskell: "true"
+          remove-codeql: "true"
+          remove-docker-images: "true"
+          # Custom removal actions
+          remove-large-packages: "true"
+          remove-swapfile: "true"
+          remove-cached-tools: "true"
+
       - name: Checkout Repo
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
 

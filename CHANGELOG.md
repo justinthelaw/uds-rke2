@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.5.0](https://github.com/justinthelaw/uds-rke2/compare/v0.4.2...v0.5.0) (2024-07-20)
+
+
+### Features
+
+* nvidia gpu operator and ca signed tls certs ([#39](https://github.com/justinthelaw/uds-rke2/issues/39)) ([3b8ec24](https://github.com/justinthelaw/uds-rke2/commit/3b8ec2476d41d5bd82920f4556d257fe89b10602))
+
+
+### Bug Fixes
+
+* release please for nvidia gpu operator ([#49](https://github.com/justinthelaw/uds-rke2/issues/49)) ([ac020d1](https://github.com/justinthelaw/uds-rke2/commit/ac020d1bb8c06e1ec34d8138cd7a58879b0e0c51))
+
 ## [0.4.2](https://github.com/justinthelaw/uds-rke2/compare/v0.4.1...v0.4.2) (2024-06-14)
 
 

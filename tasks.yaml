@@ -106,7 +106,7 @@ tasks:
   - name: release
     description: "Builds and publishes all Zarf packages and Bundles in the repository (LATEST)"
     actions:
-      - task: release-packages
+      - task: release-packages-with-clean
       - task: release-bundles
 
   - name: release-packages

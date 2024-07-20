@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.5.1](https://github.com/justinthelaw/uds-rke2/compare/v0.5.0...v0.5.1) (2024-07-20)
+
+
+### Bug Fixes
+
+* dev and latest release workflow reversed ([#52](https://github.com/justinthelaw/uds-rke2/issues/52)) ([228d784](https://github.com/justinthelaw/uds-rke2/commit/228d784d0337fa7fbd4d9179fcce82e9f436abe5))
+* release workflow with artifact clean ([#50](https://github.com/justinthelaw/uds-rke2/issues/50)) ([1e13d22](https://github.com/justinthelaw/uds-rke2/commit/1e13d2241d799d565e18a48486a1c4c3a311bdc8))
+
 ## [0.5.0](https://github.com/justinthelaw/uds-rke2/compare/v0.4.2...v0.5.0) (2024-07-20)
 
 

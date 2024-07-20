@@ -21,3 +21,9 @@ The below is used to manually create the custom Zarf init package, which is usua
 # Create the zarf init package
 uds zarf package create --architecture amd64 --confirm --set AGENT_IMAGE_TAG=$(zarf version)
 ```
+
+## Additional Info
+
+- [Zarf Repository](https://github.com/defenseunicorns/zarf)
+- [Zarf Documentation Website](https://docs.zarf.dev/getting-started/)
+- [Zarf Init Package](https://docs.zarf.dev/ref/init-package/)

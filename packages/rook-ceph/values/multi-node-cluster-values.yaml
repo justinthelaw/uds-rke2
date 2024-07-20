@@ -1,7 +1,5 @@
 # See the UDS RKE2 repository's documentation, `docs/ROOK-CEPH.md` for more details on values overrides
 
-# Please use UDS overrides to accomplish the definition of environment or node-specific configurations, like deviceFilters per node
-
 imagePullSecrets:
   - name: private-registry
 

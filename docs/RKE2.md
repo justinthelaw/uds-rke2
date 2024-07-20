@@ -49,10 +49,42 @@ An example setup is provided below:
 - Node3: `/root/rke2-startup.sh -t <token> -s <rke2_lb_address> -T <rke2_dns_address>`
 - NodeN (agent nodes): `/root/rke2-startup.sh -t <token> -s <rke2_lb_address> -a`
 
+### Script `containerd` Configuration
+
+The `containerd` configuration template is within the startup script. This configuration template adds options to the host's `containerd` configuration, as seen in the example below:
+
+```toml
+# /var/lib/rancher/rke2/agent/etc/containerd/config.toml.tmpl
+version = 2
+
+[plugins."io.containerd.internal.v1.opt"]
+  path = "/var/lib/rancher/rke2/agent/containerd"
+
+[plugins."io.containerd.grpc.v1.cri"]
+  stream_server_address = "127.0.0.1"
+  stream_server_port = "10010"
+  enable_selinux = false
+  enable_unprivileged_ports = true
+  enable_unprivileged_icmp = true
+  sandbox_image = "registry1.dso.mil/ironbank/opensource/pause/pause:3.9"
+
+[plugins."io.containerd.grpc.v1.cri".containerd]
+  snapshotter = "overlayfs"
+  disable_snapshot_annotations = true
+
+[plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc]
+  runtime_type = "io.containerd.runc.v2"
+
+[plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc.options]
+  SystemdCgroup = true
+```
+
 ## Additional Info
 
 - [RKE2 Releases](https://github.com/rancher/rke2/releases)
-- [Air-Gap Install](https://docs.rke2.io/install/airgap#tarball-method)
-- [RKE2 Installation options](https://docs.rke2.io/install/methods)
-- [RKE2 Configuration file](https://docs.rke2.io/install/configuration)
-- [RKE2 High-availability](https://ranchermanager.docs.rancher.com/how-to-guides/new-user-guides/kubernetes-cluster-setup/rke2-for-rancher)
+- [RKE2 Air-Gap Install](https://docs.rke2.io/install/airgap#tarball-method)
+- [RKE2 Installation Options](https://docs.rke2.io/install/methods)
+- [RKE2 Configuration File](https://docs.rke2.io/install/configuration)
+- [RKE2 High-Availability](https://ranchermanager.docs.rancher.com/how-to-guides/new-user-guides/kubernetes-cluster-setup/rke2-for-rancher)
+- [RKE2 Repository](https://github.com/rancher/rke2)
+- [RKE2 Documentation Website](https://docs.rke2.io/install/quickstart)

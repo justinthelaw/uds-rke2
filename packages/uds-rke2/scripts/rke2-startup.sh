@@ -97,6 +97,16 @@ version = 2
 
 [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc.options]
   SystemdCgroup = true
+
+[plugins."io.containerd.grpc.v1.cri".containerd.runtimes.nvidia]
+  privileged_without_host_devices = false
+  runtime_engine = ""
+  runtime_root = ""
+  runtime_type = "io.containerd.runc.v2"
+
+[plugins."io.containerd.grpc.v1.cri".containerd.runtimes.nvidia.options]
+  BinaryName = "/usr/bin/nvidia-container-runtime"
+  Runtime = "/usr/bin/nvidia-container-runtime"
 EOF
 
 # Start RKE2
@@ -139,7 +149,7 @@ chmod 0700 $DIR/pod-manifests
 chmod 0700 $DIR/etc
 
 find /var/lib/rancher/rke2 -maxdepth 1 -type f -name "*.kubeconfig" -exec chmod 0640 {} \;
-find /var/lib/rancher/rke2 -maxdepth 1 -type f -name "*.crt" -exec chmod 0600 {} \;
+find /var/lib/rancher/rke2 -maxdepth 1 -type f -name "*.cert" -exec chmod 0600 {} \;
 find /var/lib/rancher/rke2 -maxdepth 1 -type f -name "*.key" -exec chmod 0600 {} \;
 
 DIR=/var/lib/rancher/rke2/bin

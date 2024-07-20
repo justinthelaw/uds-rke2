@@ -97,3 +97,10 @@ sgdisk --zap-all $DISK
 dd if=/dev/zero of="$DISK" bs=1M count=100 oflag=direct,dsync
 partprobe $DISK
 ```
+
+## Additional Info
+
+- [Rook-Ceph Repository](https://github.com/rook/rook)
+- [Rook-Ceph Documentation Website](https://rook.io/docs/rook/latest-release/Getting-Started/intro/)
+- [Ceph Repository](https://github.com/ceph/ceph)
+- [Ceph Documentation Website](https://docs.ceph.com/en/latest/dev/developer_guide/intro/)

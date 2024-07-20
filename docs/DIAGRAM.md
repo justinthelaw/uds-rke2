@@ -1,6 +1,6 @@
 # UDS RKE2 Diagram
 
-Below is an diagram showing an example deployment of UDS RKE2 with the `local-path` flavor custom Zarf Init and LeapfrogAI deployed on top. The dependency chain and installation order are from bottom to top.
+Below is an diagram showing an example deployment of UDS RKE2 with the `local-path` flavor custom Zarf Init, NVIDIA GPU Operator and LeapfrogAI deployed on top. The dependency chain and installation order are from bottom to top.
 
 ```mermaid
 flowchart
@@ -14,12 +14,22 @@ flowchart
             lfai_workarounds --> lfai_package
         end
 
+        init["Zarf Package: nvidia-gpu-operator"]
+        subgraph "NVIDIA GPU Operator"
+            nfd["Zarf Component: node-feature-discovery"]
+            nvidia["Zarf Component: nvidia-gpu-operator"]
+
+            direction BT
+            nfd --> nvidia
+        end
+
         subgraph "UDS RKE2 Exemptions"
             exemptions["
                 Zarf Package: uds-rke2-exemptions-local-path
 
                 - uds-rke2-infrastructure-exemptions
                 - local-path-exemptions
+                - nvidia-gpu-operator-exemptions
             "]
         end
 
@@ -42,6 +52,7 @@ flowchart
                 - Velero
             "]
         end
+
         subgraph "UDS RKE2 Infrastructure"
             infrastructure["
                 Zarf Package: infrastructure

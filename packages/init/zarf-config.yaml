@@ -24,7 +24,7 @@ package:
       # LOCAL PATH PROVISIONER
       ########################
 
-      node_path_map_values_file: values/node-path-map-values.yaml
+      storage_configuration_values_file: values/storage-configuration-values.yaml
 
       ###########
       # ROOK-CEPH

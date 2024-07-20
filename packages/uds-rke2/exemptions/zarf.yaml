@@ -17,12 +17,15 @@ components:
         namespace: uds-policy-exemptions
         files:
           - charts/uds-rke2-infrastructure-exemptions.yaml
-    actions:
-      onDeploy:
-        after:
-          - cmd: sleep 10
-            # See https://github.com/defenseunicorns/uds-core/issues/409
-            description: Workaround for upstream UDS Core Pepr exemption race condition
+
+  - name: nvidia-gpu-operator-exemptions
+    description: "NVIDIA UDS Core Pepr policy exemptions"
+    required: false
+    manifests:
+      - name: nvidia-gpu-operator-exemptions
+        namespace: uds-policy-exemptions
+        files:
+          - charts/nvidia-gpu-operator-exemptions.yaml
 
   - name: local-path-exemptions
     description: "MetalLB UDS Core Pepr policy exemptions"
@@ -34,12 +37,6 @@ components:
         namespace: uds-policy-exemptions
         files:
           - charts/local-path-exemptions.yaml
-    actions:
-      onDeploy:
-        after:
-          - cmd: sleep 10
-            # See https://github.com/defenseunicorns/uds-core/issues/409
-            description: Workaround for upstream UDS Core Pepr exemption race condition
 
   - name: longhorn-exemptions
     description: "MetalLB UDS Core Pepr policy exemptions"
@@ -51,12 +48,6 @@ components:
         namespace: uds-policy-exemptions
         files:
           - charts/longhorn-exemptions.yaml
-    actions:
-      onDeploy:
-        after:
-          - cmd: sleep 10
-            # See https://github.com/defenseunicorns/uds-core/issues/409
-            description: Workaround for upstream UDS Core Pepr exemption race condition
 
   - name: rook-ceph-exemptions
     description: "MetalLB UDS Core Pepr policy exemptions"
@@ -68,9 +59,3 @@ components:
         namespace: uds-policy-exemptions
         files:
           - charts/rook-ceph-exemptions.yaml
-    actions:
-      onDeploy:
-        after:
-          - cmd: sleep 10
-            # See https://github.com/defenseunicorns/uds-core/issues/409
-            description: Workaround for upstream UDS Core Pepr exemption race condition

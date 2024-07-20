@@ -9,25 +9,24 @@ includes:
 variables:
   - name: VERSION
     description: "Explicitly set the version, overriding the official release tag"
-    # x-release-please-start-version
-    default: "0.4.2"
-    # x-release-please-end
+    default: "dev"
 
 tasks:
   - name: uds-rke2
-    description: "Complete a stand-up and stand-down of ONLY the RKE2 cluster"
+    description: "Deploy a new RKE2 cluster"
     actions:
+      - task: setup:clean
+
       - task: create:uds-rke2
       - task: deploy:uds-rke2-bootstrap
         with:
           joinToken: "my-test-token"
 
+  - name: local-path-minio-init
+    description: "Deploy the Local Path Provisioner + MinIO Zarf Init"
+    actions:
       - task: setup:clean
 
-  - name: local-path-minio-init
-    description: "Bootstrap a new RKE2 cluster, with the Local Path Provisioner + MinIO Zarf Init"
-    actions:
-      # Zarf packages
       - task: create:local-path-init
       - task: deploy:local-path-init
         with:

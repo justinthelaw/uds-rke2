@@ -1,0 +1,14 @@
+image:
+  repository: registry1.dso.mil/ironbank/opensource/nfd/node-feature-discovery
+  # This should be set to 'IfNotPresent' for released version
+  pullPolicy: IfNotPresent
+
+# RKE2-specific configurations
+worker:
+  securityContext:
+    privileged: true
+    allowPrivilegeEscalation: true
+master:
+  securityContext:
+    privileged: true
+    allowPrivilegeEscalation: true

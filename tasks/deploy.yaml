@@ -8,12 +8,25 @@ variables:
     default: "0.4.2"
     # x-release-please-end
 
+  - name: JOIN_TOKEN
+    description: "Cluster join token for nodes, set by the master"
+    default: "my-test-token"
+  - name: NETWORK_INTERFACE
+    description: "Interface on which to perform L2 advertisement"
+    default: "wlp0s20f3"
+  - name: DOMAIN
+    description: "The default domain to use for gateway and CoreDNS"
+    default: "uds.local"
+  - name: BUCKET_PERSISTENCE_SIZE
+    description: "The default MinIO bucket size"
+    default: "50Gi"
+
   - name: DEPLOY_OPTIONS
     description: "Extra Zarf package deployment options"
-    default: "--no-progress --no-log-file --log-level debug --confirm"
+    default: "--log-level warn --no-progress -a amd64 --confirm"
   - name: DEPLOY_BUNDLE_OPTIONS
     description: "Extra UDS bundle deployment options"
-    default: "--no-progress --no-tea --no-log-file --log-level debug -a amd64 --confirm"
+    default: "--log-level warn --no-tea --no-progress --oci-concurrency 8 -a amd64 --confirm"
 
 tasks:
   ###########
@@ -29,10 +42,19 @@ tasks:
       name:
         description: "Name of the Zarf package being deployed"
         required: true
+      optionalComponents:
+        description: "Optional components to deploy"
+        required: false
+        default: ""
+      extraOptions:
+        description: "Extra deployment options specific to the Zarf Init package's configuration"
+        required: false
     actions:
       - description: "Deploy the Zarf package for amd64 architectures"
         cmd: |
           sudo uds zarf package deploy "${{ .inputs.path }}/zarf-package-${{ .inputs.name }}-amd64-${VERSION}.tar.zst" \
+          ${{ .inputs.optionalComponents }} \
+          ${{ .inputs.extraOptions }} \
           ${DEPLOY_OPTIONS}
 
   - name: bundle
@@ -44,14 +66,28 @@ tasks:
       name:
         description: "Name of the UDS bundle being deployed"
         required: true
-      extraOptions:
-        description: "Extra deployment options specific to the UDS bundle's configuration"
-        required: false
+      udsConfig:
+        description: "UDS configuration manifest for deployment"
+        required: true
+      version:
+        description: "UDS bundle version to be deployed"
+        required: true
+      joinToken:
+        description: "Cluster join token for nodes, set by the master"
+        required: true
+      networkInterface:
+        description: "Interface on which to perform L2 advertisement"
+        required: true
+      bucketPersistenceSize:
+        description: "The default MinIO bucket size"
+        required: true
     actions:
       - description: "Deploy the UDS bundle for the amd64 architectures"
         cmd: |
-          sudo uds deploy "${{ .inputs.path }}/uds-bundle-${{ .inputs.name }}-amd64-${VERSION}.tar.zst" \
-            ${{ .inputs.extraOptions }} \
+          sudo UDS_CONFIG=${{ .inputs.udsConfig }} uds deploy "${{ .inputs.path }}/uds-bundle-${{ .inputs.name }}-amd64-${{ .inputs.version }}.tar.zst" \
+            --set JOIN_TOKEN=${{ .inputs.joinToken }} \
+            --set NETWORK_INTERFACE=${{ .inputs.networkInterface }} \
+            --set BUCKET_PERSISTENCE_SIZE=${{ .inputs.bucketPersistenceSize }} \
             ${DEPLOY_BUNDLE_OPTIONS}
 
   #########
@@ -65,7 +101,24 @@ tasks:
         with:
           name: uds-rke2-local-path-core
           path: build/bundles
-          extraOptions: "--set JOIN_TOKEN=my-test-token"
+          udsConfig: build/packages/local-path/uds-config-${VERSION}.yaml
+          version: ${VERSION}
+          joinToken: ${JOIN_TOKEN}
+          networkInterface: ${NETWORK_INTERFACE}
+          bucketPersistenceSize: ${BUCKET_PERSISTENCE_SIZE}
+
+  - name: local-path-core-bundle-dev
+    description: "Deploy the Local Path Provisioner UDS RKE2 bootstrapping bundle"
+    actions:
+      - task: bundle
+        with:
+          name: uds-rke2-local-path-core
+          path: build/bundles
+          udsConfig: build/packages/local-path/uds-config-dev.yaml
+          version: dev
+          joinToken: ${JOIN_TOKEN}
+          networkInterface: ${NETWORK_INTERFACE}
+          bucketPersistenceSize: ${BUCKET_PERSISTENCE_SIZE}
 
   ###################
   # STANDARD PACKAGES
@@ -75,7 +128,7 @@ tasks:
     description: "Deploy the UDS RKE2 Zarf package, as a new cluster bootstrapping node"
     inputs:
       joinToken:
-        description: "Cluster joining token"
+        description: "Cluster join token for nodes, set by the master"
         required: true
       optionalComponents:
         description: "Optional components to deploy"
@@ -93,7 +146,7 @@ tasks:
     description: "Deploy the UDS RKE2 Zarf package, as a cluster joining node"
     inputs:
       joinToken:
-        description: "Cluster joining token"
+        description: "Cluster join token for nodes, set by the master"
         required: true
       joinAddress:
         description: "IP address at which to join the node when an existing cluster exists at a different IP address"
@@ -124,6 +177,8 @@ tasks:
         with:
           path: build/packages
           name: infrastructure
+          # Interface on which to perform L2 advertisement
+          extraOptions: "--set NETWORK_INTERFACE=${NETWORK_INTERFACE}"
 
   - name: uds-rke2-exemptions-local-path
     description: "Deploy the UDS RKE2 service Pepr policy exemptions package"
@@ -132,6 +187,15 @@ tasks:
         with:
           path: build/packages/local-path
           name: exemptions
+
+  - name: uds-rke2-exemptions-local-path-nvidia
+    description: "Deploy the UDS RKE2 service Pepr policy exemptions package"
+    actions:
+      - task: deploy
+        with:
+          path: build/packages/local-path
+          name: exemptions
+          optionalComponents: "--components nvidia-gpu-operator-exemptions"
 
   - name: minio
     description: "Deploy the MinIO package"
@@ -178,3 +242,12 @@ tasks:
         with:
           path: build/packages
           name: leapfrogai-workarounds
+          extraOptions: "--set DOMAIN=${DOMAIN}"
+
+  - name: nvidia-gpu-operator
+    description: "Deploy the NVIDIA GPU Operator package"
+    actions:
+      - task: deploy
+        with:
+          path: build/packages
+          name: nvidia-gpu-operator

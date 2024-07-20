@@ -1,0 +1,13 @@
+# See the UDS RKE2 repository's documentation, `docs/LOCAL-PATH.md` for more details on values overrides
+
+nodePathMapJson:
+
+  # # Multi-node configuration, for multi-node filesystem definition
+  # # Adheres to nodeAffinity and accessMode provided by a deployment's PVC
+  # sharedFileSystemPath: "/opt/uds"
+
+# Node-level configuration, for per-node filesystem control
+  nodePathMap:
+    - node: DEFAULT_PATH_FOR_NON_LISTED_NODES
+      paths:
+        -  "/opt/uds"

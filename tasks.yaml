@@ -15,45 +15,70 @@ variables:
     default: "0.4.2"
     # x-release-please-end
 
+  # Explicitly set these environment variables to change the defaults
+  - name: JOIN_TOKEN
+    description: "Cluster join token for nodes, set by the master"
+    default: "my-test-token"
+  - name: NETWORK_INTERFACE
+    description: "Interface on which to perform L2 advertisement"
+    default: "wlp0s20f3"
+  - name: DOMAIN
+    description: "The default domain to use for gateway and CoreDNS"
+    default: "uds.local"
+  - name: BUCKET_PERSISTENCE_SIZE
+    description: "The default MinIO bucket size"
+    default: "50Gi"
+
 tasks:
-  ################
-  # E2E CI TESTING
-  ################
+  #########
+  # UTILITY
+  #########
 
-  - name: uds-rke2-local-path-test
-    description: "Test the RKE2 cluster, with the Local Path Provisioner + MinIO Zarf Init"
+  - name: create-tls-local-path-dev
+    description: "Utility to re-create TLS cert and key, and inject them into the uds-config.yaml"
     actions:
-      - task: test:uds-rke2
-      - task: test:local-path-minio-init
+      - task: create:tls
+        with:
+          flavor: local-path
+          bundleVersion: dev
+          certConfDir: bundles/dev
 
-  ####################
-  # BUNDLE DEPLOYMENTS
-  ####################
+  ###########################
+  # CREATE AND DEPLOY BUNDLES
+  ###########################
 
   - name: uds-rke2-local-path-core
     description: "Bootstrap a new RKE2 cluster, with the Local Path Provisioner + MinIO Zarf Init and UDS Core packages (LATEST)"
     actions:
+      - task: create:logical-volume
+
       - task: create:local-path-core-bundle
+
+      # TLS certificates are pre-packaged with UDS Core for *.uds.dev, which is the default domain for LATEST
+      # Please see `docs/DNS-TLS.md` if the deployment environment requires different CA, TLS, etc.
+      - cmd: |
+          cp bundles/latest/local-path-core/uds-config.yaml build/packages/local-path/uds-config-${VERSION}.yaml
+
       - task: deploy:local-path-core-bundle
 
   - name: uds-rke2-local-path-core-dev
     description: "Bootstrap a new RKE2 cluster, with the Local Path Provisioner + MinIO Zarf Init and UDS Core packages (DEV)"
     actions:
-      - task: release-packages-dev
+      - description: "Use the `dev` version to create all bundle packages"
+        cmd: sudo uds run create:local-path-core-bundle-packages --set VERSION=dev --log-level warn --no-progress -a amd64
+
+      - task: create:logical-volume
+
+      # Automatically generated and signed CA and TLS certificates for *.uds.local
+      # Please see `docs/DNS-TLS.md` if the deployment environment requires different CA, TLS, etc.
+      - task: create-tls-local-path-dev
+
       - task: create:local-path-core-bundle-dev
+      - task: deploy:local-path-core-bundle-dev
 
-      - description: "Use the `dev` version to run a deployment"
-        cmd: sudo uds run deploy:local-path-core-bundle --set VERSION=dev --no-progress --no-log-file --log-level debug
-
-  ##########################
-  # ALL PACKAGES AND BUNDLES
-  ##########################
-
-  - name: release
-    description: "Builds and publishes all Zarf packages and Bundles in the repository (LATEST)"
-    actions:
-      - task: release-packages
-      - task: release-bundles
+  ##############################
+  # RELEASE PACKAGES AND BUNDLES
+  ##############################
 
   - name: release-dev
     description: "Builds and publishes all Zarf packages and Bundles in the repository (DEV)"
@@ -61,56 +86,85 @@ tasks:
       - task: release-packages-dev
       - task: release-bundles-dev
 
-  ##############
-  # ALL PACKAGES
-  ##############
-
-  # TODO: re-enable rook-ceph and longhorn when built
-  - name: release-packages
-    description: "Builds and publishes all Zarf packages in the repository (LATEST)"
-    actions:
-      - task: create:uds-rke2
-      - task: publish:uds-rke2
-      - task: setup:clean
-      - task: create:uds-rke2-infrastructure
-      - task: publish:uds-rke2-infrastructure
-      - task: setup:clean
-      - task: create:uds-rke2-exemptions-local-path
-      - task: publish:uds-rke2-exemptions-local-path
-      - task: setup:clean
-      - task: create:local-path
-      - task: publish:local-path
-      - task: setup:clean
-      - task: create:local-path-init
-      - task: publish:local-path-init
-      - task: setup:clean
-      - task: create:minio
-      - task: publish:minio
-      - task: setup:clean
-      - task: create:leapfrogai-workarounds
-      - task: publish:leapfrogai-workarounds
-      - task: setup:clean
-
   - name: release-packages-dev
     description: "Builds and publishes all Zarf packages in the repository (DEV)"
     actions:
       - description: "Use the `dev` version to run a package release"
-        cmd: sudo uds run release-packages --set VERSION=dev --no-progress --no-log-file --log-level debug
+        cmd: sudo uds run release-packages --set VERSION=dev --log-level warn --no-progress -a amd64
 
-  #############
-  # ALL BUNDLES
-  #############
+  - name: release-bundles-dev
+    description: "Builds and publishes all UDS bundles in the repository (DEV)"
+    actions:
+      - task: create:local-path-core-bundle-dev
+      - description: "Use the `dev` version to run a bundle release"
+        cmd: sudo uds run publish:local-path-core-bundle --set VERSION=dev --log-level warn --no-progress -a amd64
+
+  ######################################
+  # NOT FOR LOCAL USE, FOR PIPELINE ONLY
+  ######################################
+
+  - name: release
+    description: "Builds and publishes all Zarf packages and Bundles in the repository (LATEST)"
+    actions:
+      - task: release-packages
+      - task: release-bundles
+
+  - name: release-packages
+    description: "Builds and publishes all Zarf packages in the repository WITHOUT cleaning artifacts (LATEST)"
+    actions:
+      # Standard uds-rke2-local-path-core Zarf packages
+      - task: create:uds-rke2
+      - task: publish:uds-rke2
+      - task: create:uds-rke2-infrastructure
+      - task: publish:uds-rke2-infrastructure
+      - task: create:uds-rke2-exemptions-local-path
+      - task: publish:uds-rke2-exemptions-local-path
+      - task: create:local-path
+      - task: publish:local-path
+      - task: create:local-path-init
+      - task: publish:local-path-init
+      - task: create:minio
+      - task: publish:minio
+
+      # Extra, optional Zarf packages
+      - task: create:leapfrogai-workarounds
+      - task: publish:leapfrogai-workarounds
+      - task: create:nvidia-gpu-operator
+      - task: publish:nvidia-gpu-operator
+
+  - name: release-packages-with-clean
+    description: "Builds and publishes all Zarf packages in the repository (LATEST)"
+    actions:
+      # Standard uds-rke2-local-path-core Zarf packages
+      - task: create:uds-rke2
+      - task: publish:uds-rke2
+      - task: setup:clean-build-artifacts
+      - task: create:uds-rke2-infrastructure
+      - task: publish:uds-rke2-infrastructure
+      - task: setup:clean-build-artifacts
+      - task: create:uds-rke2-exemptions-local-path
+      - task: publish:uds-rke2-exemptions-local-path
+      - task: setup:clean-build-artifacts
+      - task: create:local-path
+      - task: publish:local-path
+      - task: setup:clean-build-artifacts
+      - task: create:local-path-init
+      - task: publish:local-path-init
+      - task: setup:clean-build-artifacts
+      - task: create:minio
+      - task: publish:minio
+      - task: setup:clean-build-artifacts
+
+      # Extra, optional Zarf packages
+      - task: create:leapfrogai-workarounds
+      - task: publish:leapfrogai-workarounds
+      - task: setup:clean-build-artifacts
+      - task: create:nvidia-gpu-operator
+      - task: publish:nvidia-gpu-operator
+      - task: setup:clean-build-artifacts
 
   - name: release-bundles
     description: "Builds and publishes all UDS bundles in the repository (LATEST)"
     actions:
       - task: create:local-path-core-bundle
       - task: publish:local-path-core-bundle
-
-  - name: release-bundles-dev
-    description: "Builds and publishes all UDS bundles in the repository (DEV)"
-    actions:
-      - task: create:local-path-core-bundle-dev
-
-      - description: "Use the `dev` version to run a bundle release"
-        cmd: sudo uds run publish:local-path-core-bundle --set VERSION=dev --no-progress --no-log-file --log-level debug

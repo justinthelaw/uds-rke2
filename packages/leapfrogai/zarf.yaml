@@ -14,6 +14,14 @@ variables:
     description: "The base domain used for all UDS core services and UDS deployed applications"
     default: "uds.dev"
     prompt: false
+  - name: CERTIFICATE_DIRECTORY
+    description: "The directory where the CA and TLS configurations and resulting certificates are stored"
+    default: "build/packages/local-path/certs"
+    prompt: true
+  - name: CA_TRUST_BUNDLE_NAME
+    description: "The CA trust bundle name (e.g., ca.pem)"
+    default: "ca.pem"
+    prompt: true
 
 components:
   - name: coredns-corefile-rewrites
@@ -21,6 +29,12 @@ components:
     description: "Setup rewrites for Supabase's authentication callback to the KeycLoak SSO service"
     actions:
       onDeploy:
+        before:
+          - cmd: |
+              echo ${ZARF_VAR_DOMAIN} | sed 's/[.\/]/\\&/g'
+            description: "Add special escape characters to given domain"
+            setVariables:
+              - name: MODIFIED_DOMAIN
         after:
           - cmd: |
               sudo uds zarf tools kubectl patch configmap rke2-coredns-rke2-coredns -n kube-system --patch "
@@ -44,24 +58,99 @@ components:
                       reload
                       loadbalance
 
-                      rewrite name supabase-kong.${ZARF_VAR_DOMAIN} tenant-ingressgateway.istio-tenant-gateway.svc.cluster.local
-                      rewrite name keycloak.admin.${ZARF_VAR_DOMAIN} admin-ingressgateway.istio-admin-gateway.svc.cluster.local
+                      rewrite {
+                          name regex (.*${ZARF_VAR_MODIFIED_DOMAIN}) tenant-ingressgateway.istio-tenant-gateway.svc.cluster.local answer auto
+                      }
+                      rewrite {
+                          name regex (.*admin\.${ZARF_VAR_MODIFIED_DOMAIN}) admin-ingressgateway.istio-admin-gateway.svc.cluster.local answer auto
+                      }
                   }
               "
             description: "Patch the RKE2 CoreDNS Corefile with the tenant and admin gateway rewrites"
+          - cmd: |
+              sudo uds zarf tools kubectl rollout restart -n kube-system deployment/rke2-coredns-rke2-coredns
+            description: "Restart CoreDNS deployment to pick-up new Corefile"
+          - description: "Validate CoreDNS has restarted"
+            wait:
+              cluster:
+                kind: Pod
+                name: app.kubernetes.io/name=rke2-coredns
+                namespace: kube-system
+                condition: "'{.status.conditions[2].status}'=True"
+            maxTotalSeconds: 300
 
-  - name: supabase-studio-config
+  - name: inject-ca-trust-bundles
     required: true
-    description: "Patch the missing Supabase domain"
+    description: "Create and mount the CA trust bundle into the Supabase and LeapfrogAI UI pods"
     actions:
       onDeploy:
-        after:
+        before:
           - cmd: |
-              sudo uds zarf tools kubectl patch configmap supabase-studio-default -n leapfrogai --patch "
-              data:
-                PORT: \"3000\"
-                STUDIO_PG_META_URL: http://supabase-kong.leapfrogai.svc.cluster.local:80/pg
-                SUPABASE_PUBLIC_URL: https://supabase-kong.${ZARF_VAR_DOMAIN}
-                SUPABASE_URL: http://supabase-kong.leapfrogai.svc.cluster.local:80
-              "
-            description: "Patch the missing Supabase domain"
+              rm -f ${ZARF_VAR_CERTIFICATE_DIRECTORY}/uds-rke2-custom-ca-cert.ca-bundle
+              cp ${ZARF_VAR_CERTIFICATE_DIRECTORY}/${ZARF_VAR_CA_TRUST_BUNDLE_NAME} \
+                ${ZARF_VAR_CERTIFICATE_DIRECTORY}/uds-rke2-custom-ca-cert.ca-bundle
+
+              uds zarf tools kubectl create configmap uds-rke2-custom-ca-cert \
+                --from-file=cacert=${ZARF_VAR_CERTIFICATE_DIRECTORY}/uds-rke2-custom-ca-cert.ca-bundle \
+                -n leapfrogai
+            description: "Create the CA trust bundle ConfigMap"
+          - cmd: |
+              uds zarf tools kubectl patch deployment supabase-auth -n leapfrogai --type=json -p='[
+                {
+                  "op": "add",
+                  "path": "/spec/template/spec/volumes/-",
+                  "value": {
+                    "name": "uds-rke2-custom-ca-cert",
+                    "configMap": {
+                      "name": "uds-rke2-custom-ca-cert",
+                      "defaultMode": 511
+                    }
+                  }
+                },
+                {
+                  "op": "add",
+                  "path": "/spec/template/spec/containers/0/volumeMounts/-",
+                  "value": {
+                    "name": "uds-rke2-custom-ca-cert",
+                    "subPath": "cacert",
+                    "mountPath": "/etc/ssl/certs/uds-rke2-custom-ca-cert.ca-bundle"
+                  }
+                }
+              ]'
+            description: "Mount the CA trust bundle ConfigMap to the Supabase Auth container"
+          - cmd: |
+              uds zarf tools kubectl patch deployment leapfrogai-ui -n leapfrogai --type=json -p='[
+                {
+                  "op": "add",
+                  "path": "/spec/template/spec/volumes",
+                  "value": [
+                    {
+                      "name": "uds-rke2-custom-ca-cert",
+                      "configMap": {
+                        "name": "uds-rke2-custom-ca-cert",
+                        "defaultMode": 511
+                      }
+                    }
+                  ]
+                },
+                {
+                  "op": "add",
+                  "path": "/spec/template/spec/containers/0/volumeMounts",
+                  "value": [
+                    {
+                      "name": "uds-rke2-custom-ca-cert",
+                      "subPath": "cacert",
+                      "mountPath": "/etc/ssl/certs/uds-rke2-custom-ca-cert.ca-bundle"
+                    }
+                  ]
+                },
+                {
+                  "op": "add",
+                  "path": "/spec/template/spec/containers/0/env/-",
+                  "value": {
+                    "name": "NODE_EXTRA_CA_CERTS",
+                    "value": "/etc/ssl/certs/uds-rke2-custom-ca-cert.ca-bundle"
+                  }
+                }
+              ]'
+            description: "Mount the CA trust bundle ConfigMap to the LeapfrogAI UI container"

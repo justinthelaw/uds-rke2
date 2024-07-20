@@ -51,3 +51,5 @@ jobs:
           check-jsonschema packages/minio/zarf.yaml --schemafile zarf.schema.json
           check-jsonschema packages/local-path/zarf.yaml --schemafile zarf.schema.json
           check-jsonschema packages/rook-ceph/zarf.yaml --schemafile zarf.schema.json
+          check-jsonschema packages/leapfrogai/zarf.yaml --schemafile zarf.schema.json
+          check-jsonschema packages/nvidia-gpu-operator/zarf.yaml --schemafile zarf.schema.json

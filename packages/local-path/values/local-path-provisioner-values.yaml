@@ -1,3 +1,6 @@
+# See the UDS RKE2 repository's documentation, `docs/LOCAL-PATH.md` for more details on values overrides
+
+# Default for single-node, non-HA deployments
 replicaCount: 1
 commonLabels: {}
 
@@ -14,25 +17,25 @@ helperPod:
 imagePullSecrets:
   - name: private-registry
 
-## For creating the StorageClass automatically:
+# For creating the StorageClass automatically:
 storageClass:
   create: true
 
-  ## Set StorageClass as the default StorageClass
-  ## Ignored if storageClass.create is false
+  # Set StorageClass as the default StorageClass
+  # Ignored if storageClass.create is false
   defaultClass: ###ZARF_VAR_IS_DEFAULT_STORAGECLASS###
 
-  ## The default volume type this storage class creates, can be "local" or "hostPath"
+  # The default volume type this storage class creates, can be "local" or "hostPath"
   defaultVolumeType: ###ZARF_VAR_VOLUME_TYPE###
 
-  ## Set a StorageClass name
-  ## Ignored if storageClass.create is false
+  # Set a StorageClass name
+  # Ignored if storageClass.create is false
   name: local-path
 
-  ## ReclaimPolicy field of the class, which can be either Delete or Retain
+  # ReclaimPolicy field of the class, which can be either Delete or Retain
   reclaimPolicy: Retain
 
-  ## volumeBindingMode field controls when volume binding and dynamic provisioning should occur, can be  "Immediate" or "WaitForFirstConsumer"
+  # volumeBindingMode field controls when volume binding and dynamic provisioning should occur, can be  "Immediate" or "WaitForFirstConsumer"
   volumeBindingMode: WaitForFirstConsumer
 
 podAnnotations: {}
@@ -97,11 +100,11 @@ configmap:
 
     sudo rm -rf "$VOL_DIR"
 
-# Number of provisioner worker threads to call provision/delete simultaneously.
+# # Number of provisioner worker threads to call provision/delete simultaneously.
 # workerThreads: 4
 
-# Number of retries of failed volume provisioning. 0 means retry indefinitely.
+# # Number of retries of failed volume provisioning. 0 means retry indefinitely.
 # provisioningRetryCount: 15
 
-# Number of retries of failed volume deletion. 0 means retry indefinitely.
+# # Number of retries of failed volume deletion. 0 means retry indefinitely.
 # deletionRetryCount: 15

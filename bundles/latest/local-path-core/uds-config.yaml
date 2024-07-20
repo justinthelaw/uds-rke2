@@ -1,5 +1,4 @@
 options:
-  log_level: warn
   architecture: amd64
 
 shared:
@@ -8,19 +7,41 @@ shared:
 variables:
   uds-rke2:
     join_token: $JOIN_TOKEN
+
+  infrastructure:
+    network_interface: $NETWORK_INTERFACE
+
   local-path-init:
     # Workaround for SELinux EBS issue - https://github.com/bottlerocket-os/bottlerocket/issues/2417
     registry_hpa_enable: false
     registry_pvc_size: 100Gi
-    registry_pvc_access_mode: ReadWriteMany
-    node_path_map_values_file: values/node-path-map-values.yaml
+    # Set this to ReadWriteMany for multi-node, HA situations
+    # See documentation on the StorageClass Zarf Init flavors for more details
+    registry_pvc_access_mode: ReadWriteOnce
+    storage_configuration_values_file: values/storage-configuration-values.yaml
+
+    # MinIO bucket persistence volume size
+    bucket_persistence_size: $BUCKET_PERSISTENCE_SIZE
+
   uds-core:
-    loki_chunks_bucket: $LOKI_S3_BUCKET
-    loki_ruler_bucket: $LOKI_S3_BUCKET
-    loki_admin_bucket: $LOKI_S3_BUCKET
-    loki_s3_region: $LOKI_S3_AWS_REGION
-    loki_irsa_role_arn: $LOKI_S3_ROLE_ARN
-    velero_use_secret: $VELERO_USE_SECRET
-    velero_irsa_role_arn: $VELERO_S3_ROLE_ARN
-    velero_bucket: $VELERO_S3_BUCKET
-    velero_bucket_region: $VELERO_S3_AWS_REGION
+    loki_s3_endpoint: http://minio.minio.svc.cluster.local:9000
+    loki_chunks_bucket: uds
+    loki_ruler_bucket: uds
+    loki_admin_bucket: uds
+    loki_s3_region: us-east-1
+    loki_s3_access_key_id: uds
+    loki_s3_secret_access_key: uds-secret
+    loki_irsa_role_arn: ""
+    loki_write_replicas: 1
+    loki_read_replicas: 1
+    loki_backend_replicas: 1
+
+    velero_use_secret: false
+    velero_irsa_role_arn: ""
+
+    # Zarf variables not available via UDS bundle values path overrides
+    velero_bucket: uds
+    velero_bucket_region: us-east-1
+    velero_bucket_provider_url: http://minio.minio.svc.cluster.local:9000
+    velero_bucket_credential_name: uds
+    velero_bucket_credential_key: uds-secret

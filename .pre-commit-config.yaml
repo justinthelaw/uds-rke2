@@ -127,6 +127,16 @@ repos:
         files: "deploy.yaml"
         types: [yaml]
         args: ["--schemafile", "tasks.schema.json"]
+      - id: check-jsonschema
+        name: "Validate Setup Tasks Against Schema"
+        files: "setup.yaml"
+        types: [yaml]
+        args: ["--schemafile", "tasks.schema.json"]
+      - id: check-jsonschema
+        name: "Validate Test Tasks Against Schema"
+        files: "test.yaml"
+        types: [yaml]
+        args: ["--schemafile", "tasks.schema.json"]
   - repo: local
     hooks:
       - id: delete-schema

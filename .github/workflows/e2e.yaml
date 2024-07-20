@@ -54,11 +54,18 @@ jobs:
           registry1Password: ${{secrets.IRON_BANK_ROBOT_PASSWORD}}
           ghToken: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Create /opt/uds LVM
+      - name: Test Create Default LVM
         run: |
-          sudo mkdir -p /opt/uds
-          sudo chown -Rv 65534:65534 /opt/uds
+          sudo uds run create:logical-volume
 
-      - name: Test the UDS RKE2 + Custom Zarf Init Bootstrap (`local-path`)
+      - name: Test Create Default TLS Cert
         run: |
-          sudo uds run uds-rke2-local-path-test --no-progress --log-level warn -a amd64
+          sudo uds run create-tls-local-path-dev
+
+      - name: Test Deploy UDS RKE2
+        run: |
+          sudo uds run test:uds-rke2 --set VERSION=dev --log-level warn
+
+      - name: Test Deploy `local-path` Flavor Custom Zarf Init
+        run: |
+          sudo uds run test:local-path-minio-init --set VERSION=dev --log-level warn

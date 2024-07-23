@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.6.0](https://github.com/justinthelaw/uds-rke2/compare/v0.5.2...v0.6.0) (2024-07-23)
+
+
+### Features
+
+* metallb l2 variables and overrides ([#61](https://github.com/justinthelaw/uds-rke2/issues/61)) ([cb7624e](https://github.com/justinthelaw/uds-rke2/commit/cb7624e75aee57f4a3c897fa9e7cb696148bcb77))
+
 ## [0.5.2](https://github.com/justinthelaw/uds-rke2/compare/v0.5.1...v0.5.2) (2024-07-23)
 
 

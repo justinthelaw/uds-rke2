@@ -1,16 +1,16 @@
 #!/bin/bash
 set -e
 
-# Check if NETWORK_INTERFACES is set
-if [ -z "$NETWORK_INTERFACES" ]; then
-	echo "Error: NETWORK_INTERFACES environment variable is not set."
+# Check if NETWORK_INTERFACE is set
+if [ -z "$NETWORK_INTERFACE" ]; then
+	echo "Error: NETWORK_INTERFACE environment variable is not set."
 	exit 1
 fi
 
 # Get IP address and subnet for the specified interface
-LOCAL_IP=$(ip -4 addr show $NETWORK_INTERFACES | grep -oP '(?<=inet\s)\d+(\.\d+){3}/\d+')
+LOCAL_IP=$(ip -4 addr show $NETWORK_INTERFACE | grep -oP '(?<=inet\s)\d+(\.\d+){3}/\d+')
 if [ -z "$LOCAL_IP" ]; then
-	echo "Error: Could not determine IP address for $NETWORK_INTERFACES"
+	echo "Error: Could not determine IP address for $NETWORK_INTERFACE"
 	exit 1
 fi
 

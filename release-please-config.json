@@ -5,7 +5,16 @@
       "changelog-path": "CHANGELOG.md",
       "versioning": "default",
       "extra-files": [
-        "bundles/latest/local-path-core/uds-bundle.yaml",
+        {
+          "type": "yaml",
+          "path": "bundles/latest/local-path-core/uds-bundle.yaml",
+          "jsonpath": "$.packages[*].ref",
+          "versioning": {
+            "name": "custom",
+            "parse": "^v?(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)(-(?<flavor>.+))?$",
+            "serialize": "${version}${?-|}${flavor}"
+          }
+        },
         "packages/uds-rke2/zarf-config.yaml",
         "packages/rook-ceph/zarf-config.yaml",
         "packages/local-path/zarf-config.yaml",

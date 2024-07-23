@@ -58,6 +58,21 @@ If an `/etc/hosts` file needs to be modified for access via a host's browser, th
 192.168.0.201   leapfrogai-api.uds.dev sso.uds.dev leapfrogai.uds.dev leapfrogai-rag.uds.dev ai.uds.dev supabase-kong.uds.dev
 ```
 
+## CoreDNS Loop-back Issues
+
+When using CoreDNS in RKE2, manual modification of `/etc/resolv.conf` is typically unnecessary as CoreDNS handles cluster DNS. However, `resolv.conf` remains relevant for host-level DNS and potential CoreDNS upstream configurations. Loopback errors can occur due to misconfigured CoreDNS, `resolv.conf` pointing to localhost, NetworkManager interference, or improper kubelet (`kubelet-args`) settings. To troubleshoot, examine CoreDNS and kubelet configurations, check `resolv.conf` on host nodes, and look for NetworkManager issues.
+
+When installing on a device or server that is located in an isolated network with its own set of DNS, ensure that the `/etc/resolv.conf` does not contain any loops (e.h., `nameserver .`) or else CoreDNS will go into a `CrashBackLoop`. Follow the steps below for editing the `/etc/resolv.conf`:
+
+```bash
+# Make changes to the entries
+sudo vim /etc/systemd/resolved.conf
+# Restart the service
+sudo systemctl restart systemd-resolved
+```
+
+For more permanent changes that persist through system reboots, edit both the `/etc/resolv.conf` and the `/etc/systemd/resolved.conf`.
+
 ## CoreDNS Override
 
 If any internal services require an `https://` "reach-around" in order to interact with another service's API, then the Corefile of the RKE2 CoreDNS service can be modified by following the [RKE CoreDNS Helm Chart configuration instructions](https://www.suse.com/support/kb/doc/?id=000021179).

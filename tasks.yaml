@@ -57,6 +57,8 @@ tasks:
       # TLS certificates are pre-packaged with UDS Core for *.uds.dev, which is the default domain for LATEST
       # Please see `docs/DNS-TLS.md` if the deployment environment requires different CA, TLS, etc.
       - cmd: |
+          mkdir -p build/packages/local-path
+          touch build/packages/local-path/uds-config-${VERSION}.yaml
           cp bundles/latest/local-path-core/uds-config.yaml build/packages/local-path/uds-config-${VERSION}.yaml
 
       - task: deploy:local-path-core-bundle

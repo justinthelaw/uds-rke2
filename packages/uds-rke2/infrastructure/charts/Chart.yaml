@@ -2,4 +2,4 @@ apiVersion: v2
 name: uds-rke2-infrastructure
 description: UDS RKE2 infrastructure chart
 type: application
-version: 0.5.1
+version: 0.5.2

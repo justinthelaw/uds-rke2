@@ -93,7 +93,7 @@ tasks:
           sudo UDS_CONFIG=${{ .inputs.udsConfig }} uds deploy "${{ .inputs.path }}/uds-bundle-${{ .inputs.name }}-amd64-${{ .inputs.version }}.tar.zst" \
             --set JOIN_TOKEN=${{ .inputs.joinToken }} \
             --set IP_ADDRESS_POOL="${{ .inputs.ipAddressPool }}" \
-            --set NETWORK_INTERFACES="${{ .inputs.networkInterface }}"" \
+            --set NETWORK_INTERFACES="${{ .inputs.networkInterface }}" \
             --set BUCKET_PERSISTENCE_SIZE=${{ .inputs.bucketPersistenceSize }} \
             ${DEPLOY_BUNDLE_OPTIONS}
 

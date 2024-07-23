@@ -62,7 +62,7 @@ If an `/etc/hosts` file needs to be modified for access via a host's browser, th
 
 When using CoreDNS in RKE2, manual modification of `/etc/resolv.conf` is typically unnecessary as CoreDNS handles cluster DNS. However, `resolv.conf` remains relevant for host-level DNS and potential CoreDNS upstream configurations. Loopback errors can occur due to misconfigured CoreDNS, `resolv.conf` pointing to localhost, NetworkManager interference, or improper kubelet (`kubelet-args`) settings. To troubleshoot, examine CoreDNS and kubelet configurations, check `resolv.conf` on host nodes, and look for NetworkManager issues.
 
-When installing on a device or server that is located in an isolated network with its own set of DNS, ensure that the `/etc/resolv.conf` does not contain any loops (e.h., `nameserver .`) or else CoreDNS will go into a `CrashBackLoop`. Follow the steps below for editing the `/etc/resolv.conf`:
+When installing on a device or server that is located in an isolated network with its own set of DNS, ensure that the `/etc/resolv.conf` does not contain any loops (e.g., `nameserver .`) or else CoreDNS will go into a `CrashBackLoop`. Follow the steps below for editing the `/etc/resolv.conf`:
 
 ```bash
 # Make changes to the entries

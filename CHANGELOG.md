@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.5.2](https://github.com/justinthelaw/uds-rke2/compare/v0.5.1...v0.5.2) (2024-07-23)
+
+
+### Bug Fixes
+
+* bundle versioning strategy and install docs ([#55](https://github.com/justinthelaw/uds-rke2/issues/55)) ([e92928f](https://github.com/justinthelaw/uds-rke2/commit/e92928ffd2dc4061eac5480a92d2510dd47ebbf8))
+* semantic versioning and latest bundle task ([#53](https://github.com/justinthelaw/uds-rke2/issues/53)) ([65f18b1](https://github.com/justinthelaw/uds-rke2/commit/65f18b1a8033b849ef27f688dd26b5b98ab2a9a8))
+
 ## [0.5.1](https://github.com/justinthelaw/uds-rke2/compare/v0.5.0...v0.5.1) (2024-07-20)
 
 

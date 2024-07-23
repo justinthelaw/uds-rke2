@@ -19,7 +19,7 @@ variables:
   - name: JOIN_TOKEN
     description: "Cluster join token for nodes, set by the master"
     default: "my-test-token"
-  - name: NETWORK_INTERFACE
+  - name: NETWORK_INTERFACES
     description: "Interface on which to perform L2 advertisement"
     default: "wlp0s20f3"
   - name: DOMAIN

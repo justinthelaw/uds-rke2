@@ -12,22 +12,7 @@ To find the interface that you would like to advertise on, use `ifconfig` and id
 
 ### MetalLB
 
-The defaults for MetalLB L2 advertisement are set within the [UDS Infrastructure Zarf Package](../packages/uds-rke2/infrastructure/zarf.yaml) as Zarf Variables. These can be influence via `--set` if deploying the Zarf package standalone, or by using a `uds-config.yaml` that contains the Zarf variables under the `infrastructure` field. Below are the defaults and names of the package's variables:
-
-```yaml
-  - name: NETWORK_INTERFACE
-    description: "The network interface name on which to perform MetalLB L2 advertisement"
-    default: null # set via `--set` or via `uds-config.yaml`
-  - name: ADDRESS_POOL_LOWER_BOUND
-    description: "Lower bound of the IP Address Pool range for L2 advertisement"
-    default: "200"
-  - name: ADDRESS_POOL_UPPER_BOUND
-    description: "Upper bound of the IP Address Pool range for L2 advertisement"
-    default: "209"
-  - name: BASE_IP
-    description: "The host node's base IP"
-    default: null # set automatically
-```
+The defaults for MetalLB L2 advertisement are set within the [UDS Infrastructure Zarf Package](../packages/uds-rke2/infrastructure/zarf.yaml) as Zarf Variables. These can be influence via `--set` if deploying the Zarf package standalone, or by using a `uds-config.yaml` that contains the Zarf variables under the `infrastructure` field.
 
 `BASE_IP` is set using an automated process that extracts the server node's base IP; however, this can be manually overridden pre- or post-deployment via the [metallb-l2-values file](../packages/uds-rke2/infrastructure/values/metallb-l2-values.yaml).
 

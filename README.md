@@ -64,8 +64,8 @@ The following are quick starts for the `local-path` flavored UDS RKE2 bundle. Th
 1. Change directory to the bundle and deploy the bundle:
 
 ```bash
-# use `ifconfig` to identify the NETWORK_INTERFACE for L2 advertisement
-uds run uds-rke2-local-path-core --set NETWORK_INTERFACE=eth0
+# use `ifconfig` to identify the NETWORK_INTERFACES for L2 advertisement
+uds run uds-rke2-local-path-core --set NETWORK_INTERFACES="eth0" --set IP_ADDRESS_POOL="200, 201, 202, 203"
 ```
 
 2. Modify your `/etc/hosts` according to your base IP on the Istio Tenant gateway
@@ -100,8 +100,8 @@ set -o history
 2. Build all necessary packages and then create and deploy the bundle
 
 ```bash
-# use `ifconfig` to identify the NETWORK_INTERFACE for L2 advertisement
-uds run uds-rke2-local-path-core-dev --set NETWORK_INTERFACE=eth0
+# use `ifconfig` to identify the NETWORK_INTERFACES for L2 advertisement
+uds run uds-rke2-local-path-core-dev --set NETWORK_INTERFACES="eth0" --set IP_ADDRESS_POOL="200, 201, 202, 203"
 ```
 
 3. Modify your `/etc/hosts` according to your base IP on the Istio Tenant gateway

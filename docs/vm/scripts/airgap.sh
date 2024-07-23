@@ -3,22 +3,22 @@ set -e
 
 # Check if NETWORK_INTERFACE is set
 if [ -z "$NETWORK_INTERFACE" ]; then
-    echo "Error: NETWORK_INTERFACE environment variable is not set."
-    exit 1
+	echo "Error: NETWORK_INTERFACE environment variable is not set."
+	exit 1
 fi
 
 # Get IP address and subnet for the specified interface
 LOCAL_IP=$(ip -4 addr show $NETWORK_INTERFACE | grep -oP '(?<=inet\s)\d+(\.\d+){3}/\d+')
 if [ -z "$LOCAL_IP" ]; then
-    echo "Error: Could not determine IP address for $NETWORK_INTERFACE"
-    exit 1
+	echo "Error: Could not determine IP address for $NETWORK_INTERFACE"
+	exit 1
 fi
 
 # Get IP address and subnet for the flannel interface
 FLANNEL_IP=$(ip -4 addr show flannel.1 2>/dev/null | grep -oP '(?<=inet\s)\d+(\.\d+){3}/\d+')
 if [ -z "$FLANNEL_IP" ]; then
-    echo "Warning: Could not determine IP address for flannel interface. Using default 10.42.0.0/24"
-    FLANNEL_IP="10.42.0.0/24"
+	echo "Warning: Could not determine IP address for flannel interface. Using default 10.42.0.0/24"
+	FLANNEL_IP="10.42.0.0/24"
 fi
 
 # Set default policies

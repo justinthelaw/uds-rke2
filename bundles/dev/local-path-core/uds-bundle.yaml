@@ -35,8 +35,11 @@ packages:
       infrastructure:
         uds-rke2-infrastructure:
           variables:
-            - name: INTERFACE
-              path: interface
+            - name: NETWORK_INTERFACES
+              path: interfaces
+            - name: IP_ADDRESS_POOL
+              path: ipAddressPool
+              default: "200, 201, 202, 203"
 
   - name: core
     description: "Deploys UDS Core services"

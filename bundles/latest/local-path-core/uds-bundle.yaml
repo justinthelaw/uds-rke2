@@ -1,116 +1,98 @@
-# TODO: renovate setup
-# yaml-language-server: $schema=https://raw.githubusercontent.com/defenseunicorns/uds-cli/v0.10.4/uds.schema.json
-
 kind: UDSBundle
 metadata:
   name: uds-rke2-local-path-core
-  description: "A UDS bundle for bootstrapping an RKE2 cluster and installing UDS Core services"
-  # x-release-please-start-version
-  version: "0.5.1"
-  # x-release-please-end
+  description: >-
+    A UDS bundle for bootstrapping an RKE2 cluster and installing UDS Core
+    services
+  version: 0.5.2
   architecture: amd64
-
 packages:
   - name: uds-rke2
-    description: "Deploys the UDS RKE2 Zarf package"
+    description: Deploys the UDS RKE2 Zarf package
     repository: ghcr.io/justinthelaw/packages/uds/uds-rke2
-    # x-release-please-start-version
-    ref: "0.5.1"
-    # x-release-please-end
-
+    ref: 0.5.2
   - name: local-path-init
-    description: "Deploys the custom Zarf Init package"
+    description: Deploys the custom Zarf Init package
     repository: ghcr.io/justinthelaw/packages/uds/uds-rke2/init
-    # TODO: renovate setup
-    ref: "v0.33.0-local-path"
+    ref: v0.33.0-local-path
     overrides:
       minio:
         minio:
           variables:
             - name: BUCKET_PERSISTENCE_SIZE
-              description: "Size of the default PVC for MinIO (e.g., 30Gi)"
+              description: Size of the default PVC for MinIO (e.g., 30Gi)
               path: persistence.size
-              default: "30Gi"
-
+              default: 30Gi
   - name: uds-rke2-infrastructure
-    description: "Deploys the UDS RKE2 base infrastructure Zarf package"
+    description: Deploys the UDS RKE2 base infrastructure Zarf package
     repository: ghcr.io/justinthelaw/packages/uds/uds-rke2/infrastructure
-    # x-release-please-start-version
-    ref: "0.5.1"
-    # x-release-please-end
+    ref: 0.5.2
     overrides:
       infrastructure:
         uds-rke2-infrastructure:
           variables:
             - name: INTERFACE
               path: interface
-
   - name: uds-core
-    description: "Deploys UDS Core services"
+    description: Deploys UDS Core services
     repository: ghcr.io/defenseunicorns/packages/uds/core
-    # TODO: renovate setup
-    ref: "0.23.0-registry1"
+    ref: 0.23.0-registry1
     overrides:
       loki:
         loki:
           values:
-            # Set DNS service name for Loki Gateway
-            - path: "global.dnsService"
-              value: "rke2-coredns-rke2-coredns"
-            # Ensure we don't hit query limits
+            - path: global.dnsService
+              value: rke2-coredns-rke2-coredns
             - path: loki.limits_config.split_queries_by_interval
-              value: "30m"
+              value: 30m
             - path: loki.query_scheduler.max_outstanding_requests_per_tenant
-              value: 32000 # This is the new default in Loki 3.0
+              value: 32000
           variables:
             - name: LOKI_S3_ENDPOINT
-              description: "The S3 endpoint"
+              description: The S3 endpoint
               path: loki.storage.s3.endpoint
             - name: LOKI_CHUNKS_BUCKET
-              description: "The object storage bucket for Loki chunks"
+              description: The object storage bucket for Loki chunks
               path: loki.storage.bucketNames.chunks
             - name: LOKI_RULER_BUCKET
-              description: "The object storage bucket for Loki ruler"
+              description: The object storage bucket for Loki ruler
               path: loki.storage.bucketNames.ruler
             - name: LOKI_ADMIN_BUCKET
-              description: "The object storage bucket for Loki admin"
+              description: The object storage bucket for Loki admin
               path: loki.storage.bucketNames.admin
             - name: LOKI_S3_REGION
-              description: "The S3 region"
+              description: The S3 region
               path: loki.storage.s3.region
             - name: LOKI_S3_ACCESS_KEY_ID
-              description: "The S3 Access Key ID"
+              description: The S3 Access Key ID
               path: loki.storage.s3.accessKeyId
             - name: LOKI_S3_SECRET_ACCESS_KEY
               path: loki.storage.s3.secretAccessKey
-              description: "The S3 Secret Access Key"
+              description: The S3 Secret Access Key
             - name: LOKI_IRSA_ROLE_ARN
-              description: "The irsa role annotation"
+              description: The irsa role annotation
               path: serviceAccount.annotations.irsa/role-arn
             - name: LOKI_WRITE_REPLICAS
               path: write.replicas
-              description: "Loki write replicas"
+              description: Loki write replicas
             - name: LOKI_READ_REPLICAS
               path: read.replicas
-              description: "Loki read replicas"
+              description: Loki read replicas
             - name: LOKI_BACKEND_REPLICAS
               path: backend.replicas
-              description: "Loki backend replicas"
-
+              description: Loki backend replicas
       velero:
         velero:
           variables:
             - name: VELERO_USE_SECRET
-              description: "Toggle use secret off to use IRSA."
+              description: Toggle use secret off to use IRSA.
               path: credentials.useSecret
             - name: VELERO_IRSA_ROLE_ARN
-              description: "IRSA role arn for annotation"
+              description: IRSA role arn for annotation
               path: serviceAccount.server.annotations.irsa/role-arn
-
       keycloak:
         keycloak:
           values:
-            # Turn off verifications for dev or prototype deployments
             - path: realmInitEnv
               value:
                 EMAIL_VERIFICATION_ENABLED: true
@@ -118,46 +100,39 @@ packages:
                 TERMS_AND_CONDITIONS_ENABLED: true
                 X509_OCSP_FAIL_OPEN: true
           variables:
-            # TODO: this can only be `false` if a Postgres is integrated and accessible in the cluster
             - name: KEYCLOAK_DEV_MODE
               path: devMode
               default: true
             - name: KEYCLOAK_FIPS_MODE
               path: fips
               default: true
-            # Enable headless admin account generation, SHOULD BE CHANGED IMMEDIATELY AFTER
-            # Can be found in `keycloak-admin-password` secret in-cluster
             - name: KEYCLOAK_ENABLE_INSECURE_ADMIN_PASSWORD
               path: insecureAdminPasswordGeneration.enabled
               default: true
             - name: KEYCLOAK_ADMIN_USERNAME
               path: insecureAdminPasswordGeneration.username
               default: admin
-
-      # Access to UDS cluster administration services (e.g., *admin.uds.dev, grafana.admin.uds.dev)
-      # Access to UDS application services (e.g., *.uds.dev, ai.uds.dev)
       istio-admin-gateway:
         uds-istio-config:
           variables:
             - name: ADMIN_TLS_CERT
-              description: "The TLS cert for the admin gateway (must be base64 encoded)"
+              description: The TLS cert for the admin gateway (must be base64 encoded)
               path: tls.cert
             - name: ADMIN_TLS_KEY
-              description: "The TLS key for the admin gateway (must be base64 encoded)"
+              description: The TLS key for the admin gateway (must be base64 encoded)
               path: tls.key
       istio-tenant-gateway:
         uds-istio-config:
           variables:
             - name: TENANT_TLS_CERT
-              description: "The TLS cert for the tenant gateway (must be base64 encoded)"
+              description: The TLS cert for the tenant gateway (must be base64 encoded)
               path: tls.cert
             - name: TENANT_TLS_KEY
-              description: "The TLS key for the tenant gateway (must be base64 encoded)"
+              description: The TLS key for the tenant gateway (must be base64 encoded)
               path: tls.key
-
   - name: uds-rke2-exemptions
-    description: "Deploys the UDS Core Pepr policy exemptions"
+    description: Deploys the UDS Core Pepr policy exemptions
     repository: ghcr.io/justinthelaw/packages/uds/uds-rke2/exemptions
-    ref: "0.5.1-local-path"
+    ref: 0.5.2
     optionalComponents:
       - nvidia-gpu-operator-exemptions

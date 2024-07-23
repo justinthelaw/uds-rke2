@@ -11,7 +11,7 @@ variables:
   - name: JOIN_TOKEN
     description: "Cluster join token for nodes, set by the master"
     default: "my-test-token"
-  - name: NETWORK_INTERFACE
+  - name: NETWORK_INTERFACES
     description: "Interface on which to perform L2 advertisement"
     default: "wlp0s20f3"
   - name: DOMAIN
@@ -86,7 +86,7 @@ tasks:
         cmd: |
           sudo UDS_CONFIG=${{ .inputs.udsConfig }} uds deploy "${{ .inputs.path }}/uds-bundle-${{ .inputs.name }}-amd64-${{ .inputs.version }}.tar.zst" \
             --set JOIN_TOKEN=${{ .inputs.joinToken }} \
-            --set NETWORK_INTERFACE=${{ .inputs.networkInterface }} \
+            --set NETWORK_INTERFACES=${{ .inputs.networkInterface }} \
             --set BUCKET_PERSISTENCE_SIZE=${{ .inputs.bucketPersistenceSize }} \
             ${DEPLOY_BUNDLE_OPTIONS}
 
@@ -104,7 +104,7 @@ tasks:
           udsConfig: build/packages/local-path/uds-config-${VERSION}.yaml
           version: ${VERSION}
           joinToken: ${JOIN_TOKEN}
-          networkInterface: ${NETWORK_INTERFACE}
+          networkInterface: ${NETWORK_INTERFACES}
           bucketPersistenceSize: ${BUCKET_PERSISTENCE_SIZE}
 
   - name: local-path-core-bundle-dev
@@ -117,7 +117,7 @@ tasks:
           udsConfig: build/packages/local-path/uds-config-dev.yaml
           version: dev
           joinToken: ${JOIN_TOKEN}
-          networkInterface: ${NETWORK_INTERFACE}
+          networkInterface: ${NETWORK_INTERFACES}
           bucketPersistenceSize: ${BUCKET_PERSISTENCE_SIZE}
 
   ###################
@@ -178,7 +178,7 @@ tasks:
           path: build/packages
           name: infrastructure
           # Interface on which to perform L2 advertisement
-          extraOptions: "--set NETWORK_INTERFACE=${NETWORK_INTERFACE}"
+          extraOptions: "--set NETWORK_INTERFACES=${NETWORK_INTERFACES}"
 
   - name: uds-rke2-exemptions-local-path
     description: "Deploy the UDS RKE2 service Pepr policy exemptions package"

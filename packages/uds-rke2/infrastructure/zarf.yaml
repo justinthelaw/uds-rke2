@@ -9,7 +9,7 @@ metadata:
   version: "###ZARF_PKG_TMPL_VERSION###"
 
 variables:
-  - name: NETWORK_INTERFACE
+  - name: NETWORK_INTERFACES
     description: "The network interface name on which to perform MetalLB L2 advertisement"
     default: ""
     prompt: true

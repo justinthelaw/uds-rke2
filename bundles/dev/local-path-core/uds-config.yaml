@@ -9,7 +9,7 @@ variables:
     join_token: $JOIN_TOKEN
 
   infrastructure:
-    network_interface: $NETWORK_INTERFACE
+    network_interfaces: $NETWORK_INTERFACES
 
   local-path-init:
     # Workaround for SELinux EBS issue - https://github.com/bottlerocket-os/bottlerocket/issues/2417

@@ -15,7 +15,7 @@ To find the interface that you would like to advertise on, use `ifconfig` and id
 The defaults for MetalLB L2 advertisement are set within the [UDS Infrastructure Zarf Package](../packages/uds-rke2/infrastructure/zarf.yaml) as Zarf Variables. These can be influence via `--set` if deploying the Zarf package standalone, or by using a `uds-config.yaml` that contains the Zarf variables under the `infrastructure` field. Below are the defaults and names of the package's variables:
 
 ```yaml
-  - name: NETWORK_INTERFACE
+  - name: NETWORK_INTERFACES
     description: "The network interface name on which to perform MetalLB L2 advertisement"
     default: null # set via `--set` or via `uds-config.yaml`
   - name: ADDRESS_POOL_LOWER_BOUND

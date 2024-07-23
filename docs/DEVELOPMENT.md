@@ -64,7 +64,7 @@ For example, to deploy the UDS RKE2 bootstrap bundle with `local-path` flavor, d
 ```bash
 # create and deploy the local dev version, with /opt/uds as the PV mount, and
 # the network interface for L2 advertisement on eth0
-uds run uds-rke2-local-path-core-dev --set NETWORK_INTERFACE=eth0
+uds run uds-rke2-local-path-core-dev --set NETWORK_INTERFACES=eth0
 
 # below are examples of dev version deployments of optional packages
 uds run deploy:leapfrogai-workarounds --set VERSION=dev

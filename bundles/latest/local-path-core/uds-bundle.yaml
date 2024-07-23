@@ -42,8 +42,8 @@ packages:
       infrastructure:
         uds-rke2-infrastructure:
           variables:
-            - name: INTERFACE
-              path: interface
+            - name: NETWORK_INTERFACES
+              path: interfaces
 
   - name: uds-core
     description: "Deploys UDS Core services"

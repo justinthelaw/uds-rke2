@@ -158,6 +158,6 @@ packages:
   - name: uds-rke2-exemptions
     description: "Deploys the UDS Core Pepr policy exemptions"
     repository: ghcr.io/justinthelaw/packages/uds/uds-rke2/exemptions
-    ref: "0.5.1-local-path"
+    ref: "0.5.2-local-path"
     optionalComponents:
       - nvidia-gpu-operator-exemptions

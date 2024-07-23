@@ -10,7 +10,7 @@ The L2 advertisement requires the network interface and IP address pool. These a
 
 To find the interface that you would like to advertise on, use `ifconfig` and identify the local network-facing interface. An example network interface is `eth0`, when advertising to the local network via `192.168.x.x`.
 
-### MetalLB Advertisement
+### MetalLB
 
 The defaults for MetalLB L2 advertisement are set within the [UDS Infrastructure Zarf Package](../packages/uds-rke2/infrastructure/zarf.yaml) as Zarf Variables. These can be influence via `--set` if deploying the Zarf package standalone, or by using a `uds-config.yaml` that contains the Zarf variables under the `infrastructure` field. Below are the defaults and names of the package's variables:
 
@@ -31,18 +31,30 @@ The defaults for MetalLB L2 advertisement are set within the [UDS Infrastructure
 
 `BASE_IP` is set using an automated process that extracts the server node's base IP; however, this can be manually overridden pre- or post-deployment via the [metallb-l2-values file](../packages/uds-rke2/infrastructure/values/metallb-l2-values.yaml).
 
-If IP reservations for L2 advertisement contain skips, you cna specify whether a service or gateway grabs a specific IP via an annotation.An example is below:
+If IP reservations for L2 advertisement contain skips, you cna specify whether a service or gateway grabs a specific IP via an annotation. An example is below:
 
 ```yaml
-# istio-admin-gateway service
+# example istio-admin-gateway service
 apiVersion: v1
 kind: Service
 metadata:
   annotations:
-    meta.helm.sh/release-name: admin-ingressgateway
-    meta.helm.sh/release-namespace: istio-admin-gateway
-    metallb.universe.tf/ip-allocated-from-pool: ip-address-pool
-    metallb.universe.tf/loadBalancerIPs: "192.168.1.100"  # Replace with your desired IP
+    metallb.universe.tf/loadBalancerIPs: "192.168.1.100"  # Add annotation and replace with your desired IP
+```
+
+If you must use only specific IPs, (e.g. 192.168.1.100, 192.168.1.105, and 192.168.1.110), you must modify the `ipaddresspool` CR to contain full CIDR addresses. An example is below:
+
+```yaml
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  name: ip-address-pool
+  namespace: uds-rke2-infrastructure
+spec:
+  addresses:
+  - 192.168.1.100/32
+  - 192.168.1.105/32
+  - 192.168.1.110/32
 ```
 
 ## Exemptions

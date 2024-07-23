@@ -22,12 +22,12 @@ See the [UDS RKE2 Mermaid diagram](docs/DIAGRAM.md) for visual representations o
 
 ## Pre-Requisites
 
-The following are requirements for an environment where a user is deploying UDS RKE2 and its custom components and applications.
+The following are requirements for an environment where a user is deploying UDS RKE2 and its custom components and applications:
 
 - A base installation of [Ubuntu 20.04 or 22.04](https://ubuntu.com/download/server) on the node's host system (server or desktop)
 - [UDS CLI](https://github.com/defenseunicorns/uds-cli/blob/main/README.md#install) using the versions specified in the [UDS Common repository](https://github.com/defenseunicorns/uds-common/blob/main/README.md#supported-tool-versions)
-- See the RKE2 documentation for host system [pre-requisites](https://docs.rke2.io/install/requirements)
-- See the [Application-Specific](#application-specific) and [Flavor-Specific Infrastructure](#flavor-specific-infrastructure) configuration sections for instruction on setup based on what is deployed atop UDS RKE2
+- See the RKE2 documentation for host system [prerequisites](https://docs.rke2.io/install/requirements)
+- See the [Application-Specific](#application-specific) and [Flavor-Specific Infrastructure](#flavor-specific-infrastructure) configuration sections for instructions on setup based on what is deployed atop UDS RKE2
 
 ## Usage
 
@@ -39,17 +39,17 @@ This section provides minimal context and instructions for quickly deploying the
 ### Virtual Machines
 
 > [!CAUTION]
-> Due to the the disk formatting and mount operations, networking and STIG configurations that are applied to a node's host, it is highly recommended that the contents of this repository are not directly installed on a personal machine.
+> Due to the disk formatting and mount operations, networking, and STIG configurations that are applied to a node's host, it is highly recommended that the contents of this repository are not directly installed on a personal machine.
 
-The best way to test UDS RKE2 is to spin-up one or more nodes using a containerized method, such as virtual machines or networks.
+The best way to test UDS RKE2 is to spin up one or more nodes using a containerized method, such as virtual machines or networks.
 
 [LeapfrogAI](https://github.com/defenseunicorns/leapfrogai), the main support target of this bundle, requires GPU passthrough to all worker nodes that will have a taint for attracting pods with GPU resource and workload requirements.
 
-Please see the [VM setup documentation](./docs/VM.md) and VM setup scripts to learn more about manually creating development VM..
+Please see the [VM setup documentation](./docs/VM.md) and VM setup scripts to learn more about manually creating development VMs.
 
 ### Bundles
 
-There are 3 main "flavors" of the UDS RKE2 Core bundle, with 4 distinct flavors in total. Each flavor revolves around the storage and persistence layer of the cluster, and comes with its own documentation on configuration and installation, as linked in the bulleted list below. Please refer to that documentation for more details on each bundle flavor's recommendations and capabilities.
+There are 3 main "flavors" of the UDS RKE2 Core bundle, with 4 distinct flavors in total. Each flavor revolves around the storage and persistence layer of the cluster and comes with its own documentation on configuration and installation, as linked in the bulleted list below. Please refer to that documentation for more details on each bundle flavor's recommendations and capabilities.
 
 1. [Local Path Provisioner](./docs/LOCAL-PATH.md) + [MinIO](./docs/MINIO.md)
 2. (WIP) [Longhorn](./docs/LONGHORN.md) + [MinIO](./docs/MINIO.md)
@@ -63,59 +63,59 @@ The following are quick starts for the `local-path` flavored UDS RKE2 bundle. Th
 
 1. Change directory to the bundle and deploy the bundle:
 
-```bash
-# use `ifconfig` to identify the NETWORK_INTERFACES for L2 advertisement
-uds run uds-rke2-local-path-core --set NETWORK_INTERFACES="eth0" --set IP_ADDRESS_POOL="200, 201, 202, 203"
-```
+    ```bash
+    # use `ifconfig` to identify the NETWORK_INTERFACES for L2 advertisement
+    uds run uds-rke2-local-path-core --set NETWORK_INTERFACES="eth0" --set IP_ADDRESS_POOL="200, 201, 202, 203"
+    ```
 
-2. Modify your `/etc/hosts` according to your base IP on the Istio Tenant gateway
+2. Modify your `/etc/hosts` according to your base IP on the Istio Tenant gateway:
 
-```bash
-# /etc/hosts
+    ```bash
+    # /etc/hosts
 
-192.168.0.200   keycloak.admin.uds.dev grafana.admin.uds.dev neuvector.admin.uds.dev
-192.168.0.201   sso.uds.dev
-```
+    192.168.0.200   keycloak.admin.uds.dev grafana.admin.uds.dev neuvector.admin.uds.dev
+    192.168.0.201   sso.uds.dev
+    ```
 
 #### Development
 
 1. Login to GitHub Container Registry (GHCR) and [DoD's Registry1](https://registry1.dso.mil/):
 
-```bash
-# Login to GHCR
-set +o history
-export GHCR_USERNAME="YOUR-USERNAME-HERE"
-export GHCR_PASSWORD="YOUR-PASSWORD-HERE"
-echo $GHCR_PASSWORD | uds zarf tools registry login ghcr.io --username $GHCR_USERNAME --password-stdin
-set -o history
+    ```bash
+    # Login to GHCR
+    set +o history
+    export GHCR_USERNAME="YOUR-USERNAME-HERE"
+    export GHCR_PASSWORD="YOUR-PASSWORD-HERE"
+    echo $GHCR_PASSWORD | uds zarf tools registry login ghcr.io --username $GHCR_USERNAME --password-stdin
+    set -o history
 
-# Login to Registry1
-set +o history
-export REGISTRY1_USERNAME="YOUR-USERNAME-HERE"
-export REGISTRY1_PASSWORD="YOUR-PASSWORD-HERE"
-echo $REGISTRY1_PASSWORD | uds zarf tools registry login registry1.dso.mil --username $REGISTRY1_USERNAME --password-stdin
-set -o history
-```
+    # Login to Registry1
+    set +o history
+    export REGISTRY1_USERNAME="YOUR-USERNAME-HERE"
+    export REGISTRY1_PASSWORD="YOUR-PASSWORD-HERE"
+    echo $REGISTRY1_PASSWORD | uds zarf tools registry login registry1.dso.mil --username $REGISTRY1_USERNAME --password-stdin
+    set -o history
+    ```
 
-2. Build all necessary packages and then create and deploy the bundle
+2. Build all necessary packages and then create and deploy the bundle:
 
-```bash
-# use `ifconfig` to identify the NETWORK_INTERFACES for L2 advertisement
-uds run uds-rke2-local-path-core-dev --set NETWORK_INTERFACES="eth0" --set IP_ADDRESS_POOL="200, 201, 202, 203"
-```
+    ```bash
+    # use `ifconfig` to identify the NETWORK_INTERFACES for L2 advertisement
+    uds run uds-rke2-local-path-core-dev --set NETWORK_INTERFACES="eth0" --set IP_ADDRESS_POOL="200, 201, 202, 203"
+    ```
 
-3. Modify your `/etc/hosts` according to your base IP on the Istio Tenant gateway
+3. Modify your `/etc/hosts` according to your base IP on the Istio Tenant gateway:
 
-```bash
-# /etc/hosts
+    ```bash
+    # /etc/hosts
 
-192.168.0.200   keycloak.admin.uds.local grafana.admin.uds.local neuvector.admin.uds.local
-192.168.0.201   sso.uds.local
-```
+    192.168.0.200   keycloak.admin.uds.local grafana.admin.uds.local neuvector.admin.uds.local
+    192.168.0.201   sso.uds.local
+    ```
 
 ## Additional Info
 
-The following sub-sections outlines all of the configuration documentation, which includes additional information, optional Zarf packages, and customization options for each component of UDS RKE2.
+The following sub-sections outline all of the configuration documentation, which includes additional information, optional Zarf packages, and customization options for each component of UDS RKE2.
 
 ### Base Infrastructure
 

@@ -8,12 +8,31 @@
         {
           "type": "yaml",
           "path": "bundles/latest/local-path-core/uds-bundle.yaml",
-          "jsonpath": "$.packages[*].ref",
+          "jsonpath": "$.metadata.version",
+          "action": "update-value"
+        },
+        {
+          "type": "yaml",
+          "path": "bundles/latest/local-path-core/uds-bundle.yaml",
+          "jsonpath": "$.packages[?(@.name=='uds-rke2')].ref",
+          "action": "update-value"
+        },
+        {
+          "type": "yaml",
+          "path": "bundles/latest/local-path-core/uds-bundle.yaml",
+          "jsonpath": "$.packages[?(@.name=='uds-rke2-infrastructure')].ref",
+          "action": "update-value"
+        },
+        {
+          "type": "yaml",
+          "path": "bundles/latest/local-path-core/uds-bundle.yaml",
+          "jsonpath": "$.packages[?(@.name=='uds-rke2-exemptions')].ref",
           "versioning": {
             "name": "custom",
             "parse": "^v?(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)(-(?<flavor>.+))?$",
-            "serialize": "${version}${?-|}${flavor}"
-          }
+            "serialize": "${version}-${flavor}"
+          },
+          "action": "update-value"
         },
         "packages/uds-rke2/zarf-config.yaml",
         "packages/rook-ceph/zarf-config.yaml",

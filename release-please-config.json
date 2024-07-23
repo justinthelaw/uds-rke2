@@ -5,46 +5,7 @@
       "changelog-path": "CHANGELOG.md",
       "versioning": "default",
       "extra-files": [
-        {
-          "packages": {
-            ".": {
-              "release-type": "simple",
-              "changelog-path": "CHANGELOG.md",
-              "versioning": "default",
-              "extra-files": [
-                {
-                  "type": "yaml",
-                  "path": "bundles/latest/local-path-core/uds-bundle.yaml",
-                  "jsonpath": "$.metadata.version",
-                  "action": "update-value"
-                },
-                {
-                  "type": "yaml",
-                  "path": "bundles/latest/local-path-core/uds-bundle.yaml",
-                  "jsonpath": "$.packages[?(@.name=='uds-rke2')].ref",
-                  "action": "update-value"
-                },
-                {
-                  "type": "yaml",
-                  "path": "bundles/latest/local-path-core/uds-bundle.yaml",
-                  "jsonpath": "$.packages[?(@.name=='uds-rke2-infrastructure')].ref",
-                  "action": "update-value"
-                },
-                {
-                  "type": "yaml",
-                  "path": "bundles/latest/local-path-core/uds-bundle.yaml",
-                  "jsonpath": "$.packages[?(@.name=='uds-rke2-exemptions')].ref",
-                  "action": "update-value",
-                  "versioning": {
-                    "type": "regex",
-                    "pattern": "^(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)(-local-path)?$",
-                    "target": "${major}.${minor}.${patch}-local-path"
-                  }
-                }
-              ]
-            }
-          }
-        },
+        "bundles/latest/local-path-core/uds-bundle.yaml",
         "packages/uds-rke2/zarf-config.yaml",
         "packages/rook-ceph/zarf-config.yaml",
         "packages/local-path/zarf-config.yaml",

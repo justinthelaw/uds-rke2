@@ -37,6 +37,8 @@ packages:
           variables:
             - name: NETWORK_INTERFACES
               path: interfaces
+            - name: IP_ADDRESS_POOLS
+              path: ipAddressPools
 
   - name: core
     description: "Deploys UDS Core services"

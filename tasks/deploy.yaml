@@ -14,6 +14,9 @@ variables:
   - name: NETWORK_INTERFACES
     description: "Interface on which to perform L2 advertisement"
     default: "wlp0s20f3"
+  - name: IP_ADDRESS_POOL
+    description: "IP addresses on which to perform L2 advertisement"
+    default: "200, 201, 202, 203"
   - name: DOMAIN
     description: "The default domain to use for gateway and CoreDNS"
     default: "uds.local"
@@ -78,6 +81,9 @@ tasks:
       networkInterface:
         description: "Interface on which to perform L2 advertisement"
         required: true
+      ipAddressPool:
+        description: "IP addresses on which to perform L2 advertisement"
+        required: true
       bucketPersistenceSize:
         description: "The default MinIO bucket size"
         required: true
@@ -86,7 +92,8 @@ tasks:
         cmd: |
           sudo UDS_CONFIG=${{ .inputs.udsConfig }} uds deploy "${{ .inputs.path }}/uds-bundle-${{ .inputs.name }}-amd64-${{ .inputs.version }}.tar.zst" \
             --set JOIN_TOKEN=${{ .inputs.joinToken }} \
-            --set NETWORK_INTERFACES=${{ .inputs.networkInterface }} \
+            --set IP_ADDRESS_POOL="${{ .inputs.ipAddressPool }}" \
+            --set NETWORK_INTERFACES="${{ .inputs.networkInterface }}"" \
             --set BUCKET_PERSISTENCE_SIZE=${{ .inputs.bucketPersistenceSize }} \
             ${DEPLOY_BUNDLE_OPTIONS}
 
@@ -105,6 +112,7 @@ tasks:
           version: ${VERSION}
           joinToken: ${JOIN_TOKEN}
           networkInterface: ${NETWORK_INTERFACES}
+          ipAddressPool: ${IP_ADDRESS_POOL}
           bucketPersistenceSize: ${BUCKET_PERSISTENCE_SIZE}
 
   - name: local-path-core-bundle-dev
@@ -118,6 +126,7 @@ tasks:
           version: dev
           joinToken: ${JOIN_TOKEN}
           networkInterface: ${NETWORK_INTERFACES}
+          ipAddressPool: ${IP_ADDRESS_POOL}
           bucketPersistenceSize: ${BUCKET_PERSISTENCE_SIZE}
 
   ###################
@@ -177,8 +186,8 @@ tasks:
         with:
           path: build/packages
           name: infrastructure
-          # Interface on which to perform L2 advertisement
-          extraOptions: "--set NETWORK_INTERFACES=${NETWORK_INTERFACES}"
+          # Interface and IP address pool on which to perform L2 advertisement
+          extraOptions: "--set NETWORK_INTERFACES='${NETWORK_INTERFACES}' --set IP_ADDRESS_POOL='${IP_ADDRESS_POOL}'"
 
   - name: uds-rke2-exemptions-local-path
     description: "Deploy the UDS RKE2 service Pepr policy exemptions package"

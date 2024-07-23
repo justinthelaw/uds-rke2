@@ -25,7 +25,7 @@ variables:
 
 components:
   - name: coredns-corefile-rewrites
-    required: true
+    required: false
     description: "Setup rewrites for Supabase's authentication callback to the KeycLoak SSO service"
     actions:
       onDeploy:
@@ -80,7 +80,7 @@ components:
             maxTotalSeconds: 300
 
   - name: inject-ca-trust-bundles
-    required: true
+    required: false
     description: "Create and mount the CA trust bundle into the Supabase and LeapfrogAI UI pods"
     actions:
       onDeploy:

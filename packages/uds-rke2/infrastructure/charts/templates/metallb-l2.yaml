@@ -5,7 +5,10 @@ metadata:
   namespace: {{ .Release.Namespace }}
 spec:
   addresses:
-    {{- toYaml .Values.ipAddressPools | nindent 4 }}
+    {{- $baseIP := .Values.baseIP }}
+    {{- range $pool := splitList ", " .Values.ipAddressPool }}
+    - {{ printf "%s.%s/32" $baseIP $pool }}
+    {{- end }}
 ---
 apiVersion: metallb.io/v1beta1
 kind: L2Advertisement
@@ -14,4 +17,6 @@ metadata:
   namespace: {{ .Release.Namespace }}
 spec:
   interfaces:
-    {{- toYaml .Values.interfaces | nindent 4 }}
+    {{- range $interface := splitList ", " .Values.interfaces }}
+    - {{ $interface | trim }}
+    {{- end }}

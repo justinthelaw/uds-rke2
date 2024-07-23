@@ -37,8 +37,9 @@ packages:
           variables:
             - name: NETWORK_INTERFACES
               path: interfaces
-            - name: IP_ADDRESS_POOLS
-              path: ipAddressPools
+            - name: IP_ADDRESS_POOL
+              path: ipAddressPool
+              default: "200, 201, 202, 203"
 
   - name: core
     description: "Deploys UDS Core services"

@@ -11,7 +11,7 @@ on:
       - "packages/init"
       - "packages/uds-rke2"
       - "tasks"
-      - ".github/workflows/build-test.yaml"
+      - ".github/workflows/e2e.yaml"
       - "tasks.yaml"
 
 concurrency:

@@ -56,16 +56,16 @@ jobs:
 
       - name: Test Create Default LVM
         run: |
-          sudo uds run create:logical-volume
+          sudo uds run create:logical-volume --log-level warn --no-progress
 
       - name: Test Create Default TLS Cert
         run: |
-          sudo uds run create-tls-local-path-dev
+          sudo uds run create-tls-local-path-dev --log-level warn --no-progress
 
       - name: Test Deploy UDS RKE2
         run: |
-          sudo uds run test:uds-rke2 --set VERSION=dev --log-level warn
+          sudo uds run test:uds-rke2 --set VERSION=dev --log-level warn --no-progress
 
       - name: Test Deploy `local-path` Flavor Custom Zarf Init
         run: |
-          sudo uds run test:local-path-minio-init --set VERSION=dev --log-level warn
+          sudo uds run test:local-path-minio-init --set VERSION=dev --log-level warn --no-progress

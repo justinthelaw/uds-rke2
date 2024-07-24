@@ -120,7 +120,7 @@ packages:
   - name: minio
     repository: ghcr.io/defenseunicorns/packages/minio
     # x-release-please-start-version
-    ref: "0.6.0"
+    ref: "0.1.0"
     # x-release-please-end
     overrides:
       minio:

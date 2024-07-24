@@ -2,7 +2,7 @@ package:
   create:
     set:
       # x-release-please-start-version
-      version: "0.6.0"
+      version: "0.1.0"
       # x-release-please-end
 
       storage_configuration_values_file: values/storage-configuration-values.yaml

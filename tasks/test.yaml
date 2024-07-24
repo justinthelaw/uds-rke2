@@ -31,7 +31,7 @@ tasks:
       - task: deploy:local-path-init
         with:
           # overcome GitHub runner free space constrains
-          extraOptions: "--set BUCKET_PERSISTENCE_SIZE=1Gi --set REGISTRY_PVC_SIZE=10Gi"
+          extraOptions: "--set BUCKET_PERSISTENCE_SIZE=1Gi --set REGISTRY_PVC_SIZE=20Gi"
 
       - task: setup:clean
 

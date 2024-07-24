@@ -42,7 +42,7 @@ chmod +x /usr/local/bin/kubectl
 
 Task files contain `variables` that are passed throughout the files, and affect deploy-time variables that configure the values (and therefore, Helm charts) of the services or applications being deployed.
 
-Individual may also contain `inputs`, which means they are supposed to be a re-useable sub-task meant to be consumed by another task. These tasks with inputs cannot be used unless they are consumed by a a parent task that provides the required inputs.
+Individual task definitions may also contain `inputs`, which means they are supposed to be a re-useable sub-task meant to be consumed by another task. These tasks with inputs cannot be used unless they are consumed by a a parent task that provides the required inputs.
 
 Run the following to see all the tasks in the "root" [`tasks.yaml`](./tasks.yaml), and their descriptions:
 

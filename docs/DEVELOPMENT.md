@@ -153,7 +153,7 @@ For example, this is how you pull and deploy a LATEST version of a package:
 
 ```bash
 # pull and deploy latest versions
-uds zarf package pull oci://ghcr.io/justinthelaw/packages/uds/uds-rke2/nvidia-gpu-operator:latest -a amd64
+uds zarf package pull oci://ghcr.io/defenseunicorns/packages/uds/uds-rke2/nvidia-gpu-operator:latest -a amd64
 uds run deploy:nvidia-gpu-operator
 ```
 

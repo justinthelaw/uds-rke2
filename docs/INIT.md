@@ -15,7 +15,7 @@ A properly configured host node (`Ubuntu 20.04`) is bootstrapped with an RKE2 cl
 
 ## Create
 
-The below is used to manually create the custom Zarf init package, which is usually done with [UDS tasks](../tasks.yaml) or the [UDS bundles](https://github.com/justinthelaw/uds-rke2/tree/main/bundles) in this repository.
+The below is used to manually create the custom Zarf init package, which is usually done with [UDS tasks](../tasks.yaml) or the [UDS bundles](https://github.com/defenseunicorns/uds-rke2/tree/main/bundles) in this repository.
 
 ```bash
 # Create the zarf init package

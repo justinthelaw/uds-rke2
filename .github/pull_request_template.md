@@ -17,4 +17,4 @@ Relates to #
 ## Checklist before merging
 
 - [ ] Test, docs, adr added or updated as needed
-- [ ] [Contributor Guide Steps](https://github.com/justinthelaw/uds-rke2-sandbox/blob/main/.github/CONTRIBUTING.md) followed
+- [ ] Followed the [Contributor Guide Steps](https://github.com/defenseunicorns/uds-rke2/blob/main/.github/CONTRIBUTING.md)

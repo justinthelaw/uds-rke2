@@ -1,1 +1,10 @@
-/* @justinthelaw
+# This repository is owned by the LeapfrogAI Team
+
+* @defenseunicorns/leapfrogai @justinthelaw @vanakema @gscallon @americanthinker
+
+## Additional privileged files
+
+/.github/CODEOWNERS @justinthelaw @vanakema @gscallon @americanthinker
+/.github/LICENSE @justinthelaw @vanakema @gscallon @americanthinker
+/.github/CONTRIBUTING.md @justinthelaw @vanakema @gscallon @americanthinker
+/.github/SECURITY.md @justinthelaw @vanakema @gscallon @americanthinker @defenseunicorns/security-managers

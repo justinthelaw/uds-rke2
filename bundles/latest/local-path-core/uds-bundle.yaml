@@ -13,14 +13,14 @@ metadata:
 packages:
   - name: uds-rke2
     description: "Deploys the UDS RKE2 Zarf package"
-    repository: ghcr.io/justinthelaw/packages/uds/uds-rke2
+    repository: ghcr.io/defenseunicorns/packages/uds/uds-rke2
     # x-release-please-start-version
     ref: "0.6.0"
     # x-release-please-end
 
   - name: local-path-init
     description: "Deploys the custom Zarf Init package"
-    repository: ghcr.io/justinthelaw/packages/uds/uds-rke2/init
+    repository: ghcr.io/defenseunicorns/packages/uds/uds-rke2/init
     # TODO: renovate setup
     ref: "v0.33.0-local-path"
     overrides:
@@ -34,7 +34,7 @@ packages:
 
   - name: uds-rke2-infrastructure
     description: "Deploys the UDS RKE2 base infrastructure Zarf package"
-    repository: ghcr.io/justinthelaw/packages/uds/uds-rke2/infrastructure
+    repository: ghcr.io/defenseunicorns/packages/uds/uds-rke2/infrastructure
     # x-release-please-start-version
     ref: "0.6.0"
     # x-release-please-end
@@ -160,7 +160,7 @@ packages:
 
   - name: uds-rke2-exemptions
     description: "Deploys the UDS Core Pepr policy exemptions"
-    repository: ghcr.io/justinthelaw/packages/uds/uds-rke2/exemptions
-    ref: "0.5.2-local-path"
+    repository: ghcr.io/defenseunicorns/packages/uds/uds-rke2/exemptions
+    ref: "0.1.0-local-path"
     optionalComponents:
       - nvidia-gpu-operator-exemptions

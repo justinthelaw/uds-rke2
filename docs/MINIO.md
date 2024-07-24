@@ -118,7 +118,7 @@ This example will show how to expose the ability to override the default users, 
 
 packages:
   - name: minio
-    repository: ghcr.io/justinthelaw/packages/minio
+    repository: ghcr.io/defenseunicorns/packages/minio
     # x-release-please-start-version
     ref: "0.6.0"
     # x-release-please-end

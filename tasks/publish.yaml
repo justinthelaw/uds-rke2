@@ -105,7 +105,7 @@ tasks:
           path: build/bundles
           name: uds-rke2-local-path-core
           # the OCI reference for UDS bundle publish does not gracefully handle an ending `/`
-          targetRepo: justinthelaw/packages/uds/bundles
+          targetRepo: defenseunicorns/packages/uds/bundles
 
   ###################
   # STANDARD PACKAGES
@@ -118,7 +118,7 @@ tasks:
         with:
           path: build/packages
           name: uds-rke2
-          targetRepo: justinthelaw/packages/uds/
+          targetRepo: defenseunicorns/packages/uds/
 
   - name: uds-rke2-infrastructure
     description: "Publish the UDS RKE2 Infrastructure Zarf package"
@@ -127,7 +127,7 @@ tasks:
         with:
           path: build/packages
           name: infrastructure
-          targetRepo: justinthelaw/packages/uds/uds-rke2/
+          targetRepo: defenseunicorns/packages/uds/uds-rke2/
 
   - name: uds-rke2-exemptions-local-path
     description: "Publish the UDS RKE2 service Pepr policy exemptions package"
@@ -136,7 +136,7 @@ tasks:
         with:
           path: build/packages/local-path
           name: exemptions
-          targetRepo: justinthelaw/packages/uds/uds-rke2/
+          targetRepo: defenseunicorns/packages/uds/uds-rke2/
 
   - name: local-path
     description: "Publish the Local Path Provisioner package"
@@ -145,7 +145,7 @@ tasks:
         with:
           path: build/packages/local-path
           name: local-path
-          targetRepo: justinthelaw/packages/uds/uds-rke2/
+          targetRepo: defenseunicorns/packages/uds/uds-rke2/
 
   - name: minio
     description: "Publish the MinIO package"
@@ -154,7 +154,7 @@ tasks:
         with:
           path: build/packages
           name: minio
-          targetRepo: justinthelaw/packages/uds/uds-rke2/
+          targetRepo: defenseunicorns/packages/uds/uds-rke2/
 
   ###############
   # INIT PACKAGES
@@ -166,7 +166,7 @@ tasks:
       - task: init
         with:
           path: build/packages/local-path
-          targetRepo: justinthelaw/packages/uds/uds-rke2/
+          targetRepo: defenseunicorns/packages/uds/uds-rke2/
 
   ########################
   # APP-SPECIFIC PACKAGES
@@ -179,7 +179,7 @@ tasks:
         with:
           path: build/packages
           name: leapfrogai-workarounds
-          targetRepo: justinthelaw/packages/uds/uds-rke2/
+          targetRepo: defenseunicorns/packages/uds/uds-rke2/
 
   - name: nvidia-gpu-operator
     description: "Publish the NVIDIA GPU Operator package"
@@ -188,4 +188,4 @@ tasks:
         with:
           path: build/packages
           name: nvidia-gpu-operator
-          targetRepo: justinthelaw/packages/uds/uds-rke2/
+          targetRepo: defenseunicorns/packages/uds/uds-rke2/

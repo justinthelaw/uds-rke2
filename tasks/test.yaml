@@ -12,28 +12,39 @@ variables:
     default: "dev"
 
 tasks:
+  - name: get-node-data
+    description: "Grab node and pod data from a cluster's nodes, and clean build artifacts"
+    actions:
+      - description: "Use UDS CLI to grab data from all RKE2 nodes"
+        cmd: |
+          sudo uds zarf tools kubectl describe nodes
+          sudo uds zarf tools kubectl describe pods -A
+
+      - task: setup:clean
+
   - name: uds-rke2
     description: "Deploy a new RKE2 cluster"
     actions:
-      - task: setup:clean
-
       - task: create:uds-rke2
       - task: deploy:uds-rke2-bootstrap
         with:
           joinToken: "my-test-token"
 
+      - task: get-node-data
+
   - name: local-path-minio-init
     description: "Deploy the Local Path Provisioner + MinIO Zarf Init"
     actions:
-      - task: setup:clean
-
       - task: create:local-path-init
       - task: deploy:local-path-init
         with:
           # overcome GitHub runner free space constrains
-          extraOptions: "--set BUCKET_PERSISTENCE_SIZE=1Gi --set REGISTRY_PVC_SIZE=10Gi"
+          extraOptions: "--set BUCKET_PERSISTENCE_SIZE=1Gi --set REGISTRY_PVC_SIZE=20Gi"
 
-      - task: setup:clean
+      - task: get-node-data
 
       - task: create:uds-rke2-infrastructure
       - task: deploy:uds-rke2-infrastructure
+      - task: setup:clean
+
+      - task: get-node-data

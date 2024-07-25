@@ -18,8 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Validate PR Title
 
-    permissions:
-      pull-requests: read
+    permissions: read-all
 
     steps:
       - name: Checkout

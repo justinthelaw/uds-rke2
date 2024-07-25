@@ -3,7 +3,7 @@
 **_Unicorn Delivery Service (UDS), Rancher Kubernetes Engine 2 (RKE2)_**
 
 > [!IMPORTANT]
-> This is an unofficial sandbox repository for developing and testing a UDS RKE2 capability. Please go to the [defenseunicorns](https://github.com/defenseunicorns) organization for official UDS capabilities.
+> This is an unofficial sandbox repository for developing and testing a UDS RKE2 capability. Please go to the [defenseunicorns](https://github.com/defenseunicorns/uds-rke2) organization for the official UDS RKE2 capability.
 
 This Zarf package serves as an air-gapped production environment for deploying [UDS Core](https://github.com/defenseunicorns/uds-core), individual UDS Capabilities, and UDS capabilities aggregated (bundled) via the [UDS CLI](https://github.com/defenseunicorns/uds-cli).
 
@@ -24,8 +24,8 @@ See the [UDS RKE2 Mermaid diagram](docs/DIAGRAM.md) for visual representations o
 
 The following are requirements for an environment where a user is deploying UDS RKE2 and its custom components and applications.
 
-- A base installation of [Ubuntu 20.04 or 22.04](https://ubuntu.com/download/server) on the node's host system (server or desktop)
-- [UDS CLI](https://github.com/defenseunicorns/uds-cli/blob/main/README.md#install) using the versions specified in the [UDS Common repository](https://github.com/defenseunicorns/uds-common/blob/main/README.md#supported-tool-versions)
+- A base installation of [Ubuntu 20.04 or 22.04](https://ubuntu.com/download/server) on the node's host system
+- [UDS CLI](https://github.com/defenseunicorns/uds-cli/blob/main/README.md#install) v0.10.4
 - See the RKE2 documentation for host system [pre-requisites](https://docs.rke2.io/install/requirements)
 - See the [Application-Specific](#application-specific) and [Flavor-Specific Infrastructure](#flavor-specific-infrastructure) configuration sections for instruction on setup based on what is deployed atop UDS RKE2
 

@@ -83,8 +83,8 @@ jobs:
           echo "Publishing for tag: ${{ github.ref }}"
 
           if [[ "${{ github.ref }}" == "refs/tags/dev" ]]; then
-            sudo uds run release-dev
+            sudo uds run release-dev --log-level warn --no-progress
           else
-            sudo uds run release
+            sudo uds run release --log-level warn --no-progress
           fi
         shell: bash

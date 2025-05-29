@@ -4,7 +4,7 @@ MinIO is a package that deploys a full-featured and simplified S3 object storage
 
 ## Usage
 
-By default, the provided MinIO instance provisions a minimal set up that includes a single bucket named `uds` that is accessible by the `uds` user:
+By default, the provided MinIO instance provisions a minimal setup that includes a single bucket named `uds` that is accessible by the `uds` user:
 
 ```yaml
 users:
@@ -13,12 +13,12 @@ users:
     policy: readwrite-username-policy
 ```
 
-You can port-forward ```uds zarf tools kubectl port-forward service/minio 9000:9000 -n minio``` to access the service externally from where you can use any S3-compatible client to configure your buckets or the MinIO (`mc`) cli to handle other configurations, users or policy management. Similar functions could be performed in-cluster as well via a Job or other means.
+You can port-forward using `uds zarf tools kubectl port-forward service/minio 9000:9000 -n minio` to access the service externally, from where you can use any S3-compatible client to configure your buckets or the MinIO (`mc`) CLI to handle other configurations, users, or policy management. Similar functions could be performed in-cluster as well via a Job or other means.
 
 ## Quickstart
 
 ```bash
-# port-forward the MinIO service
+# Port-forward the MinIO service
 uds zarf tools kubectl port-forward service/minio 9000:9000 -n minio
 
 # Get the MinIO Admin Credentials
@@ -78,7 +78,7 @@ Please see the MinIO chart's [values](https://github.com/minio/minio/blob/master
 
 ## Configuring MinIO in a Bundle
 
-If you are building a uds bundle and are using uds-k3d as a base for that bundle, you might want to configure the bundle to be able to customize the MinIO deployment either at bundle create or deploy time.
+If you are building a UDS bundle and are using uds-k3d as a base for that bundle, you might want to configure the bundle to be able to customize the MinIO deployment either at bundle create or deploy time.
 
 ### Configure Create Time MinIO Overrides
 
@@ -111,7 +111,7 @@ This example will override the default users and buckets provisioned in the MinI
 
 ### Configure Deploy Time MinIO Overrides
 
-This example will show how to expose the ability to override the default users, policies, service accounts and buckets provisioned in the MinIO instance at bundle deploy time.
+This example will show how to expose the ability to override the default users, policies, service accounts, and buckets provisioned in the MinIO instance at bundle deploy time.
 
 ```yaml
 # uds-bundle.yaml
@@ -139,7 +139,7 @@ packages:
             path: policies
 ```
 
-Once the bundle has been created the deployer can customize the resources deployed by providing the values to the uds-config.yaml
+Once the bundle has been created, the deployer can customize the resources deployed by providing the values to the uds-config.yaml
 
 ```yaml
 bundle:
@@ -149,12 +149,12 @@ bundle:
         set:
           buckets:
             - name: "my-favorite-bucket"
-                policy: "public"
-                purge: false
+              policy: "public"
+              purge: false
           users:
             - accessKey: console
-                secretKey: "console-secret"
-                policy: consoleAdmin
+              secretKey: "console-secret"
+              policy: consoleAdmin
           policies:
             - name: example-policy
               statements:
@@ -165,7 +165,6 @@ bundle:
                     - "s3:DeleteObject"
                     - "s3:PutObject"
                     - "s3:ListMultipartUploadParts"
-                  actions:
                     - "s3:CreateBucket"
                     - "s3:DeleteBucket"
                     - "s3:GetBucketLocation"

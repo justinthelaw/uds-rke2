@@ -18,7 +18,7 @@ The following are requirements for building images locally for development and t
 
 ## UDS CLI Aliasing
 
-Below are instructions for adding UDS CLI aliases that are useful for deployments that occur in an air-gap with only the UDS CLI binary available to the delivery engineer.
+Below are instructions for adding UDS CLI aliases that are useful for deployments that occur in an air-gapped environment with only the UDS CLI binary available to the delivery engineer.
 
 For general CLI UX, put the following in your shell configuration (e.g., `/root/.bashrc`):
 
@@ -40,9 +40,9 @@ chmod +x /usr/local/bin/kubectl
 
 ## Tasks
 
-Task files contain `variables` that are passed throughout the files, and affect deploy-time variables that configure the values (and therefore, Helm charts) of the services or applications being deployed.
+Task files contain `variables` that are passed throughout the files and affect deploy-time variables that configure the values (and therefore, Helm charts) of the services or applications being deployed.
 
-Individual task definitions may also contain `inputs`, which means they are supposed to be a re-useable sub-task meant to be consumed by another task. These tasks with inputs cannot be used unless they are consumed by a a parent task that provides the required inputs.
+Individual task definitions may also contain `inputs`, which means they are supposed to be reusable sub-tasks meant to be consumed by another task. These tasks with inputs cannot be used unless they are consumed by a parent task that provides the required inputs.
 
 Run the following to see all the tasks in the "root" [`tasks.yaml`](./tasks.yaml), and their descriptions:
 
@@ -62,11 +62,11 @@ See the UDS [`deploy` tasks](./tasks/deploy.yaml) file for more details.
 For example, to deploy the UDS RKE2 bootstrap bundle with `local-path` flavor, do the following:
 
 ```bash
-# create and deploy the local dev version, with /opt/uds as the PV mount, and
+# Create and deploy the local dev version, with /opt/uds as the PV mount, and
 # the network interface for L2 advertisement on eth0
 uds run uds-rke2-local-path-core-dev --set NETWORK_INTERFACES="eth0" --set IP_ADDRESS_POOL="200, 201, 202, 203"
 
-# below are examples of dev version deployments of optional packages
+# Below are examples of dev version deployments of optional packages
 uds run deploy:leapfrogai-workarounds --set VERSION=dev
 uds run deploy:nvidia-gpu-operator --set VERSION=dev
 ```
@@ -78,7 +78,7 @@ See the UDS [`create` tasks](./tasks/create.yaml) file for more details.
 To create individual packages and bundles, reference the following example for NVIDIA GPU Operator:
 
 ```bash
-# create the local dev version of the Zarf package
+# Create the local dev version of the Zarf package
 uds run create:nvidia-gpu-operator --set VERSION=dev
 ```
 
@@ -89,13 +89,13 @@ See the UDS [`publish` tasks](./tasks/publish.yaml) file for more details. Also 
 To publish all packages and bundles, do the following:
 
 ```bash
-# release all packages with a `dev` version
+# Release all packages with a `dev` version
 uds run release-dev
 ```
 
 ### Remove
 
-Run the following to remove all Docker, Zarf and UDS artifacts from the host:
+Run the following to remove all Docker, Zarf, and UDS artifacts from the host:
 
 ```bash
 uds run setup:clean
@@ -114,20 +114,20 @@ To build and deploy an ENTIRE bundle, use the tasks located in the `CREATE AND D
 If you have modified the deploy-time variables in a [uds-config.yaml](bundles/dev/local-path-core/uds-config.yaml), but none of the bundle components, and want to complete a re-deployment, you will need to run the TLS creation and injection step again:
 
 ```bash
-# recreate the dev TLS certs and inject into the modified uds-config.yaml
+# Recreate the dev TLS certs and inject into the modified uds-config.yaml
 uds run create-tls-local-path-dev
 
-# deploy the pre-created UDS bundle with the modified uds-config.yaml
+# Deploy the pre-created UDS bundle with the modified uds-config.yaml
 uds run deploy:local-path-core-bundle-dev
 ```
 
-If you modified an individual package within the bundle, and want to do an integrated install again, you can just create the modified package again, and re-create the bundle:
+If you modified an individual package within the bundle and want to do an integrated install again, you can just create the modified package again and re-create the bundle:
 
 ```bash
-# recreate the local-path-init package
+# Recreate the local-path-init package
 uds run create:local-path-init --set VERSION=dev
 
-# recreate the bundle and deploy
+# Recreate the bundle and deploy
 uds run create:local-path-core-bundle-dev
 uds run deploy:local-path-core-bundle-dev
 ```
@@ -141,10 +141,10 @@ To build a single package, use the tasks located in the `STANDARD PACKAGES`, `IN
 For example, this is how you build and deploy a local DEV version of a package:
 
 ```bash
-# if package is already in the cluster, and you are deploying a new one
+# If package is already in the cluster, and you are deploying a new one
 uds zarf package remove nvidia-gpu-operator --confirm
 
-# create and deploy the new package
+# Create and deploy the new package
 uds run create:nvidia-gpu-operator --set VERSION=dev
 uds run deploy:nvidia-gpu-operator --set VERSION=dev
 ```
@@ -152,7 +152,7 @@ uds run deploy:nvidia-gpu-operator --set VERSION=dev
 For example, this is how you pull and deploy a LATEST version of a package:
 
 ```bash
-# pull and deploy latest versions
+# Pull and deploy latest versions
 uds zarf package pull oci://ghcr.io/justinthelaw/packages/uds/uds-rke2/nvidia-gpu-operator:latest -a amd64
 uds run deploy:nvidia-gpu-operator
 ```
@@ -161,7 +161,7 @@ uds run deploy:nvidia-gpu-operator
 
 ### Pre-Cluster/Node Bootstrapping
 
-This sub-section is mainly for the pre-cluster or node bootstrapping steps, and targets the testing of the air-gapped bootstrapping of UDS RKE2 infrastructure.
+This sub-section is mainly for the pre-cluster or node bootstrapping steps and targets the testing of the air-gapped bootstrapping of UDS RKE2 infrastructure.
 
 You can use the [air-gapping script](./vm/scripts/airgap.sh) in the VM documentation directory to perform an IP tables manipulation to emulate an airgap. Modify the following lines, which allow local area network traffic, in the script based on your LAN configuration:
 
@@ -182,13 +182,13 @@ To reverse this effect, just execute the [airgap reversion script](./vm/scripts/
 
 ## Troubleshooting
 
-If your RKE2 cluster is failing to spin up in the first place, you can use `journalctl` to monitor the progress. Please note that it may take up to 10 minutes for the cluster spin-up and move on to the next step of the UDS RKE2 bundle deployment.
+If your RKE2 cluster is failing to spin up in the first place, you can use `journalctl` to monitor the progress. Please note that it may take up to 10 minutes for the cluster to spin up and move on to the next step of the UDS RKE2 bundle deployment.
 
 ```bash
 journalctl -xef -u rke2-server
 ```
 
-Occasionally, a package you are trying to re-deploy, or a namespace you are trying to delete, may hang. To workaround this, be sure to check the events and logs of all resources, to include pods, deployments, daemonsets, clusterpolicies, etc. There may be finalizers, Pepr hooks, and etc. causing the re-deployment or deletion to fail. Use the `k9s` and `kubectl` tools that are vendored with UDS CLI, like in the examples below:
+Occasionally, a package you are trying to re-deploy, or a namespace you are trying to delete, may hang. To work around this, be sure to check the events and logs of all resources, including pods, deployments, daemonsets, clusterpolicies, etc. There may be finalizers, Pepr hooks, etc. causing the re-deployment or deletion to fail. Use the `k9s` and `kubectl` tools that are vendored with UDS CLI, like in the examples below:
 
 ```bash
 # k9s CLI for debugging
@@ -198,13 +198,13 @@ uds zarf tools monitor
 uds zarf tools kubectl logs DaemonSet/metallb-speaker -n uds-rke2-infrastructure --follow
 ```
 
-To describe node-level data, like resource usage, non-terminated pods, taints, etc. run the following command:
+To describe node-level data, like resource usage, non-terminated pods, taints, etc., run the following command:
 
 ```bash
 uds zarf tools kubectl describe node
 ```
 
-To check which pods are sucking up GPUs in particular, you can run the following `yq` command:
+To check which pods are using GPUs in particular, you can run the following `yq` command:
 
 ```bash
 uds zarf tools kubectl get pods \

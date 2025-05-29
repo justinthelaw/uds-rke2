@@ -2,7 +2,7 @@
 
 ## RKE2 Install
 
-The [RKE2 install script](../packages/uds-rke2/scripts/rke2/rke2-install.sh) installs RKE2, suitable for both server and agent nodes, following the upstream [RKE2 air-gapped install guide](https://docs.rke2.io/install/airgap). The basic steps involved in our current script involve:
+The [RKE2 install script](../packages/uds-rke2/scripts/rke2/rke2-install.sh) installs RKE2, suitable for both server and agent nodes, following the upstream [RKE2 air-gapped install guide](https://docs.rke2.io/install/airgap). The basic steps involved in our current script are:
 
 - Staging image tarballs: Image tarballs are downloaded and placed in the correct location for usage in an airgap (see [here](https://docs.rke2.io/install/airgap#tarball-method))
 - Run the RKE2 install script from upstream: This is pulled directly from RKE2 docs [here](https://docs.rke2.io/install/airgap#rke2-installsh-script-install)
@@ -18,16 +18,16 @@ The final portion of the build copies a few files into the image and ensures the
 - A default pod security config - this allows full privileges for running pods and is added with the expectation that a policy enforcement engine like Kyverno or Gatekeeper is being used to restrict the same things, with exceptions as necessary
 - A helper script for RKE2 startup - while RKE2 can certainly be run without this, this script can be used to add the RKE2 join address, token, and other properties to the RKE2 config file. It also corrects file permissions according to the STIG guide for files that do not exist until RKE2 startup has occurred.
 
-Additionally the etcd user and a sysctl config are added for RKE2. This follows the process documented in the [RKE2 CIS Hardening guide](https://docs.rke2.io/security/hardening_guide#ensure-etcd-is-configured-properly).
+Additionally, the etcd user and a sysctl config are added for RKE2. This follows the process documented in the [RKE2 CIS Hardening guide](https://docs.rke2.io/security/hardening_guide#ensure-etcd-is-configured-properly).
 
-Finally, configuration of the cluster's networking and default services is provided to allow the RKE2 cluster to be compatible or replaced with the components and services setup by [UDS Core](https://github.com/defenseunicorns/uds-core).
+Finally, configuration of the cluster's networking and default services is provided to allow the RKE2 cluster to be compatible with or replaced by the components and services set up by [UDS Core](https://github.com/defenseunicorns/uds-core).
 
 ## RKE2 Startup
 
 > [!IMPORTANT]  
-> Due to an upstream error in RKE2 and K3s, containerd is misconfigured leading to image pull errors from 127.0.0.1 (local registry). Please see the [rke2-startup.sh](../packages/uds-rke2/scripts/rke2/configs/rke2-startup.sh) script for details, and the [containerd CRI docs](https://github.com/containerd/cri/blob/master/docs/config.md) for more details.
+> Due to an upstream error in RKE2 and K3s, containerd is misconfigured, leading to image pull errors from 127.0.0.1 (local registry). Please see the [rke2-startup.sh](../packages/uds-rke2/scripts/rke2/configs/rke2-startup.sh) script for details, and the [containerd CRI docs](https://github.com/containerd/cri/blob/master/docs/config.md) for more details.
 
-RKE2 provides excellent tooling to build an RKE2 cluster, but when considering the STIG guides for RKE2 and deploying via IaC there is additional runtime configuration required. The [RKE2 Startup script](../packages/uds-rke2/scripts/rke2/configs/rke2-startup.sh) injected during [OS preparation](./OS.md) is not required for startup, but it abstracts away some setup complexity.
+RKE2 provides excellent tooling to build an RKE2 cluster, but when considering the STIG guides for RKE2 and deploying via IaC, there is additional runtime configuration required. The [RKE2 Startup script](../packages/uds-rke2/scripts/rke2/configs/rke2-startup.sh) injected during [OS preparation](./OS.md) is not required for startup, but it abstracts away some setup complexity.
 
 ### Script Parameters
 
@@ -36,11 +36,11 @@ This script provides a number of optional parameters depending on your desired c
 - `-t <token>`: RKE2 uses a secret token to join nodes to the cluster securely. This can be generated with something like openssl to create a secure random string.
 - `-s <join address>`: RKE2 initializes on a "bootstrap" node. The '-s' argument is the IP address or hostname of the bootstrap node or cluster control plane and is used by new nodes to join the cluster. When this is either unset or matches the IP of the host RKE2 is being started on, RKE2 will initialize as the bootstrap node.
 - `-a`: RKE2 has server or agent nodes. Agent nodes are Kubernetes worker nodes and do not host critical services like etcd or control-plane deployments.
-- `-T <dns address>`: By default cluster generated certificate is only valid for the loopback address and private IPs it can find on interfaces. When accessing cluster from a hostname or public IP, they need to be provided so they can be added to the cluster certificate.
+- `-T <dns address>`: By default, the cluster-generated certificate is only valid for the loopback address and private IPs it can find on interfaces. When accessing the cluster from a hostname or public IP, they need to be provided so they can be added to the cluster certificate.
 
 ### Script Usage
 
-This script should be run on each node with a minimum of 3 server nodes for an HA setup, plus additional agent nodes as needed. Ideally you should also setup load-balancing for server nodes (at minimum round-robin with DNS) so that a single node failure does not cause access issues.
+This script should be run on each node with a minimum of 3 server nodes for an HA setup, plus additional agent nodes as needed. Ideally, you should also set up load-balancing for server nodes (at minimum round-robin with DNS) so that a single node failure does not cause access issues.
 
 An example setup is provided below:
 

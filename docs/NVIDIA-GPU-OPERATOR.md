@@ -1,19 +1,19 @@
 # NVIDIA GPU Operator
 
-The NVIDIA GPU Operator provides a single-pane management resources that follows the Kubernetes operator pattern. When configured properly, capabilities like time-slicing and multi-instance GPUs can be provisioned on existing GPU resources on nodes within the cluster. Additionally, some optional components within the NVIDIA GPU Operator allow engineers to maintain NVIDIA dependencies in a Kubernetes-native way.
+The NVIDIA GPU Operator provides single-pane management resources that follow the Kubernetes operator pattern. When configured properly, capabilities like time-slicing and multi-instance GPUs can be provisioned on existing GPU resources on nodes within the cluster. Additionally, some optional components within the NVIDIA GPU Operator allow engineers to maintain NVIDIA dependencies in a Kubernetes-native way.
 
 ## Node Feature Discovery
 
-The Kubernetes Node Feature Discovery component allows other Kubernetes resources define and consume hardware and software resources available on a node. The NVIDIA GPU Operator requires this to be installed on the cluster beforehand so that NVIDIA GPUs can be characterized properly
+The Kubernetes Node Feature Discovery component allows other Kubernetes resources to define and consume hardware and software resources available on a node. The NVIDIA GPU Operator requires this to be installed on the cluster beforehand so that NVIDIA GPUs can be characterized properly.
 
 ## Optional Components
 
 > [!IMPORTANT]
-> Many of the default-disabled optional components of the operator contain images/containers that are not available within IronBank, and must be pulled from NVCR.
+> Many of the default-disabled optional components of the operator contain images/containers that are not available within IronBank and must be pulled from NVCR.
 
 ### NVIDIA Container Toolkit
 
-The NVIDIA Container Toolkit allows containerized applications and services to consume NVIDIA GPUs as resources. This is usually pre-installed on the host node prior to air-gapping or via an internally mirrored package repository or by bringing in the dependencies into the air-gap. The NVIDIA GPU Operator includes a DaemonSet that can be enabled to install the NVIDIA Container Toolkit on the host as a Kubernetes resource, allowing engineers the flexibility of deploying and updating the toolkit in a Kubernetes-native way.
+The NVIDIA Container Toolkit allows containerized applications and services to consume NVIDIA GPUs as resources. This is usually pre-installed on the host node prior to air-gapping or via an internally mirrored package repository or by bringing the dependencies into the air-gap. The NVIDIA GPU Operator includes a DaemonSet that can be enabled to install the NVIDIA Container Toolkit on the host as a Kubernetes resource, allowing engineers the flexibility of deploying and updating the toolkit in a Kubernetes-native way.
 
 If your NVIDIA Container Toolkit is pre-installed, please ensure that the `containerd` runtime was correctly configured post-toolkit installation. The `/etc/containerd/config.toml` should look something like this:
 
@@ -52,7 +52,7 @@ version = 2
 
 ### NVIDIA GPU Drivers
 
-NVIDIA's Driver GPUs are usually pre-installed on the host node, similar to the NVIDIA Container Toolkit. Upgrading GPU drivers and ensuring they remain up-to-date can be done using the NVIDIA GPU Operator as well. By providing the correct pre-compiled drivers within the [`nvidia-gpu-operator-values.yaml`](../packages/nvidia-gpu-operator/values/nvidia-gpu-operator-values.yaml), and ensuring the host meets minimum requirements for installing these drivers via a Kubernetes pod, engineers can maintain and deploy drivers to host node sin a Kubernetes-native way.
+NVIDIA's GPU drivers are usually pre-installed on the host node, similar to the NVIDIA Container Toolkit. Upgrading GPU drivers and ensuring they remain up-to-date can be done using the NVIDIA GPU Operator as well. By providing the correct pre-compiled drivers within the [`nvidia-gpu-operator-values.yaml`](../packages/nvidia-gpu-operator/values/nvidia-gpu-operator-values.yaml), and ensuring the host meets minimum requirements for installing these drivers via a Kubernetes pod, engineers can maintain and deploy drivers to host nodes in a Kubernetes-native way.
 
 ### Multi-Instance GPUs
 

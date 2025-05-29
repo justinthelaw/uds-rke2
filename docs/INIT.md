@@ -3,7 +3,7 @@
 <!-- TODO: renovate setup -->
 **Supported Version**: v0.33.0
 
-The custom Zarf init package comes with 3 flavors:
+The custom Zarf init package comes with three flavors:
 
 1. `local`: [Local Path Provisioner](./LOCAL-PATH.md) as the backing StorageClass with [MinIO](./MINIO.md) for its S3-compatible API
 2. `longhorn`: [Longhorn](./LONGHORN.md) as the backing StorageClass with [MinIO](./MINIO.md) for its S3-compatible API
@@ -11,7 +11,7 @@ The custom Zarf init package comes with 3 flavors:
 
 ## Pre-Requisites
 
-A properly configured host node (`Ubuntu 20.04`) is bootstrapped with an RKE2 cluster, and has at least 1 server node - this is done using the [UDS RKE2 Zarf package](../packages/uds-rke2/zarf.yaml).
+A properly configured host node (`Ubuntu 20.04`) is bootstrapped with an RKE2 cluster and has at least one server node - this is done using the [UDS RKE2 Zarf package](../packages/uds-rke2/zarf.yaml).
 
 ## Create
 

@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.6.1](https://github.com/justinthelaw/uds-rke2/compare/v0.6.0...v0.6.1) (2025-05-29)
+
+
+### Bug Fixes
+
+* docs and repo workflows ([#63](https://github.com/justinthelaw/uds-rke2/issues/63)) ([aadb3cf](https://github.com/justinthelaw/uds-rke2/commit/aadb3cfb181094ca14407ac122206678af3aa594))
+
 ## [0.6.0](https://github.com/justinthelaw/uds-rke2/compare/v0.5.2...v0.6.0) (2024-07-23)
 
 

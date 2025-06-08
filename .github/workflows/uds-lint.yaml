@@ -5,8 +5,8 @@ on:
     branches:
       - "main"
     paths:
-      - "bundles"
-      - "tasks"
+      - "bundles/**"
+      - "tasks/**"
       - "task.yaml"
       - ".github/workflows/uds-lint.yaml"
 
@@ -14,8 +14,8 @@ on:
     branches:
       - "main"
     paths:
-      - "bundles"
-      - "tasks"
+      - "bundles/**"
+      - "tasks/**"
       - "task.yaml"
       - ".github/workflows/uds-lint.yaml"
 

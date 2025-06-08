@@ -8,9 +8,8 @@ on:
     branches:
       - "main"
     paths:
-      - "packages/init"
-      - "packages/uds-rke2"
-      - "tasks"
+      - "packages/**"
+      - "tasks/**"
       - ".github/workflows/e2e.yaml"
       - "tasks.yaml"
 

@@ -5,13 +5,13 @@ on:
     branches:
       - "main"
     paths:
-      - "packages"
+      - "packages/**"
       - ".github/workflows/zarf-lint.yaml"
   pull_request:
     branches:
       - "main"
     paths:
-      - "packages"
+      - "packages/**"
       - ".github/workflows/zarf-lint.yaml"
 
 concurrency:

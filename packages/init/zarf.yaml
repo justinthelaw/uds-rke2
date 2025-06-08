@@ -22,16 +22,16 @@ components:
     required: true
     description: "Install the Zarf injector and registry binaries"
     import:
-      # TODO: renovate setup
-      url: oci://ghcr.io/defenseunicorns/packages/init:v0.33.0
+      # renovate: datasource=oci depName=ghcr.io/zarf-dev/packages/init versioning=semver
+      url: oci://ghcr.io/zarf-dev/packages/init:v0.55.6
 
   # Creates the temporary seed-registry
   - name: zarf-seed-registry
     required: true
     description: "Creates a bootstrapping seed registry and prepares a volume for mounting to the permanent registry"
     import:
-      # TODO: renovate setup
-      url: oci://ghcr.io/defenseunicorns/packages/init:v0.33.0
+      # renovate: datasource=oci depName=ghcr.io/zarf-dev/packages/init versioning=semver
+      url: oci://ghcr.io/zarf-dev/packages/init:v0.55.6
     charts:
       - name: docker-registry
         namespace: zarf
@@ -50,8 +50,7 @@ components:
             cmd: |
               uds zarf tools kubectl get pvc zarf-docker-registry -n zarf >/dev/null 2>&1 && \
               echo "" || \
-              echo "- name: REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY
-                value: \"/var/lib/registry\""
+              echo "- name: REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY\n                value: \"/var/lib/registry\""
             setVariables:
               - name: UPGRADE_ENV_VARS
                 autoIndent: true
@@ -165,8 +164,8 @@ components:
     required: true
     description: "Create the permanent registry"
     import:
-      # TODO: renovate setup
-      url: oci://ghcr.io/defenseunicorns/packages/init:v0.33.0
+      # renovate: datasource=oci depName=ghcr.io/zarf-dev/packages/init versioning=semver
+      url: oci://ghcr.io/zarf-dev/packages/init:v0.55.6
 
   ########################
   # LOCAL PATH PROVISIONER
@@ -242,5 +241,5 @@ components:
     required: true
     description: "Deploy the Zarf pod and Git mutating webhook"
     import:
-      # TODO: renovate setup
-      url: oci://ghcr.io/defenseunicorns/packages/init:v0.33.0
+      # renovate: datasource=oci depName=ghcr.io/zarf-dev/packages/init versioning=semver
+      url: oci://ghcr.io/zarf-dev/packages/init:v0.55.6
